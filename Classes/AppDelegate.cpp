@@ -16,6 +16,24 @@ AppDelegate::~AppDelegate()
 {
 }
 
+// if you want a different context, modify the value of glContextAttrs
+// it will affect all platforms
+void AppDelegate::initGLContextAttrs()
+{
+    // set OpenGL context attributes: red,green,blue,alpha,depth,stencil
+    GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
+    
+    GLView::setGLContextAttrs(glContextAttrs);
+}
+
+// if you want to use the package manager to install more packages,
+// don't modify or remove this function
+static int register_all_packages()
+{
+    return 0; //flag for packages manager
+}
+
+
 
 bool AppDelegate::applicationDidFinishLaunching() {
 	// initialize director

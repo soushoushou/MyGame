@@ -14,7 +14,8 @@ class  AppDelegate : private cocos2d::CCApplication
 public:
 	AppDelegate();
 	virtual ~AppDelegate();
-
+    //设置OpenGL context，这个设置对所有平台都有效
+    virtual void initGLContextAttrs();
 	/**
 	@brief    Implement CCDirector and CCScene init code here.
 	@return true    Initialize success, app continue.
