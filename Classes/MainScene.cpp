@@ -68,19 +68,19 @@ bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
-	Button* pCreateRoomBtn = Button::create("ui\\createRoom_normal.png", "ui\\createRoom_press.png");
+	Button* pCreateRoomBtn = Button::create("ui/createRoom_normal.png", "ui/createRoom_press.png");
 	if (!pCreateRoomBtn) return false;
-	Button* pJoinRoomBtn = Button::create("ui\\joinRoom_normal.png", "ui\\joinRoom_press.png");
+	Button* pJoinRoomBtn = Button::create("ui/joinRoom_normal.png", "ui/joinRoom_press.png");
 	if (!pJoinRoomBtn) return false;
-	Button* pShopBtn = Button::create("ui\\shop_normal.png", "ui\\shop_press.png");
+	Button* pShopBtn = Button::create("ui/shop_normal.png", "ui/shop_press.png");
 	if (!pShopBtn) return false;
-	Button* pCashBtn = Button::create("ui\\Cash.png");
+	Button* pCashBtn = Button::create("ui/Cash.png");
 	if (!pCashBtn) return false;
-	Button* pDiamondBtn = Button::create("ui\\Gems.png");
+	Button* pDiamondBtn = Button::create("ui/Gems.png");
 	if (!pDiamondBtn) return false;
-	Button* pRoleHelpBtn = Button::create("ui\\role.png");
+	Button* pRoleHelpBtn = Button::create("ui/role.png");
 	if (!pRoleHelpBtn) return false;
-	Button* pRankBtn = Button::create("ui\\rank.png");
+	Button* pRankBtn = Button::create("ui/rank.png");
 	if (!pRankBtn) return false;
 
 	pCashBtn->setScale(0.6, 0.6);
