@@ -16,10 +16,16 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual ~MainScene();
-	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
+	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);		
+	void update(float delta);
 
 private:
 	bool initBackground();
 	bool initButtons();
+	bool initNotice();
+	void flushNoticeLabel(float delta);			//ÖØ»æ¹«¸æ
+
+private:
+	LabelTTF* m_pNoticeLabel;
 };
 

@@ -1,4 +1,5 @@
 #include "MainScene.h"
+#include "toolFunctions.h"
 
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
@@ -7,6 +8,7 @@
 #define TAG_ROLE_BTN		5
 #define TAG_CASH_BTN		6
 #define TAG_DIAMOND_BTN		7
+
 
 
 MainScene::MainScene()
@@ -29,11 +31,14 @@ Scene* MainScene::scene(){
 bool MainScene::init()
 {
 	CCLayer::init();
+	scheduleUpdate();
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
+	if (!initNotice()) return false;
 	return true;
 }
 
+//初始化背景
 bool MainScene::initBackground()
 {
 	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
@@ -46,6 +51,19 @@ bool MainScene::initBackground()
 	return true;
 }
 
+
+bool MainScene::initNotice()
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	m_pNoticeLabel = LabelTTF::create(WStrToUTF8(L"抵制不良游戏，拒绝盗版游戏。 注意自我保护，谨防受骗上当。 适度游戏益脑，沉迷游戏伤身。 合理安排时间，享受健康生活。").c_str(), "Arial", 25);
+	if (!m_pNoticeLabel) return false;
+	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
+	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
+	this->addChild(m_pNoticeLabel);
+	return true;
+}
+
+//初始化各种按钮
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -109,7 +127,19 @@ bool MainScene::initButtons()
 	return true;
 }
 
+void MainScene::flushNoticeLabel(float delta)
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	float ratio = delta * 60;
+	float newX = m_pNoticeLabel->getPositionX() - ratio;
+	if (newX < -m_pNoticeLabel->getContentSize().width/2)
+	{
+		newX = size.width + m_pNoticeLabel->getContentSize().width / 2;
+	}
+	m_pNoticeLabel->setPositionX(newX);
+}
 
+//按钮点击事件回调
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	if (type == Widget::TouchEventType::ENDED)
@@ -142,6 +172,12 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 
+}
+
+//帧刷新
+void MainScene::update(float delta)
+{
+	flushNoticeLabel(delta);
 }
 
 //进入场景

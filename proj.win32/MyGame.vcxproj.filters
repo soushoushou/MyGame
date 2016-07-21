@@ -39,6 +39,9 @@
     <ClCompile Include="..\Classes\MainScene.cpp">
       <Filter>resource\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\toolFunctions.cpp">
+      <Filter>resource\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -69,6 +72,9 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MainScene.h">
+      <Filter>resource\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\toolFunctions.h">
       <Filter>resource\src</Filter>
     </ClInclude>
   </ItemGroup>
