@@ -20,7 +20,7 @@ void WStrToUTF8(string& dest, const wstring& src){
 		}
 		else if (sizeof(wchar_t) > 2 && w <= 0x10ffff)
 		{
-			dest.push_back(0xf0 | ((w >> 18) & 0x07)); // wchar_t 4-bytes situation  
+			dest.push_back(0xf0 | ((w >> 18) & 0x07)); 
 			dest.push_back(0x80 | ((w >> 12) & 0x3f));
 			dest.push_back(0x80 | ((w >> 6) & 0x3f));
 			dest.push_back(0x80 | (w & 0x3f));
