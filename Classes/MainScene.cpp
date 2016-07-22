@@ -27,7 +27,7 @@ Scene* MainScene::scene(){
 	return scene;
 }
 
-//³õÊ¼»¯³¡¾°
+//â‰¥Ä±Â ÂºÂªÃ˜â‰¥Â°Ã¦âˆž
 bool MainScene::init()
 {
 	CCLayer::init();
@@ -38,7 +38,7 @@ bool MainScene::init()
 	return true;
 }
 
-//³õÊ¼»¯±³¾°
+//â‰¥Ä±Â ÂºÂªÃ˜Â±â‰¥Ã¦âˆž
 bool MainScene::initBackground()
 {
 	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
@@ -56,15 +56,15 @@ bool MainScene::initNotice()
 
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	m_pNoticeLabel = LabelTTF::create(ASCII2UTF_8("µÖÖÆ²»Á¼ÓÎÏ·£¬¾Ü¾øµÁ°æÓÎÏ·¡£ ×¢Òâ×ÔÎÒ±£»¤£¬½÷·ÀÊÜÆ­ÉÏµ±¡£ ÊÊ¶ÈÓÎÏ·ÒæÄÔ£¬³ÁÃÔÓÎÏ·ÉËÉí¡£ ºÏÀí°²ÅÅÊ±¼ä£¬ÏíÊÜ½¡¿µÉú»î¡£"), "Arial", 25);
-	if (!m_pNoticeLabel) return false;
+    m_pNoticeLabel = LabelTTF::create("æŠµåˆ¶ä¸è‰¯æ¸¸æˆï¼Œæ‹’ç»ç›—ç‰ˆæ¸¸æˆã€‚ æ³¨æ„è‡ªæˆ‘ä¿æŠ¤ï¼Œè°¨é˜²å—éª—ä¸Šå½“ã€‚ é€‚åº¦æ¸¸æˆç›Šè„‘ï¼Œæ²‰è¿·æ¸¸æˆä¼¤èº«ã€‚ åˆç†å®‰æŽ’æ—¶é—´ï¼Œäº«å—å¥åº·ç”Ÿæ´»ã€‚", "Arial", 25);
+if (!m_pNoticeLabel) return false;
 	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
 	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
 	this->addChild(m_pNoticeLabel);
 	return true;
 }
 
-//³õÊ¼»¯¸÷ÖÖ°´Å¥
+//â‰¥Ä±Â ÂºÂªÃ˜âˆËœÃ·Ã·âˆžÂ¥â‰ˆâ€¢
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -143,7 +143,7 @@ void MainScene::flushNoticeLabel(float delta)
 	m_pNoticeLabel->setPositionX(newX);
 }
 
-//°´Å¥µã»÷ÊÂ¼þ»Øµ÷
+//âˆžÂ¥â‰ˆâ€¢Âµâ€žÂªËœÂ Â¬ÂºË›ÂªÃ¿ÂµËœ
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	if (type == Widget::TouchEventType::ENDED)
@@ -178,20 +178,20 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 }
 
-//Ö¡Ë¢ÐÂ
+//Ã·Â°Ã€Â¢â€“Â¬
 void MainScene::update(float delta)
 {
 	flushNoticeLabel(delta);
 }
 
-//½øÈë³¡¾°
+//Î©Â¯Â»ÃŽâ‰¥Â°Ã¦âˆž
 void MainScene::onEnter()
 {
 	Layer::onEnter();
 }
 
 
-//ÍÆ³ö³¡¾°
+//Ã•âˆ†â‰¥Ë†â‰¥Â°Ã¦âˆž
 void MainScene::onExit()
 {
 	Layer::onExit();
