@@ -41,7 +41,7 @@ bool MainScene::init()
 //≥ı ºªØ±≥æ∞
 bool MainScene::initBackground()
 {
-	CCSprite* bk = CCSprite::create("ui\\mainSceneBG.jpg");
+	CCSprite* bk = CCSprite::create("ui/mainSceneBG.jpg");
 	if (!bk)
 	{
 		return false;
