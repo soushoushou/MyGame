@@ -83,6 +83,9 @@
     <ClInclude Include="..\Classes\User.h">
       <Filter>resource\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\constString.h">
+      <Filter>resource\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "toolFunctions.h"
+#include "constString.h"
 
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
@@ -29,7 +30,7 @@ Scene* MainScene::scene(){
 	return scene;
 }
 
-//≥ı ºªØ≥°æ∞
+//≥ı ºªØ≥°æ�?
 bool MainScene::init()
 {
 	CCLayer::init();
@@ -42,7 +43,7 @@ bool MainScene::init()
 	return true;
 }
 
-//≥ı ºªØ±≥æ∞
+//≥ı ºªØ±≥æ�?
 bool MainScene::initBackground()
 {
 	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
@@ -61,7 +62,7 @@ bool MainScene::initPlayerProfile()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new User(50, size.height - 60, ASCII2UTF_8("�ǳ�:asdfds"), ASCII2UTF_8("Lv:14"));
+		m_pUser = new User(50, size.height - 60, "�ǳ�:asdfds", "Lv:14");
 		this->addChild(m_pUser->getHeadSprite());
 		this->addChild(m_pUser->getLevel());
 		this->addChild(m_pUser->getPlayerName());
@@ -73,7 +74,7 @@ bool MainScene::initPlayerProfile()
 bool MainScene::initNotice()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-    m_pNoticeLabel = LabelTTF::create("抵制不良游戏，拒绝盗版游戏。 注意自我保护，谨防受骗上当。 适度游戏益脑，沉迷游戏伤身。 合理安排时间，享受健康生活。", "Arial", 25);
+    m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
 if (!m_pNoticeLabel) return false;
 	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
 	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
@@ -81,7 +82,7 @@ if (!m_pNoticeLabel) return false;
 	return true;
 }
 
-//≥ı ºªØ∏˜÷÷∞¥≈•
+//≥ı ºªØ∏˜÷÷∞¥≈�?
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -160,7 +161,7 @@ void MainScene::flushNoticeLabel(float delta)
 	m_pNoticeLabel->setPositionX(newX);
 }
 
-//∞¥≈•µ„ª˜ ¬º˛ªÿµ˜
+//∞¥≈•µ„ª˜ ¬º˛ªÿµ�?
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	if (type == Widget::TouchEventType::ENDED)
@@ -195,7 +196,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 }
 
-//÷°À¢–¬
+//÷°À¢–�?
 void MainScene::update(float delta)
 {
 	flushNoticeLabel(delta);

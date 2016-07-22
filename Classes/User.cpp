@@ -29,18 +29,18 @@ bool User::setProfile(int x, int y, const string name, const string level)
 		return false;
 	}
 	m_spHead->setPosition(Vec2(x, y));
-	m_lblPlayerName = LabelTTF::create(ASCII2UTF_8(m_strPlayerName), "Arial", 7);
+	m_lblPlayerName = LabelTTF::create(m_strPlayerName, "Arial", 7);
 	if (!m_lblPlayerName)
 	{
 		return false;
 	}
-	m_lblLevel = LabelTTF::create(ASCII2UTF_8(m_strLevel), "Arial", 7);
+	m_lblLevel = LabelTTF::create(m_strLevel, "Arial", 7);
 	if (!m_lblLevel)
 	{
 		return false;
 	}
-	m_lblPlayerName->setPosition(Vec2(x + 30, y + 30));
-	m_lblLevel->setPosition(Vec2(x + 30, y));
+	m_lblPlayerName->setPosition(Vec2(x + 80, y + 30));
+	m_lblLevel->setPosition(Vec2(x + 80, y));
 	return true;
 }
 
