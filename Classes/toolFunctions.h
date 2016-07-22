@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include "platform/CCPlatformMacros.h"
+#include <locale>
+#include <codecvt>
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	#if defined(_MSC_VER)
 		#include <windows.h>
