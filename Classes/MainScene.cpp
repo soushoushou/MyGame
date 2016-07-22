@@ -13,6 +13,8 @@
 
 MainScene::MainScene()
 {
+	m_pNoticeLabel = NULL;
+	m_pUser = NULL;
 }
 
 
@@ -35,6 +37,8 @@ bool MainScene::init()
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;
+	if (!initPlayerProfile()) return false;
+
 	return true;
 }
 
@@ -51,9 +55,22 @@ bool MainScene::initBackground()
 	return true;
 }
 
+//��ʼ�������Ϣ�����ǳƣ��ȼ���ͷ���
+bool MainScene::initPlayerProfile()
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	if (!m_pUser)
+	{
+		m_pUser = new User(50, size.height - 60, ASCII2UTF_8("�ǳ�:asdfds"), ASCII2UTF_8("Lv:14"));
+		this->addChild(m_pUser->getHeadSprite());
+		this->addChild(m_pUser->getLevel());
+		this->addChild(m_pUser->getPlayerName());
+	}
+	return true;
+}
+
 
 bool MainScene::initNotice()
-
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
     m_pNoticeLabel = LabelTTF::create("抵制不良游戏，拒绝盗版游戏。 注意自我保护，谨防受骗上当。 适度游戏益脑，沉迷游戏伤身。 合理安排时间，享受健康生活。", "Arial", 25);
@@ -107,8 +124,8 @@ bool MainScene::initButtons()
 	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6)-100));
 	pJoinRoomBtn->setPosition(Vec2(size.width / 2 + 250, 3 * (size.height / 6)));
 	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6+100));
-	pCashBtn->setPosition(Vec2(100, size.height-50));
-	pDiamondBtn->setPosition(Vec2(260,size.height-50));
+	pCashBtn->setPosition(Vec2(280, size.height-50));
+	pDiamondBtn->setPosition(Vec2(440,size.height-50));
 	pRoleHelpBtn->setPosition(Vec2(size.width - 150, size.height - 50));
 	pRankBtn->setPosition(Vec2(size.width - 75, size.height - 50));
 

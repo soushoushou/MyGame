@@ -42,6 +42,9 @@
     <ClCompile Include="..\Classes\toolFunctions.cpp">
       <Filter>resource\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\User.cpp">
+      <Filter>resource\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -75,6 +78,9 @@
       <Filter>resource\src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\toolFunctions.h">
+      <Filter>resource\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\User.h">
       <Filter>resource\src</Filter>
     </ClInclude>
   </ItemGroup>
