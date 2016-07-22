@@ -107,14 +107,19 @@ std::string Unicode2Utf8(const std::wstring& widestring)
 //ascii 转 Utf8  
 string ASCII2UTF_8(string strAsciiCode)
 {
+	string strRet("");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	std::string strRet("");
-	//先把 ascii 转为 unicode  
-	std::wstring wstr = Acsi2WideByte(strAsciiCode);
-	//最后把 unicode 转为 utf8  
-	strRet = Unicode2Utf8(wstr);
-	return strRet;
+	#if defined(_MSC_VER)
+		//先把 ascii 转为 unicode  
+		std::wstring wstr = Acsi2WideByte(strAsciiCode);
+		//最后把 unicode 转为 utf8  
+		strRet = Unicode2Utf8(wstr);
+	#else
+		strRet = strAsciiCode;
+	#endif
+#else
+	strRet = strAsciiCode;
 #endif
-	return strAsciiCode;
+	return strRet;
 }
 
