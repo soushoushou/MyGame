@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#ifdef _WIN32
+#include "platform/CCPlatformMacros.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include <windows.h>
 #endif // _WIN32
 #include <vector>

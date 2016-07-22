@@ -107,7 +107,7 @@ std::string Unicode2Utf8(const std::wstring& widestring)
 //ascii 转 Utf8  
 string ASCII2UTF_8(string strAsciiCode)
 {
-#ifdef _WIN32
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	std::string strRet("");
 	//先把 ascii 转为 unicode  
 	std::wstring wstr = Acsi2WideByte(strAsciiCode);

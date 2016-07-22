@@ -68,11 +68,11 @@ bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
-	Button* pCreateRoomBtn = Button::create("ui/createRoom_normal.png", "ui/createRoom_press.png");
+	Button* pCreateRoomBtn = Button::create("ui/createRoom_normal.png");
 	if (!pCreateRoomBtn) return false;
-	Button* pJoinRoomBtn = Button::create("ui/joinRoom_normal.png", "ui/joinRoom_press.png");
+	Button* pJoinRoomBtn = Button::create("ui/joinRoom_normal.png");
 	if (!pJoinRoomBtn) return false;
-	Button* pShopBtn = Button::create("ui/shop_normal.png", "ui/shop_press.png");
+	Button* pShopBtn = Button::create("ui/shop_normal.png");
 	if (!pShopBtn) return false;
 	Button* pCashBtn = Button::create("ui/Cash.png");
 	if (!pCashBtn) return false;
@@ -87,6 +87,9 @@ bool MainScene::initButtons()
 	pDiamondBtn->setScale(0.6, 0.6);
 	pRankBtn->setScale(0.7, 0.7);
 	pRoleHelpBtn->setScale(0.7, 0.7);
+	pCreateRoomBtn->setScale(0.8, 0.8);
+	pJoinRoomBtn->setScale(0.8, 0.8);
+	pShopBtn->setScale(0.8, 0.8);
 
 	pCreateRoomBtn->setTag(TAG_CREATEROOM_BTN);
 	pJoinRoomBtn->setTag(TAG_JOINROOM_BTN);
