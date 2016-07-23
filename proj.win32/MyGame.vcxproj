@@ -151,6 +151,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\MainScene.cpp" />
     <ClCompile Include="..\Classes\Player.cpp" />
     <ClCompile Include="..\Classes\Poker.cpp" />
+    <ClCompile Include="..\Classes\ShadeLayer.cpp" />
     <ClCompile Include="..\Classes\Tool.cpp" />
     <ClCompile Include="..\Classes\toolFunctions.cpp" />
     <ClCompile Include="..\Classes\User.cpp" />
@@ -165,6 +166,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\MainScene.h" />
     <ClInclude Include="..\Classes\Player.h" />
     <ClInclude Include="..\Classes\Poker.h" />
+    <ClInclude Include="..\Classes\ShadeLayer.h" />
     <ClInclude Include="..\Classes\Tool.h" />
     <ClInclude Include="..\Classes\toolFunctions.h" />
     <ClInclude Include="..\Classes\User.h" />

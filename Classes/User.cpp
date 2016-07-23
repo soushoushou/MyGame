@@ -15,8 +15,10 @@ User::User(int x, int y, const string name, const string level)
 	m_spHead->setPosition(Vec2(x, y));
 	m_lblPlayerName = LabelTTF::create(m_strPlayerName, "Arial", 15);
 	m_lblLevel = LabelTTF::create(m_strLevel, "Arial", 15);
-	m_lblPlayerName->setPosition(Vec2(x + 80, y + 30));
-	m_lblLevel->setPosition(Vec2(x + 80, y));
+	m_lblPlayerName->setAnchorPoint(Vec2(0, 0));
+	m_lblPlayerName->setPosition(Vec2(x + 40, y + 20));
+	m_lblLevel->setAnchorPoint(Vec2(0, 0));
+	m_lblLevel->setPosition(Vec2(x + 40, y-10));
 }
 
 bool User::setProfile(int x, int y, const string name, const string level)
@@ -39,8 +41,10 @@ bool User::setProfile(int x, int y, const string name, const string level)
 	{
 		return false;
 	}
-	m_lblPlayerName->setPosition(Vec2(x + 80, y + 30));
-	m_lblLevel->setPosition(Vec2(x + 80, y));
+	m_lblPlayerName->setAnchorPoint(Vec2(0, 0));
+	m_lblPlayerName->setPosition(Vec2(x + 40, y + 20));
+	m_lblLevel->setAnchorPoint(Vec2(0, 0));
+	m_lblLevel->setPosition(Vec2(x + 40, y - 10));
 	return true;
 }
 

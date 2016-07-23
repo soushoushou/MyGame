@@ -1,6 +1,7 @@
 #include "MainScene.h"
 #include "toolFunctions.h"
 #include "constString.h"
+#include "ShadeLayer.h"
 
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
@@ -30,7 +31,7 @@ Scene* MainScene::scene(){
 	return scene;
 }
 
-//â‰¥Ä±Â ÂºÂªÃ˜â‰¥Â°Ã¦âˆ?
+//³õÊ¼»¯¸÷ÖÖ
 bool MainScene::init()
 {
 	CCLayer::init();
@@ -43,7 +44,7 @@ bool MainScene::init()
 	return true;
 }
 
-//â‰¥Ä±Â ÂºÂªÃ˜Â±â‰¥Ã¦âˆ?
+//³õÊ¼»¯±³¾°
 bool MainScene::initBackground()
 {
 	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
@@ -82,7 +83,7 @@ if (!m_pNoticeLabel) return false;
 	return true;
 }
 
-//â‰¥Ä±Â ÂºÂªÃ˜âˆËœÃ·Ã·âˆžÂ¥â‰ˆâ€?
+//³õÊ¼»¯¸÷ÖÖ°´Å¥
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -149,6 +150,7 @@ bool MainScene::initButtons()
 	return true;
 }
 
+//Ë¢ÐÂ¹«¸æ
 void MainScene::flushNoticeLabel(float delta)
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -161,9 +163,10 @@ void MainScene::flushNoticeLabel(float delta)
 	m_pNoticeLabel->setPositionX(newX);
 }
 
-//âˆžÂ¥â‰ˆâ€¢Âµâ€žÂªËœÂ Â¬ÂºË›ÂªÃ¿ÂµË?
+//´¥Ãþ¼àÌý
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
+	Size size = Director::sharedDirector()->getWinSize();
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
@@ -171,8 +174,15 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		switch (tag)
 		{
 		case TAG_CREATEROOM_BTN:
+		{
 			log("create room");
+			ShadeLayer* l = ShadeLayer::create();
+			l->setFrameSprite("shadeFrame.png", Vec2(size.width / 2, size.height / 2));
+			l->setTitle(g_strMessageBosTitle1, "Arial", 10, Vec2(size.width / 2, size.height / 2 + 20));
+			l->setContent(g_strHoldOn1, "Arial", 10, Vec2(size.width / 2, size.height / 2 - 20));
+			butten->getParent()->addChild(l);
 			break;
+		}
 		case TAG_JOINROOM_BTN:
 			log("join room");
 			break;
@@ -196,20 +206,20 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 }
 
-//Ã·Â°Ã€Â¢â€“Â?
+//Ö¡Ë¢ÐÂ
 void MainScene::update(float delta)
 {
 	flushNoticeLabel(delta);
 }
 
-//Î©Â¯Â»ÃŽâ‰¥Â°Ã¦âˆž
+//½øÈë³¡¾°Ê±
 void MainScene::onEnter()
 {
 	Layer::onEnter();
 }
 
 
-//Ã•âˆ†â‰¥Ë†â‰¥Â°Ã¦âˆž
+//ÍÆ³ö³¡¾°Ê±
 void MainScene::onExit()
 {
 	Layer::onExit();

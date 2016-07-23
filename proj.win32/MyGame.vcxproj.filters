@@ -45,6 +45,9 @@
     <ClCompile Include="..\Classes\User.cpp">
       <Filter>resource\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ShadeLayer.cpp">
+      <Filter>resource\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -84,6 +87,9 @@
       <Filter>resource\src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\constString.h">
+      <Filter>resource\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ShadeLayer.h">
       <Filter>resource\src</Filter>
     </ClInclude>
   </ItemGroup>
