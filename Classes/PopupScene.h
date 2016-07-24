@@ -2,7 +2,7 @@
 #define TestCpp_PopupScene_h
 
 #include "cocos2d.h"
-#include "ui\UICheckBox.h"
+#include "ui/UICheckBox.h"
 USING_NS_CC;
 using namespace cocos2d;
 using namespace ui;

@@ -35,7 +35,7 @@ bool GamePlayScene::initBackground()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//Ìí¼Ó±³¾°
-	auto spriteBK = Sprite::create("game/game.jpg");
+	auto spriteBK = Sprite::create("game.jpg");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
 	return true;
@@ -45,7 +45,7 @@ bool GamePlayScene::initButtons()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 
-	Button* startGameBtn = Button::create("game/start.png");
+	Button* startGameBtn = Button::create("start.png");
 	if (!startGameBtn) return false;
 
 	startGameBtn->setScale(0.4, 0.4);
@@ -76,7 +76,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			log("start game");
 			TimeLayer* timeLayer = TimeLayer::create();
-			timeLayer->setFrameSprite("game/timeWait.png", Vec2(size.width / 2, size.height / 2 - 20));
+			timeLayer->setFrameSprite("timeWait.png", Vec2(size.width / 2, size.height / 2 - 20));
 			timeLayer->setTime(5, 20, Vec2(size.width / 2, size.height / 2 - 20));
 			butten->getParent()->addChild(timeLayer);
 			break;

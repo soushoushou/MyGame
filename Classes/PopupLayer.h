@@ -1,7 +1,7 @@
 #pragma once
 #include "cocos2d.h"
-#include "ui\UIScale9Sprite.h"
-#include "ui\UICheckBox.h"
+#include "ui/UIScale9Sprite.h"
+#include "ui/UICheckBox.h"
 using namespace cocos2d;
 using namespace ui;
 //using namespace cocos2d::extension;
@@ -14,18 +14,18 @@ public:
 	CREATE_FUNC(PopupLayer);
 	static PopupLayer* create(const char* backgroundImage, Size dialogSize);
 
-	//touchÊÂ¼ş¼àÌı ÆÁ±ÎÏòÏÂ´¥Ãş
+	//touchÂ Â¬ÂºË›Âºâ€¡ÃƒË âˆ†Â¡Â±Å’Å“ÃšÅ“Â¬Â¥â€¢âˆšË›
 	bool onTouchBegan(Touch *touch, Event *event);
 	void onTouchMoved(Touch *touch, Event *event);
 	void onTouchEnded(Touch* touch, Event* event);
 	//virtual void registerWithTouchDispatcher();
-	//±êÌâ
+	//Â±ÃÃƒâ€š
 	void setTitle(const char* title, int fontsize = 20);
-	//ÎÄ±¾
+	//Å’Æ’Â±Ã¦
 	void setContentText(const char* text, int fontsize = 20, int padding = 50, int paddintTop = 100);
-	//ÉèÖÃbutton»Øµ÷ÊÂ¼ş
+	//â€¦Ã‹Ã·âˆšbuttonÂªÃ¿ÂµËœÂ Â¬ÂºË›
 	void setCallbackFunc(Ref* target, SEL_CallFuncN callfun);
-	//Ìí¼Óbutton
+	//ÃƒÃŒÂºâ€button
 	bool addButton(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
 	bool addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
 	
@@ -38,7 +38,7 @@ private:
 
 	void buttonCallBack(Ref* pSender);
 	void selectedEvent(Object* pSender, CheckBoxEventType type);
-	// ÎÄ×ÖÄÚÈİÁ½±ßµÄ¿Õ°×Çø
+	// Å’Æ’â—ŠÃ·Æ’â„Â»â€ºÂ¡Î©Â±ï¬‚ÂµÆ’Ã¸â€™âˆâ—ŠÂ«Â¯
 	int m_contentPadding;
 	int m_contentPaddingTop;
 

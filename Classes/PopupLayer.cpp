@@ -1,6 +1,6 @@
 #include "PopupLayer.h"
-#include "ui\UIScale9Sprite.h"
-#include "ui\UICheckBox.h"
+#include "ui/UIScale9Sprite.h"
+#include "ui/UICheckBox.h"
 using namespace ui;
 PopupLayer::PopupLayer() :
 	m__pMenu(NULL)

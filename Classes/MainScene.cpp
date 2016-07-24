@@ -199,12 +199,12 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 		case TAG_SHOP_BTN: {
 			log("shop");
-			PopupLayer* pl = PopupLayer::create("popuplayer/BackGround.png", Size(400, 350));
+			PopupLayer* pl = PopupLayer::create("BackGround.png", Size(400, 350));
 			pl->setTitle("hhh");
 			pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
-			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
+			pl->addButton("pop_button.png", "pop_button.png", "submit", 1);
+			pl->addButton("pop_button.png", "pop_button.png", "cancel", 0);
 			pl->addCheckBox("CheckBox_UnSelect.png",
 				"CheckBox_Select.png", "haha", 2);
 			butten->getParent()->addChild(pl);
