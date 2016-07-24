@@ -1,9 +1,14 @@
 #include "GameScene.h"
 #include "AppDelegate.h"
 #include "MainScene.h"
+#include "LoginScene.h"
+#include "SimpleAudioEngine.h"   
+
+using namespace CocosDenshion;
+
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(800, 600);
+static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -57,11 +62,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->setAnimationInterval(1.0 / 60);
 
 	// create a scene. it's an autorelease object
-
-	auto scene =LoginScene::createScene();
+	auto scene = LoginScene::createScene();
 
 	// run
 	director->runWithScene(scene);
+	//¿ªÊ¼²¥·Å±³¾°ÒôÀÖ
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3");
 
 	return true;
 }
@@ -71,7 +77,7 @@ void AppDelegate::applicationDidEnterBackground() {
 	Director::getInstance()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
-	// SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
@@ -79,5 +85,5 @@ void AppDelegate::applicationWillEnterForeground() {
 	Director::getInstance()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here
-	// SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }

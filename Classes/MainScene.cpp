@@ -1,8 +1,13 @@
-#include "MainScene.h"
+ï»¿#include "MainScene.h"
 #include "toolFunctions.h"
 #include "constString.h"
 #include "ShadeLayer.h"
 #include "PopupLayer.h"
+#include "GamePlayScene.h"
+
+using namespace ui;
+
+
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
 #define TAG_SHOP_BTN		3
@@ -32,7 +37,7 @@ Scene* MainScene::scene(){
 	return scene;
 }
 
-//³õÊ¼»¯¸÷ÖÖ
+//åˆå§‹åŒ–å„ç§
 bool MainScene::init()
 {
 	printf("s");
@@ -48,7 +53,7 @@ bool MainScene::init()
 	return true;
 }
 
-//³õÊ¼»¯±³¾°
+//åˆå§‹åŒ–èƒŒæ™¯
 bool MainScene::initBackground()
 {
 	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
@@ -61,13 +66,13 @@ bool MainScene::initBackground()
 	return true;
 }
 
-//³õÊ¼»¯Íæ¼ÒÐÅÏ¢£¬ÈçêÇ³Æ£¬µÈ¼¶£¬Í·ÏñµÈ
+//åˆå§‹åŒ–çŽ©å®¶ä¿¡æ¯ï¼Œå¦‚æ˜µç§°ï¼Œç­‰çº§ï¼Œå¤´åƒç­‰
 bool MainScene::initPlayerProfile()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new User(50, size.height - 60, "êÇ³Æ:asdfds", "Lv:14");
+		m_pUser = new User(50, size.height - 60, "æ˜µç§°:asdfds", "Lv:14");
 		this->addChild(m_pUser->getHeadSprite());
 		this->addChild(m_pUser->getLevel());
 		this->addChild(m_pUser->getPlayerName());
@@ -79,15 +84,15 @@ bool MainScene::initPlayerProfile()
 bool MainScene::initNotice()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-    m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
-if (!m_pNoticeLabel) return false;
+	m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
+	if (!m_pNoticeLabel) return false;
 	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
 	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
 	this->addChild(m_pNoticeLabel);
 	return true;
 }
 
-//³õÊ¼»¯¸÷ÖÖ°´Å¥
+//åˆå§‹åŒ–å„ç§æŒ‰é’®
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -127,11 +132,11 @@ bool MainScene::initButtons()
 	pJoinRoomBtn->setScale9Enabled(true);
 	pShopBtn->setScale9Enabled(true);
 	pDiamondBtn->setScale9Enabled(true);
-	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6)-100));
+	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6) - 100));
 	pJoinRoomBtn->setPosition(Vec2(size.width / 2 + 250, 3 * (size.height / 6)));
-	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6+100));
-	pCashBtn->setPosition(Vec2(280, size.height-50));
-	pDiamondBtn->setPosition(Vec2(440,size.height-50));
+	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6 + 100));
+	pCashBtn->setPosition(Vec2(280, size.height - 50));
+	pDiamondBtn->setPosition(Vec2(440, size.height - 50));
 	pRoleHelpBtn->setPosition(Vec2(size.width - 150, size.height - 50));
 	pRankBtn->setPosition(Vec2(size.width - 75, size.height - 50));
 
@@ -154,20 +159,20 @@ bool MainScene::initButtons()
 	return true;
 }
 
-//Ë¢ÐÂ¹«¸æ
+//åˆ·æ–°å…¬å‘Š
 void MainScene::flushNoticeLabel(float delta)
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	float ratio = delta * 60;
 	float newX = m_pNoticeLabel->getPositionX() - ratio;
-	if (newX < -m_pNoticeLabel->getContentSize().width/2)
+	if (newX < -m_pNoticeLabel->getContentSize().width / 2)
 	{
 		newX = size.width + m_pNoticeLabel->getContentSize().width / 2;
 	}
 	m_pNoticeLabel->setPositionX(newX);
 }
 
-//´¥Ãþ¼àÌý
+//è§¦æ‘¸ç›‘å¬
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	Size size = Director::sharedDirector()->getWinSize();
@@ -188,8 +193,10 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			break;
 		}
 		case TAG_JOINROOM_BTN:
-			log("join room");
+		{
+			Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
+		}
 		case TAG_SHOP_BTN: {
 			log("shop");
 			PopupLayer* pl = PopupLayer::create("popuplayer/BackGround.png", Size(400, 350));
@@ -219,24 +226,25 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 }
 
-//Ö¡Ë¢ÐÂ
+//å¸§åˆ·æ–°
 void MainScene::update(float delta)
 {
 	flushNoticeLabel(delta);
 }
 
-//½øÈë³¡¾°Ê±
+//è¿›å…¥åœºæ™¯æ—¶
 void MainScene::onEnter()
 {
 	Layer::onEnter();
 }
 
 
-//ÍÆ³ö³¡¾°Ê±
+//æŽ¨å‡ºåœºæ™¯æ—¶
 void MainScene::onExit()
 {
 	Layer::onExit();
 }
+
 void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
 	//CCLog("button call back. tag: %d", pNode->getTag());
 }
