@@ -2,7 +2,7 @@
 #include "toolFunctions.h"
 #include "constString.h"
 #include "ShadeLayer.h"
-
+#include "PopupLayer.h"
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
 #define TAG_SHOP_BTN		3
@@ -27,6 +27,7 @@ MainScene::~MainScene()
 Scene* MainScene::scene(){
 	Scene* scene = Scene::create();
 	MainScene * mainScene = MainScene::create();
+	if(mainScene!=nullptr)
 	scene->addChild(mainScene);
 	return scene;
 }
@@ -34,8 +35,11 @@ Scene* MainScene::scene(){
 //初始化各种
 bool MainScene::init()
 {
+	printf("s");
 	CCLayer::init();
+	printf("s");
 	scheduleUpdate();
+	printf("s");
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;
@@ -186,9 +190,18 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_JOINROOM_BTN:
 			log("join room");
 			break;
-		case TAG_SHOP_BTN:
+		case TAG_SHOP_BTN: {
 			log("shop");
-			break;
+			PopupLayer* pl = PopupLayer::create("popuplayer/BackGround.png", Size(400, 350));
+			pl->setTitle("hhh");
+			pl->setContentText("hhhh", 20, 60, 250);
+			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
+			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
+			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
+			pl->addCheckBox("CheckBox_UnSelect.png",
+				"CheckBox_Select.png", "haha", 2);
+			butten->getParent()->addChild(pl);
+			break; }
 		case TAG_RANK_BTN:
 			log("rank");
 			break;
@@ -223,4 +236,7 @@ void MainScene::onEnter()
 void MainScene::onExit()
 {
 	Layer::onExit();
+}
+void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
+	//CCLog("button call back. tag: %d", pNode->getTag());
 }

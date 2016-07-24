@@ -4,6 +4,7 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
+#include "LoginScene.h"
 /**
 @brief    The cocos2d Application.
 

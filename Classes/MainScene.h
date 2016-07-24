@@ -18,7 +18,7 @@ public:
 	virtual ~MainScene();
 	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);		
 	void update(float delta);
-
+	void buttonCallback(CCNode* pSender);
 private:
 	bool initBackground();
 	bool initButtons();
