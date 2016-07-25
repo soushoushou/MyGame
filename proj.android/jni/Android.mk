@@ -15,10 +15,8 @@ LOCAL_MODULE := MyGame_shared
 
 LOCAL_MODULE_FILENAME := libMyGame
 
-//添加新增加的cpp路径
 LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp \
                    ../../Classes/GameScene.cpp \
                    ../../Classes/Global.cpp \
 				   ../../Classes/MainScene.cpp \
@@ -33,7 +31,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/PopupLayer.cpp \
 				   ../../Classes/PopupScene.cpp \
 				   ../../Classes/DebugSimpleServer.cpp \
-				   ../../Classes/TimeLayer.cpp \
+				   ../../Classes/TimeLayer.cpp 
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
