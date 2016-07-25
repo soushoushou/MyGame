@@ -1,7 +1,7 @@
 #include "TimeLayer.h"
 
 
-TimeLayer::TimeLayer() :m_pFrameSprtie(NULL)
+TimeLayer::TimeLayer() :m_pFrameSprtie(NULL), m_bCanRemove(false)
 {
 }
 
@@ -89,6 +89,16 @@ void TimeLayer::update(float delta)
 		sprintf(mtime, "%d", (int)pTime % 60);
 		timeLabel->setString(mtime);
 	}
+	else
+	{
+		this->unschedule(schedule_selector(TimeLayer::update));
+		m_bCanRemove = true;
+	}
+}
+
+bool TimeLayer::canRemove() const
+{
+	return m_bCanRemove;
 }
 
 bool TimeLayer::setTime(float time, float size, const Vec2& pos)

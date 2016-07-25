@@ -32,7 +32,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/LoginScene.cpp \
 				   ../../Classes/PopupLayer.cpp \
 				   ../../Classes/PopupScene.cpp \
-				   ../../Classes/TimeLayer.cpp
+				   ../../Classes/DebugSimpleServer.cpp \
+				   ../../Classes/TimeLayer.cpp \
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

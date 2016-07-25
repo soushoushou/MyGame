@@ -17,6 +17,7 @@ public:
 	static TimeLayer* createTimer(float time, float size, const Vec2& pos);
 	void update(float delta);
 	bool setTime(float time, float size, const Vec2& pos);
+	bool canRemove() const;
 
 protected:
 	Sprite* m_pFrameSprtie;							//ÏûÏ¢¿ò¾«Áé
@@ -24,5 +25,6 @@ protected:
 private:
 	LabelTTF* timeLabel;
 	float pTime;
+	bool m_bCanRemove;
 };
 
