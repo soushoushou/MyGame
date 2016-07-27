@@ -52,7 +52,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
 		director->setOpenGLView(glview);
 	}
-	//¸Ä±ä·Ö±æÂÊ
+	//âˆÆ’Â±â€°âˆ‘Ã·Â±ÃŠÂ¬Â 
 	glview->setDesignResolutionSize(800, 600, ResolutionPolicy::EXACT_FIT);
 
 	// turn on display FPS
@@ -66,8 +66,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	// run
 	director->runWithScene(scene);
-	//¿ªÊ¼²¥·Å±³¾°ÒôÀÖ
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3");
+	//Ã¸â„¢Â Âºâ‰¤â€¢âˆ‘â‰ˆÂ±â‰¥Ã¦âˆžâ€œÃ™Â¿Ã·
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3",true);
 
 	return true;
 }
