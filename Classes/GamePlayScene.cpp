@@ -66,7 +66,7 @@ void GamePlayScene::update(float delta)
 //	}
 }
 
-//≥ı ºªØ
+//初始化
 bool GamePlayScene::init()
 {
 	if (!Layer::init())
@@ -84,13 +84,13 @@ bool GamePlayScene::init()
     return true;
 }
 
-//≥ı ºªØ±≥æ∞
+//初始化背景
 bool GamePlayScene::initBackground()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//ÃÌº”±≥æ∞
+	//添加背景
 	auto spriteBK = Sprite::create("game.jpg");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
@@ -131,7 +131,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_STARTGAME_BTN:
 		{
 			log("start game");
-			//ƒ£ƒ‚µ±À˘”–ÕÊº“∂º◊º±∏∫√∫Û‘Ÿµπº∆ ±
+			//模拟当所有玩家都准备好后再倒计时
 			DebugSimpleServer::getInstance()->playerReady("alw");
 			m_bReady = !m_bReady;
 			break;
