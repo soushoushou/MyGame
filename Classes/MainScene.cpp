@@ -1,6 +1,16 @@
-#include "MainScene.h"
+ï»¿#include "MainScene.h"
 #include "toolFunctions.h"
+<<<<<<< HEAD
 #include "Help.h"
+=======
+#include "constString.h"
+#include "ShadeLayer.h"
+#include "PopupLayer.h"
+#include "GamePlayScene.h"
+
+using namespace ui;
+
+>>>>>>> 71810d6863adb0218247c5b4cf694aef42da547a
 
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
@@ -14,6 +24,8 @@
 
 MainScene::MainScene()
 {
+	m_pNoticeLabel = NULL;
+	m_pUser = NULL;
 }
 
 
@@ -24,25 +36,31 @@ MainScene::~MainScene()
 Scene* MainScene::scene(){
 	Scene* scene = Scene::create();
 	MainScene * mainScene = MainScene::create();
+	if(mainScene!=nullptr)
 	scene->addChild(mainScene);
 	return scene;
 }
 
-//³õÊ¼»¯³¡¾°
+//åˆå§‹åŒ–å„ç§
 bool MainScene::init()
 {
+	printf("s");
 	CCLayer::init();
+	printf("s");
 	scheduleUpdate();
+	printf("s");
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;
+	if (!initPlayerProfile()) return false;
+
 	return true;
 }
 
-//³õÊ¼»¯±³¾°
+//åˆå§‹åŒ–èƒŒæ™¯
 bool MainScene::initBackground()
 {
-	CCSprite* bk = CCSprite::create("ui\\mainSceneBG.jpg");
+	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
 	if (!bk)
 	{
 		return false;
@@ -52,12 +70,25 @@ bool MainScene::initBackground()
 	return true;
 }
 
-
-bool MainScene::initNotice()
-
+//åˆå§‹åŒ–ç©å®¶ä¿¡æ¯ï¼Œå¦‚æ˜µç§°ï¼Œç­‰çº§ï¼Œå¤´åƒç­‰
+bool MainScene::initPlayerProfile()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	m_pNoticeLabel = LabelTTF::create(ASCII2UTF_8("µÖÖÆ²»Á¼ÓÎÏ·£¬¾Ü¾øµÁ°æÓÎÏ·¡£ ×¢Òâ×ÔÎÒ±£»¤£¬½÷·ÀÊÜÆ­ÉÏµ±¡£ ÊÊ¶ÈÓÎÏ·ÒæÄÔ£¬³ÁÃÔÓÎÏ·ÉËÉí¡£ ºÏÀí°²ÅÅÊ±¼ä£¬ÏíÊÜ½¡¿µÉú»î¡£"), "Arial", 25);
+	if (!m_pUser)
+	{
+		m_pUser = new User(50, size.height - 60, "æ˜µç§°:asdfds", "Lv:14");
+		this->addChild(m_pUser->getHeadSprite());
+		this->addChild(m_pUser->getLevel());
+		this->addChild(m_pUser->getPlayerName());
+	}
+	return true;
+}
+
+
+bool MainScene::initNotice()
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
 	if (!m_pNoticeLabel) return false;
 	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
 	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
@@ -65,24 +96,24 @@ bool MainScene::initNotice()
 	return true;
 }
 
-//³õÊ¼»¯¸÷ÖÖ°´Å¥
+//åˆå§‹åŒ–å„ç§æŒ‰é’®
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
-	Button* pCreateRoomBtn = Button::create("ui/createRoom_normal.png");
+	Button* pCreateRoomBtn = Button::create("createRoom_normal.png");
 	if (!pCreateRoomBtn) return false;
-	Button* pJoinRoomBtn = Button::create("ui/joinRoom_normal.png");
+	Button* pJoinRoomBtn = Button::create("joinRoom_normal.png");
 	if (!pJoinRoomBtn) return false;
-	Button* pShopBtn = Button::create("ui/shop_normal.png");
+	Button* pShopBtn = Button::create("shop_normal.png");
 	if (!pShopBtn) return false;
-	Button* pCashBtn = Button::create("ui/Cash.png");
+	Button* pCashBtn = Button::create("Cash.png");
 	if (!pCashBtn) return false;
-	Button* pDiamondBtn = Button::create("ui/Gems.png");
+	Button* pDiamondBtn = Button::create("Gems.png");
 	if (!pDiamondBtn) return false;
-	Button* pRoleHelpBtn = Button::create("ui/role.png");
+	Button* pRoleHelpBtn = Button::create("role.png");
 	if (!pRoleHelpBtn) return false;
-	Button* pRankBtn = Button::create("ui/rank.png");
+	Button* pRankBtn = Button::create("rank.png");
 	if (!pRankBtn) return false;
 
 	pCashBtn->setScale(0.6, 0.6);
@@ -105,11 +136,11 @@ bool MainScene::initButtons()
 	pJoinRoomBtn->setScale9Enabled(true);
 	pShopBtn->setScale9Enabled(true);
 	pDiamondBtn->setScale9Enabled(true);
-	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6)-100));
+	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6) - 100));
 	pJoinRoomBtn->setPosition(Vec2(size.width / 2 + 250, 3 * (size.height / 6)));
-	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6+100));
-	pCashBtn->setPosition(Vec2(100, size.height-50));
-	pDiamondBtn->setPosition(Vec2(260,size.height-50));
+	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6 + 100));
+	pCashBtn->setPosition(Vec2(280, size.height - 50));
+	pDiamondBtn->setPosition(Vec2(440, size.height - 50));
 	pRoleHelpBtn->setPosition(Vec2(size.width - 150, size.height - 50));
 	pRankBtn->setPosition(Vec2(size.width - 75, size.height - 50));
 
@@ -132,23 +163,28 @@ bool MainScene::initButtons()
 	return true;
 }
 
+//åˆ·æ–°å…¬å‘Š
 void MainScene::flushNoticeLabel(float delta)
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	float ratio = delta * 60;
 	float newX = m_pNoticeLabel->getPositionX() - ratio;
-	if (newX < -m_pNoticeLabel->getContentSize().width/2)
+	if (newX < -m_pNoticeLabel->getContentSize().width / 2)
 	{
 		newX = size.width + m_pNoticeLabel->getContentSize().width / 2;
 	}
 	m_pNoticeLabel->setPositionX(newX);
 }
 
-//°´Å¥µã»÷ÊÂ¼ş»Øµ÷
+//è§¦æ‘¸ç›‘å¬
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
+<<<<<<< HEAD
 	auto director = Director::getInstance();
 	auto helpscene = Help::scene();
+=======
+	Size size = Director::sharedDirector()->getWinSize();
+>>>>>>> 71810d6863adb0218247c5b4cf694aef42da547a
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
@@ -156,14 +192,32 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		switch (tag)
 		{
 		case TAG_CREATEROOM_BTN:
+		{
 			log("create room");
+			ShadeLayer* l = ShadeLayer::create();
+			l->setFrameSprite("shadeFrame.png", Vec2(size.width / 2, size.height / 2));
+			l->setTitle(g_strMessageBosTitle1, "Arial", 10, Vec2(size.width / 2, size.height / 2 + 20));
+			l->setContent(g_strHoldOn1, "Arial", 10, Vec2(size.width / 2, size.height / 2 - 20));
+			butten->getParent()->addChild(l);
 			break;
+		}
 		case TAG_JOINROOM_BTN:
-			log("join room");
+		{
+			Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
-		case TAG_SHOP_BTN:
+		}
+		case TAG_SHOP_BTN: {
 			log("shop");
-			break;
+			PopupLayer* pl = PopupLayer::create("BackGround.png", Size(400, 350));
+			pl->setTitle("hhh");
+			pl->setContentText("hhhh", 20, 60, 250);
+			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
+			pl->addButton("pop_button.png", "pop_button.png", "submit", 1);
+			pl->addButton("pop_button.png", "pop_button.png", "cancel", 0);
+			pl->addCheckBox("CheckBox_UnSelect.png",
+				"CheckBox_Select.png", "haha", 2);
+			butten->getParent()->addChild(pl);
+			break; }
 		case TAG_RANK_BTN:
 			log("rank");
 			break;
@@ -182,21 +236,25 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 }
 
-//Ö¡Ë¢ĞÂ
+//å¸§åˆ·æ–°
 void MainScene::update(float delta)
 {
 	flushNoticeLabel(delta);
 }
 
-//½øÈë³¡¾°
+//è¿›å…¥åœºæ™¯æ—¶
 void MainScene::onEnter()
 {
 	Layer::onEnter();
 }
 
 
-//ÍÆ³ö³¡¾°
+//æ¨å‡ºåœºæ™¯æ—¶
 void MainScene::onExit()
 {
 	Layer::onExit();
+}
+
+void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
+	//CCLog("button call back. tag: %d", pNode->getTag());
 }

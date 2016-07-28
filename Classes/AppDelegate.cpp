@@ -1,6 +1,10 @@
 #include "GameScene.h"
 #include "AppDelegate.h"
 #include "MainScene.h"
+#include "LoginScene.h"
+#include "SimpleAudioEngine.h"   
+
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -48,7 +52,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		#endif
 		director->setOpenGLView(glview);
 	}
-	//�ı�ֱ���
+	//∏ƒ±‰∑÷±Ê¬ 
 	glview->setDesignResolutionSize(800, 600, ResolutionPolicy::EXACT_FIT);
 
 	// turn on display FPS
@@ -58,10 +62,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->setAnimationInterval(1.0 / 60);
 
 	// create a scene. it's an autorelease object
-	auto scene = MainScene::scene();
+	auto scene = LoginScene::createScene();
 
 	// run
 	director->runWithScene(scene);
+	//ø™ º≤•∑≈±≥æ∞“Ù¿÷
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3",true);
 
 	return true;
 }
@@ -71,7 +77,7 @@ void AppDelegate::applicationDidEnterBackground() {
 	Director::getInstance()->stopAnimation();
 
 	// if you use SimpleAudioEngine, it must be pause
-	// SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+	SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
@@ -79,5 +85,5 @@ void AppDelegate::applicationWillEnterForeground() {
 	Director::getInstance()->startAnimation();
 
 	// if you use SimpleAudioEngine, it must resume here
-	// SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+	SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 }

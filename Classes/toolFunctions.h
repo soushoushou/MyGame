@@ -1,15 +1,14 @@
 #pragma once
 #include <string>
-#include "platform/CCPlatformMacros.h"
-#include <locale>
-#include <codecvt>
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	#if defined(_MSC_VER)
-		#include <windows.h>
-	#endif // _WIN32
-#endif
+//#include "platform/CCPlatformMacros.h"
+//#include <codecvt>
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+//	#if defined(_MSC_VER)
+//		#include <windows.h>
+//	#endif // _WIN32
+//#endif
 #include <vector>
 using namespace std;
-#define _T(x)      L ## x
-
-string ASCII2UTF_8(string strAsciiCode);		//win32下ANSI转utf-8
+//#define _T(x)      L ## x
+//
+//string ASCII2UTF_8(string strAsciiCode);		//win32下ANSI转utf-8
