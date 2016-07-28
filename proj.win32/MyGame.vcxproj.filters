@@ -42,6 +42,9 @@
     <ClCompile Include="..\Classes\toolFunctions.cpp">
       <Filter>resource\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Help.cpp">
+      <Filter>resource\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -77,6 +80,9 @@
     <ClInclude Include="..\Classes\toolFunctions.h">
       <Filter>resource\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Help.h">
+      <Filter>resource\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -94,6 +100,9 @@
   <ItemGroup>
     <Xml Include="..\..\VSworkspace\斗地主源代码\Resources\strings.xml">
       <Filter>resource</Filter>
+    </Xml>
+    <Xml Include="instruction.xml">
+      <Filter>resource\src</Filter>
     </Xml>
   </ItemGroup>
 </Project>

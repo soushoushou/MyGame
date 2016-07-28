@@ -1,5 +1,6 @@
 #include "MainScene.h"
 #include "toolFunctions.h"
+#include "Help.h"
 
 #define TAG_CREATEROOM_BTN	1	
 #define TAG_JOINROOM_BTN	2
@@ -146,6 +147,8 @@ void MainScene::flushNoticeLabel(float delta)
 //按钮点击事件回调
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
+	auto director = Director::getInstance();
+	auto helpscene = Help::scene();
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
@@ -165,7 +168,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("rank");
 			break;
 		case TAG_ROLE_BTN:
-			log("role");
+			//director->runWithScene(helpscene);
+			CCDirector::sharedDirector()->replaceScene(helpscene);
 			break;
 		case TAG_CASH_BTN:
 			log("cash");

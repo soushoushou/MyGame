@@ -41,11 +41,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto director = Director::getInstance();
 	auto glview = director->getOpenGLView();
 	if (!glview) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-		glview = GLViewImpl::createWithRect("GitTest", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
-#else
-		glview = GLViewImpl::create("GitTest");
-#endif
+		#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+				glview = GLViewImpl::createWithRect("GitTest", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+		#else
+				glview = GLViewImpl::create("GitTest");
+		#endif
 		director->setOpenGLView(glview);
 	}
 	//改变分辨率
