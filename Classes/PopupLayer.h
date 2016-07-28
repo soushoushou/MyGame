@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "ui/UIScale9Sprite.h"
 #include "ui/UICheckBox.h"
+#include "ui/UIListView.h" 
 using namespace cocos2d;
 using namespace ui;
 //using namespace cocos2d::extension;
@@ -14,21 +15,22 @@ public:
 	CREATE_FUNC(PopupLayer);
 	static PopupLayer* create(const char* backgroundImage, Size dialogSize);
 
-	//touch ¬º˛º‡Ã˝ ∆¡±ŒœÚœ¬¥•√˛
+	//touch事件监听 屏蔽向下触摸
 	bool onTouchBegan(Touch *touch, Event *event);
 	void onTouchMoved(Touch *touch, Event *event);
 	void onTouchEnded(Touch* touch, Event* event);
 	//virtual void registerWithTouchDispatcher();
-	//±ÍÃ‚
+	//标题
 	void setTitle(const char* title, int fontsize = 20);
-	//Œƒ±æ
+	//文本
 	void setContentText(const char* text, int fontsize = 20, int padding = 50, int paddintTop = 100);
-	//…Ë÷√buttonªÿµ˜ ¬º˛
+	//设置button回调事件
 	void setCallbackFunc(Ref* target, SEL_CallFuncN callfun);
-	//ÃÌº”button
+	//添加button
 	bool addButton(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
+	bool addListView(/*const char* normalImage, const char* selectedImage, const char* title, int tag = 0*/);
 	bool addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
-	
+	void selectedItemEvent(Ref *pSender, ListViewEventType type);
 	virtual void onEnter();
 	virtual void onExit();
 
@@ -38,7 +40,7 @@ private:
 
 	void buttonCallBack(Ref* pSender);
 	void selectedEvent(Object* pSender, CheckBoxEventType type);
-	// Œƒ◊÷ƒ⁄»›¡Ω±ﬂµƒø’∞◊«¯
+	// 文字内容两边的空白区
 	int m_contentPadding;
 	int m_contentPaddingTop;
 

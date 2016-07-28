@@ -1,6 +1,8 @@
 #include "PopupLayer.h"
+
 #include "ui/UIScale9Sprite.h"
 #include "ui/UICheckBox.h"
+#include "ui/CocosGUI.h"
 using namespace ui;
 PopupLayer::PopupLayer() :
 	m__pMenu(NULL)
@@ -113,6 +115,84 @@ bool PopupLayer::addButton(const char* normalImage, const char* selectedImage, c
 	getMenuButton()->addChild(item);
 
 	return true;
+}
+bool PopupLayer::addListView(/*const char* normalImage, const char* selectedImage, const char* title, int tag  = 0 */) {
+
+	Size size = Size(200, 50);
+	auto popupSize = Director::getInstance()->getWinSize();
+	auto center = Point(popupSize.width / 2, popupSize.height / 2);
+	auto lv = ListView::create();
+	// 创建图片菜单按钮
+	lv->setDirection(ui::ScrollView::Direction::VERTICAL);
+	lv->setBounceEnabled(true);
+	lv->setBackGroundImage("bg.jpg");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成  
+	lv->setBackGroundImageScale9Enabled(true);
+	lv->setContentSize(Size(200, 150));
+	lv->setAnchorPoint(Point(0.5, 0.5));
+	lv->setPosition(center);
+	char* _image[15] = { "CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
+		"CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
+		"nCloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png" };
+	this->addChild(lv,10);
+	
+	for (int i = 0; i < 15; ++i)
+	{
+		auto image = ImageView::create(_image[i]);
+
+		image->setPosition(Point(image->getContentSize().width / 2, size.height / 2));
+
+		auto bt = Button::create("joinRoom_normal.png", "joinRoom_press.png");
+
+		bt->setScale9Enabled(true);
+
+		bt->setContentSize(Size(size.width / 2, size.height / 2));
+
+		bt->setPosition(Point(size.width - bt->getContentSize().width / 2, size.height / 2));
+
+		bt->setTitleText(_image[i]);
+
+		//itme的布局  
+		auto layout = Layout::create();
+
+		layout->setBackGroundImageScale9Enabled(true);
+
+		layout->setBackGroundImage("bg.jpg");
+
+		layout->setContentSize(size);
+
+		layout->addChild(bt);
+		layout->addChild(image);
+
+		lv->addChild(layout);
+
+	}
+
+	lv->setItemsMargin(10);
+	return true;
+}
+void PopupLayer::selectedItemEvent(cocos2d::Ref *pSender, ListViewEventType type)
+{
+
+	switch (type) {
+	case cocos2d::ui::LISTVIEW_ONSELECTEDITEM_START:
+	{
+		ListView* listView = static_cast<ListView*>(pSender);
+
+		log("%ld", listView->getCurSelectedIndex());
+	}
+	break;
+
+
+	case cocos2d::ui::LISTVIEW_ONSELECTEDITEM_END:
+	{
+		ListView* listView = static_cast<ListView*>(pSender);
+
+		log("%ld", listView->getCurSelectedIndex());
+	}
+	break;
+	default:
+		break;
+	}
 }
 bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag /* = 0 */) {
 
