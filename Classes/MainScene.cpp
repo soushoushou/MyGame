@@ -9,10 +9,14 @@ using namespace ui;
 
 
 #define TAG_CREATEROOM_BTN	1	
-#define TAG_JOINROOM_BTN	2
+#define TAG_JOINGAME_BTN	2
 #define TAG_SHOP_BTN		3
 #define TAG_RANK_BTN		4
+#define TAG_GAMEHALL_BTN	5
+#define TAG_NOTICE_BTN		6
+#define TAG_SETTING_BTN		7
 #define TAG_BACK_BTN		8
+
 
 
 
@@ -201,13 +205,14 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 		case TAG_SHOP_BTN: {
 			log("shop");
-		
+			PopupLayer* pl = PopupLayer::create("popuplayer/BackGround.png", Size(400, 350));
 			pl->setTitle("hhh");
 			pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-
+			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
+			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
 			//pl->addCheckBox("CheckBox_UnSelect.png",
-				//"CheckBox_Select.png", "haha", 2);
+			//"CheckBox_Select.png", "haha", 2);
 			pl->addListView();
 			butten->getParent()->addChild(pl);
 			break; }
