@@ -50,12 +50,14 @@ private:
     __Array* m_arrPokers;
     /** 玩家 */
     CC_SYNTHESIZE(NiuPlayer*, m_player, Player);
-    /** 玩家右一 */
-    NiuPlayer* m_playerOne;
+    /** 玩家右 */
+    NiuPlayer* m_playerRight;
     /** 玩家上二 */
-    NiuPlayer* m_playerTwo;
-    /** 玩家左三 */
-    NiuPlayer* m_playerThree;
+    NiuPlayer* m_playerTopRight;
+    /** 玩家上一 */
+    NiuPlayer* m_playerTopLeft;
+    /** 玩家左 */
+    NiuPlayer* m_playerLeft;
     /** 玩家坐标 */
     Point playerDiZhuLablePt;
     /** 玩家右一坐标 */

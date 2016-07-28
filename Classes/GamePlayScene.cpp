@@ -11,9 +11,10 @@ USING_NS_CC;
 GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),m_isSend(true), m_iSendPk(0), m_iState(0)
 {
     m_player = new NiuPlayer();
-    m_playerOne = new NiuPlayer();
-    m_playerTwo = new NiuPlayer();
-    m_playerThree = new NiuPlayer();
+    m_playerRight = new NiuPlayer();
+    m_playerTopRight = new NiuPlayer();
+    m_playerTopLeft = new NiuPlayer();
+    m_playerLeft = new NiuPlayer();
     
     m_arrPokers = __Array::create();
     m_arrPokers->retain();
@@ -22,9 +23,10 @@ GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bRead
 
 GamePlayScene::~GamePlayScene(){
     CC_SAFE_DELETE(m_player);
-    CC_SAFE_DELETE(m_playerOne);
-    CC_SAFE_DELETE(m_playerTwo);
-    CC_SAFE_DELETE(m_playerThree);
+    CC_SAFE_DELETE(m_playerRight);
+    CC_SAFE_DELETE(m_playerTopRight);
+    CC_SAFE_DELETE(m_playerTopLeft);
+    CC_SAFE_DELETE(m_playerTopLeft);
     CC_SAFE_RELEASE(m_arrPokers);
 }
 
@@ -144,16 +146,19 @@ bool GamePlayScene::initPlayer(){
     Size size = Director::getInstance()->getVisibleSize();
     //设置主玩家的位置
     m_player->setPoint(Vec2(size.width / 2, size.height/6));
-    m_player->setPlayerClass(0);
-    //设置玩家右一的位置
-    m_playerOne->setPoint(Vec2(735, size.height / 2));
-    m_playerOne->setPlayerClass(1);
+    m_player->setPlayerClass(PlayerType_Me);
+    //设置玩家右的位置
+    m_playerRight->setPoint(Vec2(size.width-pkWidth*3, size.height / 2));
+    m_playerRight->setPlayerClass(PlayerType_Right);
     //设置玩家上二的位置
-    m_playerTwo->setPoint(Vec2(size.width / 2, size.height/6*5));
-    m_playerTwo->setPlayerClass(6);
-    //设置玩家左三的位置
-    m_playerThree->setPoint(Vec2(65, size.height / 2));
-    m_playerThree->setPlayerClass(1);
+    m_playerTopRight->setPoint(Vec2(size.width*0.5+pkWidth*3, size.height/6*5));
+    m_playerTopRight->setPlayerClass(PlayerType_TopRight);
+    //设置玩家上一的位置
+    m_playerTopLeft->setPoint(Vec2(size.width*0.5-pkWidth*4, size.height / 6*5));
+    m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
+    //设置玩家左的位置
+    m_playerLeft->setPoint(Vec2(65, size.height / 2));
+    m_playerLeft->setPlayerClass(PlayerType_Left);
     return true;
 }
 
@@ -216,17 +221,19 @@ bool GamePlayScene::xiPai(){
 
 void GamePlayScene::SendPk(){
     NiuPoker* pk;
-    if (m_iSendPk<20)
+    if (m_iSendPk<25)
     {
         pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(m_iSendPk);
-        if(m_iSendPk%4==0)
+        if(m_iSendPk%5==0)
             MovePk(m_player, pk);
         else if (m_iSendPk%4==1)
-            MovePk(m_playerOne, pk);
+            MovePk(m_playerRight, pk);
         else if (m_iSendPk%4==2)
-            MovePk(m_playerTwo, pk);
+            MovePk(m_playerTopRight, pk);
+        else if (m_iSendPk%4==3)
+            MovePk(m_playerTopLeft, pk);
         else
-            MovePk(m_playerThree, pk);
+            MovePk(m_playerLeft, pk);
         ++m_iSendPk;
         //        m_isSend=false;
     }
