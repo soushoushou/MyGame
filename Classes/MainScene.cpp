@@ -82,12 +82,34 @@ bool MainScene::initPlayerProfile()
 
 bool MainScene::initNotice()
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	Size size = Director::sharedDirector()->getWinSize();
+	m_spRoundRectInNotice = Sprite::create("MainScene/roundRect2.png");
+	m_spRoundRectInNotice->setPosition(Vec2(size.width/2,3*size.height/4));
+	this->addChild(m_spRoundRectInNotice);
+	Sprite *spLaBa = Sprite::create("MainScene/laba.png");
+	spLaBa->setPosition(Vec2(size.width / 12, 3 * size.height / 4));
+	this->addChild(spLaBa);
+	ClippingNode* clipNode = ClippingNode::create();
+	clipNode->setContentSize(Size(m_spRoundRectInNotice->getContentSize().width-130,m_spRoundRectInNotice->getContentSize().height));
+	auto stencil = DrawNode::create();
+	Vec2 rectangle[4];
+	rectangle[0] = Vec2(0, 0);
+	rectangle[1] = Vec2(clipNode->getContentSize().width, 0);
+	rectangle[2] = Vec2(clipNode->getContentSize().width, clipNode->getContentSize().height);
+	rectangle[3] = Vec2(0, clipNode->getContentSize().height);
+
+	Color4F white(1, 1, 1, 1);
+	stencil->drawPolygon(rectangle, 4, white, 1, white);
+	clipNode->setStencil(stencil);
+
+	clipNode->setAnchorPoint(Vec2(0.5,0.5));
+	clipNode->setPosition(Vec2(size.width / 2+60, 3 * size.height / 4-10));
+	this->addChild(clipNode);
 	m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
 	if (!m_pNoticeLabel) return false;
-	m_pNoticeLabel->setPosition(Vec2(size.width + m_pNoticeLabel->getContentSize().width / 2, 50));
-	m_pNoticeLabel->setColor(Color3B(255, 0, 0));
-	this->addChild(m_pNoticeLabel);
+	m_pNoticeLabel->setPosition(Vec2(-(clipNode->getContentSize().width / 2+m_pNoticeLabel->getContentSize().width/2), 3 * clipNode->getContentSize().height / 4));
+	m_pNoticeLabel->setColor(Color3B(255, 255, 255));
+	clipNode->addChild(m_pNoticeLabel);
 	return true;
 }
 
@@ -95,8 +117,6 @@ bool MainScene::initNotice()
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-
-
 	Button* pGameHallBtn = Button::create("MainScene/gameHall-normal.png", "MainScene/gameHall-pressed.png");
 	if (!pGameHallBtn) return false;
 	Button* pCreateRoomBtn = Button::create("MainScene/createRoom-normal.png", "MainScene/createRoom-pressed.png");
@@ -167,6 +187,10 @@ bool MainScene::initButtons()
 //刷新公告
 void MainScene::flushNoticeLabel(float delta)
 {
+	if (!m_pNoticeLabel)
+	{
+		return;
+	}
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	float ratio = delta * 60;
 	float newX = m_pNoticeLabel->getPositionX() - ratio;

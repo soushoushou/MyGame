@@ -29,6 +29,7 @@ private:
 private:
 	LabelTTF* m_pNoticeLabel;
 	UserProfileUI* m_pUser;
+	Sprite* m_spRoundRectInNotice;		
 };
 
 
