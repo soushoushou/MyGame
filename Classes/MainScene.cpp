@@ -1,8 +1,5 @@
 ﻿#include "MainScene.h"
 #include "toolFunctions.h"
-<<<<<<< HEAD
-#include "Help.h"
-=======
 #include "constString.h"
 #include "ShadeLayer.h"
 #include "PopupLayer.h"
@@ -10,15 +7,15 @@
 
 using namespace ui;
 
->>>>>>> 71810d6863adb0218247c5b4cf694aef42da547a
 
 #define TAG_CREATEROOM_BTN	1	
-#define TAG_JOINROOM_BTN	2
+#define TAG_JOINGAME_BTN	2
 #define TAG_SHOP_BTN		3
 #define TAG_RANK_BTN		4
-#define TAG_ROLE_BTN		5
-#define TAG_CASH_BTN		6
-#define TAG_DIAMOND_BTN		7
+#define TAG_GAMEHALL_BTN	5
+#define TAG_NOTICE_BTN		6
+#define TAG_SETTING_BTN		7
+#define TAG_BACK_BTN		8
 
 
 
@@ -60,7 +57,7 @@ bool MainScene::init()
 //初始化背景
 bool MainScene::initBackground()
 {
-	CCSprite* bk = CCSprite::create("mainSceneBG.jpg");
+	CCSprite* bk = CCSprite::create("MainScene/bg.png");
 	if (!bk)
 	{
 		return false;
@@ -76,10 +73,7 @@ bool MainScene::initPlayerProfile()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new User(50, size.height - 60, "昵称:asdfds", "Lv:14");
-		this->addChild(m_pUser->getHeadSprite());
-		this->addChild(m_pUser->getLevel());
-		this->addChild(m_pUser->getPlayerName());
+		m_pUser = new UserProfileUIInMainScene(this, Vec2(30,17), "MainScene/timo.png", "LOVEVVV666", 13300);
 	}
 	return true;
 }
@@ -101,65 +95,67 @@ bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
-	Button* pCreateRoomBtn = Button::create("createRoom_normal.png");
+	Button* pGameHallBtn = Button::create("MainScene/gameHall-normal.png", "MainScene/gameHall-pressed.png");
+	if (!pGameHallBtn) return false;
+	Button* pCreateRoomBtn = Button::create("MainScene/createRoom-normal.png", "MainScene/createRoom-pressed.png");
 	if (!pCreateRoomBtn) return false;
-	Button* pJoinRoomBtn = Button::create("joinRoom_normal.png");
-	if (!pJoinRoomBtn) return false;
-	Button* pShopBtn = Button::create("shop_normal.png");
-	if (!pShopBtn) return false;
-	Button* pCashBtn = Button::create("Cash.png");
-	if (!pCashBtn) return false;
-	Button* pDiamondBtn = Button::create("Gems.png");
-	if (!pDiamondBtn) return false;
-	Button* pRoleHelpBtn = Button::create("role.png");
-	if (!pRoleHelpBtn) return false;
-	Button* pRankBtn = Button::create("rank.png");
+	Button* pJoinGameBtn = Button::create("MainScene/joinGame-normal.png", "MainScene/joinGame-pressed.png");
+	if (!pJoinGameBtn) return false;
+	Button* pSettingBtn = Button::create("MainScene/setting-normal.png", "MainScene/setting-pressed.png");
+	if (!pSettingBtn) return false;
+	Button* pBackBtn = Button::create("MainScene/back-normal.png", "MainScene/back-pressed.png");
+	if (!pSettingBtn) return false;
+	Button* pNoticeBtn = Button::create("MainScene/notice-normal.png", "MainScene/notice-pressed.png");
+	if (!pNoticeBtn) return false;
+	Button* pRankBtn = Button::create("MainScene/rank-normal.png", "MainScene/rank-pressed.png");
 	if (!pRankBtn) return false;
-
-	pCashBtn->setScale(0.6, 0.6);
-	pDiamondBtn->setScale(0.6, 0.6);
-	pRankBtn->setScale(0.7, 0.7);
-	pRoleHelpBtn->setScale(0.7, 0.7);
-	pCreateRoomBtn->setScale(0.8, 0.8);
-	pJoinRoomBtn->setScale(0.8, 0.8);
-	pShopBtn->setScale(0.8, 0.8);
-
+	Button* pShopBtn = Button::create("MainScene/shop-normal.png", "MainScene/shop-pressed.png");
+	if (!pShopBtn) return false;
+	
+	pGameHallBtn->setTag(TAG_GAMEHALL_BTN);
 	pCreateRoomBtn->setTag(TAG_CREATEROOM_BTN);
-	pJoinRoomBtn->setTag(TAG_JOINROOM_BTN);
+	pJoinGameBtn->setTag(TAG_JOINGAME_BTN);
 	pShopBtn->setTag(TAG_SHOP_BTN);
 	pRankBtn->setTag(TAG_RANK_BTN);
-	pRoleHelpBtn->setTag(TAG_ROLE_BTN);
-	pCashBtn->setTag(TAG_CASH_BTN);
-	pDiamondBtn->setTag(TAG_DIAMOND_BTN);
+	pSettingBtn->setTag(TAG_SETTING_BTN);
+	pBackBtn->setTag(TAG_BACK_BTN);
+	pNoticeBtn->setTag(TAG_NOTICE_BTN);
 
 	pCreateRoomBtn->setScale9Enabled(true);
-	pJoinRoomBtn->setScale9Enabled(true);
+	pJoinGameBtn->setScale9Enabled(true);
 	pShopBtn->setScale9Enabled(true);
-	pDiamondBtn->setScale9Enabled(true);
-	pCreateRoomBtn->setPosition(Vec2(size.width / 2 + 250, 5 * (size.height / 6) - 100));
-	pJoinRoomBtn->setPosition(Vec2(size.width / 2 + 250, 3 * (size.height / 6)));
-	pShopBtn->setPosition(Vec2(size.width / 2 + 250, size.height / 6 + 100));
-	pCashBtn->setPosition(Vec2(280, size.height - 50));
-	pDiamondBtn->setPosition(Vec2(440, size.height - 50));
-	pRoleHelpBtn->setPosition(Vec2(size.width - 150, size.height - 50));
-	pRankBtn->setPosition(Vec2(size.width - 75, size.height - 50));
+	pGameHallBtn->setScale9Enabled(true);
+	pNoticeBtn->setScale9Enabled(true);
+	pRankBtn->setScale9Enabled(true);
+	pSettingBtn->setScale9Enabled(true);
+	pBackBtn->setScale9Enabled(true);
+
+	pGameHallBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pGameHallBtn->getContentSize().width / 2, 233)));
+	pCreateRoomBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pCreateRoomBtn->getContentSize().width / 2, 348)));
+	pJoinGameBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pJoinGameBtn->getContentSize().width / 2, 465)));
+	pNoticeBtn->setPosition(Director::getInstance()->convertToUI(Vec2(705 + pNoticeBtn->getContentSize().width / 2, 574 + pNoticeBtn->getContentSize().height / 2)));
+	pRankBtn->setPosition(Director::getInstance()->convertToUI(Vec2(840 + pRankBtn->getContentSize().width / 2, 574 + pRankBtn->getContentSize().height / 2)));
+	pShopBtn->setPosition(Director::getInstance()->convertToUI(Vec2(1050 + pShopBtn->getContentSize().width / 2, 550 + pShopBtn->getContentSize().height / 2)));
+	pSettingBtn->setPosition(Director::getInstance()->convertToUI(Vec2(947+pSettingBtn->getContentSize().width/2 , 22 + pSettingBtn->getContentSize().height / 2)));
+	pBackBtn->setPosition(Director::getInstance()->convertToUI(Vec2(1050 + pBackBtn->getContentSize().width / 2, 26 + pBackBtn->getContentSize().height / 2)));
 
 	pCreateRoomBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pJoinRoomBtn->addTouchEventListener(MainScene::onBtnTouch);
+	pGameHallBtn->addTouchEventListener(MainScene::onBtnTouch);
 	pShopBtn->addTouchEventListener(MainScene::onBtnTouch);
 	pRankBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pRoleHelpBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pCashBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pDiamondBtn->addTouchEventListener(MainScene::onBtnTouch);
-
+	pJoinGameBtn->addTouchEventListener(MainScene::onBtnTouch);
+	pSettingBtn->addTouchEventListener(MainScene::onBtnTouch);
+	pBackBtn->addTouchEventListener(MainScene::onBtnTouch);
+	pNoticeBtn->addTouchEventListener(MainScene::onBtnTouch);
 
 	this->addChild(pCreateRoomBtn);
-	this->addChild(pJoinRoomBtn);
+	this->addChild(pGameHallBtn);
 	this->addChild(pShopBtn);
-	this->addChild(pCashBtn);
-	this->addChild(pDiamondBtn);
 	this->addChild(pRankBtn);
-	this->addChild(pRoleHelpBtn);
+	this->addChild(pJoinGameBtn);
+	this->addChild(pSettingBtn);
+	this->addChild(pBackBtn);
+	this->addChild(pNoticeBtn);
 	return true;
 }
 
@@ -179,12 +175,7 @@ void MainScene::flushNoticeLabel(float delta)
 //触摸监听
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
-<<<<<<< HEAD
-	auto director = Director::getInstance();
-	auto helpscene = Help::scene();
-=======
 	Size size = Director::sharedDirector()->getWinSize();
->>>>>>> 71810d6863adb0218247c5b4cf694aef42da547a
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
@@ -201,7 +192,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			butten->getParent()->addChild(l);
 			break;
 		}
-		case TAG_JOINROOM_BTN:
+		case TAG_JOINGAME_BTN:
 		{
 			Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
@@ -219,17 +210,19 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			butten->getParent()->addChild(pl);
 			break; }
 		case TAG_RANK_BTN:
-			log("rank");
+			log("RANK");
 			break;
-		case TAG_ROLE_BTN:
-			//director->runWithScene(helpscene);
-			CCDirector::sharedDirector()->replaceScene(helpscene);
+		case TAG_NOTICE_BTN:
+			log("NOTIC");
 			break;
-		case TAG_CASH_BTN:
-			log("cash");
+		case TAG_GAMEHALL_BTN:
+			log("GAMEHALL");
 			break;
-		case TAG_DIAMOND_BTN:
-			log("diamond");
+		case TAG_SETTING_BTN:
+			log("SETTING");
+			break;
+		case TAG_BACK_BTN:
+			log("BACK");
 			break;
 		}
 	}

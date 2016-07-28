@@ -1,7 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "ui/CocosGUI.h" 
-#include "User.h"
+#include "UserProfileUI.h"
 USING_NS_CC;
 using namespace ui;
 
@@ -28,7 +28,7 @@ private:
 
 private:
 	LabelTTF* m_pNoticeLabel;
-	User* m_pUser;
+	UserProfileUI* m_pUser;
 };
 
 

@@ -8,9 +8,9 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1136, 640);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(1136, 640);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {
@@ -45,15 +45,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	auto director = Director::getInstance();
 	auto glview = director->getOpenGLView();
 	if (!glview) {
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-				glview = GLViewImpl::createWithRect("GitTest", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
-		#else
-				glview = GLViewImpl::create("GitTest");
-		#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
+		glview = GLViewImpl::createWithRect("GitTest", cocos2d::Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height));
+#else
+		glview = GLViewImpl::create("GitTest");
+#endif
 		director->setOpenGLView(glview);
 	}
-	//âˆÆ’Â±â€°âˆ‘Ã·Â±ÃŠÂ¬Â 
-	glview->setDesignResolutionSize(800, 600, ResolutionPolicy::EXACT_FIT);
+	//¸Ä±ä·Ö±æÂÊ
+	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);
 
 	// turn on display FPS
 	director->setDisplayStats(true);
@@ -66,8 +66,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	// run
 	director->runWithScene(scene);
-	//Ã¸â„¢Â Âºâ‰¤â€¢âˆ‘â‰ˆÂ±â‰¥Ã¦âˆžâ€œÃ™Â¿Ã·
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3",true);
+	//¿ªÊ¼²¥·Å±³¾°ÒôÀÖ
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3");
 
 	return true;
 }

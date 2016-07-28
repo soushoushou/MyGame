@@ -82,7 +82,7 @@ bool Help::initNotice()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	label_notice = Label::create(ASCII2UTF_8("规则说明"), "Arial", 30);
+	label_notice = Label::create("规则说明", "Arial", 30);
 	//label_notice->setColor(Color3B::RED);
 	label_notice->setTextColor(Color4B::RED);
 	label_notice->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - label_notice->getContentSize().height));
@@ -96,7 +96,7 @@ bool Help::initInstruction()
 	auto visibleSize = Director::getInstance()->getVisibleSize();	//800,600
 	CCDictionary* pDict = CCDictionary::createWithContentsOfFile("instruction.xml");
 	const char *charchinese = ((CCString*)pDict->objectForKey("name"))->getCString();
-	label = Label::create(ASCII2UTF_8(charchinese), "Arial", 25);
+	label = Label::create(charchinese, "Arial", 25);
 	label->setHorizontalAlignment(TextHAlignment::LEFT);
 	label->setDimensions(800, 2000);
 	label->setLineBreakWithoutSpace(true);

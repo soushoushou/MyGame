@@ -10,6 +10,7 @@
 #define NiuPoker_hpp
 
 #include "Global.h"
+#include "cocos2d.h"
 class GamePlayScene;
 USING_NS_CC;
 class  NiuPoker: public Sprite
