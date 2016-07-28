@@ -12,7 +12,7 @@ public:
 
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
-
+	void loading();
 	// implement the "static create()" method manually
 	CREATE_FUNC(LoginScene);
 };

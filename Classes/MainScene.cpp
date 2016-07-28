@@ -9,12 +9,9 @@ using namespace ui;
 
 
 #define TAG_CREATEROOM_BTN	1	
-#define TAG_JOINGAME_BTN	2
+#define TAG_JOINROOM_BTN	2
 #define TAG_SHOP_BTN		3
 #define TAG_RANK_BTN		4
-#define TAG_GAMEHALL_BTN	5
-#define TAG_NOTICE_BTN		6
-#define TAG_SETTING_BTN		7
 #define TAG_BACK_BTN		8
 
 
@@ -95,6 +92,7 @@ bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
+
 	Button* pGameHallBtn = Button::create("MainScene/gameHall-normal.png", "MainScene/gameHall-pressed.png");
 	if (!pGameHallBtn) return false;
 	Button* pCreateRoomBtn = Button::create("MainScene/createRoom-normal.png", "MainScene/createRoom-pressed.png");
@@ -111,6 +109,7 @@ bool MainScene::initButtons()
 	if (!pRankBtn) return false;
 	Button* pShopBtn = Button::create("MainScene/shop-normal.png", "MainScene/shop-pressed.png");
 	if (!pShopBtn) return false;
+
 	
 	pGameHallBtn->setTag(TAG_GAMEHALL_BTN);
 	pCreateRoomBtn->setTag(TAG_CREATEROOM_BTN);
@@ -151,7 +150,9 @@ bool MainScene::initButtons()
 	this->addChild(pCreateRoomBtn);
 	this->addChild(pGameHallBtn);
 	this->addChild(pShopBtn);
+
 	this->addChild(pRankBtn);
+
 	this->addChild(pJoinGameBtn);
 	this->addChild(pSettingBtn);
 	this->addChild(pBackBtn);
@@ -165,6 +166,7 @@ void MainScene::flushNoticeLabel(float delta)
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	float ratio = delta * 60;
 	float newX = m_pNoticeLabel->getPositionX() - ratio;
+
 	if (newX < -m_pNoticeLabel->getContentSize().width / 2)
 	{
 		newX = size.width + m_pNoticeLabel->getContentSize().width / 2;
@@ -199,25 +201,28 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 		case TAG_SHOP_BTN: {
 			log("shop");
-			PopupLayer* pl = PopupLayer::create("BackGround.png", Size(400, 350));
+		
 			pl->setTitle("hhh");
 			pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			pl->addButton("pop_button.png", "pop_button.png", "submit", 1);
-			pl->addButton("pop_button.png", "pop_button.png", "cancel", 0);
-			pl->addCheckBox("CheckBox_UnSelect.png",
-				"CheckBox_Select.png", "haha", 2);
+
+			//pl->addCheckBox("CheckBox_UnSelect.png",
+				//"CheckBox_Select.png", "haha", 2);
+			pl->addListView();
 			butten->getParent()->addChild(pl);
 			break; }
 		case TAG_RANK_BTN:
 			log("RANK");
 			break;
+
 		case TAG_NOTICE_BTN:
 			log("NOTIC");
 			break;
+
 		case TAG_GAMEHALL_BTN:
 			log("GAMEHALL");
 			break;
+
 		case TAG_SETTING_BTN:
 			log("SETTING");
 			break;
