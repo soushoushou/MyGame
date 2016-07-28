@@ -3,6 +3,7 @@
 #include "MainScene.h"
 USING_NS_CC;
 
+
 Scene* LoginScene::createScene()
 {
 	// 'scene' is an autorelease object
@@ -89,7 +90,7 @@ void LoginScene::loading() {
 	char path[256] = { 0 };
 	for (int i = 1; i <= 3; ++i)
 	{
-		sprintf_s(path, "login/loading0%d.png", i);
+		sprintf(path, "login/loading0%d.png", i);
 
 		// 331x212是图片的大小，貌似这样直接设定是不好的；但是还必须提供这个参数
 		// 应该给这个Rect参数提供一个默认参数，默认加载整个图片
