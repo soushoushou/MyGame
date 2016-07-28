@@ -54,7 +54,7 @@ void GamePlayScene::update(float delta)
 //		if (!m_timeLayer && m_bReady)
 //		{
 //			m_timeLayer = TimeLayer::create();
-//			m_timeLayer->setFrameSprite("timeWait.png", Vec2(size.width / 2, size.height / 2 - 20));
+//			m_timeLayer->setFrameSprite("game/timeWait.png", Vec2(size.width / 2, size.height / 2 - 20));
 //			m_timeLayer->setTime(5, 20, Vec2(size.width / 2, size.height / 2 - 20));
 //			addChild(m_timeLayer);
 //		}
@@ -91,7 +91,7 @@ bool GamePlayScene::initBackground()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//添加背景
-	auto spriteBK = Sprite::create("game.jpg");
+	auto spriteBK = Sprite::create("game/game.jpg");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
 	return true;
@@ -101,7 +101,7 @@ bool GamePlayScene::initButtons()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 
-	m_startGameBtn = Button::create("start.png");
+	m_startGameBtn = Button::create("game/start.png");
 	if (!m_startGameBtn) return false;
 
 	m_startGameBtn->setScale(0.4, 0.4);
