@@ -2,32 +2,32 @@
 #include "SimpleAudioEngine.h"
 #include "constString.h"
 #include "Global.h"
-#include "NiuPoker.hpp"
-#include "NiuPlayer.hpp"
+#include "NiuPoker.h"
+#include "NiuPlayer.h"
 USING_NS_CC;
 
 #define TAG_START_BTN	1	
 
-GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),m_isSend(true), m_iSendPk(0), m_iState(1)
+GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true), m_iSendPk(0), m_iState(1)
 {
-    m_player = new NiuPlayer();
-    m_playerRight = new NiuPlayer();
-    m_playerTopRight = new NiuPlayer();
-    m_playerTopLeft = new NiuPlayer();
-    m_playerLeft = new NiuPlayer();
-    
-    m_arrPokers = __Array::create();
-    m_arrPokers->retain();
+	m_player = new NiuPlayer();
+	m_playerRight = new NiuPlayer();
+	m_playerTopRight = new NiuPlayer();
+	m_playerTopLeft = new NiuPlayer();
+	m_playerLeft = new NiuPlayer();
+
+	m_arrPokers = __Array::create();
+	m_arrPokers->retain();
 
 }
 
 GamePlayScene::~GamePlayScene(){
-    CC_SAFE_DELETE(m_player);
-    CC_SAFE_DELETE(m_playerRight);
-    CC_SAFE_DELETE(m_playerTopRight);
-    CC_SAFE_DELETE(m_playerTopLeft);
-    CC_SAFE_DELETE(m_playerTopLeft);
-    CC_SAFE_RELEASE(m_arrPokers);
+	CC_SAFE_DELETE(m_player);
+	CC_SAFE_DELETE(m_playerRight);
+	CC_SAFE_DELETE(m_playerTopRight);
+	CC_SAFE_DELETE(m_playerTopLeft);
+	CC_SAFE_DELETE(m_playerTopLeft);
+	CC_SAFE_RELEASE(m_arrPokers);
 }
 
 
@@ -46,11 +46,11 @@ void GamePlayScene::update(float delta)
 	switch (m_iState)
 	{
 	case 0:
-		//å‘ç‰Œ
+		//·¢ÅÆ
 		SendPk();
 		break;
 	case 1:
-		//å€’è®¡æ—¶
+		//µ¹¼ÆÊ±
 		if (server->isAllReady())
 		{
 			if (!m_timeLayer && m_bReady)
@@ -73,7 +73,7 @@ void GamePlayScene::update(float delta)
 	}
 }
 
-//åˆå§‹åŒ–
+//³õÊ¼»¯
 bool GamePlayScene::init()
 {
 	if (!Layer::init())
@@ -84,20 +84,20 @@ bool GamePlayScene::init()
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	scheduleUpdate();
-    srand((unsigned)time(NULL));//åˆå§‹åŒ–éšæœºç§å­
-    if (!initPlayer()) return false;
-    if (!createPokers()) return false;
-    if(!xiPai()) return false;
-    return true;
+	srand((unsigned)time(NULL));//³õÊ¼»¯Ëæ»úÖÖ×Ó
+	if (!initPlayer()) return false;
+	if (!createPokers()) return false;
+	if (!xiPai()) return false;
+	return true;
 }
 
-//åˆå§‹åŒ–èƒŒæ™¯
+//³õÊ¼»¯±³¾°
 bool GamePlayScene::initBackground()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//æ·»åŠ èƒŒæ™¯
+	//Ìí¼Ó±³¾°
 	auto spriteBK = Sprite::create("game/gamebg.png");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
@@ -138,7 +138,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("start game");
 			butten->setEnabled(false);
 
-			//æ¨¡æ‹Ÿå½“æ‰€æœ‰çŽ©å®¶éƒ½å‡†å¤‡å¥½åŽå†å€’è®¡æ—¶
+			//Ä£Äâµ±ËùÓÐÍæ¼Ò¶¼×¼±¸ºÃºóÔÙµ¹¼ÆÊ±
 			m_bReady = !m_bReady;
 			DebugSimpleServer::getInstance()->playerReady("alw");
 			break;
@@ -148,120 +148,121 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 }
 
 bool GamePlayScene::initPlayer(){
-    Size size = Director::getInstance()->getVisibleSize();
-    //è®¾ç½®ä¸»çŽ©å®¶çš„ä½ç½®
-    m_player->setPoint(Vec2(size.width / 2, size.height/6));
-    m_player->setPlayerClass(PlayerType_Me);
-    //è®¾ç½®çŽ©å®¶å³çš„ä½ç½®
-    m_playerRight->setPoint(Vec2(size.width-pkWidth*3, size.height / 2));
-    m_playerRight->setPlayerClass(PlayerType_Right);
-    //è®¾ç½®çŽ©å®¶ä¸ŠäºŒçš„ä½ç½®
-    m_playerTopRight->setPoint(Vec2(size.width*0.5+pkWidth*3, size.height/6*5));
-    m_playerTopRight->setPlayerClass(PlayerType_TopRight);
-    //è®¾ç½®çŽ©å®¶ä¸Šä¸€çš„ä½ç½®
-    m_playerTopLeft->setPoint(Vec2(size.width*0.5-pkWidth*4, size.height / 6*5));
-    m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
-    //è®¾ç½®çŽ©å®¶å·¦çš„ä½ç½®
-    m_playerLeft->setPoint(Vec2(65, size.height / 2));
-    m_playerLeft->setPlayerClass(PlayerType_Left);
-    return true;
+	Size size = Director::getInstance()->getVisibleSize();
+	//ÉèÖÃÖ÷Íæ¼ÒµÄÎ»ÖÃ
+	m_player->setPoint(Vec2(size.width / 2, size.height / 6));
+	m_player->setPlayerClass(PlayerType_Me);
+	//ÉèÖÃÍæ¼ÒÓÒµÄÎ»ÖÃ
+	m_playerRight->setPoint(Vec2(size.width - pkWidth * 3, size.height / 2));
+	m_playerRight->setPlayerClass(PlayerType_Right);
+	//ÉèÖÃÍæ¼ÒÉÏ¶þµÄÎ»ÖÃ
+	m_playerTopRight->setPoint(Vec2(size.width*0.5 + pkWidth * 3, size.height / 6 * 5));
+	m_playerTopRight->setPlayerClass(PlayerType_TopRight);
+	//ÉèÖÃÍæ¼ÒÉÏÒ»µÄÎ»ÖÃ
+	m_playerTopLeft->setPoint(Vec2(size.width*0.5 - pkWidth * 4, size.height / 6 * 5));
+	m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
+	//ÉèÖÃÍæ¼Ò×óµÄÎ»ÖÃ
+	m_playerLeft->setPoint(Vec2(65, size.height / 2));
+	m_playerLeft->setPlayerClass(PlayerType_Left);
+	return true;
 }
 
 NiuPoker* GamePlayScene::selectPoker(int huaSe, int num){
-    NiuPoker* pk;
-    if (num<3) {
-        pk = NiuPoker::create("poker.png", Rect((10+num)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
-    }else{
-        pk = NiuPoker::create("poker.png", Rect((num-3)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
-    }
-    pk->setHuaSe(huaSe);
-    pk->setNum(num);
-    pk->setGameMain(this);
-    return pk;
+	NiuPoker* pk;
+	if (num<3) {
+		pk = NiuPoker::create("poker.png", Rect((10 + num)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
+	}
+	else{
+		pk = NiuPoker::create("poker.png", Rect((num - 3)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
+	}
+	pk->setHuaSe(huaSe);
+	pk->setNum(num);
+	pk->setGameMain(this);
+	return pk;
 }
 
 bool GamePlayScene::createPokers(){
-    bool isRet = false;
-    do
-    {
-        Size size = Director::getInstance()->getVisibleSize();
-        NiuPoker* pk;
-        //åˆ›å»º52ä¸ªç‰Œ
-        for (int i = 0; i<4; ++i)
-        {
-            for (int j = 1; j<=13; ++j)
-            {
-                pk = selectPoker(i, j);
-                pk->setPosition(Vec2(size.width / 2, size.height / 2));
-                pk->showLast();
-                this->addChild(pk);
-                this->m_arrPokers->addObject(pk);
-                
-            }
-        }
-        isRet = true;
-    } while (0);
-    return isRet;
+	bool isRet = false;
+	do
+	{
+		Size size = Director::getInstance()->getVisibleSize();
+		NiuPoker* pk;
+		//´´½¨52¸öÅÆ
+		for (int i = 0; i<4; ++i)
+		{
+			for (int j = 1; j <= 13; ++j)
+			{
+				pk = selectPoker(i, j);
+				pk->setPosition(Vec2(size.width / 2, size.height / 2));
+				pk->showLast();
+				this->addChild(pk);
+				this->m_arrPokers->addObject(pk);
+
+			}
+		}
+		isRet = true;
+	} while (0);
+	return isRet;
 }
-#pragma mark-æ´—ç‰Œ
+#pragma mark-Ï´ÅÆ
 bool GamePlayScene::xiPai(){
-    bool isRet = false;
-    do
-    {
-        for (int i = 0; i<52; ++i)
-        {
-            NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getRandomObject();
-            NiuPoker* pk2 = (NiuPoker*)m_arrPokers->getRandomObject();
-            m_arrPokers->exchangeObject(pk1, pk2);
-        }
-        for (int i = 0; i<52; ++i)
-        {
-            NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
-            pk1->printPoker();
-        }
-        isRet = true;
-    } while (0);
-    return isRet;
+	bool isRet = false;
+	do
+	{
+		for (int i = 0; i<52; ++i)
+		{
+			NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getRandomObject();
+			NiuPoker* pk2 = (NiuPoker*)m_arrPokers->getRandomObject();
+			m_arrPokers->exchangeObject(pk1, pk2);
+		}
+		for (int i = 0; i<52; ++i)
+		{
+			NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
+			pk1->printPoker();
+		}
+		isRet = true;
+	} while (0);
+	return isRet;
 }
 
 void GamePlayScene::SendPk(){
-    NiuPoker* pk;
-    if (m_iSendPk<25)
-    {
-        pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(m_iSendPk);
-        if(m_iSendPk%5==0)
-            MovePk(m_player, pk);
-        else if (m_iSendPk%4==1)
-            MovePk(m_playerRight, pk);
-        else if (m_iSendPk%4==2)
-            MovePk(m_playerTopRight, pk);
-        else if (m_iSendPk%4==3)
-            MovePk(m_playerTopLeft, pk);
-        else
-            MovePk(m_playerLeft, pk);
-        ++m_iSendPk;
-        //        m_isSend=false;
-    }
-    else
-        m_iState=1;
+	NiuPoker* pk;
+	if (m_iSendPk<25)
+	{
+		pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(m_iSendPk);
+		if (m_iSendPk % 5 == 0)
+			MovePk(m_player, pk);
+		else if (m_iSendPk % 4 == 1)
+			MovePk(m_playerRight, pk);
+		else if (m_iSendPk % 4 == 2)
+			MovePk(m_playerTopRight, pk);
+		else if (m_iSendPk % 4 == 3)
+			MovePk(m_playerTopLeft, pk);
+		else
+			MovePk(m_playerLeft, pk);
+		++m_iSendPk;
+		//        m_isSend=false;
+	}
+	else
+		m_iState = 1;
 }
 
 void GamePlayScene::func(Node* pSender, void* pData){
-    NiuPlayer* play = (NiuPlayer*)pData;
-    play->updatePkWeiZhi();
-    //    m_isSend = true;
+	NiuPlayer* play = (NiuPlayer*)pData;
+	play->updatePkWeiZhi();
+	//    m_isSend = true;
 }
 
 void GamePlayScene::MovePk(NiuPlayer* play, NiuPoker* pk)
 {
-    MoveTo* move;
-    __CCCallFuncND* func;
-    float time = 0.05;
-    play->getArrPk()->addObject(pk);
-    move = MoveTo::create(time, play->getPoint());
-    func = __CCCallFuncND::create(this, callfuncND_selector(GamePlayScene::func), play);
-    Sequence* sequence = Sequence::create(move, func, NULL);
-    pk->runAction(sequence);
+	MoveTo* move;
+	__CCCallFuncND* func;
+	float time = 0.05;
+	play->getArrPk()->addObject(pk);
+	move = MoveTo::create(time, play->getPoint());
+	func = __CCCallFuncND::create(this, callfuncND_selector(GamePlayScene::func), play);
+	Sequence* sequence = Sequence::create(move, func, NULL);
+	pk->runAction(sequence);
 }
 
 void GamePlayScene::menuCloseCallback(Ref* pSender)

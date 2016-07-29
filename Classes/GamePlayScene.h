@@ -14,7 +14,7 @@ class GamePlayScene : public cocos2d::Layer
 {
 public:
 	GamePlayScene();
-    ~GamePlayScene();
+	~GamePlayScene();
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	void menuCloseCallback(cocos2d::Ref* pSender);
@@ -28,50 +28,50 @@ private:
 	bool initBackground();
 	bool initButtons();
 	bool initPlayerProfile();
-    /** åˆå§‹åŒ–ç©å®¶ä¿¡æ¯ */
-    bool initPlayer();
-    /** ç”Ÿæˆä¸€ä¸ªç‰Œ */
-    NiuPoker* selectPoker(int huaSe, int num);
-    /** åˆ›å»ºä¸€å‰¯æ‰‘å…‹ç‰Œ */
-    bool createPokers();
-    /** æ´—ç‰Œ */
-    bool xiPai();
-    /** å‘ç‰Œ */
-    void SendPk();
-    /** å‘ç‰Œç§»åŠ¨åŠ¨ç”» */
-    void MovePk(NiuPlayer* play, NiuPoker* pk);
-    
-    void func(Node* pSender, void* pData);
+	/** ³õÊ¼»¯Íæ¼ÒĞÅÏ¢ */
+	bool initPlayer();
+	/** Éú³ÉÒ»¸öÅÆ */
+	NiuPoker* selectPoker(int huaSe, int num);
+	/** ´´½¨Ò»¸±ÆË¿ËÅÆ */
+	bool createPokers();
+	/** Ï´ÅÆ */
+	bool xiPai();
+	/** ·¢ÅÆ */
+	void SendPk();
+	/** ·¢ÅÆÒÆ¶¯¶¯»­ */
+	void MovePk(NiuPlayer* play, NiuPoker* pk);
+
+	void func(Node* pSender, void* pData);
 private:
 	TimeLayer* m_timeLayer;
 	Button* m_startGameBtn;
 	bool m_bReady;
-    /** æ‰€æœ‰çš„ç‰Œ */
-    __Array* m_arrPokers;
-    /** ç©å®¶ */
-    CC_SYNTHESIZE(NiuPlayer*, m_player, Player);
-    /** ç©å®¶å³ */
-    NiuPlayer* m_playerRight;
-    /** ç©å®¶ä¸ŠäºŒ */
-    NiuPlayer* m_playerTopRight;
-    /** ç©å®¶ä¸Šä¸€ */
-    NiuPlayer* m_playerTopLeft;
-    /** ç©å®¶å·¦ */
-    NiuPlayer* m_playerLeft;
-    /** ç©å®¶åæ ‡ */
-    Point playerDiZhuLablePt;
-    /** ç©å®¶å³ä¸€åæ ‡ */
-    Point playerOneLablePt;
-    /** ç©å®¶ä¸ŠäºŒåæ ‡ */
-    Point playerTwoLablePt;
-    /** ç©å®¶å·¦ä¸‰åæ ‡ */
-    Point playerThreeLablePt;
-    /** æ˜¯å¦å‘å®Œç‰Œ */
-    bool m_isSend;
-    /** å·²å‘å‡ºç¬¬å‡ å¼ ç‰Œ */
-    int m_iSendPk;
-    /** å½“å‰çŠ¶æ€ 0ï¼šå‘ç‰ŒçŠ¶æ€  */
-    int m_iState;
+	/** ËùÓĞµÄÅÆ */
+	__Array* m_arrPokers;
+	/** Íæ¼Ò */
+	CC_SYNTHESIZE(NiuPlayer*, m_player, Player);
+	/** Íæ¼ÒÓÒ */
+	NiuPlayer* m_playerRight;
+	/** Íæ¼ÒÉÏ¶ş */
+	NiuPlayer* m_playerTopRight;
+	/** Íæ¼ÒÉÏÒ» */
+	NiuPlayer* m_playerTopLeft;
+	/** Íæ¼Ò×ó */
+	NiuPlayer* m_playerLeft;
+	/** Íæ¼Ò×ø±ê */
+	Point playerDiZhuLablePt;
+	/** Íæ¼ÒÓÒÒ»×ø±ê */
+	Point playerOneLablePt;
+	/** Íæ¼ÒÉÏ¶ş×ø±ê */
+	Point playerTwoLablePt;
+	/** Íæ¼Ò×óÈı×ø±ê */
+	Point playerThreeLablePt;
+	/** ÊÇ·ñ·¢ÍêÅÆ */
+	bool m_isSend;
+	/** ÒÑ·¢³öµÚ¼¸ÕÅÅÆ */
+	int m_iSendPk;
+	/** µ±Ç°×´Ì¬ 0£º·¢ÅÆ×´Ì¬  */
+	int m_iState;
 };
 
 

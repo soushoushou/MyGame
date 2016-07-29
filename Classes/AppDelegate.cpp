@@ -1,4 +1,3 @@
-#include "GameScene.h"
 #include "AppDelegate.h"
 #include "MainScene.h"
 #include "LoginScene.h"

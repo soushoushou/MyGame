@@ -5,5 +5,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/android-async-http-1.4.8.jar"/>
+	<classpathentry kind="lib" path="libs/com.android.vending.expansion.zipfile.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

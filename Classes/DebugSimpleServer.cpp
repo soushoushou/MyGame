@@ -106,7 +106,7 @@ void DebugSimpleServer::update()
 			if (m_vecPlayersInRoom.size() < 5)
 			{
 				//有概率玩家进入房间
-				if (rand() % 10000000 < 1)
+				if (rand() % 10000 < 1)
 				{
 					if (rand() % 100 < 1)
 					{
@@ -120,7 +120,7 @@ void DebugSimpleServer::update()
 			if (m_vecPlayersInRoom.size() < 4)
 			{
 				//有概率玩家进入房间
-				if (rand() % 10000000 < 1)
+				if (rand() % 10000 < 1)
 				{
 					if (rand() % 100 < 1)
 					{
