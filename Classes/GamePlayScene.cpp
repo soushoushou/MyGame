@@ -6,9 +6,9 @@
 #include "NiuPlayer.hpp"
 USING_NS_CC;
 
-#define TAG_STARTGAME_BTN	1	
+#define TAG_START_BTN	1	
 
-GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),m_isSend(true), m_iSendPk(0), m_iState(0)
+GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),m_isSend(true), m_iSendPk(0), m_iState(1)
 {
     m_player = new NiuPlayer();
     m_playerRight = new NiuPlayer();
@@ -41,31 +41,36 @@ Scene* GamePlayScene::createScene()
 
 void GamePlayScene::update(float delta)
 {
-    switch (m_iState)
-    {
-        case 0:
-            SendPk();
-            break;
-        default:
-            break;
-    }
-//	Size size = Director::sharedDirector()->getWinSize();
-//	auto server = DebugSimpleServer::getInstance();
-//	if (server->isAllReady())
-//	{
-//		if (!m_timeLayer && m_bReady)
-//		{
-//			m_timeLayer = TimeLayer::create();
-//			m_timeLayer->setFrameSprite("game/timeWait.png", Vec2(size.width / 2, size.height / 2 - 20));
-//			m_timeLayer->setTime(5, 20, Vec2(size.width / 2, size.height / 2 - 20));
-//			addChild(m_timeLayer);
-//		}
-//		if (m_timeLayer && m_timeLayer->canRemove())
-//		{
-//			this->removeChild(m_timeLayer);
-//			this->removeChild(m_startGameBtn);
-//		}
-//	}
+	Size size = Director::sharedDirector()->getWinSize();
+	auto server = DebugSimpleServer::getInstance();
+	switch (m_iState)
+	{
+	case 0:
+		//发牌
+		SendPk();
+		break;
+	case 1:
+		//倒计时
+		if (server->isAllReady())
+		{
+			if (!m_timeLayer && m_bReady)
+			{
+				m_timeLayer = TimeLayer::create();
+				m_timeLayer->setFrameSprite("game/clock.png", Vec2(size.width / 2, size.height / 2 - 40));
+				m_timeLayer->setTime(5, 20, Vec2(size.width / 2, size.height / 2 - 20));
+				addChild(m_timeLayer);
+			}
+			if (m_timeLayer && m_timeLayer->canRemove())
+			{
+				this->removeChild(m_timeLayer);
+				this->removeChild(m_startGameBtn);
+				m_iState = 0;
+			}
+		};
+		break;
+	default:
+		break;
+	}
 }
 
 //初始化
@@ -77,7 +82,7 @@ bool GamePlayScene::init()
 	}
 
 	if (!initBackground()) return false;
-//	if (!initButtons()) return false;
+	if (!initButtons()) return false;
 	scheduleUpdate();
     srand((unsigned)time(NULL));//初始化随机种子
     if (!initPlayer()) return false;
@@ -93,7 +98,7 @@ bool GamePlayScene::initBackground()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//添加背景
-	auto spriteBK = Sprite::create("game/game.jpg");
+	auto spriteBK = Sprite::create("game/gamebg.png");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
 	return true;
@@ -103,16 +108,14 @@ bool GamePlayScene::initButtons()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 
-	m_startGameBtn = Button::create("game/start.png");
+	m_startGameBtn = Button::create("game/startgame.png");
 	if (!m_startGameBtn) return false;
 
-	m_startGameBtn->setScale(0.4, 0.4);
-
-	m_startGameBtn->setTag(TAG_STARTGAME_BTN);
+	m_startGameBtn->setTag(TAG_START_BTN);
 
 	m_startGameBtn->setScale9Enabled(true);
 
-	m_startGameBtn->setPosition(Vec2(size.width / 2, size.height / 2 - 100));
+	m_startGameBtn->setPosition(Vec2(size.width / 2, size.height / 2 - 150));
 
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 
@@ -130,12 +133,14 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		unsigned int tag = butten->getTag();
 		switch (tag)
 		{
-		case TAG_STARTGAME_BTN:
+		case TAG_START_BTN:
 		{
 			log("start game");
+			butten->setEnabled(false);
+
 			//模拟当所有玩家都准备好后再倒计时
-			DebugSimpleServer::getInstance()->playerReady("alw");
 			m_bReady = !m_bReady;
+			DebugSimpleServer::getInstance()->playerReady("alw");
 			break;
 		}
 		}
