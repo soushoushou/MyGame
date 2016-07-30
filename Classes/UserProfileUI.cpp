@@ -3,13 +3,13 @@
 UserProfileUI::UserProfileUI(Node* pParent)
 {
 	m_strPlayerName = "";
-	m_nDiamond = 0;
+	m_nCoin = 0;
 	m_lblDiamond = NULL;
 	m_spHead = NULL;
 	m_lblPlayerName = NULL;
 	m_pParent = pParent;
 	m_spFrame = NULL;
-	m_spDianmond = NULL;
+	m_spCoin = NULL;
 }
 
 
@@ -23,7 +23,8 @@ HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent) :UserProfileUI(pParent
 
 }
 
-HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond):
+HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin) :
 UserProfileUI(pParent)
 {
 	auto director = Director::getInstance();
@@ -37,21 +38,22 @@ UserProfileUI(pParent)
 	m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
 	m_lblPlayerName->setPosition(Vec2(110,90));
 	m_spFrame->addChild(m_lblPlayerName);
-	m_spDianmond = Sprite::create("MainScene/diamond.png");
-	m_spDianmond->setAnchorPoint(Vec2(0, 1));
-	m_spDianmond->setPosition(Vec2(105, 55));
-	m_spFrame->addChild(m_spDianmond);
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(Vec2(105, 55));
+	m_spFrame->addChild(m_spCoin);
 	char buf[100];
 	sprintf(buf, "%d", diamond);
-	m_nDiamond = diamond;
-	m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
-	m_lblDiamond->setColor(Color3B(224, 179, 9));
-	m_lblDiamond->setAnchorPoint(Vec2(0, 1));
-	m_lblDiamond->setPosition(Vec2(165, 45));
-	m_spFrame->addChild(m_lblDiamond);
+	m_nCoin = diamond;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+	m_lblCoin->setColor(Color3B(224, 179, 9));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(Vec2(165, 45));
+	m_spFrame->addChild(m_lblCoin);
 }
 
-bool HerizelUserProfileUI::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond)
+bool HerizelUserProfileUI::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin)
 {
 	if (!m_pParent)
 	{
@@ -84,26 +86,26 @@ bool HerizelUserProfileUI::setProfile(Vec2 pos, const string headFileName, const
 	m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
 	m_lblPlayerName->setPosition(Vec2(110, 90));
 	m_spFrame->addChild(m_lblPlayerName);
-	m_spDianmond = Sprite::create("MainScene/diamond.png");
-	if (!m_spDianmond)
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	if (!m_spCoin)
 	{
 		return false;
 	}
-	m_spDianmond->setAnchorPoint(Vec2(0, 1));
-	m_spDianmond->setPosition(Vec2(105, 55));
-	m_spFrame->addChild(m_spDianmond);
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(Vec2(105, 55));
+	m_spFrame->addChild(m_spCoin);
 	char buf[100];
 	sprintf(buf, "%d", diamond);
-	m_nDiamond = diamond;
-	m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
-	if (!m_lblDiamond)
+	m_nCoin = diamond;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+	if (!m_lblCoin)
 	{
 		return false;
 	}
-	m_lblDiamond->setColor(Color3B(224, 179, 9));
-	m_lblDiamond->setAnchorPoint(Vec2(0, 1));
-	m_lblDiamond->setPosition(Vec2(165, 45));
-	m_spFrame->addChild(m_lblDiamond);
+	m_lblCoin->setColor(Color3B(224, 179, 9));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(Vec2(165, 45));
+	m_spFrame->addChild(m_lblCoin);
 	return true;
 }
 
@@ -112,7 +114,8 @@ VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent) :UserProfileUI(pPare
 
 }
 
-VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond):
+VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin) :
 UserProfileUI(pParent)
 {
 	auto director = Director::getInstance();
@@ -125,21 +128,22 @@ UserProfileUI(pParent)
 	m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
 	m_lblPlayerName->setPosition(Vec2(m_spFrame->getContentSize().width / 2, 60));
 	m_spFrame->addChild(m_lblPlayerName);
-	m_spDianmond = Sprite::create("MainScene/diamond.png");
-	m_spDianmond->setAnchorPoint(Vec2(0, 1));
-	m_spDianmond->setPosition(Vec2(5, 45));
-	m_spFrame->addChild(m_spDianmond);
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(Vec2(5, 45));
+	m_spFrame->addChild(m_spCoin);
 	char buf[100];
 	sprintf(buf, "%d", diamond);
-	m_nDiamond = diamond;
-	m_lblDiamond = LabelTTF::create(buf, "Arial", 20);
-	m_lblDiamond->setColor(Color3B(255, 252, 0));
-	m_lblDiamond->setAnchorPoint(Vec2(0, 1));
-	m_lblDiamond->setPosition(Vec2(55, 35));
-	m_spFrame->addChild(m_lblDiamond);
+	m_nCoin = diamond;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 20);
+	m_lblCoin->setColor(Color3B(255, 252, 0));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(Vec2(55, 35));
+	m_spFrame->addChild(m_lblCoin);
 }
 
-bool VerticalUserProfileUI::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond)
+bool VerticalUserProfileUI::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin)
 {
 	if (!m_pParent)
 	{
@@ -167,30 +171,31 @@ bool VerticalUserProfileUI::setProfile(Vec2 pos, const string headFileName, cons
 	}
 	m_lblPlayerName->setPosition(Vec2(m_spFrame->getContentSize().width / 2, 60));
 	m_spFrame->addChild(m_lblPlayerName);
-	m_spDianmond = Sprite::create("MainScene/diamond.png");
-	if (!m_spDianmond)
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	if (!m_spCoin)
 	{
 		return false;
 	}
-	m_spDianmond->setAnchorPoint(Vec2(0, 1));
-	m_spDianmond->setPosition(Vec2(5, 45));
-	m_spFrame->addChild(m_spDianmond);
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(Vec2(5, 45));
+	m_spFrame->addChild(m_spCoin);
 	char buf[100];
 	sprintf(buf, "%d", diamond);
-	m_nDiamond = diamond;
-	m_lblDiamond = LabelTTF::create(buf, "Arial", 20);
-	if (!m_lblDiamond)
+	m_nCoin = diamond;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 20);
+	if (!m_lblCoin)
 	{
 		return false;
 	}
-	m_lblDiamond->setColor(Color3B(255, 252, 0));
-	m_lblDiamond->setAnchorPoint(Vec2(0, 1));
-	m_lblDiamond->setPosition(Vec2(55, 35));
-	m_spFrame->addChild(m_lblDiamond);
+	m_lblCoin->setColor(Color3B(255, 252, 0));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(Vec2(55, 35));
+	m_spFrame->addChild(m_lblCoin);
 	return true;
 }
 
-UserProfileUIInMainScene::UserProfileUIInMainScene(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond) :
+UserProfileUIInMainScene::UserProfileUIInMainScene(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin) :
 HerizelUserProfileUI(pParent)
 {
 	auto director = Director::getInstance();
@@ -198,6 +203,10 @@ HerizelUserProfileUI(pParent)
 	m_spRoundRect->setAnchorPoint(Vec2(0, 1));
 	m_spRoundRect->setPosition(director->convertToUI(Vec2(90, 65)));
 	m_pParent->addChild(m_spRoundRect);
+	m_spRoundRect2 = Sprite::create("MainScene/roundRect3.png");
+	m_spRoundRect2->setAnchorPoint(Vec2(0, 1));
+	m_spRoundRect2->setPosition(director->convertToUI(Vec2(380, 65)));
+	m_pParent->addChild(m_spRoundRect2);
 	m_spHead = Sprite::create(headFileName);
 	m_spHead->setAnchorPoint(Vec2(0,1));
 	m_spHead->setPosition(director->convertToUI(pos));
@@ -223,16 +232,37 @@ HerizelUserProfileUI(pParent)
 	m_btnAddDiamond->setAnchorPoint(Vec2(0, 1));
 	m_btnAddDiamond->setPosition(director->convertToUI(Vec2(300,63)));
 	m_pParent->addChild(m_btnAddDiamond);
-	m_btnAddDiamond->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddDiamondTouch,this));
+	m_btnAddDiamond->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
+
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(director->convertToUI(Vec2(380, 65)));
+	m_pParent->addChild(m_spCoin);
+	sprintf(buf, "%d", coin);
+	m_nCoin = coin;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+	m_lblCoin->setColor(Color3B(224, 179, 9));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(director->convertToUI(Vec2(435, 75)));
+	m_pParent->addChild(m_lblCoin);
+	m_btnAddCoin = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+	m_btnAddCoin->setScale9Enabled(true);
+	m_btnAddCoin->setAnchorPoint(Vec2(0, 1));
+	m_btnAddCoin->setPosition(director->convertToUI(Vec2(540, 63)));
+	m_pParent->addChild(m_btnAddCoin);
+	m_btnAddCoin->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
 }
 
 UserProfileUIInMainScene::UserProfileUIInMainScene(Node* pParent) :HerizelUserProfileUI(pParent)
 {
 	m_spRoundRect = NULL;
 	m_btnAddDiamond = NULL;
+	m_spRoundRect2 = NULL;
+	m_btnAddCoin = NULL;
 }
 
-bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond)
+bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond
+	, const int coin)
 {
 	if (!m_pParent)
 	{
@@ -292,11 +322,53 @@ bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, c
 	m_btnAddDiamond->setAnchorPoint(Vec2(0, 1));
 	m_btnAddDiamond->setPosition(director->convertToUI(Vec2(300, 63)));
 	m_pParent->addChild(m_btnAddDiamond);
-	m_btnAddDiamond->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddDiamondTouch, this));
+	m_btnAddDiamond->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
+
+	m_spCoin = Sprite::create("MainScene/coin.png");
+	if (!m_spCoin)
+	{
+		return false;
+	}
+	m_spCoin->setAnchorPoint(Vec2(0, 1));
+	m_spCoin->setPosition(director->convertToUI(Vec2(380, 65)));
+	m_pParent->addChild(m_spCoin);
+	sprintf(buf, "%d", coin);
+	m_nCoin = coin;
+	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+	if (!m_lblCoin)
+	{
+		return false;
+	}
+	m_lblCoin->setColor(Color3B(224, 179, 9));
+	m_lblCoin->setAnchorPoint(Vec2(0, 1));
+	m_lblCoin->setPosition(director->convertToUI(Vec2(435, 75)));
+	m_pParent->addChild(m_lblCoin);
+	m_btnAddCoin = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+	if (!m_btnAddCoin)
+	{
+		return false;
+	}
+	m_btnAddCoin->setScale9Enabled(true);
+	m_btnAddCoin->setAnchorPoint(Vec2(0, 1));
+	m_btnAddCoin->setPosition(director->convertToUI(Vec2(540, 63)));
+	m_pParent->addChild(m_btnAddCoin);
+	m_btnAddCoin->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
 	return true;
 }
 
-void UserProfileUIInMainScene::onAddDiamondTouch(Ref *pSender, Widget::TouchEventType type)
+void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
-	log("add diamond");
+	Button* pBtn = dynamic_cast<Button*>(pSender);
+	if (type == Widget::TouchEventType::ENDED)
+	{
+		if (pBtn == m_btnAddCoin)
+		{
+			log("add coin");
+		}
+		else if (pBtn == m_btnAddDiamond)
+		{
+			log("add diamond");
+		}
+	}
+
 }
