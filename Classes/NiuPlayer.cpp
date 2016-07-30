@@ -25,7 +25,7 @@ void NiuPlayer::updatePkWeiZhi(){
 	int x, y;
 	if (m_iPlayerClass == PlayerType_Me)
 	{
-		x = size.width / 2 - ((m_arrPk->count() - 1)*pkJianJu + pkWidth) / 2;
+		x = size.width / 2 - ((m_arrPk->count() - 1)*(pkWidth+pkJianJu) + pkWidth) / 2;
 		y = m_point.y;
 	}
 	else
@@ -48,14 +48,16 @@ void NiuPlayer::updatePkWeiZhi(){
 	}
 	CCARRAY_FOREACH(m_arrPk, object){
 		NiuPoker* pk = (NiuPoker*)object;
-		pk->setPosition(Vec2(x + num*pkJianJu + pkWidth / 2, y));
+		
 		if (m_iPlayerClass == PlayerType_Me)
 		{
 			pk->showFront();
+            pk->setPosition(Vec2(x + num*(pkWidth+pkJianJu) + pkWidth / 2, y));
 		}
 		else
 		{
 			pk->showLast();
+            pk->setPosition(Vec2(x + num*pkJianJu + pkWidth / 2, y));
 		}
 		++num;
 	}
