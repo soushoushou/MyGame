@@ -8,7 +8,9 @@ USING_NS_CC;
 
 #define TAG_START_BTN	1	
 
-GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true), m_iSendPk(0), m_iState(1)
+GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true), 
+m_iSendPk(0), m_iState(1),m_btnSetting(NULL)
+
 {
 	m_player = new NiuPlayer();
 	m_playerRight = new NiuPlayer();
@@ -120,6 +122,8 @@ bool GamePlayScene::initButtons()
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 
 	this->addChild(m_startGameBtn);
+
+	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)));
 
 	return true;
 }

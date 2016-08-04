@@ -15,7 +15,6 @@ public:
 	bool setFrameSprite(const string fileName, const Vec2& pos);
 	bool setTitle(const string title, const string fontName, float size,const Vec2& pos);
 	bool setContent(const string content, const string fontName, float size, const Vec2& pos);
-	//static void onTouchEnded(Touch *touch, Event *unused_event);
 protected:
 	Sprite* m_pFrameSprtie;							//消息框精灵
 	LabelTTF* m_plblTitle;							//消息框标题
