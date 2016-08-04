@@ -4,6 +4,7 @@
 #include "ShadeLayer.h"
 #include "PopupLayer.h"
 #include "GamePlayScene.h"
+#include "ShopLayer.h"
 
 using namespace ui;
 
@@ -227,19 +228,12 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
 		}
-		case TAG_SHOP_BTN: {
+		case TAG_SHOP_BTN: 
+		{
 			log("shop");
-			PopupLayer* pl = PopupLayer::create("popuplayer/BackGround.png", Size(400, 350));
-			pl->setTitle("hhh");
-			pl->setContentText("hhhh", 20, 60, 250);
-			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
-			pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
-			//pl->addCheckBox("CheckBox_UnSelect.png",
-			//"CheckBox_Select.png", "haha", 2);
-			pl->addListView();
-			butten->getParent()->addChild(pl);
-			break; }
+			Director::getInstance()->replaceScene(ShopLayer::createScene());
+			break; 
+		}
 		case TAG_RANK_BTN:
 			log("RANK");
 			break;
