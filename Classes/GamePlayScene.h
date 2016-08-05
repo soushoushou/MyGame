@@ -47,6 +47,7 @@ private:
 	TimeLayer* m_timeLayer;
 	Button* m_startGameBtn;
 	SettingMenuInPlaying *m_btnSetting;
+
 	bool m_bReady;
 	/** ËùÓĞµÄÅÆ */
 	__Array* m_arrPokers;
