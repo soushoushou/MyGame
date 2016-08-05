@@ -1,5 +1,7 @@
 #include "UserProfileUI.h"
 #include "PopupLayer.h"
+#include "ShopLayer.h"
+
 UserProfileUI::UserProfileUI(Node* pParent)
 {
 	m_strPlayerName = "";
@@ -363,11 +365,20 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 	{
 		if (pBtn == m_btnAddCoin)
 		{
-			log("add coin");
+			//log("add coin");
+
+			//CCScene  * scene = ShopLayer::createScene();
+			//ShopLayer * layer = (ShopLayer*)(scene->getChildren()->objectAtIndex(0));
+			//layer->value = "1";
+			//CCDirector::sharedDirector()->replaceScene(scene);
+
+			//Director::getInstance()->pushScene(TransitionShrinkGrow::create(0, ShopLayer::createScene()));
+			Director::getInstance()->replaceScene(ShopLayer::createScene(0));
 		}
 		else if (pBtn == m_btnAddDiamond)
 		{
 			log("add diamond");
+			Director::getInstance()->replaceScene(ShopLayer::createScene(1));
 		}
 	}
 

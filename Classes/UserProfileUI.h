@@ -14,6 +14,7 @@ public:
 	UserProfileUI(Node* pParent);
 	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond,const int coin) = 0;
 	~UserProfileUI();
+	//static int m_nDiamond;
 protected:
 	string m_strPlayerName;			//用户昵称
 	int m_nCoin;					//金币数量
