@@ -43,15 +43,15 @@ bool Popup::init() {
 }
 
 void Popup::popupLayer() {
-	PopupLayer* pl = PopupLayer::create("BackGround.png", Size(400, 350));
-	pl->setTitle("hhh");
-	pl->setContentText("hhhh", 20, 60, 250);
-	pl->setCallbackFunc(this, callfuncN_selector(Popup::buttonCallback));
-	pl->addButton("pop_button.png", "pop_button.png", "submit", 1);
-	pl->addButton("pop_button.png", "pop_button.png", "cancel", 0);
-	pl->addCheckBox("CheckBox_UnSelect.png",
-		"CheckBox_Select.png", "haha",2);
-	this->addChild(pl);
+	//PopupLayer* pl = PopupLayer::create("BackGround.png", Size(400, 350));
+	//pl->setTitle("hhh");
+	//pl->setContentText("hhhh", 20, 60, 250);
+	//pl->setCallbackFunc(this, callfuncN_selector(Popup::buttonCallback));
+	//pl->addButton("pop_button.png", "pop_button.png", "submit", 1);
+	//pl->addButton("pop_button.png", "pop_button.png", "cancel", 0);
+	//pl->addCheckBox("CheckBox_UnSelect.png",
+	//	"CheckBox_Select.png", "haha",2);
+	//this->addChild(pl);
 }
 
 void Popup::menuCallback(cocos2d::CCObject *pSender) {

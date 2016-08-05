@@ -8,3 +8,5 @@ const string g_testPlayerName = "昵称：卧槽！！";
 const string g_testPlayerLevel = "等级：14";
 const string g_strMessageBosTitle1 = "提示";
 const string g_strHoldOn1 = "正在连接服务器，请稍后...";
+const string g_strCreateRoom = "创建房间";
+const string g_inputRoomNum = "输入房间号";

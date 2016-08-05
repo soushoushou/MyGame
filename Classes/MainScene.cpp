@@ -223,26 +223,37 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 		case TAG_CREATEROOM_BTN:
 		{
-			log("create room");
-			ShadeLayer* l = ShadeLayer::create();
-			l->setFrameSprite("shadeFrame.png", Vec2(size.width / 2, size.height / 2));
-			l->setTitle(g_strMessageBosTitle1, "Arial", 10, Vec2(size.width / 2, size.height / 2 + 20));
-			l->setContent(g_strHoldOn1, "Arial", 10, Vec2(size.width / 2, size.height / 2 - 20));
-			butten->getParent()->addChild(l);
+			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
+			//pl->setTitle("hhh");
+			//pl->setContentText("hhhh", 20, 60, 250);
+			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
+			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
+			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
+			//pl->addCheckBox("CheckBox_UnSelect.png",
+			//"CheckBox_Select.png", "haha", 2);
+			//pl->addListView();
+			butten->getParent()->addChild(pl);
 			break;
 		}
 		case TAG_JOINGAME_BTN:
 		{
-			Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			CCSize size = CCDirector::sharedDirector()->getWinSize();
+			PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width/9*7, size.height-540));
+			//auto position = ccp((size.width) / 2, size.height / 2);
+			//pl->setAnchorPoint(ccp(0.5, 0.5));
+			//pl->setPosition(position);
+
+			butten->getParent()->addChild(pl);
+
+			//Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
 		}
 		case TAG_SHOP_BTN: 
 		{
 			log("shop");
+			
 			Director::getInstance()->replaceScene(ShopLayer::createScene());
-			break; 
-		}
-		case TAG_RANK_BTN:
+			break; }		case TAG_RANK_BTN:
 			log("RANK");
 			break;
 
@@ -254,11 +265,23 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("GAMEHALL");
 			break;
 
-		case TAG_SETTING_BTN:
+		case TAG_SETTING_BTN: {
 			log("SETTING");
-			break;
+			CCSize size = CCDirector::sharedDirector()->getWinSize();
+			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width/2, size.height/7*4));
+			//pl->setTitle("hhh");
+			//pl->setContentText("hhhh", 20, 60, 250);
+			//pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
+			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
+			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
+			//pl->addCheckBox("CheckBox_UnSelect.png",
+			//"CheckBox_Select.png", "haha", 2);
+			//pl->addListView();
+			butten->getParent()->addChild(pl);
+			break; }
 		case TAG_BACK_BTN:
-			log("BACK");
+			PopupLayer* pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4),"hhh","hhhhh");
+			butten->getParent()->addChild(pl);
 			break;
 		}
 	}

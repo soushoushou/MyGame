@@ -3,18 +3,30 @@
 #include "ui/UIScale9Sprite.h"
 #include "ui/UICheckBox.h"
 #include "ui/UIListView.h" 
+#include "ui/UIEditBox/UIEditBox.h"
+#include "SimpleAudioEngine.h"
+#include "ui/UILayoutParameter.h"
+#include "constString.h"
+//USING_NS_CC_EXT;
 using namespace cocos2d;
 using namespace ui;
-//using namespace cocos2d::extension;
-class PopupLayer : public LayerColor {
+using namespace CocosDenshion;
+class PopupLayer : public LayerColor,public EditBoxDelegate{
 public:
 	PopupLayer();
 	~PopupLayer();
 
 	virtual bool init();
 	CREATE_FUNC(PopupLayer);
-	static PopupLayer* create(const char* backgroundImage, Size dialogSize);
-
+	static PopupLayer* createRoomDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* recordDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* settingDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* joinRoomDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* backDialog(const char* backgroundImage, Size dialogSize, const char* title, const char* content);
+	virtual void editBoxEditingDidBegin(EditBox* editBox);
+	virtual void editBoxEditingDidEnd(EditBox* editBox);
+	virtual void editBoxTextChanged(EditBox* editBox, const std::string &text);
+	virtual void editBoxReturn(EditBox *editBox);
 	//touch事件监听 屏蔽向下触摸
 	bool onTouchBegan(Touch *touch, Event *event);
 	void onTouchMoved(Touch *touch, Event *event);
@@ -33,7 +45,7 @@ public:
 	void selectedItemEvent(Ref *pSender, ListViewEventType type);
 	virtual void onEnter();
 	virtual void onExit();
-
+	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void backgroundFinish();
 
 private:

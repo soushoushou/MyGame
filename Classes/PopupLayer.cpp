@@ -3,7 +3,12 @@
 #include "ui/UIScale9Sprite.h"
 #include "ui/UICheckBox.h"
 #include "ui/CocosGUI.h"
+#include "GamePlayScene.h"
+
+//#include "SimpleAudioEngine.h"
+
 using namespace ui;
+
 PopupLayer::PopupLayer() :
 	m__pMenu(NULL)
 	, m_contentPadding(0)
@@ -17,7 +22,17 @@ PopupLayer::PopupLayer() :
 {
 
 }
-
+#define TAG_CHECKBOX_10	1	
+#define TAG_CHECKBOX_20	2
+#define TAG_CHECKBOX_QZ		3
+#define TAG_CHECKBOX_LL		4
+#define TAG_CREATEROOM_BTN	5
+#define TAG_CLOSEDIALOG_BTN		6
+#define TAG_SEND_BTN		7
+#define TAG_BACK_BTN		8
+#define TAG_CHECKBOX_MUSIC	9	
+#define TAG_CHECKBOX_MUSICE	10
+#define TAG_LOGOUT_BTN	10
 PopupLayer::~PopupLayer() {
 	CC_SAFE_RELEASE(m__pMenu);
 	CC_SAFE_RELEASE(m__sfBackGround);
@@ -54,6 +69,7 @@ bool PopupLayer::onTouchBegan(Touch *touch, Event *event) {
 	return true;
 }
 
+
 void PopupLayer::onTouchMoved(Touch *touch, Event *event) {
 
 }
@@ -61,19 +77,319 @@ void PopupLayer::onTouchMoved(Touch *touch, Event *event) {
 void PopupLayer::onTouchEnded(Touch* touch, Event* event) {
 
 }
+PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogSize) {
+	layer = PopupLayer::create();
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	layer->m_dialogContentSize = dialogSize;
+	auto size = Director::getInstance()->getWinSize();
 
-PopupLayer* PopupLayer::create(const char* backgroundImage, Size dialogSize) {
+	
+	auto pEditBox_roomNum = EditBox::create(CCSizeMake(493, 87), Scale9Sprite::create("popuplayer/EditBoxBg.png"));
+	//auto size = Director::getInstance()->getWinSize();
+	auto roomNumPosition = ccp(layer->getPositionX(),size.height/2-5);
+	pEditBox_roomNum->setFontColor(Color3B(0, 0, 0));
+	pEditBox_roomNum->setFontSize(30);
+	pEditBox_roomNum->setMaxLength(8);//设置最大长度    
+	pEditBox_roomNum->setInputMode(cocos2d::ui::EditBox::InputMode::PHONE_NUMBER);
+	//pEditBox_roomNum->setInputFlag(cocos2d::ui::EditBox::InputFlag::INITIAL_CAPS_WORD);
+	pEditBox_roomNum->setPlaceHolder("ha ha");
+	pEditBox_roomNum->setPosition(roomNumPosition);
+	pEditBox_roomNum->setReturnType(EditBox::KeyboardReturnType::DONE);
+	pEditBox_roomNum->setDelegate(layer);
+	pEditBox_roomNum->attachWithIME();
+
+	layer->addChild(pEditBox_roomNum,10);
+	LabelTTF* label = LabelTTF::create(g_inputRoomNum, "", 36);
+	label->setPosition(ccp(roomNumPosition.x - pEditBox_roomNum->getContentSize().width / 2 - 20 - label->getContentSize().width / 2, roomNumPosition.y));
+	label->setColor(Color3B(255, 255, 255));
+	label->setFontName("Marker Felt");
+	layer->addChild(label, 10);
+	Button* sendBtn = Button::create("popuplayer/sendBtn.png", "popuplayer/sendBtn_pressed.png");
+	if (!sendBtn) return false;	
+	sendBtn->setScaleX(160 / sendBtn->getContentSize().width);
+	sendBtn->setScaleY(80 / sendBtn->getContentSize().height);
+	sendBtn->setPosition(ccp(roomNumPosition.x+pEditBox_roomNum->getContentSize().width/2+20+sendBtn->getContentSize().width/2, roomNumPosition.y));
+	sendBtn->setTag(TAG_SEND_BTN);
+	sendBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(sendBtn, 20);
+	return layer;
+}
+
+PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialogSize) {
 
 	layer = PopupLayer::create();
 
 	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
-
+	auto size = Director::getInstance()->getWinSize();
+	LabelTTF* label = LabelTTF::create("hhhhhhhh", "", 40);
+	label->setPosition(size.width/2,(size.height/2+dialogSize.height/2-35));
+	label->setColor(Color3B(0, 0, 0));
+	layer->addChild(label,10);
 	layer->m_dialogContentSize = dialogSize;
+	//auto item = MenuItemImage::create(
+	//	"popuplayer/close.png",
+	//	"popuplayer/close_pressed.png",
+	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return false;	
+	Button* createBtn = Button::create("popuplayer/startGame.png", "popuplayer/startGame_pressed.png");
+	if (!createBtn) return false;
+	//auto contentSize = item->getContentSize;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(closeBtn, 20);
 
+	auto startPosition = ccp(size.width / 2, createBtn->getContentSize().height / 2 + (size.height - dialogSize.height) / 2 + 30);
+	createBtn->setPosition(startPosition);
+	createBtn->setTag(TAG_CREATEROOM_BTN);
+	createBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(createBtn, 20);
+
+	LabelTTF* label2 = LabelTTF::create("hhhhhhhh", "", 32);
+	label2->setPosition(ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 - label2->getContentSize().width / 2 - 35, (size.height - dialogSize.height) / 2 + dialogSize.height / 3 * 2));
+	label2->setColor(Color3B(255, 255, 255));
+	layer->addChild(label2, 10);
+	CheckBox* checkBox = CheckBox::create();
+	checkBox->setTouchEnabled(true);
+	checkBox->loadTextures("popuplayer/checkbox_true.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png");
+	auto checkBoxPosition = ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3, (size.height - dialogSize.height) / 2 + dialogSize.height / 3 * 2);
+	checkBox->setPosition(checkBoxPosition);
+
+	checkBox->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox != nullptr)
+		layer->addChild(checkBox, 10);
+	checkBox->setTag(TAG_CHECKBOX_10);
+	LabelTTF* label3 = LabelTTF::create("10 hhh", "", 32);
+	label3->setPosition(checkBox->getContentSize().width/2+checkBoxPosition.x+20+label3->getContentSize().width/2,checkBoxPosition.y);
+	label3->setColor(Color3B(255, 255, 255));
+	layer->addChild(label3, 10);
+	CheckBox* checkBox2 = CheckBox::create();
+	checkBox2->setTouchEnabled(true);
+	checkBox2->loadTextures("popuplayer/checkbox_true.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png");
+	auto checkBoxPosition2 = ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 * 2, (size.height - dialogSize.height) / 2 + dialogSize.height / 3 * 2);
+	checkBox2->setPosition(checkBoxPosition2);
+	checkBox2->setSelectedState(true);
+	checkBox2->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	LabelTTF* label4 = LabelTTF::create("10 hhh", "", 32);
+	label4->setPosition(checkBox2->getContentSize().width / 2 + checkBoxPosition2.x + 20 + label4->getContentSize().width / 2, checkBoxPosition.y);
+	label4->setColor(Color3B(255, 255, 255));
+	layer->addChild(label4, 10);
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox2 != nullptr)
+		layer->addChild(checkBox2, 10);
+	checkBox2->setTag(TAG_CHECKBOX_20);
+
+	LabelTTF* label5 = LabelTTF::create("hhhhhhhh", "", 32);
+	label5->setPosition(ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 - label5->getContentSize().width / 2 - 35, checkBoxPosition2.y-90));
+	label5->setColor(Color3B(255, 255, 255));
+	layer->addChild(label5, 10);
+	
+	CheckBox* checkBox3 = CheckBox::create();
+	checkBox3->setTouchEnabled(true);
+	checkBox3->loadTextures("popuplayer/checkbox_true.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png");
+	auto checkBoxPosition3 = ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3, checkBoxPosition2.y - 90);
+	checkBox3->setPosition(checkBoxPosition3);
+
+	checkBox3->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox3 != nullptr)
+		layer->addChild(checkBox3, 10);
+	checkBox3->setTag(TAG_CHECKBOX_QZ);
+	LabelTTF* label6 = LabelTTF::create("10 hhh", "", 32);
+	label6->setPosition(checkBox3->getContentSize().width / 2 + checkBoxPosition.x + 20 + label6->getContentSize().width / 2, checkBoxPosition3.y);
+	label6->setColor(Color3B(255, 255, 255));
+	layer->addChild(label6, 10);
+	CheckBox* checkBox4 = CheckBox::create();
+	checkBox4->setTouchEnabled(true);
+	checkBox4->loadTextures("popuplayer/checkbox_true.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png",
+		"popuplayer/checkbox_false.png");
+	auto checkBoxPosition4 = ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 * 2, checkBoxPosition2.y - 90);
+	checkBox4->setPosition(checkBoxPosition4);
+	checkBox4->setSelectedState(true);
+	checkBox4->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	LabelTTF* label7 = LabelTTF::create("10 hhh", "", 32);
+	label7->setPosition(checkBox4->getContentSize().width / 2 + checkBoxPosition4.x + 20 + label7->getContentSize().width / 2, checkBoxPosition4.y);
+	label7->setColor(Color3B(255, 255, 255));
+	layer->addChild(label7, 10);
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox4 != nullptr)
+		layer->addChild(checkBox4, 10);
+	checkBox4->setTag(TAG_CHECKBOX_LL);
+
+	LabelTTF* label8 = LabelTTF::create("10 hhh", "", 20);
+	label8->setPosition(createBtn->getContentSize().width / 2 + startPosition.x + 20 + label8->getContentSize().width / 2, startPosition.y);
+	label8->setColor(Color3B(255, 255, 255));
+	layer->addChild(label8, 10);
 	return layer;
 }
+PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSize) {
 
+	layer = PopupLayer::create();
+
+	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	auto size = Director::getInstance()->getWinSize();
+	LabelTTF* label = LabelTTF::create("hhhhhhhh", "", 40);
+	label->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
+	label->setColor(Color3B(0, 0, 0));
+	layer->addChild(label, 10);
+	layer->m_dialogContentSize = dialogSize;
+	//auto item = MenuItemImage::create(
+	//	"popuplayer/close.png",
+	//	"popuplayer/close_pressed.png",
+	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return false;
+	Button* createBtn = Button::create("popuplayer/startGame.png", "popuplayer/startGame_pressed.png");
+	if (!createBtn) return false;
+	//auto contentSize = item->getContentSize;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(closeBtn, 20);
+}
+
+PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,const char* title,const char* content) {
+
+	layer = PopupLayer::create();
+
+	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	auto size = Director::getInstance()->getWinSize();
+	LabelTTF* titleLable = LabelTTF::create(title, "", 40);
+	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
+	titleLable->setColor(Color3B(0, 0, 0));
+	layer->addChild(titleLable, 10);
+	LabelTTF* contentLabel = LabelTTF::create(content, "", 30);
+	contentLabel->setPosition(size.width / 2, (size.height  - dialogSize.height) / 2 +dialogSize.height/3*2);
+	contentLabel->setColor(Color3B(0, 0, 0));
+	layer->addChild(contentLabel, 10);
+	layer->m_dialogContentSize = dialogSize;
+	//auto item = MenuItemImage::create(
+	//	"popuplayer/close.png",
+	//	"popuplayer/close_pressed.png",
+	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return false;
+	Button* commitBtn = Button::create("popuplayer/commitBtn.png", "popuplayer/commitBtn_pressed.png");
+	if (!commitBtn) return false;
+	Button* cancelBtn = Button::create("popuplayer/cancelBtn.png", "popuplayer/cancelBtn_pressed.png");
+	if (!cancelBtn) return false;
+	auto cancelPosition = Point((size.width + dialogSize.width) / 2  -20 - commitBtn->getContentSize().width / 2, (size.height - dialogSize.height) / 2 + 20 + commitBtn->getContentSize().height / 2);
+	auto commitPosition = Point((size.width - dialogSize.width) / 2+20+commitBtn->getContentSize().width/2, (size.height - dialogSize.height) / 2 + 20 + commitBtn->getContentSize().height / 2);
+	//auto contentSize = item->getContentSize;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	cancelBtn->setPosition(cancelPosition);
+	cancelBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	commitBtn->setPosition(commitPosition);
+	commitBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	commitBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	cancelBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(closeBtn, 20);
+	layer->addChild(commitBtn, 20);
+	layer->addChild(cancelBtn, 20);
+}
+PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSize) {
+	layer = PopupLayer::create();
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	layer->m_dialogContentSize = dialogSize;
+	auto size = Director::getInstance()->getWinSize();
+	LabelTTF* label = LabelTTF::create("hhhhhhhh", "", 40);
+	label->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
+	label->setColor(Color3B(0, 0, 0));
+	layer->addChild(label, 10);
+
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return false;
+	Button* logoutBtn = Button::create("popuplayer/logoutBtn.png", "popuplayer/logoutBtn_pressed.png");
+	if (!logoutBtn) return false;
+	//auto contentSize = item->getContentSize;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(closeBtn, 20);
+
+
+	LabelTTF* label2 = LabelTTF::create("hhhhhhhh", "", 32);
+	label2->setPosition(ccp((size.width - dialogSize.width) / 2 + label2->getContentSize().width / 2 + 65, (size.height - dialogSize.height) / 2 + dialogSize.height / 5 * 3));
+	label2->setColor(Color3B(255, 255, 255));
+	layer->addChild(label2, 10);
+	CheckBox* checkBox = CheckBox::create();
+	checkBox->setTouchEnabled(true);
+	checkBox->loadTextures("popuplayer/switch_on.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png");
+	auto checkBoxPosition = ccp((size.width - dialogSize.width) / 2 + label2->getContentSize().width +checkBox->getContentSize().width/2+65, (size.height - dialogSize.height) / 2 + dialogSize.height / 5 * 3);
+	checkBox->setPosition(checkBoxPosition);
+	
+	checkBox->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox != nullptr)
+		layer->addChild(checkBox, 10);
+	checkBox->setTag(TAG_CHECKBOX_MUSIC);
+
+	LabelTTF* label3 = LabelTTF::create("hhhhhhhh", "", 32);
+	label3->setPosition(ccp((size.width - dialogSize.width) / 2 + label3->getContentSize().width / 2 + 65, checkBoxPosition.y-30 - checkBox->getContentSize().height ));
+	label3->setColor(Color3B(255, 255, 255));
+	layer->addChild(label3, 10);
+	CheckBox* checkBox2 = CheckBox::create();
+	checkBox2->setTouchEnabled(true);
+	checkBox2->loadTextures("popuplayer/switch_on.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png",
+		"popuplayer/switch_off.png");
+	auto checkBoxPosition2 = ccp((size.width - dialogSize.width) / 2 + label3->getContentSize().width + checkBox->getContentSize().width / 2 + 65, checkBoxPosition.y - 30-checkBox->getContentSize().height/2-checkBox2->getContentSize().height / 2);
+	checkBox2->setPosition(checkBoxPosition2);
+
+	checkBox2->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
+	//getMenuButton()->addWidget(checkBox);
+	if (checkBox2 != nullptr)
+		layer->addChild(checkBox2, 10);
+	checkBox2->setTag(TAG_CHECKBOX_MUSICE);
+	auto director = Director::getInstance();
+	auto m_spHead = Sprite::create("MainScene/timo.png");
+	m_spHead->setScaleX(141.0 / m_spHead->getContentSize().width);
+	m_spHead->setScaleY(138.0 / m_spHead->getContentSize().height);
+	//m_spHead->setAnchorPoint(Vec2(0.5, 0.5));
+	auto pos = ccp((size.width - dialogSize.width) / 2+dialogSize.width-m_spHead->getContentSize().width/2-45, checkBoxPosition.y);
+	m_spHead->setPosition(pos);
+	layer->addChild(m_spHead,10);
+
+
+	auto logoutPosition = ccp(pos.x, pos.y-m_spHead->getContentSize().height/2-35-logoutBtn->getContentSize().height/2);
+	logoutBtn->setPosition(logoutPosition);
+	logoutBtn->setTag(TAG_LOGOUT_BTN);
+	logoutBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	layer->addChild(logoutBtn, 20);
+	return layer;
+}
 void PopupLayer::setTitle(const char* title, int fontsize /* = 20 */) {
 	LabelTTF* label = LabelTTF::create(title, "", fontsize);
 	setLabelTitle(label);
@@ -133,8 +449,8 @@ bool PopupLayer::addListView(/*const char* normalImage, const char* selectedImag
 	char* _image[15] = { "CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
 		"CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
 		"nCloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png" };
-	this->addChild(lv,10);
-	
+	this->addChild(lv, 10);
+
 	for (int i = 0; i < 15; ++i)
 	{
 		auto image = ImageView::create(_image[i]);
@@ -200,7 +516,7 @@ bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage,
 	auto center = Point(size.width / 2, size.height / 2);
 
 	// 创建图片菜单按钮
-		CheckBox* checkBox = CheckBox::create();
+	CheckBox* checkBox = CheckBox::create();
 	checkBox->setTouchEnabled(true);
 	checkBox->loadTextures("CheckBox_UnSelect.png",
 		"CheckBox_Select.png",
@@ -211,9 +527,10 @@ bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage,
 
 	checkBox->addEventListenerCheckBox(this, checkboxselectedeventselector(PopupLayer::selectedEvent));
 	//getMenuButton()->addWidget(checkBox);
-	if(checkBox!=nullptr)
-	layer->addChild(checkBox,10);
+	if (checkBox != nullptr)
+		layer->addChild(checkBox, 10);
 	checkBox->setTag(0);
+	//checkBox->setFocused(true);
 	//m_pUiLayer->addWidget(checkBox);
 	/*
 	checkBox->setPosition(center);
@@ -226,31 +543,108 @@ bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage,
 	checkBox->addChild(ttf);*/
 
 
-	
+
 
 	return true;
 }
 void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 {
+	CheckBox* checkbox = (CheckBox*)pSender;
+	CheckBox* checkBox = (CheckBox*) this->getChildByTag(TAG_CHECKBOX_10);
+	CheckBox* checkBox2 = (CheckBox*) this->getChildByTag(TAG_CHECKBOX_20);
+	CheckBox* checkBox3 = (CheckBox*) this->getChildByTag(TAG_CHECKBOX_QZ);
+	CheckBox* checkBox4 = (CheckBox*) this->getChildByTag(TAG_CHECKBOX_LL);
+	unsigned int tag = checkbox->getTag();
 	switch (type) {
 	case cocos2d::ui::CHECKBOX_STATE_EVENT_SELECTED:
-		
+		switch (tag) {
+		case TAG_CHECKBOX_10:		
+			checkBox2->setSelectedState(false);
+			break;
+		case TAG_CHECKBOX_20:			
+			checkBox->setSelectedState(false);
+			break;
+		case TAG_CHECKBOX_QZ:
+			checkBox4->setSelectedState(false);
+			break;
+		case TAG_CHECKBOX_LL:
+			checkBox3->setSelectedState(false);
+			break;
+		case TAG_CHECKBOX_MUSIC:
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3");
+			break;
+		case TAG_CHECKBOX_MUSICE:
+			break;
+		}
 		break;
 	case ui::CHECKBOX_STATE_EVENT_UNSELECTED:
-		
+		switch (tag) {
+		case TAG_CHECKBOX_10:
+			checkBox2->setSelectedState(true);
+			break;
+		case TAG_CHECKBOX_20:
+			checkBox->setSelectedState(true);
+			break;
+		case TAG_CHECKBOX_QZ:
+			checkBox4->setSelectedState(true);
+			break;
+		case TAG_CHECKBOX_LL:
+			checkBox3->setSelectedState(true);
+			break;
+		case TAG_CHECKBOX_MUSIC:
+			SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+			break;
+		case TAG_CHECKBOX_MUSICE:
+			break;
+		}
 		break;
 	default:
 		break;
 	}
 
 }
-void PopupLayer::buttonCallBack(Ref* pSender) {
-	Node* node = dynamic_cast<Node*>(pSender);
-	//CCLog("【====PopupLayer::buttonCallBack====】touch tag: %d", node->getTag());
-	if (m_callback && m_callbackListener) {
-		(m_callbackListener->*m_callback)(node);
+void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
+{
+	Size size = Director::sharedDirector()->getWinSize();
+	if (type == Widget::TouchEventType::ENDED)
+	{
+		Button* butten = (Button*)pSender;
+		unsigned int tag = butten->getTag();
+		switch (tag)
+		{
+		case TAG_CREATEROOM_BTN:
+			Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			break;
+		case TAG_CLOSEDIALOG_BTN:
+			butten->getParent()->removeFromParent();
+			break;
+		case TAG_SEND_BTN:
+			Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			break;
+		case TAG_LOGOUT_BTN:
+			butten->getParent()->removeFromParent();
+			break;
+		}
 	}
-	this->removeFromParent();
+}
+void PopupLayer::buttonCallBack(Ref* pSender) {
+	//Node* node = dynamic_cast<Node*>(pSender);
+	////CCLog("【====PopupLayer::buttonCallBack====】touch tag: %d", node->getTag());
+	//if (m_callback && m_callbackListener) {
+	//	(m_callbackListener->*m_callback)(node);
+	//}
+	//this->removeFromParent();
+	MenuItemImage* butten = (MenuItemImage*)pSender;
+	unsigned int tag = butten->getTag();
+	switch (tag)
+	{
+	case TAG_CREATEROOM_BTN:                                
+		Director::getInstance()->replaceScene(GamePlayScene::createScene());
+		break;
+	case TAG_CLOSEDIALOG_BTN:
+		this->removeFromParent();
+		break;
+	}
 }
 
 void PopupLayer::onEnter() {
@@ -334,4 +728,33 @@ void PopupLayer::onExit() {
 
 	//CCLog("popup on exit.");
 	CCLayerColor::onExit();
+}
+void PopupLayer::editBoxEditingDidBegin(EditBox *editBox)
+{
+	CCLOG("start edit");
+}
+void PopupLayer::editBoxEditingDidEnd(EditBox *editBox)
+{
+	CCLOG("end edit");
+}
+void PopupLayer::editBoxReturn(EditBox *editBox)
+{
+	CCLOG("editbox return");
+}
+void PopupLayer::editBoxTextChanged(EditBox *editBox, const std::string &text)
+{
+	auto editbox = (EditBox*)editBox;
+	switch (editBox->getTag())
+	{
+	case 101:
+		CCLOG("EditBox_name changed");
+		//m_name = text;
+		break;
+	case 102:
+		CCLOG("EditBox_password changed");
+		//m_password = text;
+		break;
+	default:
+		break;
+	}
 }
