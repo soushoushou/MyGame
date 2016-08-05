@@ -30,6 +30,11 @@ GamePlayScene::~GamePlayScene(){
 	CC_SAFE_DELETE(m_playerTopLeft);
 	CC_SAFE_DELETE(m_playerTopLeft);
 	CC_SAFE_RELEASE(m_arrPokers);
+	if (m_btnSetting)
+	{
+		delete m_btnSetting;
+		m_btnSetting = NULL;
+	}
 }
 
 

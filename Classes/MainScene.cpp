@@ -56,6 +56,14 @@ bool MainScene::init()
 	return true;
 }
 
+Scene* MainScene::createScene()
+{
+	Scene* scene = Scene::create();
+	MainScene* p = MainScene::create();
+	scene->addChild(p);
+	return scene;
+}
+
 //初始化背景
 bool MainScene::initBackground()
 {

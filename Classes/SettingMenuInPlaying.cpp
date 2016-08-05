@@ -1,4 +1,5 @@
 #include "SettingMenuInPlaying.h"
+#include "MainScene.h"
 
 
 SettingMenuInPlaying::SettingMenuInPlaying(Node* parent) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
@@ -16,6 +17,8 @@ m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NOR
 
 SettingMenuInPlaying::~SettingMenuInPlaying()
 {
+	m_spFrame->removeAllChildren();
+	m_spFrame->release();
 }
 
 void SettingMenuInPlaying::setPos(Vec2 pos)
@@ -68,7 +71,7 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		}
 		else if (pBtn == m_btnQuitRoom)
 		{
-			log("2222");
+			Director::getInstance()->replaceScene(MainScene::createScene());
 		}
 		else if (pBtn == m_btnDestoryRoom)
 		{

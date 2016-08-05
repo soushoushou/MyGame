@@ -11,6 +11,7 @@ class MainScene :public Layer
 public:
 	MainScene();
 	static Scene* scene();
+	static Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(MainScene);
 	virtual void onEnter();
