@@ -3,6 +3,7 @@
 
 TimeLayer::TimeLayer() :m_pFrameSprtie(NULL), m_bCanRemove(false)
 {
+    m_type=Tip_gameBegin;
 }
 
 
@@ -24,11 +25,23 @@ bool TimeLayer::init()
 	{
 		return false;
 	}
-	if (m_pFrameSprtie)
-	{
-		this->addChild(m_pFrameSprtie);
-	}
-
+//	if (m_pFrameSprtie)
+//	{
+//		this->addChild(m_pFrameSprtie);
+//	}
+    Size size = Director::getInstance()->getWinSize();
+    m_pFrameSprtie = Sprite::create("tips/clockbg.png");
+    m_pFrameSprtie->setPosition(Vec2(size.width / 2, size.height / 2 - 20));
+    this->addChild(m_pFrameSprtie);
+    
+    m_tipSprite = Sprite::create("tips/tip_gameBegin.png");
+    float height=m_pFrameSprtie->getPositionY()-((m_pFrameSprtie->getContentSize().height+m_tipSprite->getContentSize().height)*0.5+6);
+    m_tipSprite->setPosition(Vec2(size.width / 2, height));
+    this->addChild(m_tipSprite);
+    
+    setTime(5, 20, m_pFrameSprtie->getPosition());
+    
+    
 	//吞噬touch消息
 	auto dispatcher = Director::getInstance()->getEventDispatcher();
 	auto listener = EventListenerTouchOneByOne::create();
@@ -82,7 +95,7 @@ TimeLayer* TimeLayer::createTimer(float time, float size, const Vec2& pos)
 void TimeLayer::update(float delta)
 {
 	pTime -= delta;
-	if (pTime >= 0)
+	if (pTime > 0)
 	{
 		char* mtime = new char[10];
 		//此处只是显示秒数  自己可以定义输出时间格式  
@@ -114,3 +127,43 @@ bool TimeLayer::setTime(float time, float size, const Vec2& pos)
 
 	return true;
 }
+
+void TimeLayer::changeType(TipType type){
+    switch (type) {
+        case Tip_gameBegin:
+            m_tipSprite->setTexture("tips/tip_gameBegin.png");
+            break;
+        case Tip_hog:
+            m_tipSprite->setTexture("tips/tip_hog.png");
+            break;
+        case Tip_chooseMul:
+            m_tipSprite->setTexture("tips/tip_chooseMul.png");
+            break;
+        case Tip_waitOther:
+            m_tipSprite->setTexture("tips/tip_waitOther.png");
+            break;
+        default:
+            break;
+    }
+}
+
+void TimeLayer::setNewTime(float time){
+    pTime = time;
+    m_bCanRemove=false;
+    char* mtime = new char[10];
+    sprintf(mtime, "%d", (int)pTime);
+    timeLabel->setString("mtime");
+    schedule(schedule_selector(TimeLayer::update));
+}
+
+void TimeLayer::setTimeAndType(float time, TipType type){
+    setNewTime(time);
+    changeType(type);
+    this->setVisible(true);
+}
+
+void TimeLayer::stopTimer(){
+    pTime=0;
+    this->setVisible(false);
+}
+

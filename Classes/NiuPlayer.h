@@ -36,6 +36,8 @@ public:
 	NiuPlayer();
 	~NiuPlayer();
 	void updatePkWeiZhi();
+    void showAllPokers();
+    void emptyAllPokers();
 
 private:
 	CC_SYNTHESIZE(__Array*, m_arrPk, ArrPk);

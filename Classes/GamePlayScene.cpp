@@ -6,21 +6,41 @@
 #include "NiuPlayer.h"
 USING_NS_CC;
 
-#define TAG_START_BTN	1	
+enum ButtonTag{
+    /** 准备 */
+    TAG_START_BTN=1,
+    /** 不抢 */
+    TAG_NOT_HOG_BTN,
+    /** 抢庄 */
+    TAG_HOG_BTN,
+    /** 一倍按钮 */
+    TAG_MUL_ONE,
+    /** 二倍按钮 */
+    TAG_MUL_TWO,
+    /** 三倍按钮 */
+    TAG_MUL_THERE,
+    /** 四倍按钮 */
+    TAG_MUL_FOUR,
+    /** 五倍按钮 */
+    TAG_MUL_FIVE
+};
 
-GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true), 
-m_iSendPk(0), m_iState(1),m_btnSetting(NULL)
+
+GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
+m_iSendPk(0), m_iState(StartState),m_btnSetting(NULL)
 
 {
-	m_player = new NiuPlayer();
-	m_playerRight = new NiuPlayer();
-	m_playerTopRight = new NiuPlayer();
-	m_playerTopLeft = new NiuPlayer();
+    m_player = new NiuPlayer();
+    m_playerRight = new NiuPlayer();
+    m_playerTopRight = new NiuPlayer();
+    m_playerTopLeft = new NiuPlayer();
 	m_playerLeft = new NiuPlayer();
 
 	m_arrPokers = __Array::create();
 	m_arrPokers->retain();
-
+    m_creatHogBtn=false;
+    m_creatMulBtn=false;
+    m_playNum=1;
 }
 
 GamePlayScene::~GamePlayScene(){
@@ -52,35 +72,51 @@ void GamePlayScene::update(float delta)
 	auto server = DebugSimpleServer::getInstance();
 	switch (m_iState)
 	{
-	case 0:
-		//����
-		SendPk();
-		break;
-	case 1:
-		//����ʱ
-		if (server->isAllReady())
-		{
-			if (!m_timeLayer && m_bReady)
-			{
-				m_timeLayer = TimeLayer::create();
-				m_timeLayer->setFrameSprite("game/clock.png", Vec2(size.width / 2, size.height / 2 - 40));
-				m_timeLayer->setTime(5, 20, Vec2(size.width / 2, size.height / 2 - 20));
-				addChild(m_timeLayer);
-			}
-			if (m_timeLayer && m_timeLayer->canRemove())
-			{
-				this->removeChild(m_timeLayer);
-				this->removeChild(m_startGameBtn);
-				m_iState = 0;
-			}
-		};
-		break;
+        case StartState:
+        {
+		//µπº∆ ±
+            if (server->isAllReady())
+            {
+                if (!m_timeLayer && m_bReady)
+                {
+                    m_timeLayer = TimeLayer::create();
+                    addChild(m_timeLayer);
+                }
+                if (m_timeLayer && m_timeLayer->canRemove())
+                {
+                    m_timeLayer->setVisible(false);
+                    m_startGameBtn->setVisible(false);
+                    m_iState = SendPokerState;
+                }
+            }
+            break;
+        }
+        case SendPokerState:
+            SendPk();
+            break;
+        case HogState:{
+            if (m_timeLayer && m_timeLayer->canRemove())
+            {
+                notHogBtnAction();
+                unschedule(schedule_selector(GamePlayScene::update));
+            }
+            break;
+        }
+        case ChooseMultipleState:{
+            if (m_timeLayer && m_timeLayer->canRemove())
+            {
+                notChooseMulAction();
+                unschedule(schedule_selector(GamePlayScene::update));
+            }
+            break;
+            
+        }
 	default:
 		break;
 	}
 }
 
-//��ʼ��
+//≥ı ºªØ
 bool GamePlayScene::init()
 {
 	if (!Layer::init())
@@ -90,24 +126,30 @@ bool GamePlayScene::init()
 
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
-	scheduleUpdate();
-	srand((unsigned)time(NULL));//��ʼ���������
+	srand((unsigned)time(NULL));//≥ı ºªØÀÊª˙÷÷◊”
 	if (!initPlayer()) return false;
 	if (!createPokers()) return false;
 	if (!xiPai()) return false;
+    schedule(schedule_selector(GamePlayScene::update));
 	return true;
 }
 
-//��ʼ������
+//≥ı ºªØ±≥æ∞
 bool GamePlayScene::initBackground()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//���ӱ���
+	//ÃÌº”±≥æ∞
 	auto spriteBK = Sprite::create("game/gamebg.png");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
+    
+    m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 50);
+    if (!m_pNoticeLabel) return false;
+    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2));
+    m_pNoticeLabel->setColor(Color3B(255, 255, 255));
+    this->addChild(m_pNoticeLabel);
 	return true;
 }
 
@@ -135,56 +177,78 @@ bool GamePlayScene::initButtons()
 
 void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
-	Size size = Director::sharedDirector()->getWinSize();
+	Size size = Director::getInstance()->getWinSize();
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
 		unsigned int tag = butten->getTag();
 		switch (tag)
 		{
-		case TAG_START_BTN:
-		{
-			log("start game");
-			butten->setEnabled(false);
+            case TAG_START_BTN:
+            {
+                log("start game");
+                butten->setEnabled(false);
 
-			//ģ�⵱������Ҷ�׼���ú��ٵ���ʱ
-			m_bReady = !m_bReady;
-			DebugSimpleServer::getInstance()->playerReady("alw");
-			break;
-		}
+                //ƒ£ƒ‚µ±À˘”–ÕÊº“∂º◊º±∏∫√∫Û‘Ÿµπº∆ ±
+                m_bReady = !m_bReady;
+                DebugSimpleServer::getInstance()->playerReady("alw");
+                break;
+            }
+            case TAG_NOT_HOG_BTN:
+            {
+                notHogBtnAction();
+                break;
+            }
+            case TAG_HOG_BTN:
+            {
+                m_notHogBtn->setVisible(false);
+                m_HogBtn->setVisible(false);
+                m_timeLayer->stopTimer();
+                m_iState=ChooseMultipleState;
+                showChooseMultipleButton();
+                break;
+            }
+            case TAG_MUL_ONE:
+            case TAG_MUL_TWO:
+            case TAG_MUL_THERE:
+            case TAG_MUL_FOUR:
+            case TAG_MUL_FIVE:{
+                notChooseMulAction();
+                break;
+            }
+            default:
+                break;
 		}
 	}
 }
 
 bool GamePlayScene::initPlayer(){
 	Size size = Director::getInstance()->getVisibleSize();
-	//��������ҵ�λ��
-	m_player->setPoint(Vec2(size.width / 2, size.height / 6));
-	m_player->setPlayerClass(PlayerType_Me);
-	//��������ҵ�λ��
-	m_playerRight->setPoint(Vec2(size.width - pkWidth * 3, size.height / 2));
-	m_playerRight->setPlayerClass(PlayerType_Right);
-	//��������϶���λ��
-	m_playerTopRight->setPoint(Vec2(size.width*0.5 + pkWidth * 3, size.height / 6 * 5));
-	m_playerTopRight->setPlayerClass(PlayerType_TopRight);
-	//���������һ��λ��
-	m_playerTopLeft->setPoint(Vec2(size.width*0.5 - pkWidth * 4, size.height / 6 * 5));
-	m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
-	//����������λ��
-	m_playerLeft->setPoint(Vec2(65, size.height / 2));
-	m_playerLeft->setPlayerClass(PlayerType_Left);
+	//…Ë÷√÷˜ÕÊº“µƒŒª÷√
+    m_player->setPoint(Vec2(size.width / 2, size.height / 6-20));
+    m_player->setPlayerClass(PlayerType_Me);
+    //…Ë÷√ÕÊº“”“µƒŒª÷√
+    m_playerRight->setPoint(Vec2(size.width - pkWidth_small * 3, size.height / 2));
+    m_playerRight->setPlayerClass(PlayerType_Right);
+    //…Ë÷√ÕÊº“…œ∂˛µƒŒª÷√
+    m_playerTopRight->setPoint(Vec2(size.width*0.5 + pkWidth_small * 3, size.height / 6 * 5));
+    m_playerTopRight->setPlayerClass(PlayerType_TopRight);
+    //…Ë÷√ÕÊº“…œ“ªµƒŒª÷√
+    m_playerTopLeft->setPoint(Vec2(size.width*0.5 - pkWidth_small * 4, size.height / 6 * 5));
+    m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
+    //…Ë÷√ÕÊº“◊ÛµƒŒª÷√
+    m_playerLeft->setPoint(Vec2(65, size.height / 2));
+    m_playerLeft->setPlayerClass(PlayerType_Left);
+
 	return true;
 }
 
 NiuPoker* GamePlayScene::selectPoker(int huaSe, int num){
 	NiuPoker* pk;
-	if (num<3) {
-		pk = NiuPoker::create("poker.png", Rect((10 + num)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
-	}
-	else{
-		pk = NiuPoker::create("poker.png", Rect((num - 3)*pkWidth, huaSe*pkHeight, pkWidth, pkHeight));
-	}
-	pk->setHuaSe(huaSe);
+    char path[256] = { 0 };
+    sprintf(path, "pokerBig/%d_%d@2x.png", huaSe,num);
+    pk = NiuPoker::create("poker.png", Rect(0, 0, pkWidth_small, pkHeight_small));
+    pk->setHuaSe(huaSe);
 	pk->setNum(num);
 	pk->setGameMain(this);
 	return pk;
@@ -194,27 +258,25 @@ bool GamePlayScene::createPokers(){
 	bool isRet = false;
 	do
 	{
-		Size size = Director::getInstance()->getVisibleSize();
 		NiuPoker* pk;
-		//����52����
-		for (int i = 0; i<4; ++i)
+		//¥¥Ω®52∏ˆ≈∆
+		for (int i = 1; i<=4; ++i)
 		{
 			for (int j = 1; j <= 13; ++j)
 			{
 				pk = selectPoker(i, j);
-				pk->setPosition(Vec2(size.width / 2, size.height / 2));
-				pk->showLast();
 				this->addChild(pk);
 				this->m_arrPokers->addObject(pk);
-
+                pk->setVisible(false);
 			}
 		}
 		isRet = true;
 	} while (0);
 	return isRet;
 }
-#pragma mark-ϴ��
+#pragma mark-œ¥≈∆
 bool GamePlayScene::xiPai(){
+    Size size = Director::getInstance()->getVisibleSize();
 	bool isRet = false;
 	do
 	{
@@ -224,13 +286,14 @@ bool GamePlayScene::xiPai(){
 			NiuPoker* pk2 = (NiuPoker*)m_arrPokers->getRandomObject();
 			m_arrPokers->exchangeObject(pk1, pk2);
 		}
-		for (int i = 0; i<52; ++i)
-		{
-			NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
-			pk1->printPoker();
-		}
 		isRet = true;
 	} while (0);
+    for (int i=0; i<25; i++) {
+        NiuPoker* pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
+        pk->setPosition(Vec2(size.width / 2, size.height / 2));
+        pk->showLast();
+        pk->setVisible(true);
+    }
 	return isRet;
 }
 
@@ -252,8 +315,10 @@ void GamePlayScene::SendPk(){
 		++m_iSendPk;
 		//        m_isSend=false;
 	}
-	else
-		m_iState = 1;
+    else{
+        m_iState = HogState;
+        showHogButton();
+    }
 }
 
 void GamePlayScene::func(Node* pSender, void* pData){
@@ -285,4 +350,158 @@ void GamePlayScene::menuCloseCallback(Ref* pSender)
 
 }
 
+#pragma mark-显示抢庄按钮
+void GamePlayScene::showHogButton()
+{
+    m_timeLayer->setTimeAndType(12, Tip_hog);
+    if (!m_creatHogBtn) {
+        auto size = Director::getInstance()->getVisibleSize();
+        /** 不抢 */
+        m_notHogBtn = Button::create("game/not_hog_button.png","game/not_hog_button_pressed.png");
+        
+        m_notHogBtn->setTag(TAG_NOT_HOG_BTN);
+        
+        m_notHogBtn->setScale9Enabled(true);
+        
+        m_notHogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        
+        this->addChild(m_notHogBtn);
+        /** 抢庄 */
+        m_HogBtn = Button::create("game/hog_button.png","game/hog_button_pressed.png");
+        
+        m_HogBtn->setTag(TAG_HOG_BTN);
+        
+        m_HogBtn->setScale9Enabled(true);
+        
+        m_HogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        
+        this->addChild(m_HogBtn);
+        
+        float btnwidth=m_notHogBtn->getContentSize().width;
+        float height=size.height *0.5 - 150;
+        m_notHogBtn->setPosition(Vec2(size.width / 2-(btnwidth*0.5+10), height));
+        m_HogBtn->setPosition(Vec2(size.width / 2+(btnwidth*0.5+10), height));
+        
+        m_creatHogBtn=true;
+    }
+    else
+    {
+        m_notHogBtn->setVisible(true);
+        m_HogBtn->setVisible(true);
+    }
+    
+}
+
+#pragma mark-不抢事件
+void GamePlayScene::notHogBtnAction(){
+    m_notHogBtn->setVisible(false);
+    m_HogBtn->setVisible(false);
+    m_timeLayer->stopTimer();
+    m_iState=CompareState;
+    showCompare();
+}
+
+#pragma mark-显示倍数按钮
+void GamePlayScene::showChooseMultipleButton()
+{
+    m_timeLayer->setTimeAndType(12, Tip_chooseMul);
+    schedule(schedule_selector(GamePlayScene::update));
+    if (!m_creatMulBtn) {
+        auto size = Director::getInstance()->getVisibleSize();
+        /** 一倍 */
+        m_OneBtn = Button::create("game/button_02.png","game/button-pressed_02.png");
+        m_OneBtn->setScale9Enabled(true);
+        m_OneBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        this->addChild(m_OneBtn);
+        /** 二倍 */
+        m_TwoBtn = Button::create("game/button_05.png","game/button-pressed_05.png");
+        m_TwoBtn->setScale9Enabled(true);
+        m_TwoBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        this->addChild(m_TwoBtn);
+        /** 三倍 */
+        m_ThreeBtn = Button::create("game/button_07.png","game/button-pressed_07.png");
+        m_ThreeBtn->setScale9Enabled(true);
+        m_ThreeBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        this->addChild(m_ThreeBtn);
+        /** 四倍 */
+        m_FourBtn = Button::create("game/button_09.png","game/button-pressed_09.png");
+        m_FourBtn->setScale9Enabled(true);
+        m_FourBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        this->addChild(m_FourBtn);
+        /** 五倍 */
+        m_FiveBtn = Button::create("game/button_11.png","game/button-pressed_11.png");
+        m_FiveBtn->setScale9Enabled(true);
+        m_FiveBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+        this->addChild(m_FiveBtn);
+        
+        m_OneBtn->setTag(TAG_MUL_ONE);
+        m_TwoBtn->setTag(TAG_MUL_TWO);
+        m_ThreeBtn->setTag(TAG_MUL_THERE);
+        m_FourBtn->setTag(TAG_MUL_FOUR);
+        m_FiveBtn->setTag(TAG_MUL_FIVE);
+        
+        float btnwidth=m_OneBtn->getContentSize().width;
+        float height=size.height *0.5 - 150;
+        
+        m_OneBtn->setPosition(Vec2(size.width / 2-(btnwidth+10)*2, height));
+        m_TwoBtn->setPosition(Vec2(size.width / 2-(btnwidth+10), height));
+        m_ThreeBtn->setPosition(Vec2(size.width / 2, height));
+        m_FourBtn->setPosition(Vec2(size.width / 2+(btnwidth+10), height));
+        m_FiveBtn->setPosition(Vec2(size.width / 2+(btnwidth+10)*2, height));
+        
+        m_creatMulBtn=true;
+    }
+    else
+    {
+        m_OneBtn->setVisible(true);
+        m_TwoBtn->setVisible(true);
+        m_ThreeBtn->setVisible(true);
+        m_FourBtn->setVisible(true);
+        m_FiveBtn->setVisible(true);
+    }
+}
+
+#pragma mark-选择倍数超时
+void GamePlayScene::notChooseMulAction(){
+    m_OneBtn->setVisible(false);
+    m_TwoBtn->setVisible(false);
+    m_ThreeBtn->setVisible(false);
+    m_FourBtn->setVisible(false);
+    m_FiveBtn->setVisible(false);
+    m_timeLayer->stopTimer();
+    showCompare();
+}
+
+#pragma mark-显示结果
+void GamePlayScene::showCompare(){
+    m_player->showAllPokers();
+    m_playerRight->showAllPokers();
+    m_playerTopRight->showAllPokers();
+    m_playerTopLeft->showAllPokers();
+    m_playerLeft->showAllPokers();
+    m_playNum++;
+    if (m_playNum<=10) {
+        auto delayTime = DelayTime::create(3.0);
+        auto func=CallFunc::create(CC_CALLBACK_0(GamePlayScene::startNewPlay, this));
+        auto seq=Sequence::create(delayTime,func, nullptr);
+        this->runAction(seq);
+    }
+    
+}
+
+#pragma mark-延迟执行重新开局
+void GamePlayScene::startNewPlay(){
+    char path[256] = { 0 };
+    sprintf(path, "第%d局", m_playNum);
+    m_pNoticeLabel->setString(path);
+    m_player->emptyAllPokers();
+    m_playerRight->emptyAllPokers();
+    m_playerTopRight->emptyAllPokers();
+    m_playerTopLeft->emptyAllPokers();
+    m_playerLeft->emptyAllPokers();
+    xiPai();
+    m_iSendPk=0;
+    m_iState = SendPokerState;
+    schedule(schedule_selector(GamePlayScene::update));
+}
 

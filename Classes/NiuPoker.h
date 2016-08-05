@@ -21,6 +21,8 @@ public:
 	static NiuPoker* create(const char *pszFileName, const Rect& rect);
 	void showFront();//显示前面
 	void showLast();//显示背面
+    void showFront_small();
+    void showLast_small();
 	NiuPoker* copy();
 	/** 打印扑克牌 */
 	void printPoker();

@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include <vector>
-const int pkWidth = 71;//牌的宽
-const int pkHeight = 96;//牌的高
+const int pkWidth_small = 60;//71;//牌的宽
+const int pkHeight_small = 79;//96;//牌的高
+const int pkWidth_Big=88;
+const int pkHeight_Big=112;
 const int pkJianJu = 20;//牌与牌之间的间距
 //花色
 enum HuaSe

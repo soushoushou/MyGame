@@ -25,7 +25,7 @@ void NiuPlayer::updatePkWeiZhi(){
 	int x, y;
 	if (m_iPlayerClass == PlayerType_Me)
 	{
-		x = size.width / 2 - ((m_arrPk->count() - 1)*(pkWidth+pkJianJu) + pkWidth) / 2;
+		x = size.width / 2 - ((m_arrPk->count() - 1)*(pkWidth_Big+pkJianJu) + pkWidth_Big) / 2;
 		y = m_point.y;
 	}
 	else
@@ -51,13 +51,18 @@ void NiuPlayer::updatePkWeiZhi(){
 		
 		if (m_iPlayerClass == PlayerType_Me)
 		{
-			pk->showFront();
-            pk->setPosition(Vec2(x + num*(pkWidth+pkJianJu) + pkWidth / 2, y));
+            if(num==m_arrPk->count()-1)
+                pk->showLast();
+            else
+                pk->showFront();
+            pk->setPosition(Vec2(x + num*(pkWidth_Big+pkJianJu) + pkWidth_Big / 2, y));
+            pk->setContentSize(Size(pkWidth_Big, pkHeight_Big));
 		}
 		else
 		{
-			pk->showLast();
-            pk->setPosition(Vec2(x + num*pkJianJu + pkWidth / 2, y));
+			pk->showLast_small();
+            pk->setPosition(Vec2(x + num*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
+            pk->setContentSize(Size(pkWidth_small, pkHeight_small));
 		}
 		++num;
 	}
@@ -66,4 +71,24 @@ void NiuPlayer::updatePkWeiZhi(){
 		pk->setLocalZOrder(pk->getPositionX());
 
 	}
+}
+
+void NiuPlayer::showAllPokers(){
+    for (int i=0; i< m_arrPk->count(); i++) {
+        NiuPoker* pk = (NiuPoker*)m_arrPk->getObjectAtIndex(i);
+        if (m_iPlayerClass == PlayerType_Me)
+            pk->showFront();
+        else
+            pk->showFront_small();
+    }
+}
+
+void NiuPlayer::emptyAllPokers(){
+    Size size = Director::getInstance()->getVisibleSize();
+    for (int i=0; i<m_arrPk->count(); i++) {
+        NiuPoker* pk = (NiuPoker*)m_arrPk->getObjectAtIndex(i);
+        pk->setPosition(Vec2(size.width*0.5, size.height*0.5));
+        pk->setVisible(false);
+    }
+    m_arrPk->removeAllObjects();
 }

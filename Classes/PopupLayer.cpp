@@ -105,7 +105,7 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	label->setFontName("Marker Felt");
 	layer->addChild(label, 10);
 	Button* sendBtn = Button::create("popuplayer/sendBtn.png", "popuplayer/sendBtn_pressed.png");
-	if (!sendBtn) return false;	
+	if (!sendBtn) return NULL;
 	sendBtn->setScaleX(160 / sendBtn->getContentSize().width);
 	sendBtn->setScaleY(80 / sendBtn->getContentSize().height);
 	sendBtn->setPosition(ccp(roomNumPosition.x+pEditBox_roomNum->getContentSize().width/2+20+sendBtn->getContentSize().width/2, roomNumPosition.y));
@@ -132,9 +132,9 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	//	"popuplayer/close_pressed.png",
 	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
 	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
-	if (!closeBtn) return false;	
+	if (!closeBtn) return NULL;
 	Button* createBtn = Button::create("popuplayer/startGame.png", "popuplayer/startGame_pressed.png");
-	if (!createBtn) return false;
+	if (!createBtn) return NULL;
 	//auto contentSize = item->getContentSize;
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
@@ -258,9 +258,9 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	//	"popuplayer/close_pressed.png",
 	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
 	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
-	if (!closeBtn) return false;
+	if (!closeBtn) return NULL;
 	Button* createBtn = Button::create("popuplayer/startGame.png", "popuplayer/startGame_pressed.png");
-	if (!createBtn) return false;
+	if (!createBtn) return NULL;
 	//auto contentSize = item->getContentSize;
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
@@ -290,11 +290,11 @@ PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,
 	//	"popuplayer/close_pressed.png",
 	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
 	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
-	if (!closeBtn) return false;
+	if (!closeBtn) return NULL;
 	Button* commitBtn = Button::create("popuplayer/commitBtn.png", "popuplayer/commitBtn_pressed.png");
-	if (!commitBtn) return false;
+	if (!commitBtn) return NULL;
 	Button* cancelBtn = Button::create("popuplayer/cancelBtn.png", "popuplayer/cancelBtn_pressed.png");
-	if (!cancelBtn) return false;
+	if (!cancelBtn) return NULL;
 	auto cancelPosition = Point((size.width + dialogSize.width) / 2  -20 - commitBtn->getContentSize().width / 2, (size.height - dialogSize.height) / 2 + 20 + commitBtn->getContentSize().height / 2);
 	auto commitPosition = Point((size.width - dialogSize.width) / 2+20+commitBtn->getContentSize().width/2, (size.height - dialogSize.height) / 2 + 20 + commitBtn->getContentSize().height / 2);
 	//auto contentSize = item->getContentSize;
@@ -323,9 +323,9 @@ PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSi
 	layer->addChild(label, 10);
 
 	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
-	if (!closeBtn) return false;
+	if (!closeBtn) return NULL;
 	Button* logoutBtn = Button::create("popuplayer/logoutBtn.png", "popuplayer/logoutBtn_pressed.png");
-	if (!logoutBtn) return false;
+	if (!logoutBtn) return NULL;
 	//auto contentSize = item->getContentSize;
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
