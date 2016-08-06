@@ -6,6 +6,9 @@
 #include "DebugSimpleServer.h"
 #include "TimeLayer.h"
 #include "SettingMenuInPlaying.h"
+#include "UserProfileUI.h"
+#include "ChatLayer.h"
+
 class NiuPoker;
 class NiuPlayer;
 USING_NS_CC;
@@ -43,18 +46,18 @@ public:
 private:
 	bool initBackground();
 	bool initButtons();
-	bool initPlayerProfile();
-	/** ≥ı ºªØÕÊº“–≈œ¢ */
+	bool initPlayerProfile();	//初始化玩家信息
+	/** 初始化玩家信息 */
 	bool initPlayer();
-	/** …˙≥…“ª∏ˆ≈∆ */
+	/** 生成一个牌 */
 	NiuPoker* selectPoker(int huaSe, int num);
-	/** ¥¥Ω®“ª∏±∆ÀøÀ≈∆ */
+	/** 创建一副扑克牌 */
 	bool createPokers();
-	/** œ¥≈∆ */
+	/** 洗牌 */
 	bool xiPai();
-	/** ∑¢≈∆ */
+	/** 发牌 */
 	void SendPk();
-	/** ∑¢≈∆“∆∂Ø∂Øª≠ */
+	/** 发牌移动动画 */
 	void MovePk(NiuPlayer* play, NiuPoker* pk);
 
 	void func(Node* pSender, void* pData);
@@ -73,7 +76,13 @@ private:
     void notChooseMulAction();
 private:
 	TimeLayer* m_timeLayer;
+	ChatLayer* m_chatLayer;
+
+	UserProfileUI* m_pUser;	//当前用户
+	/** 设置 */
 	SettingMenuInPlaying *m_btnSetting;
+	/** 聊天 */
+	Button* m_chatBtn;
     /** 准备按钮 */
     Button* m_startGameBtn;
     /** 不抢按钮 */
@@ -91,31 +100,31 @@ private:
     /** 五倍按钮 */
     Button* m_FiveBtn;
 	bool m_bReady;
-	/** À˘”–µƒ≈∆ */
+	/** 所有的牌 */
 	__Array* m_arrPokers;
-	/** ÕÊº“ */
+	/** 玩家 */
 	CC_SYNTHESIZE(NiuPlayer*, m_player, Player);
-	/** ÕÊº“”“ */
+	/** 玩家右 */
 	NiuPlayer* m_playerRight;
-	/** ÕÊº“…œ∂˛ */
+	/** 玩家上二 */
 	NiuPlayer* m_playerTopRight;
-	/** ÕÊº“…œ“ª */
+	/** 玩家上一 */
 	NiuPlayer* m_playerTopLeft;
-	/** ÕÊº“◊Û */
+	/** 玩家左 */
 	NiuPlayer* m_playerLeft;
-	/** ÕÊº“◊¯±Í */
+	/** 玩家坐标 */
 	Point playerDiZhuLablePt;
-	/** ÕÊº“”““ª◊¯±Í */
+	/** 玩家右一坐标 */
 	Point playerOneLablePt;
-	/** ÕÊº“…œ∂˛◊¯±Í */
+	/** 玩家上二坐标 */
 	Point playerTwoLablePt;
-	/** ÕÊº“◊Û»˝◊¯±Í */
+	/** 玩家左三坐标 */
 	Point playerThreeLablePt;
-	/**  «∑Ò∑¢ÕÍ≈∆ */
+	/**  是否发完牌 */
 	bool m_isSend;
-	/** “—∑¢≥ˆµ⁄º∏’≈≈∆ */
+	/** 已发出第几张牌 */
 	int m_iSendPk;
-	/** µ±«∞◊¥Ã¨ 0£∫∑¢≈∆◊¥Ã¨  */
+	/** 当前状态 0：发牌状态  */
 	UpdateType m_iState;
     /** 是否创建抢庄按钮 */
     bool m_creatHogBtn;

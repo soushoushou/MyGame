@@ -22,12 +22,14 @@ enum ButtonTag{
     /** 四倍按钮 */
     TAG_MUL_FOUR,
     /** 五倍按钮 */
-    TAG_MUL_FIVE
+    TAG_MUL_FIVE,
+	/** 聊天 */
+	TAG_CHAT_BTN
 };
 
 
 GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
-m_iSendPk(0), m_iState(StartState),m_btnSetting(NULL)
+m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL)
 
 {
     m_player = new NiuPlayer();
@@ -74,7 +76,7 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
-		//µπº∆ ±
+		    //倒计时
             if (server->isAllReady())
             {
                 if (!m_timeLayer && m_bReady)
@@ -92,6 +94,7 @@ void GamePlayScene::update(float delta)
             break;
         }
         case SendPokerState:
+			//发牌
             SendPk();
             break;
         case HogState:{
@@ -116,7 +119,7 @@ void GamePlayScene::update(float delta)
 	}
 }
 
-//≥ı ºªØ
+//初始化
 bool GamePlayScene::init()
 {
 	if (!Layer::init())
@@ -126,7 +129,8 @@ bool GamePlayScene::init()
 
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
-	srand((unsigned)time(NULL));//≥ı ºªØÀÊª˙÷÷◊”
+	if (!initPlayerProfile()) return false;	//初始化玩家信息
+	srand((unsigned)time(NULL));//初始化随机种子
 	if (!initPlayer()) return false;
 	if (!createPokers()) return false;
 	if (!xiPai()) return false;
@@ -134,20 +138,20 @@ bool GamePlayScene::init()
 	return true;
 }
 
-//≥ı ºªØ±≥æ∞
+//初始化背景
 bool GamePlayScene::initBackground()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	//ÃÌº”±≥æ∞
+	//添加背景
 	auto spriteBK = Sprite::create("game/gamebg.png");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 50);
     if (!m_pNoticeLabel) return false;
-    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2));
+    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 270));
     m_pNoticeLabel->setColor(Color3B(255, 255, 255));
     this->addChild(m_pNoticeLabel);
 	return true;
@@ -157,21 +161,36 @@ bool GamePlayScene::initButtons()
 {
 	auto size = Director::getInstance()->getVisibleSize();
 
+	//开始游戏按钮
 	m_startGameBtn = Button::create("game/startgame.png");
 	if (!m_startGameBtn) return false;
-
 	m_startGameBtn->setTag(TAG_START_BTN);
-
 	m_startGameBtn->setScale9Enabled(true);
-
 	m_startGameBtn->setPosition(Vec2(size.width / 2, size.height / 2 - 150));
-
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-
 	this->addChild(m_startGameBtn);
 
+	//设置按钮
 	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)));
 
+	//聊天按钮
+	m_chatBtn = Button::create("game/chat.png");
+	m_chatBtn->setTag(TAG_CHAT_BTN);
+	m_chatBtn->setScale9Enabled(true);
+	m_chatBtn->setPosition(Vec2(size.width - 100, 80));
+	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+	this->addChild(m_chatBtn);
+
+	return true;
+}
+
+bool GamePlayScene::initPlayerProfile()
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	if (!m_pUser)
+	{
+		m_pUser = new HerizelUserProfileUI(this, Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333);
+	}
 	return true;
 }
 
@@ -180,18 +199,18 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 	Size size = Director::getInstance()->getWinSize();
 	if (type == Widget::TouchEventType::ENDED)
 	{
-		Button* butten = (Button*)pSender;
-		unsigned int tag = butten->getTag();
+		Button* button = (Button*)pSender;
+		unsigned int tag = button->getTag();
 		switch (tag)
 		{
             case TAG_START_BTN:
             {
                 log("start game");
-                butten->setEnabled(false);
-
-                //ƒ£ƒ‚µ±À˘”–ÕÊº“∂º◊º±∏∫√∫Û‘Ÿµπº∆ ±
-                m_bReady = !m_bReady;
-                DebugSimpleServer::getInstance()->playerReady("alw");
+				button->setTouchEnabled(false);
+				button->loadTextures("game/startgamePressed.png", "");
+				//模拟当所有玩家都准备好后再倒计时
+				m_bReady = !m_bReady;
+				DebugSimpleServer::getInstance()->playerReady("alw");
                 break;
             }
             case TAG_NOT_HOG_BTN:
@@ -216,6 +235,28 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 notChooseMulAction();
                 break;
             }
+			case TAG_CHAT_BTN:
+			{
+				log("chat");
+				auto size = Director::getInstance()->getWinSize();
+				m_chatLayer = ChatLayer::create();
+
+				//快捷聊天内容以及音乐地址
+				vector<pair<string, string>> quickMessage;
+				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("play game play", "game/message1.mp3"));
+
+				m_chatLayer->createListView(quickMessage);
+
+				addChild(m_chatLayer);
+				break;
+			}
             default:
                 break;
 		}
@@ -224,19 +265,19 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 bool GamePlayScene::initPlayer(){
 	Size size = Director::getInstance()->getVisibleSize();
-	//…Ë÷√÷˜ÕÊº“µƒŒª÷√
+	//设置主玩家的位置
     m_player->setPoint(Vec2(size.width / 2, size.height / 6-20));
     m_player->setPlayerClass(PlayerType_Me);
-    //…Ë÷√ÕÊº“”“µƒŒª÷√
+    //设置玩家右的位置
     m_playerRight->setPoint(Vec2(size.width - pkWidth_small * 3, size.height / 2));
     m_playerRight->setPlayerClass(PlayerType_Right);
-    //…Ë÷√ÕÊº“…œ∂˛µƒŒª÷√
+    //设置玩家上二的位置
     m_playerTopRight->setPoint(Vec2(size.width*0.5 + pkWidth_small * 3, size.height / 6 * 5));
     m_playerTopRight->setPlayerClass(PlayerType_TopRight);
-    //…Ë÷√ÕÊº“…œ“ªµƒŒª÷√
+    //设置玩家上一的位置
     m_playerTopLeft->setPoint(Vec2(size.width*0.5 - pkWidth_small * 4, size.height / 6 * 5));
     m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
-    //…Ë÷√ÕÊº“◊ÛµƒŒª÷√
+    //设置玩家左的位置
     m_playerLeft->setPoint(Vec2(65, size.height / 2));
     m_playerLeft->setPlayerClass(PlayerType_Left);
 
@@ -259,7 +300,7 @@ bool GamePlayScene::createPokers(){
 	do
 	{
 		NiuPoker* pk;
-		//¥¥Ω®52∏ˆ≈∆
+		//创建52个牌
 		for (int i = 1; i<=4; ++i)
 		{
 			for (int j = 1; j <= 13; ++j)
@@ -274,7 +315,7 @@ bool GamePlayScene::createPokers(){
 	} while (0);
 	return isRet;
 }
-#pragma mark-œ¥≈∆
+#pragma mark-洗牌
 bool GamePlayScene::xiPai(){
     Size size = Director::getInstance()->getVisibleSize();
 	bool isRet = false;
