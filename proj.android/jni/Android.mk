@@ -23,7 +23,13 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/GamePlayScene.cpp \
 				   ../../Classes/NiuPlayer.cpp \
 				   ../../Classes/NiuPoker.cpp \
-				   ../../Classes/TimeLayer.cpp
+				   ../../Classes/TimeLayer.cpp \
+				   ../../Classes/ChatLayer.cpp \
+				   ../../Classes/Help.cpp \
+				   ../../Classes/PopupScene.cpp \
+				   ../../Classes/SettingMenuInPlaying.cpp \
+				   ../../Classes/ShopLayer.cpp \
+				   ../../Classes/Tool.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

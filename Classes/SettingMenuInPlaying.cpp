@@ -71,7 +71,9 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		}
 		else if (pBtn == m_btnQuitRoom)
 		{
-			Director::getInstance()->replaceScene(MainScene::createScene());
+			auto scene = MainScene::createScene();
+			if (scene)
+				Director::getInstance()->replaceScene(MainScene::scene());
 		}
 		else if (pBtn == m_btnDestoryRoom)
 		{
