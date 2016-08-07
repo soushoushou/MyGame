@@ -1,16 +1,19 @@
 #include "SettingMenuInPlaying.h"
 #include "MainScene.h"
+#include "PopupLayer.h"
 
 
 SettingMenuInPlaying::SettingMenuInPlaying(Node* parent) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
 m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL)
 {
+	m_pParent = parent;
 	init(parent);
 }
 
 SettingMenuInPlaying::SettingMenuInPlaying(Node* parent,Vec2 pos) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
 m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL)
 {
+	m_pParent = parent;
 	init(parent);
 	setPos(pos);
 }
@@ -71,9 +74,7 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		}
 		else if (pBtn == m_btnQuitRoom)
 		{
-			auto scene = MainScene::createScene();
-			if (scene)
-				Director::getInstance()->replaceScene(MainScene::scene());
+			Director::getInstance()->replaceScene(MainScene::scene());
 		}
 		else if (pBtn == m_btnDestoryRoom)
 		{

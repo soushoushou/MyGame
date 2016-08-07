@@ -13,7 +13,6 @@ static cocos2d::Size mediumResolutionSize = cocos2d::Size(1136, 640);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {
-
 }
 
 AppDelegate::~AppDelegate()

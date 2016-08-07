@@ -29,5 +29,6 @@ private:
 	Button* m_btnQuitRoom;				//离开房间
 	Button* m_btnDestoryRoom;			//解散房间
 	Button* m_btnOptions;				//选项
+	Node* m_pParent;
 };
 
