@@ -227,11 +227,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			//pl->setTitle("hhh");
 			//pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
-			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
-			//pl->addCheckBox("CheckBox_UnSelect.png",
-			//"CheckBox_Select.png", "haha", 2);
-			//pl->addListView();
+			
 			butten->getParent()->addChild(pl);
 			break;
 		}
@@ -268,19 +264,12 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SETTING_BTN: {
 			log("SETTING");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
-			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width/2, size.height/7*4));
-			//pl->setTitle("hhh");
-			//pl->setContentText("hhhh", 20, 60, 250);
-			//pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "submit", 1);
-			//pl->addButton("popuplayer/pop_button.png", "popuplayer/pop_button.png", "cancel", 0);
-			//pl->addCheckBox("CheckBox_UnSelect.png",
-			//"CheckBox_Select.png", "haha", 2);
-			//pl->addListView();
+			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width/2, size.height/7*4));			
 			butten->getParent()->addChild(pl);
 			break; }
 		case TAG_BACK_BTN:
 			PopupLayer* pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4),"hhh","hhhhh");
+			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
 			butten->getParent()->addChild(pl);
 			break;
 		}
@@ -308,5 +297,6 @@ void MainScene::onExit()
 }
 
 void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
-	//CCLog("button call back. tag: %d", pNode->getTag());
+	log("button call back. tag: %d", pNode->getTag());
+
 }

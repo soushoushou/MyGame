@@ -20,8 +20,8 @@ PopupLayer::PopupLayer() :
 	, m__ltContentText(NULL)
 	, m__ltTitle(NULL)
 {
-
 }
+
 #define TAG_CHECKBOX_10	1	
 #define TAG_CHECKBOX_20	2
 #define TAG_CHECKBOX_QZ		3
@@ -32,7 +32,7 @@ PopupLayer::PopupLayer() :
 #define TAG_BACK_BTN		8
 #define TAG_CHECKBOX_MUSIC	9	
 #define TAG_CHECKBOX_MUSICE	10
-#define TAG_LOGOUT_BTN	10
+#define TAG_LOGOUT_BTN	11
 PopupLayer::~PopupLayer() {
 	CC_SAFE_RELEASE(m__pMenu);
 	CC_SAFE_RELEASE(m__sfBackGround);
@@ -86,7 +86,7 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	
 	auto pEditBox_roomNum = EditBox::create(CCSizeMake(493, 87), Scale9Sprite::create("popuplayer/EditBoxBg.png"));
 	//auto size = Director::getInstance()->getWinSize();
-	auto roomNumPosition = ccp(layer->getPositionX(),size.height/2-5);
+	auto roomNumPosition = ccp((size.width)/2,size.height/2-5);
 	pEditBox_roomNum->setFontColor(Color3B(0, 0, 0));
 	pEditBox_roomNum->setFontSize(30);
 	pEditBox_roomNum->setMaxLength(8);//设置最大长度    
@@ -108,9 +108,9 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	if (!sendBtn) return NULL;
 	sendBtn->setScaleX(160 / sendBtn->getContentSize().width);
 	sendBtn->setScaleY(80 / sendBtn->getContentSize().height);
-	sendBtn->setPosition(ccp(roomNumPosition.x+pEditBox_roomNum->getContentSize().width/2+20+sendBtn->getContentSize().width/2, roomNumPosition.y));
+	sendBtn->setPosition(ccp(roomNumPosition.x+pEditBox_roomNum->getContentSize().width/2+5+sendBtn->getContentSize().width/2, roomNumPosition.y));
 	sendBtn->setTag(TAG_SEND_BTN);
-	sendBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	sendBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(sendBtn, 20);
 	return layer;
 }
@@ -139,13 +139,13 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
 	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
-	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 
 	auto startPosition = ccp(size.width / 2, createBtn->getContentSize().height / 2 + (size.height - dialogSize.height) / 2 + 30);
 	createBtn->setPosition(startPosition);
 	createBtn->setTag(TAG_CREATEROOM_BTN);
-	createBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	createBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(createBtn, 20);
 
 	LabelTTF* label2 = LabelTTF::create("hhhhhhhh", "", 32);
@@ -265,7 +265,7 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
 	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
-	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 }
 
@@ -304,10 +304,10 @@ PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,
 	cancelBtn->setPosition(cancelPosition);
 	cancelBtn->setTag(TAG_CLOSEDIALOG_BTN);
 	commitBtn->setPosition(commitPosition);
-	commitBtn->setTag(TAG_CLOSEDIALOG_BTN);
-	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
-	commitBtn->addTouchEventListener(PopupLayer::onBtnTouch);
-	cancelBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	commitBtn->setTag(TAG_BACK_BTN);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	commitBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	cancelBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 	layer->addChild(commitBtn, 20);
 	layer->addChild(cancelBtn, 20);
@@ -330,7 +330,7 @@ PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSi
 	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
 	closeBtn->setPosition(closePosition);
 	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
-	closeBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 
 
@@ -386,7 +386,7 @@ PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSi
 	auto logoutPosition = ccp(pos.x, pos.y-m_spHead->getContentSize().height/2-35-logoutBtn->getContentSize().height/2);
 	logoutBtn->setPosition(logoutPosition);
 	logoutBtn->setTag(TAG_LOGOUT_BTN);
-	logoutBtn->addTouchEventListener(PopupLayer::onBtnTouch);
+	logoutBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(logoutBtn, 20);
 	return layer;
 }
@@ -407,85 +407,20 @@ void PopupLayer::setCallbackFunc(Ref* target, SEL_CallFuncN callfun) {
 	m_callback = callfun;
 }
 
-bool PopupLayer::addButton(const char* normalImage, const char* selectedImage, const char* title, int tag /* = 0 */) {
+bool PopupLayer::addButton(const char* normalImage, const char* selectedImage,  int tag /* = 0 */) {
 
 	auto size = Director::getInstance()->getWinSize();
 	auto center = Point(size.width / 2, size.height / 2);
 
 	// 创建图片菜单按钮
-	auto item = MenuItemImage::create(
-		normalImage,
-		selectedImage,
-		CC_CALLBACK_1(PopupLayer::buttonCallBack, this));
-	item->setTag(tag);
-	item->setPosition(center);
-
-	// 添加文字说明并设置位置
-	Size itemSize = item->getContentSize();
-	LabelTTF* ttf = LabelTTF::create(title, "", 20);
-	ttf->setColor(Color3B(0, 0, 0));
-	ttf->setPosition(Point(itemSize.width / 2, itemSize.height / 2));
-	item->addChild(ttf);
-
-
-	getMenuButton()->addChild(item);
-
+	Button* commitBtn = Button::create("popuplayer/commitBtn.png", "popuplayer/commitBtn_pressed.png");
+	if (!commitBtn) return false;
+	commitBtn->setPosition(center);
+	commitBtn->setTag(TAG_CREATEROOM_BTN);
+	commitBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch,this));
 	return true;
 }
-bool PopupLayer::addListView(/*const char* normalImage, const char* selectedImage, const char* title, int tag  = 0 */) {
 
-	Size size = Size(200, 50);
-	auto popupSize = Director::getInstance()->getWinSize();
-	auto center = Point(popupSize.width / 2, popupSize.height / 2);
-	auto lv = ListView::create();
-	// 创建图片菜单按钮
-	lv->setDirection(ui::ScrollView::Direction::VERTICAL);
-	lv->setBounceEnabled(true);
-	lv->setBackGroundImage("bg.jpg");//设置图片为九宫格格式。其实就和9图一个意思。只是安卓中要自己制作。这里程序会帮你生成  
-	lv->setBackGroundImageScale9Enabled(true);
-	lv->setContentSize(Size(200, 150));
-	lv->setAnchorPoint(Point(0.5, 0.5));
-	lv->setPosition(center);
-	char* _image[15] = { "CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
-		"CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png",
-		"nCloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png","CloseNormal.png" };
-	this->addChild(lv, 10);
-
-	for (int i = 0; i < 15; ++i)
-	{
-		auto image = ImageView::create(_image[i]);
-
-		image->setPosition(Point(image->getContentSize().width / 2, size.height / 2));
-
-		auto bt = Button::create("joinRoom_normal.png", "joinRoom_press.png");
-
-		bt->setScale9Enabled(true);
-
-		bt->setContentSize(Size(size.width / 2, size.height / 2));
-
-		bt->setPosition(Point(size.width - bt->getContentSize().width / 2, size.height / 2));
-
-		bt->setTitleText(_image[i]);
-
-		//itme的布局  
-		auto layout = Layout::create();
-
-		layout->setBackGroundImageScale9Enabled(true);
-
-		layout->setBackGroundImage("bg.jpg");
-
-		layout->setContentSize(size);
-
-		layout->addChild(bt);
-		layout->addChild(image);
-
-		lv->addChild(layout);
-
-	}
-
-	lv->setItemsMargin(10);
-	return true;
-}
 void PopupLayer::selectedItemEvent(cocos2d::Ref *pSender, ListViewEventType type)
 {
 
@@ -510,43 +445,27 @@ void PopupLayer::selectedItemEvent(cocos2d::Ref *pSender, ListViewEventType type
 		break;
 	}
 }
-bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag /* = 0 */) {
-
-	auto size = Director::getInstance()->getWinSize();
-	auto center = Point(size.width / 2, size.height / 2);
-
-	// 创建图片菜单按钮
-	CheckBox* checkBox = CheckBox::create();
-	checkBox->setTouchEnabled(true);
-	checkBox->loadTextures("CheckBox_UnSelect.png",
-		"CheckBox_Select.png",
-		"CheckBox_UnSelect.png",
-		"CheckBox_UnSelect.png",
-		"CheckBox_UnSelect.png");
-	checkBox->setPosition(Point(center));
-
-	checkBox->addEventListenerCheckBox(this, checkboxselectedeventselector(PopupLayer::selectedEvent));
-	//getMenuButton()->addWidget(checkBox);
-	if (checkBox != nullptr)
-		layer->addChild(checkBox, 10);
-	checkBox->setTag(0);
-	//checkBox->setFocused(true);
-	//m_pUiLayer->addWidget(checkBox);
-	/*
-	checkBox->setPosition(center);
-
-	// 添加文字说明并设置位置
-	Size itemSize = checkBox->getContentSize();
-	LabelTTF* ttf = LabelTTF::create(title, "", 20);
-	ttf->setColor(Color3B(0, 0, 0));
-	ttf->setPosition(Point(itemSize.width / 2, itemSize.height / 2));
-	checkBox->addChild(ttf);*/
-
-
-
-
-	return true;
-}
+//bool PopupLayer::addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag /* = 0 */) {
+//
+//	auto size = Director::getInstance()->getWinSize();
+//	auto center = Point(size.width / 2, size.height / 2);
+//
+//	// 创建图片菜单按钮
+//	CheckBox* checkBox = CheckBox::create();
+//	checkBox->setTouchEnabled(true);
+//	checkBox->loadTextures("CheckBox_UnSelect.png",
+//		"CheckBox_Select.png",
+//		"CheckBox_UnSelect.png",
+//		"CheckBox_UnSelect.png",
+//		"CheckBox_UnSelect.png");
+//	checkBox->setPosition(Point(center));
+//
+//	checkBox->addEventListenerCheckBox(this, checkboxselectedeventselector(PopupLayer::selectedEvent));
+//	if (checkBox != nullptr)
+//		layer->addChild(checkBox, 10);
+//	checkBox->setTag(0);
+//	return true;
+//}
 void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 {
 	CheckBox* checkbox = (CheckBox*)pSender;
@@ -603,6 +522,7 @@ void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 	}
 
 }
+
 void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	Size size = Director::sharedDirector()->getWinSize();
@@ -619,21 +539,26 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			butten->getParent()->removeFromParent();
 			break;
 		case TAG_SEND_BTN:
-			Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			
+			
+				Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			
 			break;
 		case TAG_LOGOUT_BTN:
 			butten->getParent()->removeFromParent();
+			break;
+		case TAG_BACK_BTN:
+			if (m_callback&& m_callbackListener) {
+				(m_callbackListener->*m_callback)(butten);
+			}
+			else {
+				butten->getParent()->removeFromParent();
+			}
 			break;
 		}
 	}
 }
 void PopupLayer::buttonCallBack(Ref* pSender) {
-	//Node* node = dynamic_cast<Node*>(pSender);
-	////CCLog("【====PopupLayer::buttonCallBack====】touch tag: %d", node->getTag());
-	//if (m_callback && m_callbackListener) {
-	//	(m_callbackListener->*m_callback)(node);
-	//}
-	//this->removeFromParent();
 	MenuItemImage* butten = (MenuItemImage*)pSender;
 	unsigned int tag = butten->getTag();
 	switch (tag)
@@ -643,6 +568,9 @@ void PopupLayer::buttonCallBack(Ref* pSender) {
 		break;
 	case TAG_CLOSEDIALOG_BTN:
 		this->removeFromParent();
+		break;
+	case TAG_BACK_BTN:
+		
 		break;
 	}
 }

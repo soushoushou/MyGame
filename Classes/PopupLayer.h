@@ -39,15 +39,17 @@ public:
 	//设置button回调事件
 	void setCallbackFunc(Ref* target, SEL_CallFuncN callfun);
 	//添加button
-	bool addButton(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
-	bool addListView(/*const char* normalImage, const char* selectedImage, const char* title, int tag = 0*/);
-	bool addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
+	bool addButton(const char* normalImage, const char* selectedImage, int tag = 0);
+	//bool addListView(/*const char* normalImage, const char* selectedImage, const char* title, int tag = 0*/);
+	//bool addCheckBox(const char* normalImage, const char* selectedImage, const char* title, int tag = 0);
 	void selectedItemEvent(Ref *pSender, ListViewEventType type);
 	virtual void onEnter();
 	virtual void onExit();
-	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
+	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void backgroundFinish();
 
+	Ref* m_callbackListener;
+	SEL_CallFuncN m_callback;
 private:
 
 	void buttonCallBack(Ref* pSender);
@@ -58,8 +60,6 @@ private:
 
 	Size m_dialogContentSize;
 
-	Ref* m_callbackListener;
-	SEL_CallFuncN m_callback;
 	//set and get
 	CC_SYNTHESIZE_RETAIN(Menu*, m__pMenu, MenuButton);
 	CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);
