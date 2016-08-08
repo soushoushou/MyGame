@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h" 
 #include "UserProfileUI.h"
+#include "NetworkManger.h"
 USING_NS_CC;
 using namespace ui;
 
@@ -17,7 +18,8 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual ~MainScene();
-	static void onBtnTouch(Ref *pSender, Widget::TouchEventType type);		
+	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);		
+	void onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *response);
 	void update(float delta);
 	void buttonCallback(CCNode* pSender);
 private:
@@ -28,6 +30,7 @@ private:
 	void flushNoticeLabel(float delta);			//ÖØ»æ¹«¸æ
 
 private:
+	typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
 	LabelTTF* m_pNoticeLabel;
 	UserProfileUI* m_pUser;
 	Sprite* m_spRoundRectInNotice;		

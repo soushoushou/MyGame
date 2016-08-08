@@ -6,6 +6,7 @@
 #include "GamePlayScene.h"
 #include "ShopLayer.h"
 
+
 using namespace ui;
 
 
@@ -171,14 +172,14 @@ bool MainScene::initButtons()
 	pSettingBtn->setPosition(Director::getInstance()->convertToUI(Vec2(947+pSettingBtn->getContentSize().width/2 , 22 + pSettingBtn->getContentSize().height / 2)));
 	pBackBtn->setPosition(Director::getInstance()->convertToUI(Vec2(1050 + pBackBtn->getContentSize().width / 2, 26 + pBackBtn->getContentSize().height / 2)));
 
-	pCreateRoomBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pGameHallBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pShopBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pRankBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pJoinGameBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pSettingBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pBackBtn->addTouchEventListener(MainScene::onBtnTouch);
-	pNoticeBtn->addTouchEventListener(MainScene::onBtnTouch);
+	pCreateRoomBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch,this));
+	pGameHallBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pShopBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pRankBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pJoinGameBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pSettingBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pBackBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pNoticeBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 
 	this->addChild(pCreateRoomBtn);
 	this->addChild(pGameHallBtn);
@@ -223,12 +224,14 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 		case TAG_CREATEROOM_BTN:
 		{
+			NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack,this));
 			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
 			//pl->setTitle("hhh");
 			//pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
 			
 			butten->getParent()->addChild(pl);
+			
 			break;
 		}
 		case TAG_JOINGAME_BTN:
@@ -299,4 +302,29 @@ void MainScene::onExit()
 void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
 	log("button call back. tag: %d", pNode->getTag());
 
+}
+
+
+void MainScene::onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *response)
+{
+	if (!response)
+	{
+		return;
+	}
+	int statusCode = response->getResponseCode();
+	char statusString[64] = {};
+	sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+	log("response code: %d", statusCode);
+	if (!response->isSucceed())
+	{
+		log("response failed");
+		log("error buffer: %s", response->getErrorBuffer());
+		return;
+	}
+	std::vector<char> *buffer = response->getResponseData();
+	printf("Http Test, dump data: ");
+	for (unsigned int i = 0; i < buffer->size(); i++)
+	{
+		log("%s",buffer[i]);
+	}
 }

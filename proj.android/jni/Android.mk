@@ -29,6 +29,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/PopupScene.cpp \
 				   ../../Classes/SettingMenuInPlaying.cpp \
 				   ../../Classes/ShopLayer.cpp \
+				   ../../Classes/NetworkManger.cpp \
 				   ../../Classes/Tool.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

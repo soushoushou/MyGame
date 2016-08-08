@@ -5,7 +5,7 @@ USING_NS_CC;
 using namespace ui;
 
 
-class SettingMenuInPlaying
+class SettingMenuInPlaying:public Ref
 {
 public:
 	SettingMenuInPlaying(Node* parent);
@@ -14,6 +14,7 @@ public:
 	virtual ~SettingMenuInPlaying();	
 	void onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet);
 	void onBtnsTouch(Ref* pSender, Widget::TouchEventType evnet);
+	void quitRoomCallback(Node* node);
 private:
 	bool init(Node* parent);
 	enum BtnStatus

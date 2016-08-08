@@ -17,6 +17,12 @@ AppDelegate::AppDelegate() {
 
 AppDelegate::~AppDelegate()
 {
+	NetworkManger* P = NetworkManger::getInstance();
+	if (P)
+	{
+		delete P;
+		P = NULL;
+	}
 }
 
 // if you want a different context, modify the value of glContextAttrs
