@@ -179,7 +179,7 @@ bool GamePlayScene::initButtons()
 	m_chatBtn->setScale9Enabled(true);
 	m_chatBtn->setPosition(Vec2(size.width - 100, 80));
 	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-	this->addChild(m_chatBtn);
+	this->addChild(m_chatBtn,100);
 
 	return true;
 }
@@ -254,7 +254,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 				m_chatLayer->createListView(quickMessage);
 
-				addChild(m_chatLayer);
+				addChild(m_chatLayer,500);
 				break;
 			}
             default:

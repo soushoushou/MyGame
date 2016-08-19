@@ -36,9 +36,9 @@ void NiuPlayer::updatePkWeiZhi(){
 
 	int num = 0;
 	Ref* object;
-	for (int i = 0; m_arrPk->count() != 0 && i<m_arrPk->count() - 1; ++i)
+	for (int i = 0; m_arrPk->count() != 0 && i < m_arrPk->count() - 1; ++i)
 	{
-		for (int j = 0; j<m_arrPk->count() - 1 - i; ++j)
+		for (int j = 0; j < m_arrPk->count() - 1 - i; ++j)
 		{
 			NiuPoker* pk1 = (NiuPoker*)m_arrPk->getObjectAtIndex(j);
 			NiuPoker* pk2 = (NiuPoker*)m_arrPk->getObjectAtIndex(j + 1);
@@ -63,13 +63,9 @@ void NiuPlayer::updatePkWeiZhi(){
 			pk->showLast_small();
             pk->setPosition(Vec2(x + num*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
             pk->setContentSize(Size(pkWidth_small, pkHeight_small));
+			pk->setLocalZOrder(num+1);
 		}
 		++num;
-	}
-	CCARRAY_FOREACH(m_arrPk, object){
-		NiuPoker* pk = (NiuPoker*)object;
-		pk->setLocalZOrder(pk->getPositionX());
-
 	}
 }
 

@@ -31,7 +31,7 @@ bool ChatLayer::init()
 
 	if (m_pFrameSprtie)
 	{
-		this->addChild(m_pFrameSprtie);
+		this->addChild(m_pFrameSprtie,10);
 	}
 	
 	if (!initChatBG())
