@@ -5,7 +5,7 @@
 #include "PopupLayer.h"
 #include "GamePlayScene.h"
 #include "ShopLayer.h"
-
+#include "Help.h"
 
 using namespace ui;
 
@@ -252,14 +252,20 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("shop");
 			
 			Director::getInstance()->replaceScene(ShopLayer::createScene());
-			break; }		case TAG_RANK_BTN:
+			break; 
+		}		
+		case TAG_RANK_BTN:
 			log("RANK");
 			break;
 
 		case TAG_NOTICE_BTN:
+		{
 			log("NOTIC");
+			CCSize size = CCDirector::sharedDirector()->getWinSize();
+			PopupLayer* pl = PopupLayer::noticeDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4));
+			butten->getParent()->addChild(pl);
 			break;
-
+		}
 		case TAG_GAMEHALL_BTN:
 			log("GAMEHALL");
 			break;

@@ -23,6 +23,7 @@ public:
 	static PopupLayer* settingDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* joinRoomDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* backDialog(const char* backgroundImage, Size dialogSize, const char* title, const char* content);
+	static PopupLayer* noticeDialog(const char* backgroundImage, Size dialogSize);
 	virtual void editBoxEditingDidBegin(EditBox* editBox);
 	virtual void editBoxEditingDidEnd(EditBox* editBox);
 	virtual void editBoxTextChanged(EditBox* editBox, const std::string &text);

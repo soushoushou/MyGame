@@ -390,6 +390,63 @@ PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSi
 	layer->addChild(logoutBtn, 20);
 	return layer;
 }
+
+PopupLayer* PopupLayer::noticeDialog(const char* backgroundImage, Size dialogSize) {
+	layer = PopupLayer::create();
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	layer->m_dialogContentSize = dialogSize;
+	auto size = Director::getInstance()->getWinSize();
+
+	//公告文字
+	CCDictionary* pDict = CCDictionary::createWithContentsOfFile("notice.xml");
+	const char *charchinese = ((CCString*)pDict->objectForKey("name"))->getCString();
+	Label* label_wenzi = Label::create(charchinese, "Arial", 25);
+	label_wenzi->setHorizontalAlignment(TextHAlignment::LEFT);
+	label_wenzi->setDimensions(430, 1000);
+	//label_wenzi->setContentSize(Size(430,1000));
+	label_wenzi->setLineBreakWithoutSpace(true);
+	label_wenzi->setAnchorPoint(Point(0.5, 0.5));
+	label_wenzi->setPosition(Point(size.width / 2 - 280, size.height / 2));
+
+	//item的布局
+	auto layout = Layout::create();
+	layout->setBackGroundImageScale9Enabled(true);
+	layout->setTouchEnabled(true);
+	layout->setContentSize(Size(430, 800));
+	layout->addChild(label_wenzi);
+
+	//初始化标题
+	LabelTTF* label = LabelTTF::create("gonggao", "", 40);
+	label->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
+	label->setColor(Color3B(0, 0, 0));
+	layer->addChild(label, 10);
+
+	//滑动轮
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	ListView* lv = ListView::create();
+	lv->setDirection(ui::ScrollView::Direction::VERTICAL);	//设置为垂直方向
+	lv->setBounceEnabled(true);
+	lv->setTouchEnabled(true);
+	lv->setBackGroundImageScale9Enabled(true);
+	lv->setContentSize(Size(580, 270));
+	lv->setAnchorPoint(Point(0.5, 0.5));
+	lv->setPosition(Point(size.width / 2, size.height / 2 - 35));
+	//lv->addEventListenerListView(this, listvieweventselector(ChatLayer::selectedItemEvent));
+	lv->addChild(layout);
+	layer->addChild(lv,10);
+
+
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return NULL;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(closeBtn, 20);
+
+	return layer;
+}
+
 void PopupLayer::setTitle(const char* title, int fontsize /* = 20 */) {
 	LabelTTF* label = LabelTTF::create(title, "", fontsize);
 	setLabelTitle(label);
