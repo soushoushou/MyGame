@@ -255,7 +255,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			break; 
 		}		
 
-		case TAG_RANK_BTN:{
+		case TAG_RANK_BTN:
 		{
 			PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
 			vector<pair<int, int>> quickMessage;
