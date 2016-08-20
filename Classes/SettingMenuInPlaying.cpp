@@ -70,7 +70,9 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		Button* pBtn = dynamic_cast<Button*>(pSender);
 		if (pBtn == m_btnSetting)
 		{
-			log("1111");
+			CCSize size = CCDirector::sharedDirector()->getWinSize();
+			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width / 2, size.height / 7 * 4));
+			m_pParent->addChild(pl);
 		}
 		else if (pBtn == m_btnQuitRoom)
 		{

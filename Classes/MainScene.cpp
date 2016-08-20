@@ -271,7 +271,6 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			quickMessage.push_back(pair<int, int>(8, -1111111));
 			pl->createListView(quickMessage);
 			butten->getParent()->addChild(pl);
-		}
 			
 			break;
 		}
