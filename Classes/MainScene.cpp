@@ -254,16 +254,14 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			Director::getInstance()->replaceScene(ShopLayer::createScene());
 			break; 
 		}		
-		case TAG_RANK_BTN:
-			log("RANK");
-			break;
 
-		case TAG_NOTICE_BTN:{
+		case TAG_RANK_BTN:{
+		{
 			PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
 			vector<pair<int, int>> quickMessage;
 			quickMessage.push_back(pair<int, int>(1, +1200));
 			quickMessage.push_back(pair<int, int>(2, -1200));
-			quickMessage.push_back(pair<int, int>(3,0));
+			quickMessage.push_back(pair<int, int>(3, 0));
 			quickMessage.push_back(pair<int, int>(4, 2400));
 			quickMessage.push_back(pair<int, int>(5, -1200));
 			quickMessage.push_back(pair<int, int>(6, -1200));
@@ -271,9 +269,18 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			quickMessage.push_back(pair<int, int>(8, -1111111));
 			pl->createListView(quickMessage);
 			butten->getParent()->addChild(pl);
-			
+		
+			break;}
+
+		case TAG_NOTICE_BTN:
+		{
+			log("NOTIC");
+			CCSize size = CCDirector::sharedDirector()->getWinSize();
+			PopupLayer* pl = PopupLayer::noticeDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4));
+			butten->getParent()->addChild(pl);
 			break;
 		}
+
 		case TAG_GAMEHALL_BTN:
 			log("GAMEHALL");
 			break;
