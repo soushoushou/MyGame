@@ -3,6 +3,7 @@
 #include "ui/UIScale9Sprite.h"
 #include "ui/UICheckBox.h"
 #include "ui/UIListView.h" 
+#include "toolFunctions.h"
 #include "ui/UIEditBox/UIEditBox.h"
 #include "SimpleAudioEngine.h"
 #include "ui/UILayoutParameter.h"
@@ -11,6 +12,7 @@
 using namespace cocos2d;
 using namespace ui;
 using namespace CocosDenshion;
+
 class PopupLayer : public LayerColor,public EditBoxDelegate{
 public:
 	PopupLayer();
@@ -48,7 +50,7 @@ public:
 	virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void backgroundFinish();
-
+	bool createListView(const vector<pair<int, int>> quickMessage);
 	Ref* m_callbackListener;
 	SEL_CallFuncN m_callback;
 private:
@@ -58,7 +60,7 @@ private:
 	// 文字内容两边的空白区
 	int m_contentPadding;
 	int m_contentPaddingTop;
-
+	ListView* lv;
 	Size m_dialogContentSize;
 
 	//set and get

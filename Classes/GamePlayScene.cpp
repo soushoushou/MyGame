@@ -530,7 +530,7 @@ void GamePlayScene::showCompare(){
     
 }
 
-#pragma mark-延迟执行重新开局
+//#pragma mark-延迟执行重新开局
 void GamePlayScene::startNewPlay(){
     char path[256] = { 0 };
     sprintf(path, "第%d局", m_playNum);

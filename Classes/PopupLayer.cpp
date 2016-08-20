@@ -268,7 +268,85 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 }
+bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
+{
+	Size size = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	lv = ListView::create();
+	lv->setDirection(ui::ScrollView::Direction::VERTICAL);	//设置为垂直方向
+	lv->setBounceEnabled(true);
+	lv->setTouchEnabled(true);
+	//lv->setBackGroundImage("game/chat_bg.png");
+	lv->setBackGroundImageScale9Enabled(true);
+	lv->setContentSize(Size(700, 300));
+	lv->setAnchorPoint(Point(0.5, 0.5));
+	lv->setPosition(Point(size.width / 2, size.height / 2));
+	//lv->addEventListenerListView(this, listvieweventselector(ChatLayer::selectedItemEvent));
+	this->addChild(lv,10);
+	auto button2 = Button::create("game/chat-line.png");
+	button2->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
+	button2->setScale9Enabled(true);
+	LabelTTF* roomNumLable = LabelTTF::create("房间号", "fonts/arial.ttf", 30);
+	LabelTTF* rankLable = LabelTTF::create("积分", "fonts/arial.ttf", 30);
+	//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
+	roomNumLable->setPosition(Point(size.width / 2 - 450, size.height / 2 - 285));
+	rankLable->setPosition(Point(size.width / 2 - 230, size.height / 2 - 285));
+	button2->addChild(roomNumLable);
+	button2->addChild(rankLable);	
+	rankLable->setColor(Color3B(255, 255, 255));
+	//item的布局
+	auto layout2 = Layout::create();
+	layout2->setBackGroundImageScale9Enabled(true);
+	layout2->setTouchEnabled(true);
+	layout2->setContentSize(Size(650, 70));
 
+	layout2->addChild(button2);
+	lv->pushBackCustomItem(layout2);
+	for (int i = 0; i < quickMessage.size(); ++i)
+	{
+		auto button = Button::create("game/chat-line.png");
+		button->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
+		button->setScale9Enabled(true);
+		//button->setName(quickMessage[i].second);
+		//button->addTouchEventListener(CC_CALLBACK_2(ChatLayer::onBtnTouch, this));
+		stringstream ss;
+		ss << quickMessage[i].first;
+		string s1 = ss.str();
+		stringstream ss2;
+		ss2 << quickMessage[i].second;
+		string s2 = ss2.str();
+		LabelTTF* roomNumLable = LabelTTF::create(s1, "fonts/arial.ttf", 30);
+		LabelTTF* rankLable = LabelTTF::create(s2, "fonts/arial.ttf", 30);
+		//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
+		roomNumLable->setPosition(Point(size.width / 2 - 450, size.height / 2 - 285));
+		rankLable->setPosition(Point(size.width / 2 - 230, size.height / 2 - 285));
+		button->addChild(roomNumLable);
+		button->addChild(rankLable);
+		if(quickMessage[i].second>0)
+		{
+			rankLable->setColor(Color3B(255, 255, 0));
+		}
+		else if(quickMessage[i].second<0)
+		{
+			rankLable->setColor(Color3B(0, 0, 255));
+		}
+		else
+		{
+			rankLable->setColor(Color3B(255, 255, 255));
+		}
+		//item的布局
+		auto layout = Layout::create();
+		layout->setBackGroundImageScale9Enabled(true);
+		layout->setTouchEnabled(true);
+		layout->setContentSize(Size(650, 70));
+
+		layout->addChild(button);
+		lv->pushBackCustomItem(layout);
+	}
+	lv->setItemsMargin(10);
+
+	return true;
+}
 PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,const char* title,const char* content) {
 
 	layer = PopupLayer::create();
