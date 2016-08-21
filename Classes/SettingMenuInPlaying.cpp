@@ -76,7 +76,7 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		}
 		else if (pBtn == m_btnQuitRoom)
 		{
-			auto dialog = PopupLayer::backDialog("popuplayer/backbg.png", Size(610, 399), "提示", "确定要退出房间吗？");
+			auto dialog = PopupLayer::backDialog("popuplayer/backbg.png", Size(610, 399), "quit room", "Are you sure?");
 			m_pParent->addChild(dialog,999);
 			dialog->setCallbackFunc(this, callfuncN_selector(SettingMenuInPlaying::quitRoomCallback));
 		}
@@ -89,7 +89,9 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 
 void SettingMenuInPlaying::quitRoomCallback(Node* node)
 {
-	Director::getInstance()->replaceScene(MainScene::scene());
+    auto s = MainScene::scene();
+    if(s)
+        Director::getInstance()->replaceScene(s);
 }
 
 void SettingMenuInPlaying::onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet)

@@ -293,7 +293,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			break; }
 		case TAG_BACK_BTN:
 			PopupLayer* pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4),"hhh","hhhhh");
-			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
+			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			butten->getParent()->addChild(pl);
 			break;
 		}

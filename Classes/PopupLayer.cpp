@@ -267,6 +267,7 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
 	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
+    return layer;
 }
 bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 {
@@ -286,8 +287,8 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 	auto button2 = Button::create("game/chat-line.png");
 	button2->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
 	button2->setScale9Enabled(true);
-	LabelTTF* roomNumLable = LabelTTF::create("房间号", "fonts/arial.ttf", 30);
-	LabelTTF* rankLable = LabelTTF::create("积分", "fonts/arial.ttf", 30);
+	LabelTTF* roomNumLable = LabelTTF::create("roomNum", "fonts/arial.ttf", 30);
+	LabelTTF* rankLable = LabelTTF::create("rank", "fonts/arial.ttf", 30);
 	//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
 	roomNumLable->setPosition(Point(size.width / 2 - 450, size.height / 2 - 285));
 	rankLable->setPosition(Point(size.width / 2 - 230, size.height / 2 - 285));
@@ -389,6 +390,7 @@ PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,
 	layer->addChild(closeBtn, 20);
 	layer->addChild(commitBtn, 20);
 	layer->addChild(cancelBtn, 20);
+    return layer;
 }
 PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSize) {
 	layer = PopupLayer::create();

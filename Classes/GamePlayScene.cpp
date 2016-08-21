@@ -52,11 +52,8 @@ GamePlayScene::~GamePlayScene(){
 	CC_SAFE_DELETE(m_playerTopLeft);
 	CC_SAFE_DELETE(m_playerTopLeft);
 	CC_SAFE_RELEASE(m_arrPokers);
-	if (m_btnSetting)
-	{
-		delete m_btnSetting;
-		m_btnSetting = NULL;
-	}
+	CC_SAFE_RELEASE(m_btnSetting);
+	
 }
 
 
@@ -172,6 +169,7 @@ bool GamePlayScene::initButtons()
 
 	//设置按钮
 	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)));
+    m_btnSetting->retain();
 
 	//聊天按钮
 	m_chatBtn = Button::create("game/chat.png");

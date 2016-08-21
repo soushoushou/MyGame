@@ -1,8 +1,8 @@
 #pragma once
 #include "cocos2d.h"
 #include "toolFunctions.h"
-#include "ui\UIEditBox\UIEditBox.h"
-#include "ui\CocosGUI.h"
+#include "ui/UIEditBox/UIEditBox.h"
+#include "ui/CocosGUI.h"
 #include "SimpleAudioEngine.h"   
 
 using namespace CocosDenshion;
@@ -19,18 +19,18 @@ public:
 	virtual bool init();
 	CREATE_FUNC(ChatLayer);
 
-	//³õÊ¼»¯±³¾°
+	//â‰¥Ä±Â ÂºÂªÃ˜Â±â‰¥Ã¦âˆ
 	bool initChatBG();
-	//ÉèÖÃÊäÈë¿ò
+	//â€¦Ã‹Ã·âˆšÂ â€°Â»ÃÃ¸Ãš
 	bool createListView(const vector<pair<string, string>> quickMessage);
 
 	void selectedItemEvent(cocos2d::Ref *pSender, ListViewEventType type);
 
-	//³õÊ¼»¯±êÌâ
+	//â‰¥Ä±Â ÂºÂªÃ˜Â±ÃÃƒâ€š
 	bool initTitle();
-	//³õÊ¼»¯°´Å¥
+	//â‰¥Ä±Â ÂºÂªÃ˜âˆÂ¥â‰ˆâ€¢
 	bool initButton();
-	//ÉèÖÃÊäÈë¿ò
+	//â€¦Ã‹Ã·âˆšÂ â€°Â»ÃÃ¸Ãš
 	bool initEditBox();
 
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
@@ -42,7 +42,7 @@ public:
 
 
 protected:
-	Sprite* m_pFrameSprtie;							//ÏûÏ¢¿ò¾«Áé
+	Sprite* m_pFrameSprtie;							//Å“ËšÅ“Â¢Ã¸ÃšÃ¦Â´Â¡Ãˆ
 
 private:
 	ListView* lv;
