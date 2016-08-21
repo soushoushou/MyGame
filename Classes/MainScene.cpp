@@ -343,9 +343,10 @@ void MainScene::onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *re
 		return;
 	}
 	std::vector<char> *buffer = response->getResponseData();
-	printf("Http Test, dump data: ");
+	std::string s;
 	for (unsigned int i = 0; i < buffer->size(); i++)
 	{
-		log("%s",buffer[i]);
+		s.push_back((*buffer)[i]);
 	}
+	log("%s",s.c_str());
 }
