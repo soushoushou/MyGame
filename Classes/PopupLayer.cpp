@@ -114,7 +114,22 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	layer->addChild(sendBtn, 20);
 	return layer;
 }
+PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size dialogSize) {
+	layer = PopupLayer::create();
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	layer->m_dialogContentSize = dialogSize;
+	auto size = Director::getInstance()->getWinSize();
+	auto * sprite = Scale9Sprite::create("popuplayer/EditBoxBg.png");
+	//上面那句话也可以根据需要这样来写：  
+	//CCString* fileName = CCString::createWithFormat("Icon_%d.jpg", flag);  
+	//CCSprite* sprite = CCSprite::create(fileName->getCString());  
+	auto editBgPs =ccp((size.width) / 2, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite->setPosition(editBgPs);
+	layer->addChild(sprite,10);
 
+	
+	return layer;
+}
 PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialogSize) {
 
 	layer = PopupLayer::create();

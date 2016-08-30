@@ -21,6 +21,7 @@ public:
 	virtual bool init();
 	CREATE_FUNC(PopupLayer);
 	static PopupLayer* createRoomDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* joinRoomWith9Dialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* recordDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* settingDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* joinRoomDialog(const char* backgroundImage, Size dialogSize);
