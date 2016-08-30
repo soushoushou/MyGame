@@ -256,7 +256,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}		
 
 		case TAG_RANK_BTN:
-		{
+		
 			PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
 			vector<pair<int, int>> quickMessage;
 			quickMessage.push_back(pair<int, int>(1, +1200));
@@ -292,9 +292,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			butten->getParent()->addChild(pl);
 			break; }
 		case TAG_BACK_BTN:
-			PopupLayer* pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4),"hhh","hhhhh");
-			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			butten->getParent()->addChild(pl);
+			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			break;
 		}
 	}

@@ -267,8 +267,7 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
 	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
-    return layer;
-}
+	return layer;}
 bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 {
 	Size size = Director::getInstance()->getVisibleSize();
@@ -283,7 +282,7 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 	lv->setAnchorPoint(Point(0.5, 0.5));
 	lv->setPosition(Point(size.width / 2, size.height / 2));
 	//lv->addEventListenerListView(this, listvieweventselector(ChatLayer::selectedItemEvent));
-	this->addChild(lv,10);
+	
 	auto button2 = Button::create("game/chat-line.png");
 	button2->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
 	button2->setScale9Enabled(true);
@@ -303,6 +302,7 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 
 	layout2->addChild(button2);
 	lv->pushBackCustomItem(layout2);
+	this->addChild(lv, 10);
 	for (int i = 0; i < quickMessage.size(); ++i)
 	{
 		auto button = Button::create("game/chat-line.png");
@@ -390,8 +390,7 @@ PopupLayer* PopupLayer::backDialog(const char* backgroundImage, Size dialogSize,
 	layer->addChild(closeBtn, 20);
 	layer->addChild(commitBtn, 20);
 	layer->addChild(cancelBtn, 20);
-    return layer;
-}
+	return layer;}
 PopupLayer* PopupLayer::settingDialog(const char* backgroundImage, Size dialogSize) {
 	layer = PopupLayer::create();
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
