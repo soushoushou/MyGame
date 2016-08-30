@@ -105,7 +105,7 @@ void GamePlayScene::update(float delta)
         case ChooseMultipleState:{
             if (m_timeLayer && m_timeLayer->canRemove())
             {
-                notChooseMulAction();
+                notChooseMulAction(0);
                 unschedule(schedule_selector(GamePlayScene::update));
             }
             break;
@@ -211,12 +211,12 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				DebugSimpleServer::getInstance()->playerReady("alw");
                 break;
             }
-            case TAG_NOT_HOG_BTN:
+            case TAG_HOG_BTN:
             {
                 notHogBtnAction();
                 break;
             }
-            case TAG_HOG_BTN:
+            case TAG_NOT_HOG_BTN:
             {
                 m_notHogBtn->setVisible(false);
                 m_HogBtn->setVisible(false);
@@ -230,7 +230,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             case TAG_MUL_THERE:
             case TAG_MUL_FOUR:
             case TAG_MUL_FIVE:{
-                notChooseMulAction();
+                notChooseMulAction(0);
+//                m_player->showMulti(tag-TAG_MUL_ONE+1,this);
+//                scheduleOnce(schedule_selector(GamePlayScene::notChooseMulAction), 10.0f);
                 break;
             }
 			case TAG_CHAT_BTN:
@@ -501,7 +503,7 @@ void GamePlayScene::showChooseMultipleButton()
 }
 
 #pragma mark-选择倍数超时
-void GamePlayScene::notChooseMulAction(){
+void GamePlayScene::notChooseMulAction(float dt){
     m_OneBtn->setVisible(false);
     m_TwoBtn->setVisible(false);
     m_ThreeBtn->setVisible(false);

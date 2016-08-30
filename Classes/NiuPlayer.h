@@ -2,7 +2,7 @@
 //  NiuPlayer.hpp
 //  BullPoker
 //
-//  Created by ³Â¶¬Ã· on 16/7/25.
+//  Created by â‰¥Â¬âˆ‚Â¨âˆšâˆ‘ on 16/7/25.
 //
 //
 
@@ -15,20 +15,22 @@
 
 USING_NS_CC;
 
-/** Íæ¼ÒÀàĞÍ */
+/** Ã•ÃŠÂºâ€œÂ¿â€¡â€“Ã• */
 enum PlayerType
 {
-	/** Íæ¼Ò×Ô¼º */
+	/** Ã•ÃŠÂºâ€œâ—Šâ€˜Âºâˆ« */
 	PlayerType_Me,
-	/** ÓÒ±ßÍæ¼Ò */
+	/** â€â€œÂ±ï¬‚Ã•ÃŠÂºâ€œ */
 	PlayerType_Right,
-	/** ÉÏ²¿ÓÒ±ßÍæ¼Ò */
+	/** â€¦Å“â‰¤Ã¸â€â€œÂ±ï¬‚Ã•ÃŠÂºâ€œ */
 	PlayerType_TopRight,
-	/** ÉÏ²¿×ó±ßÍæ¼Ò */
+	/** â€¦Å“â‰¤Ã¸â—ŠÃ›Â±ï¬‚Ã•ÃŠÂºâ€œ */
 	PlayerType_TopLeft,
-	/** ×ó±ßÍæ¼Ò */
+	/** â—ŠÃ›Â±ï¬‚Ã•ÃŠÂºâ€œ */
 	PlayerType_Left
 };
+
+
 
 class NiuPlayer : public Object
 {
@@ -38,10 +40,14 @@ public:
 	void updatePkWeiZhi();
     void showAllPokers();
     void emptyAllPokers();
+//    /** æ˜¾ç¤ºå€æ•° */
+//    void showMulti(int multi,GamePlayScene *scene);
+//    void multiDisAppear();
 
 private:
 	CC_SYNTHESIZE(__Array*, m_arrPk, ArrPk);
 	CC_SYNTHESIZE(Point, m_point, Point);
 	CC_SYNTHESIZE(PlayerType, m_iPlayerClass, PlayerClass);
+    Sprite *m_multiImg;
 };
 #endif /* NiuPlayer_h */

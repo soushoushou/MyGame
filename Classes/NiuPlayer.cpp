@@ -2,7 +2,7 @@
 //  NiuPlayer.cpp
 //  BullPoker
 //
-//  Created by �¶�÷ on 16/7/25.
+//  Created by ≥¬∂¨√∑ on 16/7/25.
 //
 //
 
@@ -88,3 +88,41 @@ void NiuPlayer::emptyAllPokers(){
     }
     m_arrPk->removeAllObjects();
 }
+
+///** 显示倍数 */
+//void NiuPlayer::showMulti(int multi,GamePlayScene *scene){
+//    if (!m_multiImg) {
+//        m_multiImg=Sprite::create("multi/multi_1.png");
+//        m_multiImg->setContentSize(Size(31, 33));
+//        scene->addChild(m_multiImg);
+//    }else
+//        m_multiImg->setVisible(true);
+//    char path[25] = { 0 };
+//    sprintf(path, "multi/multi_%d.png",multi);
+//    m_multiImg->setTexture(path);
+//    int x,y;
+//    if (m_iPlayerClass == PlayerType_Me)
+//    {
+//        x = m_point.x-pkWidth_Big*3;
+//        y = m_point.y;
+//    }
+//    else
+//    {
+//        x = m_point.x;
+//        y = m_point.y;
+//    }
+//    m_multiImg->setPosition(Vec2(x, y));
+//    
+//}
+//
+//void NiuPlayer::multiDisAppear(){
+//    m_multiImg->setVisible(false);
+//}
+
+
+
+
+
+
+
+

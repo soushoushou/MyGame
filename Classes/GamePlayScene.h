@@ -73,7 +73,7 @@ private:
     /** 不抢和抢庄超时事件 */
     void notHogBtnAction();
     /** 选择倍数超时事件 */
-    void notChooseMulAction();
+    void notChooseMulAction(float dt);
 private:
 	TimeLayer* m_timeLayer;
 	ChatLayer* m_chatLayer;
