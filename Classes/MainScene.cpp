@@ -14,7 +14,7 @@ using namespace ui;
 #define TAG_JOINGAME_BTN	2
 #define TAG_SHOP_BTN		3
 #define TAG_RANK_BTN		4
-#define TAG_GAMEHALL_BTN	5
+#define TAG_FREEDOMFIGHT_BTN	5
 #define TAG_NOTICE_BTN		6
 #define TAG_SETTING_BTN		7
 #define TAG_BACK_BTN		8
@@ -127,12 +127,12 @@ bool MainScene::initNotice()
 bool MainScene::initButtons()
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	Button* pGameHallBtn = Button::create("MainScene/gameHall-normal.png", "MainScene/gameHall-pressed.png");
-	if (!pGameHallBtn) return false;
+	Button* pJoinRoomBtn = Button::create("MainScene/joinRoom-normal.png", "MainScene/joinRoom-pressed.png");
+	if (!pJoinRoomBtn) return false;
 	Button* pCreateRoomBtn = Button::create("MainScene/createRoom-normal.png", "MainScene/createRoom-pressed.png");
 	if (!pCreateRoomBtn) return false;
-	Button* pJoinGameBtn = Button::create("MainScene/joinGame-normal.png", "MainScene/joinGame-pressed.png");
-	if (!pJoinGameBtn) return false;
+	Button* pFreedomFightBtn = Button::create("MainScene/freedomFight-normal.png", "MainScene/freedomFight-pressed.png");
+	if (!pFreedomFightBtn) return false;
 	Button* pSettingBtn = Button::create("MainScene/setting-normal.png", "MainScene/setting-pressed.png");
 	if (!pSettingBtn) return false;
 	Button* pBackBtn = Button::create("MainScene/back-normal.png", "MainScene/back-pressed.png");
@@ -145,9 +145,9 @@ bool MainScene::initButtons()
 	if (!pShopBtn) return false;
 
 	
-	pGameHallBtn->setTag(TAG_GAMEHALL_BTN);
+	pJoinRoomBtn->setTag(TAG_JOINGAME_BTN);
 	pCreateRoomBtn->setTag(TAG_CREATEROOM_BTN);
-	pJoinGameBtn->setTag(TAG_JOINGAME_BTN);
+	pFreedomFightBtn->setTag(TAG_FREEDOMFIGHT_BTN);
 	pShopBtn->setTag(TAG_SHOP_BTN);
 	pRankBtn->setTag(TAG_RANK_BTN);
 	pSettingBtn->setTag(TAG_SETTING_BTN);
@@ -155,17 +155,17 @@ bool MainScene::initButtons()
 	pNoticeBtn->setTag(TAG_NOTICE_BTN);
 
 	pCreateRoomBtn->setScale9Enabled(true);
-	pJoinGameBtn->setScale9Enabled(true);
+	pJoinRoomBtn->setScale9Enabled(true);
 	pShopBtn->setScale9Enabled(true);
-	pGameHallBtn->setScale9Enabled(true);
+	pFreedomFightBtn->setScale9Enabled(true);
 	pNoticeBtn->setScale9Enabled(true);
 	pRankBtn->setScale9Enabled(true);
 	pSettingBtn->setScale9Enabled(true);
 	pBackBtn->setScale9Enabled(true);
 
-	pGameHallBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pGameHallBtn->getContentSize().width / 2, 233)));
-	pCreateRoomBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pCreateRoomBtn->getContentSize().width / 2, 348)));
-	pJoinGameBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pJoinGameBtn->getContentSize().width / 2, 465)));
+	pJoinRoomBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pJoinRoomBtn->getContentSize().width / 2, 348)));
+	pCreateRoomBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pCreateRoomBtn->getContentSize().width / 2, 233)));
+	pFreedomFightBtn->setPosition(Director::getInstance()->convertToUI(Vec2(765 + pFreedomFightBtn->getContentSize().width / 2, 465)));
 	pNoticeBtn->setPosition(Director::getInstance()->convertToUI(Vec2(705 + pNoticeBtn->getContentSize().width / 2, 574 + pNoticeBtn->getContentSize().height / 2)));
 	pRankBtn->setPosition(Director::getInstance()->convertToUI(Vec2(840 + pRankBtn->getContentSize().width / 2, 574 + pRankBtn->getContentSize().height / 2)));
 	pShopBtn->setPosition(Director::getInstance()->convertToUI(Vec2(1050 + pShopBtn->getContentSize().width / 2, 550 + pShopBtn->getContentSize().height / 2)));
@@ -173,21 +173,21 @@ bool MainScene::initButtons()
 	pBackBtn->setPosition(Director::getInstance()->convertToUI(Vec2(1050 + pBackBtn->getContentSize().width / 2, 26 + pBackBtn->getContentSize().height / 2)));
 
 	pCreateRoomBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch,this));
-	pGameHallBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pJoinRoomBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pShopBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pRankBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
-	pJoinGameBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
+	pFreedomFightBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pSettingBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pBackBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pNoticeBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 
 	this->addChild(pCreateRoomBtn);
-	this->addChild(pGameHallBtn);
+	this->addChild(pJoinRoomBtn);
 	this->addChild(pShopBtn);
 
 	this->addChild(pRankBtn);
 
-	this->addChild(pJoinGameBtn);
+	this->addChild(pFreedomFightBtn);
 	this->addChild(pSettingBtn);
 	this->addChild(pBackBtn);
 	this->addChild(pNoticeBtn);
@@ -236,15 +236,10 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 		case TAG_JOINGAME_BTN:
 		{
+			log("join room!");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
 			PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width / 9 * 7, size.height - 540));
-			//auto position = ccp((size.width) / 2, size.height / 2);
-			//pl->setAnchorPoint(ccp(0.5, 0.5));
-			//pl->setPosition(position);
-
 			butten->getParent()->addChild(pl);
-
-			//Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
 		}
 		case TAG_SHOP_BTN:
@@ -281,9 +276,10 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			break;
 		}
 
-		case TAG_GAMEHALL_BTN:
-			log("GAMEHALL");
+		case TAG_FREEDOMFIGHT_BTN:{
 			break;
+		}
+
 
 		case TAG_SETTING_BTN: {
 			log("SETTING");
