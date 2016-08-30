@@ -224,20 +224,20 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 		case TAG_CREATEROOM_BTN:
 		{
-			NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack,this));
+			NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack, this));
 			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
 			//pl->setTitle("hhh");
 			//pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-			
+
 			butten->getParent()->addChild(pl);
-			
+
 			break;
 		}
 		case TAG_JOINGAME_BTN:
 		{
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
-			PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width/9*7, size.height-540));
+			PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width / 9 * 7, size.height - 540));
 			//auto position = ccp((size.width) / 2, size.height / 2);
 			//pl->setAnchorPoint(ccp(0.5, 0.5));
 			//pl->setPosition(position);
@@ -247,16 +247,16 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			//Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			break;
 		}
-		case TAG_SHOP_BTN: 
+		case TAG_SHOP_BTN:
 		{
 			log("shop");
-			
-			Director::getInstance()->replaceScene(ShopLayer::createScene());
-			break; 
-		}		
 
-		case TAG_RANK_BTN:
-		
+			Director::getInstance()->replaceScene(ShopLayer::createScene());
+			break;
+		}
+
+		case TAG_RANK_BTN: {
+
 			PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
 			vector<pair<int, int>> quickMessage;
 			quickMessage.push_back(pair<int, int>(1, +1200));
@@ -269,8 +269,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			quickMessage.push_back(pair<int, int>(8, -1111111));
 			pl->createListView(quickMessage);
 			butten->getParent()->addChild(pl);
-		
-			break;}
+
+			break; }
 
 		case TAG_NOTICE_BTN:
 		{
@@ -288,18 +288,19 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SETTING_BTN: {
 			log("SETTING");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
-			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width/2, size.height/7*4));			
+			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width / 2, size.height / 7 * 4));
 			butten->getParent()->addChild(pl);
 			break; }
-		case TAG_BACK_BTN:
+		case TAG_BACK_BTN: {
+			auto pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(610, 399), "quit room", "Are you sure?");
 			butten->getParent()->addChild(pl);
 			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			break;
 		}
+		}
+
 	}
-
 }
-
 //帧刷新
 void MainScene::update(float delta)
 {
