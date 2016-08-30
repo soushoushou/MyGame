@@ -44,11 +44,8 @@ Scene* MainScene::scene(){
 //初始化各种
 bool MainScene::init()
 {
-	printf("s");
 	CCLayer::init();
-	printf("s");
 	scheduleUpdate();
-	printf("s");
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;

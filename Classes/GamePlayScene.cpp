@@ -187,7 +187,8 @@ bool GamePlayScene::initPlayerProfile()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new HerizelUserProfileUI(this, Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333);
+		m_pUser = new HerizelUserProfileUI(this);
+		m_pUser->setProfileProperty(Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
 	}
 	return true;
 }

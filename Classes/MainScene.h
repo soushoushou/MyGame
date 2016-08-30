@@ -32,7 +32,7 @@ private:
 private:
 	typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
 	LabelTTF* m_pNoticeLabel;
-	UserProfileUI* m_pUser;
+	UserProfileUIInMainScene* m_pUser;
 	Sprite* m_spRoundRectInNotice;		
 };
 

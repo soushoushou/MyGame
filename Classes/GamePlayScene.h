@@ -78,7 +78,7 @@ private:
 	TimeLayer* m_timeLayer;
 	ChatLayer* m_chatLayer;
 
-	UserProfileUI* m_pUser;	//当前用户
+	IUserProfileUIInGame* m_pUser;	//当前用户
 	/** 设置 */
 	SettingMenuInPlaying *m_btnSetting;
 	/** 聊天 */

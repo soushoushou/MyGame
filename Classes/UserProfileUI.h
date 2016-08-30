@@ -14,7 +14,6 @@ public:
 	UserProfileUI(Node* pParent);
 	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond,const int coin) = 0;
 	~UserProfileUI();
-	//static int m_nDiamond;
 protected:
 	string m_strPlayerName;			//用户昵称
 	int m_nCoin;					//金币数量
@@ -29,27 +28,46 @@ protected:
 	Sprite* m_spDianmond;			//钻石精灵
 };
 
+//用于游戏中的头像接口
+class IUserProfileUIInGame : public UserProfileUI
+{
+public:
+	IUserProfileUIInGame(Node* pParent) :UserProfileUI(pParent),m_spBankerFrame(0), m_lblMultiple(0){}
+	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
+	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple) = 0;
+	virtual void showMultiple(bool isShow = true) = 0;												//显示倍数
+	virtual void showBanker(bool isShow = true) = 0;													//显示庄家框
+	~IUserProfileUIInGame(){}
+protected:
+	Sprite* m_spBankerFrame;
+	LabelTTF* m_lblMultiple;
+};
+
 //竖向用户头像UI，用于游戏中
-class VerticalUserProfileUI : public UserProfileUI
+class VerticalUserProfileUI : public IUserProfileUIInGame
 {
 public:
 	VerticalUserProfileUI(Node* pParent);
-	VerticalUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
-	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
+	//VerticalUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
+	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
+	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple);
+	virtual void showMultiple(bool isShow = true);													//显示倍数
+	virtual void showBanker(bool isShow = true);													//显示庄家框
 };
 
 //横向用户头像UI，用于游戏中
-class HerizelUserProfileUI: public UserProfileUI
+class HerizelUserProfileUI : public IUserProfileUIInGame
 {
 public:
 	HerizelUserProfileUI(Node* pParent);
-	HerizelUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
-	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
-protected:
-private:
+	//HerizelUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
+	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
+	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple);
+	virtual void showMultiple(bool isShow = true);												//显示倍数
+	virtual void showBanker(bool isShow = true);													//显示庄家框
 };
 
-class UserProfileUIInMainScene : public HerizelUserProfileUI
+class UserProfileUIInMainScene : public UserProfileUI
 {
 public:
 	UserProfileUIInMainScene(Node* pParent);
