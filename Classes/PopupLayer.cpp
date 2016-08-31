@@ -33,6 +33,19 @@ PopupLayer::PopupLayer() :
 #define TAG_CHECKBOX_MUSIC	9	
 #define TAG_CHECKBOX_MUSICE	10
 #define TAG_LOGOUT_BTN	11
+#define TAG_0_BTN 12
+#define TAG_1_BTN 13
+#define TAG_2_BTN 14
+#define TAG_3_BTN 15
+#define TAG_4_BTN 16
+#define TAG_5_BTN 17
+#define TAG_6_BTN 18
+#define TAG_7_BTN 19
+#define TAG_8_BTN 20
+#define TAG_9_BTN 21
+#define TAG_DEL_BTN 22
+#define TAG_JOINROOM_BTN 23
+
 PopupLayer::~PopupLayer() {
 	CC_SAFE_RELEASE(m__pMenu);
 	CC_SAFE_RELEASE(m__sfBackGround);
@@ -132,7 +145,109 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	layer->addChild(sprite,10);
 
 	
-	return layer;
+LabelTTF* numLabel = LabelTTF::create("", "", 40);
+	numLabel->setPosition(editBgPs);
+	numLabel->setName("numLabel");
+	numLabel->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel, 10);
+	LabelTTF* titleLable = LabelTTF::create("ÇëÊäÈë·¿¼äºÅ", "", 40);
+	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
+	titleLable->setColor(Color3B(0, 0, 0));
+	layer->addChild(titleLable, 10);
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return NULL;
+
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(closeBtn, 20);
+
+	Button* m0Btn = Button::create("popuplayer/0.png", "popuplayer/0_pressed.png");
+	if (!m0Btn) return NULL;
+	Button* m1Btn = Button::create("popuplayer/1.png", "popuplayer/1_pressed.png");
+	if (!m1Btn) return NULL;
+	Button* m2Btn = Button::create("popuplayer/2.png", "popuplayer/2_pressed.png");
+	if (!m2Btn) return NULL;
+	Button* m3Btn = Button::create("popuplayer/3.png", "popuplayer/3_pressed.png");
+	if (!m3Btn) return NULL;
+	Button* m4Btn = Button::create("popuplayer/4.png", "popuplayer/4_pressed.png");
+	if (!m4Btn) return NULL;
+	Button* m5Btn = Button::create("popuplayer/5.png", "popuplayer/5_pressed.png");
+	if (!m5Btn) return NULL;
+	Button* m6Btn = Button::create("popuplayer/6.png", "popuplayer/6_pressed.png");
+	if (!m6Btn) return NULL;
+	Button* m7Btn = Button::create("popuplayer/7.png", "popuplayer/7_pressed.png");
+	if (!m7Btn) return NULL;
+	Button* m8Btn = Button::create("popuplayer/8.png", "popuplayer/8_pressed.png");
+	if (!m8Btn) return NULL;
+	Button* m9Btn = Button::create("popuplayer/9.png", "popuplayer/9_pressed.png");
+	if (!m9Btn) return NULL;
+	Button* delBtn = Button::create("popuplayer/delete.png", "popuplayer/delete_pressed.png");
+	if (!delBtn) return NULL;
+	Button* sendBtn = Button::create("popuplayer/sendBtnJoin.png", "popuplayer/sendBtnJoin_pressed.png");
+	if (!sendBtn) return NULL;
+
+	auto btn1Position = ccp(editBgPs.x- sprite->getContentSize().width/2+m1Btn->getContentSize().width/2-12,editBgPs.y-70);
+	m1Btn->setPosition(btn1Position);
+	m1Btn->setTag(TAG_1_BTN);
+	m1Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m1Btn,10);
+	auto btn2Position = ccp(editBgPs.x, btn1Position.y);
+	m2Btn->setPosition(btn2Position);
+	m2Btn->setTag(TAG_2_BTN);
+	m2Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m2Btn, 10);
+	auto btn3Position = ccp(editBgPs.x + sprite->getContentSize().width / 2 - m1Btn->getContentSize().width / 2 + 12, btn1Position.y);
+	m3Btn->setPosition(btn3Position);
+	m3Btn->setTag(TAG_3_BTN);
+	m3Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m3Btn, 10);
+	auto btn4Position = ccp(btn1Position.x, btn1Position.y - 90);
+	m4Btn->setPosition(btn4Position);
+	m4Btn->setTag(TAG_4_BTN);
+	m4Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m4Btn, 10);
+	auto btn5Position = ccp(btn2Position.x, btn1Position.y - 90);
+	m5Btn->setPosition(btn5Position);
+	m5Btn->setTag(TAG_5_BTN);
+	m5Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m5Btn, 10);
+	auto btn6Position = ccp(btn3Position.x, btn1Position.y - 90);
+	m6Btn->setPosition(btn6Position);
+	m6Btn->setTag(TAG_6_BTN);
+	m6Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m6Btn, 10);
+	auto btn7Position = ccp(btn1Position.x, btn4Position.y - 90);
+	m7Btn->setPosition(btn7Position);
+	m7Btn->setTag(TAG_7_BTN);
+	m7Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m7Btn, 10);
+	auto btn8Position = ccp(btn2Position.x, btn4Position.y - 90);
+	m8Btn->setPosition(btn8Position);
+	m8Btn->setTag(TAG_8_BTN);
+	m8Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m8Btn, 10);
+	auto btn9Position = ccp(btn3Position.x, btn4Position.y - 90);
+	m9Btn->setPosition(btn9Position);
+	m9Btn->setTag(TAG_9_BTN);
+	m9Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m9Btn, 10);
+	auto delBtnPosition = ccp(btn1Position.x, btn7Position.y - 90);
+	delBtn->setPosition(delBtnPosition);
+	delBtn->setTag(TAG_DEL_BTN);
+	delBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(delBtn, 10);
+	auto btn0Position = ccp(btn2Position.x, btn7Position.y - 90);
+	m0Btn->setPosition(btn0Position);
+	m0Btn->setTag(TAG_0_BTN);
+	m0Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(m0Btn, 10);
+	auto sendBtnPosition = ccp(btn3Position.x, btn7Position.y - 90);
+	sendBtn->setPosition(sendBtnPosition);
+	sendBtn->setTag(TAG_JOINROOM_BTN);
+	sendBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(sendBtn, 10);	return layer;
 }
 PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialogSize) {
 
@@ -685,7 +800,42 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 	{
 		Button* butten = (Button*)pSender;
 		unsigned int tag = butten->getTag();
-		switch (tag)
+if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
+			Label* label = (Label *)butten->getParent()->getChildByName("numLabel");
+			if (label == NULL)
+				return;
+			string num = label->getString();
+			int count = num.length();
+			if (tag <= TAG_9_BTN)
+			{
+				if (count < 6) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s1 = ss.str();				
+					num += s1;
+					label->setString(num);
+				}
+				else {
+					return;
+				}
+				return;
+			}
+			if (tag == TAG_DEL_BTN) {
+				if (count == 0) {
+					return;
+				}
+				else {
+					num=num.erase(num.length()-1);
+					label->setString(num);
+					return;
+				}
+			}
+			if (tag == TAG_JOINROOM_BTN) {
+				Director::getInstance()->replaceScene(GamePlayScene::createScene());
+			}
+			return;
+		}		switch (tag)
 		{
 		case TAG_CREATEROOM_BTN:
 			Director::getInstance()->replaceScene(GamePlayScene::createScene());
@@ -769,8 +919,6 @@ void PopupLayer::onEnter() {
 		NULL
 	);
 	background->runAction(popupLayer);
-
-
 
 }
 

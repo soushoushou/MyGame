@@ -235,7 +235,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			log("join room!");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
-			PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width / 9 * 7, size.height - 540));
+			//PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width / 9 * 7, size.height - 540));
+			PopupLayer* pl = PopupLayer::joinRoomWith9Dialog("popuplayer/joinRoomBg2.png", Size(621, 542));
 			butten->getParent()->addChild(pl);
 			break;
 		}
