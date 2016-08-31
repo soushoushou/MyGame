@@ -101,6 +101,16 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 		m_pParent->addChild(m_spFrame);
 	}
 	m_spFrame->setPosition(director->convertToUI(pos));
+	if (!m_spBankerFrame)
+	{
+		m_spBankerFrame = Sprite::create("game/h_zhuang.png");
+		if (!m_spBankerFrame)
+		{
+			return false;
+		}
+		m_spFrame->addChild(m_spBankerFrame);
+		m_spBankerFrame->setPosition(Vec2(m_spFrame->getContentSize().width / 2 + 10, m_spFrame->getContentSize().height / 2 + 5));
+	}
 	if (!m_spHead)
 	{
 		m_spHead = Sprite::create(headFileName);
@@ -176,6 +186,7 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 	}
 	m_lblMultiple->setString(txts[multiple]);
 	showMultiple(false);
+	showBanker(false);
 	return true;
 }
 
@@ -246,6 +257,16 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 		m_pParent->addChild(m_spFrame);
 	}
 	m_spFrame->setPosition(director->convertToUI(pos));
+	if (!m_spBankerFrame)
+	{
+		m_spBankerFrame = Sprite::create("game/v_zhuang.png");
+		if (!m_spBankerFrame)
+		{
+			return false;
+		}
+		m_spFrame->addChild(m_spBankerFrame);
+		m_spBankerFrame->setPosition(Vec2(m_spFrame->getContentSize().width / 2 + 10, m_spFrame->getContentSize().height / 2 + 5));
+	}
 	if (!m_spHead)
 	{
 		m_spHead = Sprite::create(headFileName);
@@ -315,6 +336,7 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 	}
 	m_lblMultiple->setString(txts[multiple]);
 	showMultiple(false);
+	showBanker(false);
 	return true;
 }
 
