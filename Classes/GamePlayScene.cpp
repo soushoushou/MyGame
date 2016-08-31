@@ -188,7 +188,7 @@ bool GamePlayScene::initPlayerProfile()
 	if (!m_pUser)
 	{
 		m_pUser = new HerizelUserProfileUI(this);
-		m_pUser->setProfileProperty(Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
+		m_pUser->setProfileProperty(Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
 	}
 	return true;
 }

@@ -12,6 +12,7 @@ UserProfileUI::UserProfileUI(Node* pParent)
 	m_pParent = pParent;
 	m_spFrame = NULL;
 	m_spCoin = NULL;
+	m_lblCoin = NULL;
 }
 
 
@@ -90,74 +91,91 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 		return false;
 	}
 	auto director = Director::getInstance();
-	if (m_spFrame)
-	{
-		m_spFrame->removeAllChildren();
-		m_spFrame->release();
-	}
-	m_spFrame = Sprite::create("MainScene/userProfileFrame.png");
 	if (!m_spFrame)
 	{
-		return false;
+		m_spFrame = Sprite::create("MainScene/userProfileFrame.png");
+		if (!m_spFrame)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spFrame);
 	}
-	m_pParent->addChild(m_spFrame);
 	m_spFrame->setPosition(director->convertToUI(pos));
-	if (!m_spFrame)
-	{
-		return false;
-	}
-	m_spHead = Sprite::create(headFileName);
 	if (!m_spHead)
 	{
-		return false;
+		m_spHead = Sprite::create(headFileName);
+		if (!m_spHead)
+		{
+			return false;
+		}
+
+		m_spHead->setPosition(Vec2(55, 55));
+		m_spFrame->addChild(m_spHead);
 	}
 
-	m_spHead->setPosition(Vec2(55, 55));
-	m_spFrame->addChild(m_spHead);
-	m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
 	if (!m_lblPlayerName)
 	{
-		return false;
+		m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
+		if (!m_lblPlayerName)
+		{
+			return false;
+		}
+		m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
+		m_lblPlayerName->setPosition(Vec2(110, 90));
+		m_spFrame->addChild(m_lblPlayerName);
 	}
-	m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
-	m_lblPlayerName->setPosition(Vec2(110, 90));
-	m_spFrame->addChild(m_lblPlayerName);
-	m_spCoin = Sprite::create("MainScene/coin.png");
+	m_lblPlayerName->setString(name);
+
 	if (!m_spCoin)
 	{
-		return false;
+		m_spCoin = Sprite::create("MainScene/coin.png");
+		if (!m_spCoin)
+		{
+			return false;
+		}
+		m_spCoin->setAnchorPoint(Vec2(0, 1));
+		m_spCoin->setPosition(Vec2(105, 55));
+		m_spFrame->addChild(m_spCoin);
 	}
-	m_spCoin->setAnchorPoint(Vec2(0, 1));
-	m_spCoin->setPosition(Vec2(105, 55));
-	m_spFrame->addChild(m_spCoin);
+
 	char buf[100];
 	sprintf(buf, "%d", diamond);
 	m_nCoin = diamond;
-	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
 	if (!m_lblCoin)
 	{
-		return false;
+		m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+		if (!m_lblCoin)
+		{
+			return false;
+		}
+		m_lblCoin->setColor(Color3B(224, 179, 9));
+		m_lblCoin->setAnchorPoint(Vec2(0, 1));
+		m_lblCoin->setPosition(Vec2(165, 45));
+		m_spFrame->addChild(m_lblCoin);
 	}
-	m_lblCoin->setColor(Color3B(224, 179, 9));
-	m_lblCoin->setAnchorPoint(Vec2(0, 1));
-	m_lblCoin->setPosition(Vec2(165, 45));
-	m_spFrame->addChild(m_lblCoin);
+	m_lblCoin->setString(buf);
 
-	if (m_lblMultiple)
-	{
-		m_lblMultiple->release();
-	}
 	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
-	m_lblMultiple = LabelTTF::create(txts[multiple], "Arial", 30);
 	if (!m_lblMultiple)
 	{
-		return false;
+		m_lblMultiple = LabelTTF::create(txts[multiple], "Arial", 30);
+		if (!m_lblMultiple)
+		{
+			return false;
+		}
+		m_lblMultiple->setColor(Color3B::GREEN);
+		m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
+		m_lblMultiple->setAnchorPoint(Vec2(0, 1));
+		if (m_spFrame->getPosition().y <= 100)
+		{
+			m_lblMultiple->setPosition(Vec2(15, 150));
+		}
+		else
+			m_lblMultiple->setPosition(Vec2(15, -10));
+		m_spFrame->addChild(m_lblMultiple);
 	}
-	m_lblMultiple->setColor(Color3B::GREEN);
-	m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
-	m_lblMultiple->setAnchorPoint(Vec2(0, 1));
-	m_lblMultiple->setPosition(Vec2(15, -10));
-	m_spFrame->addChild(m_lblMultiple);
+	m_lblMultiple->setString(txts[multiple]);
+	showMultiple(false);
 	return true;
 }
 
@@ -218,52 +236,85 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 		return false;
 	}
 	auto director = Director::getInstance();
-	if (m_spFrame)
-	{
-		m_spFrame->removeAllChildren();
-		m_spFrame->release();
-	}
-	m_spFrame = Sprite::create("MainScene/userProfileFrameV.png");
 	if (!m_spFrame)
 	{
-		return false;
+		m_spFrame = Sprite::create("MainScene/userProfileFrameV.png");
+		if (!m_spFrame)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spFrame);
 	}
-	m_pParent->addChild(m_spFrame);
 	m_spFrame->setPosition(director->convertToUI(pos));
-	m_spHead = Sprite::create(headFileName);
 	if (!m_spHead)
 	{
-		return false;
+		m_spHead = Sprite::create(headFileName);
+		if (!m_spHead)
+		{
+			return false;
+		}
+		m_spHead->setPosition(Vec2(62, 120));
+		m_spFrame->addChild(m_spHead);
 	}
-	m_spHead->setPosition(Vec2(62, 120));
-	m_spFrame->addChild(m_spHead);
-	m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
 	if (!m_lblPlayerName)
 	{
-		return false;
+		m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
+		if (!m_lblPlayerName)
+		{
+			return false;
+		}
+		m_lblPlayerName->setPosition(Vec2(m_spFrame->getContentSize().width / 2, 60));
+		m_spFrame->addChild(m_lblPlayerName);
 	}
-	m_lblPlayerName->setPosition(Vec2(m_spFrame->getContentSize().width / 2, 60));
-	m_spFrame->addChild(m_lblPlayerName);
-	m_spCoin = Sprite::create("MainScene/coin.png");
+	m_lblPlayerName->setString(name);
 	if (!m_spCoin)
 	{
-		return false;
+		m_spCoin = Sprite::create("MainScene/coin.png");
+		if (!m_spCoin)
+		{
+			return false;
+		}
+		m_spCoin->setAnchorPoint(Vec2(0, 1));
+		m_spCoin->setPosition(Vec2(5, 45));
+		m_spFrame->addChild(m_spCoin);
 	}
-	m_spCoin->setAnchorPoint(Vec2(0, 1));
-	m_spCoin->setPosition(Vec2(5, 45));
-	m_spFrame->addChild(m_spCoin);
 	char buf[100];
 	sprintf(buf, "%d", diamond);
 	m_nCoin = diamond;
-	m_lblCoin = LabelTTF::create(buf, "Arial", 20);
 	if (!m_lblCoin)
 	{
-		return false;
+		m_lblCoin = LabelTTF::create(buf, "Arial", 20);
+		if (!m_lblCoin)
+		{
+			return false;
+		}
+		m_lblCoin->setColor(Color3B(255, 252, 0));
+		m_lblCoin->setAnchorPoint(Vec2(0, 1));
+		m_lblCoin->setPosition(Vec2(55, 35));
+		m_spFrame->addChild(m_lblCoin);
 	}
-	m_lblCoin->setColor(Color3B(255, 252, 0));
-	m_lblCoin->setAnchorPoint(Vec2(0, 1));
-	m_lblCoin->setPosition(Vec2(55, 35));
-	m_spFrame->addChild(m_lblCoin);
+	m_lblCoin->setString(buf);
+	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
+	if (!m_lblMultiple)
+	{
+		m_lblMultiple = LabelTTF::create(txts[multiple], "Arial", 30);
+		if (!m_lblMultiple)
+		{
+			return false;
+		}
+		m_lblMultiple->setColor(Color3B::GREEN);
+		m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
+		m_lblMultiple->setAnchorPoint(Vec2(0, 1));
+		if (m_spFrame->getPosition().x <= 100)
+		{
+			m_lblMultiple->setPosition(Vec2(145, 170));
+		}
+		else
+			m_lblMultiple->setPosition(Vec2(-45, 170));
+		m_spFrame->addChild(m_lblMultiple);
+	}
+	m_lblMultiple->setString(txts[multiple]);
+	showMultiple(false);
 	return true;
 }
 
