@@ -54,8 +54,8 @@ public:
 	bool createListView(const vector<pair<int, int>> quickMessage);
 	Ref* m_callbackListener;
 	SEL_CallFuncN m_callback;
-private:
 
+private:
 	void buttonCallBack(Ref* pSender);
 	void selectedEvent(Object* pSender, CheckBoxEventType type);
 	// 文字内容两边的空白区
@@ -63,6 +63,7 @@ private:
 	int m_contentPaddingTop;
 	ListView* lv;
 	Size m_dialogContentSize;
+	EditBox* pEditBox_roomNum;
 
 	//set and get
 	CC_SYNTHESIZE_RETAIN(Menu*, m__pMenu, MenuButton);

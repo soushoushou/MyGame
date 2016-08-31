@@ -132,6 +132,8 @@ private:
     bool m_creatMulBtn;
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
+	LabelTTF *m_pRoomNumberLabel;
+	LabelTTF *m_pModelLabel;
 };
 
 

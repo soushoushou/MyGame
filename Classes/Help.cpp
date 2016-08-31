@@ -94,7 +94,7 @@ bool Help::initInstruction()
 {
 	//获取主屏幕的尺寸
 	auto visibleSize = Director::getInstance()->getVisibleSize();	//800,600
-	CCDictionary* pDict = CCDictionary::createWithContentsOfFile("instruction.xml");
+	CCDictionary* pDict = CCDictionary::createWithContentsOfFile("notice.xml");
 	const char *charchinese = ((CCString*)pDict->objectForKey("name"))->getCString();
 	label = Label::create(charchinese, "Arial", 25);
 	label->setHorizontalAlignment(TextHAlignment::LEFT);
@@ -104,7 +104,7 @@ bool Help::initInstruction()
 
 	//滚动条
 	scrollView = Help::MyScrollView::create();
-	scrollView->setContentSize(Size(800, 600));
+	scrollView->setContentSize(Size(500, 600));
 	scrollView->setPosition(Vec2(0, 5 * (visibleSize.height / 6) + 420 - label->getContentSize().height / 2));
 	scrollView->setTouchEnabled(true);
 	scrollView->setInertiaScrollEnabled(true);

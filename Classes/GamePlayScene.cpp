@@ -145,12 +145,25 @@ bool GamePlayScene::initBackground()
 	auto spriteBK = Sprite::create("game/gamebg.png");
 	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
+
+
+	m_pRoomNumberLabel = LabelTTF::create("房间号:008", "Arial", 25);
+	if (!m_pRoomNumberLabel) return false;
+	m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 300));
+	m_pRoomNumberLabel->setColor(Color3B(151, 84, 20));
+	this->addChild(m_pRoomNumberLabel);
     
-    m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 50);
+    m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
     if (!m_pNoticeLabel) return false;
-    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 270));
+    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 300));
     m_pNoticeLabel->setColor(Color3B(255, 255, 255));
-    this->addChild(m_pNoticeLabel);
+	this->addChild(m_pNoticeLabel);
+
+	m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
+	if (!m_pModelLabel) return false;
+	m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 300));
+	m_pModelLabel->setColor(Color3B(255, 255, 255));
+	this->addChild(m_pModelLabel);
 	return true;
 }
 
