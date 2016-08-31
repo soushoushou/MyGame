@@ -4,7 +4,14 @@
 #include "Global.h"
 #include "NiuPoker.h"
 #include "NiuPlayer.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "iOSAudio/CDMiOSAudioPlay.h"
+#endif
+
 USING_NS_CC;
+
+BOOL isRecording;
+CDMiOSAudioPlay *m_audioPlay;
 
 enum ButtonTag{
     /** 准备 */
@@ -24,7 +31,9 @@ enum ButtonTag{
     /** 五倍按钮 */
     TAG_MUL_FIVE,
 	/** 聊天 */
-	TAG_CHAT_BTN
+	TAG_CHAT_BTN,
+    /** 录音 */
+    TAG_RECORD_BTN
 };
 
 
@@ -67,7 +76,7 @@ Scene* GamePlayScene::createScene()
 
 void GamePlayScene::update(float delta)
 {
-	Size size = Director::sharedDirector()->getWinSize();
+	cocos2d::Size Size = Director::sharedDirector()->getWinSize();
 	auto server = DebugSimpleServer::getInstance();
 	switch (m_iState)
 	{
@@ -132,6 +141,10 @@ bool GamePlayScene::init()
 	if (!createPokers()) return false;
 	if (!xiPai()) return false;
     schedule(schedule_selector(GamePlayScene::update));
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    isRecording=NO;
+    m_audioPlay=[[CDMiOSAudioPlay alloc] init];
+#endif
 	return true;
 }
 
@@ -143,40 +156,39 @@ bool GamePlayScene::initBackground()
 
 	//添加背景
 	auto spriteBK = Sprite::create("game/gamebg.png");
-	spriteBK->setPosition(Point(size.width / 2, size.height / 2));
+	spriteBK->setPosition(cocos2d::Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
-
-
-	m_pRoomNumberLabel = LabelTTF::create("房间号:008", "Arial", 25);
-	if (!m_pRoomNumberLabel) return false;
-	m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
-	m_pRoomNumberLabel->setColor(Color3B(255, 255, 255));
-	this->addChild(m_pRoomNumberLabel);
+    
+    m_pRoomNumberLabel = LabelTTF::create("房间号:008", "Arial", 25);
+    if (!m_pRoomNumberLabel) return false;
+    m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
+    m_pRoomNumberLabel->setColor(Color3B(255, 255, 255));
+    this->addChild(m_pRoomNumberLabel);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
     if (!m_pNoticeLabel) return false;
     m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 290));
     m_pNoticeLabel->setColor(Color3B(255, 255, 255));
-	this->addChild(m_pNoticeLabel);
-
-	m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
-	if (!m_pModelLabel) return false;
-	m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
-	m_pModelLabel->setColor(Color3B(255, 255, 255));
-	this->addChild(m_pModelLabel);
+    this->addChild(m_pNoticeLabel);
+    
+    m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
+    if (!m_pModelLabel) return false;
+    m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
+    m_pModelLabel->setColor(Color3B(255, 255, 255));
+    this->addChild(m_pModelLabel);
 	return true;
 }
 
 bool GamePlayScene::initButtons()
 {
-	auto size = Director::getInstance()->getVisibleSize();
+	auto Size = Director::getInstance()->getVisibleSize();
 
 	//开始游戏按钮
 	m_startGameBtn = Button::create("game/startgame.png");
 	if (!m_startGameBtn) return false;
 	m_startGameBtn->setTag(TAG_START_BTN);
 	m_startGameBtn->setScale9Enabled(true);
-	m_startGameBtn->setPosition(Vec2(size.width / 2, size.height / 2 - 150));
+	m_startGameBtn->setPosition(cocos2d::Vec2(Size.width / 2, Size.height / 2 - 150));
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_startGameBtn);
 
@@ -188,31 +200,52 @@ bool GamePlayScene::initButtons()
 	m_chatBtn = Button::create("game/chat.png");
 	m_chatBtn->setTag(TAG_CHAT_BTN);
 	m_chatBtn->setScale9Enabled(true);
-	m_chatBtn->setPosition(Vec2(size.width - 100, 80));
+	m_chatBtn->setPosition(Vec2(Size.width - 120, 80));
 	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_chatBtn,100);
 
+    m_recordBtn = Button::create("game/record.png","game/record-pressed.png");
+    m_recordBtn->setTag(TAG_RECORD_BTN);
+    m_recordBtn->setScale9Enabled(true);
+    m_recordBtn->setPosition(Vec2(Size.width - 50, 80));
+    m_recordBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+    this->addChild(m_recordBtn,100);
+    
 	return true;
 }
 
 bool GamePlayScene::initPlayerProfile()
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
 	if (!m_pUser)
 	{
 		m_pUser = new HerizelUserProfileUI(this);
-		m_pUser->setProfileProperty(Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
+        m_pUser->setProfileProperty(cocos2d::Vec2(160,550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
 	}
 	return true;
 }
 
 void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
-	Size size = Director::getInstance()->getWinSize();
-	if (type == Widget::TouchEventType::ENDED)
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
+    Button* button = (Button*)pSender;
+    unsigned int tag = button->getTag();
+    if (type == Widget::TouchEventType::BEGAN) {
+        switch (tag)
+        {
+            case TAG_RECORD_BTN:{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+                log("录音");
+                [m_audioPlay AudioRecording];
+#endif
+            }
+                break;
+            default:
+                break;
+        }
+    }
+	else if (type == Widget::TouchEventType::ENDED)
 	{
-		Button* button = (Button*)pSender;
-		unsigned int tag = button->getTag();
 		switch (tag)
 		{
             case TAG_START_BTN:
@@ -252,7 +285,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			case TAG_CHAT_BTN:
 			{
 				log("chat");
-				auto size = Director::getInstance()->getWinSize();
+				auto Size = Director::getInstance()->getWinSize();
 				m_chatLayer = ChatLayer::create();
 
 				//快捷聊天内容以及音乐地址
@@ -271,6 +304,12 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				addChild(m_chatLayer,500);
 				break;
 			}
+            case TAG_RECORD_BTN:{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+                [m_audioPlay playAudio];
+#endif
+            }
+                break;
             default:
                 break;
 		}
@@ -278,21 +317,21 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 }
 
 bool GamePlayScene::initPlayer(){
-	Size size = Director::getInstance()->getVisibleSize();
+	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	//设置主玩家的位置
-    m_player->setPoint(Vec2(size.width / 2, size.height / 6-20));
+    m_player->setPoint(cocos2d::Vec2(Size.width / 2, Size.height / 6-20));
     m_player->setPlayerClass(PlayerType_Me);
     //设置玩家右的位置
-    m_playerRight->setPoint(Vec2(size.width - pkWidth_small * 3, size.height / 2));
+    m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3, Size.height / 2));
     m_playerRight->setPlayerClass(PlayerType_Right);
     //设置玩家上二的位置
-    m_playerTopRight->setPoint(Vec2(size.width*0.5 + pkWidth_small * 3, size.height / 6 * 5));
+    m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3, Size.height / 6 * 5));
     m_playerTopRight->setPlayerClass(PlayerType_TopRight);
     //设置玩家上一的位置
-    m_playerTopLeft->setPoint(Vec2(size.width*0.5 - pkWidth_small * 4, size.height / 6 * 5));
+    m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4, Size.height / 6 * 5));
     m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
     //设置玩家左的位置
-    m_playerLeft->setPoint(Vec2(65, size.height / 2));
+    m_playerLeft->setPoint(Vec2(65, Size.height / 2));
     m_playerLeft->setPlayerClass(PlayerType_Left);
 
 	return true;
@@ -302,7 +341,7 @@ NiuPoker* GamePlayScene::selectPoker(int huaSe, int num){
 	NiuPoker* pk;
     char path[256] = { 0 };
     sprintf(path, "pokerBig/%d_%d@2x.png", huaSe,num);
-    pk = NiuPoker::create("poker.png", Rect(0, 0, pkWidth_small, pkHeight_small));
+    pk = NiuPoker::create("poker.png", cocos2d::Rect(0, 0, pkWidth_small, pkHeight_small));
     pk->setHuaSe(huaSe);
 	pk->setNum(num);
 	pk->setGameMain(this);
@@ -331,7 +370,7 @@ bool GamePlayScene::createPokers(){
 }
 #pragma mark-洗牌
 bool GamePlayScene::xiPai(){
-    Size size = Director::getInstance()->getVisibleSize();
+    cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	bool isRet = false;
 	do
 	{
@@ -345,7 +384,7 @@ bool GamePlayScene::xiPai(){
 	} while (0);
     for (int i=0; i<25; i++) {
         NiuPoker* pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
-        pk->setPosition(Vec2(size.width / 2, size.height / 2));
+        pk->setPosition(Vec2(Size.width / 2, Size.height / 2));
         pk->showLast();
         pk->setVisible(true);
     }
@@ -410,7 +449,7 @@ void GamePlayScene::showHogButton()
 {
     m_timeLayer->setTimeAndType(12, Tip_hog);
     if (!m_creatHogBtn) {
-        auto size = Director::getInstance()->getVisibleSize();
+        auto Size = Director::getInstance()->getVisibleSize();
         /** 不抢 */
         m_notHogBtn = Button::create("game/not_hog_button.png","game/not_hog_button_pressed.png");
         
@@ -433,9 +472,9 @@ void GamePlayScene::showHogButton()
         this->addChild(m_HogBtn);
         
         float btnwidth=m_notHogBtn->getContentSize().width;
-        float height=size.height *0.5 - 150;
-        m_notHogBtn->setPosition(Vec2(size.width / 2-(btnwidth*0.5+10), height));
-        m_HogBtn->setPosition(Vec2(size.width / 2+(btnwidth*0.5+10), height));
+        float height=Size.height *0.5 - 150;
+        m_notHogBtn->setPosition(Vec2(Size.width / 2-(btnwidth*0.5+10), height));
+        m_HogBtn->setPosition(Vec2(Size.width / 2+(btnwidth*0.5+10), height));
         
         m_creatHogBtn=true;
     }
@@ -462,7 +501,7 @@ void GamePlayScene::showChooseMultipleButton()
     m_timeLayer->setTimeAndType(12, Tip_chooseMul);
     schedule(schedule_selector(GamePlayScene::update));
     if (!m_creatMulBtn) {
-        auto size = Director::getInstance()->getVisibleSize();
+        auto Size = Director::getInstance()->getVisibleSize();
         /** 一倍 */
         m_OneBtn = Button::create("game/button_02.png","game/button-pressed_02.png");
         m_OneBtn->setScale9Enabled(true);
@@ -496,13 +535,13 @@ void GamePlayScene::showChooseMultipleButton()
         m_FiveBtn->setTag(TAG_MUL_FIVE);
         
         float btnwidth=m_OneBtn->getContentSize().width;
-        float height=size.height *0.5 - 150;
+        float height=Size.height *0.5 - 150;
         
-        m_OneBtn->setPosition(Vec2(size.width / 2-(btnwidth+10)*2, height));
-        m_TwoBtn->setPosition(Vec2(size.width / 2-(btnwidth+10), height));
-        m_ThreeBtn->setPosition(Vec2(size.width / 2, height));
-        m_FourBtn->setPosition(Vec2(size.width / 2+(btnwidth+10), height));
-        m_FiveBtn->setPosition(Vec2(size.width / 2+(btnwidth+10)*2, height));
+        m_OneBtn->setPosition(Vec2(Size.width / 2-(btnwidth+10)*2, height));
+        m_TwoBtn->setPosition(Vec2(Size.width / 2-(btnwidth+10), height));
+        m_ThreeBtn->setPosition(Vec2(Size.width / 2, height));
+        m_FourBtn->setPosition(Vec2(Size.width / 2+(btnwidth+10), height));
+        m_FiveBtn->setPosition(Vec2(Size.width / 2+(btnwidth+10)*2, height));
         
         m_creatMulBtn=true;
     }

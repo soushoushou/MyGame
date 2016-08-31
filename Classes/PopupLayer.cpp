@@ -150,7 +150,7 @@ LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	numLabel->setName("numLabel");
 	numLabel->setColor(Color3B(0, 0, 0));
 	layer->addChild(numLabel, 10);
-	LabelTTF* titleLable = LabelTTF::create("ÇëÊäÈë·¿¼äºÅ", "", 40);
+	LabelTTF* titleLable = LabelTTF::create("title", "", 40);
 	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
 	titleLable->setColor(Color3B(0, 0, 0));
 	layer->addChild(titleLable, 10);
@@ -183,7 +183,7 @@ LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	if (!m8Btn) return NULL;
 	Button* m9Btn = Button::create("popuplayer/9.png", "popuplayer/9_pressed.png");
 	if (!m9Btn) return NULL;
-	Button* delBtn = Button::create("popuplayer/delete.png", "popuplayer/delete_pressed.png");
+	Button* delBtn = Button::create("popuplayer/delete.png", "popuplayer/delete-pressed.png");
 	if (!delBtn) return NULL;
 	Button* sendBtn = Button::create("popuplayer/sendBtnJoin.png", "popuplayer/sendBtnJoin_pressed.png");
 	if (!sendBtn) return NULL;
@@ -801,7 +801,7 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		Button* butten = (Button*)pSender;
 		unsigned int tag = butten->getTag();
 if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
-			Label* label = (Label *)butten->getParent()->getChildByName("numLabel");
+			LabelTTF* label = (LabelTTF *)butten->getParent()->getChildByName("numLabel");
 			if (label == NULL)
 				return;
 			string num = label->getString();

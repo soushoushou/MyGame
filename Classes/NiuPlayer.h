@@ -46,7 +46,7 @@ public:
 
 private:
 	CC_SYNTHESIZE(__Array*, m_arrPk, ArrPk);
-	CC_SYNTHESIZE(Point, m_point, Point);
+	CC_SYNTHESIZE(cocos2d::Point, m_point, Point);
 	CC_SYNTHESIZE(PlayerType, m_iPlayerClass, PlayerClass);
     Sprite *m_multiImg;
 };

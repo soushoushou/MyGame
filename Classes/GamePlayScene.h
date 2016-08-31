@@ -113,13 +113,13 @@ private:
 	/** 玩家左 */
 	NiuPlayer* m_playerLeft;
 	/** 玩家坐标 */
-	Point playerDiZhuLablePt;
+	cocos2d::Point playerDiZhuLablePt;
 	/** 玩家右一坐标 */
-	Point playerOneLablePt;
+	cocos2d::Point playerOneLablePt;
 	/** 玩家上二坐标 */
-	Point playerTwoLablePt;
+	cocos2d::Point playerTwoLablePt;
 	/** 玩家左三坐标 */
-	Point playerThreeLablePt;
+	cocos2d::Point playerThreeLablePt;
 	/**  是否发完牌 */
 	bool m_isSend;
 	/** 已发出第几张牌 */
@@ -134,6 +134,8 @@ private:
     LabelTTF *m_pNoticeLabel;
 	LabelTTF *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
+    Button *m_recordBtn;
+
 };
 
 
