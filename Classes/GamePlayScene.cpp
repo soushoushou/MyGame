@@ -149,19 +149,19 @@ bool GamePlayScene::initBackground()
 
 	m_pRoomNumberLabel = LabelTTF::create("房间号:008", "Arial", 25);
 	if (!m_pRoomNumberLabel) return false;
-	m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 300));
-	m_pRoomNumberLabel->setColor(Color3B(151, 84, 20));
+	m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
+	m_pRoomNumberLabel->setColor(Color3B(255, 255, 255));
 	this->addChild(m_pRoomNumberLabel);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
     if (!m_pNoticeLabel) return false;
-    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 300));
+    m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 290));
     m_pNoticeLabel->setColor(Color3B(255, 255, 255));
 	this->addChild(m_pNoticeLabel);
 
 	m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
 	if (!m_pModelLabel) return false;
-	m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 300));
+	m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
 	m_pModelLabel->setColor(Color3B(255, 255, 255));
 	this->addChild(m_pModelLabel);
 	return true;
