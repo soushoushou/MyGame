@@ -8,12 +8,12 @@ USING_NS_CC;
 using namespace ui;
 
 //基类
-class UserProfileUI
+class UserProfileUI:public Ref
 {
 public:
 	UserProfileUI(Node* pParent);
 	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond,const int coin) = 0;
-	~UserProfileUI();
+	virtual ~UserProfileUI();
 protected:
 	string m_strPlayerName;			//用户昵称
 	int m_nCoin;					//金币数量
@@ -37,7 +37,7 @@ public:
 	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple) = 0;
 	virtual void showMultiple(bool isShow = true) = 0;												//显示倍数
 	virtual void showBanker(bool isShow = true) = 0;													//显示庄家框
-	~IUserProfileUIInGame(){}
+	virtual ~IUserProfileUIInGame(){}
 protected:
 	Sprite* m_spBankerFrame;
 	LabelTTF* m_lblMultiple;
@@ -47,6 +47,7 @@ protected:
 class VerticalUserProfileUI : public IUserProfileUIInGame
 {
 public:
+	static IUserProfileUIInGame* create(Node* pParent);
 	VerticalUserProfileUI(Node* pParent);
 	//VerticalUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
 	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
@@ -59,6 +60,7 @@ public:
 class HerizelUserProfileUI : public IUserProfileUIInGame
 {
 public:
+	static IUserProfileUIInGame* create(Node* pParent);
 	HerizelUserProfileUI(Node* pParent);
 	//HerizelUserProfileUI(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
 	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
@@ -70,10 +72,12 @@ public:
 class UserProfileUIInMainScene : public UserProfileUI
 {
 public:
+	static UserProfileUI* create(Node* pParent);
 	UserProfileUIInMainScene(Node* pParent);
 	UserProfileUIInMainScene(Node* pParent, Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
 	virtual bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin);
 	void onAddBtnTouch(Ref *pSender, Widget::TouchEventType type);
+	virtual ~UserProfileUIInMainScene();
 private:
 	Sprite* m_spRoundRect;
 	Sprite* m_spRoundRect2;

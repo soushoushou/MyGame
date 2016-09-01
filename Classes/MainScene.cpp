@@ -81,7 +81,8 @@ bool MainScene::initPlayerProfile()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new UserProfileUIInMainScene(this, Vec2(30,17), "MainScene/timo.png", "LOVEVVV666", 13300,13333);
+		m_pUser = UserProfileUIInMainScene::create(this);
+		m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", "LOVEVVV666", 13300, 13333);
 	}
 	return true;
 }

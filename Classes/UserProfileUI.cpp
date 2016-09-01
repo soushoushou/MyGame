@@ -211,6 +211,42 @@ void VerticalUserProfileUI::showBanker(bool isShow /* = true */)
 	}
 }
 
+IUserProfileUIInGame* VerticalUserProfileUI::create(Node* pParent)
+{
+	IUserProfileUIInGame *ui = new (std::nothrow) VerticalUserProfileUI(pParent);
+	if (ui)
+	{
+		ui->autorelease();
+		return ui;
+	}
+	CC_SAFE_DELETE(ui);
+	return nullptr;
+}
+
+IUserProfileUIInGame* HerizelUserProfileUI::create(Node* pParent)
+{
+	IUserProfileUIInGame *ui = new (std::nothrow) HerizelUserProfileUI(pParent);
+	if (ui)
+	{
+		ui->autorelease();
+		return ui;
+	}
+	CC_SAFE_DELETE(ui);
+	return nullptr;
+}
+
+UserProfileUI* UserProfileUIInMainScene::create(Node* pParent)
+{
+	UserProfileUI *ui = new (std::nothrow) UserProfileUIInMainScene(pParent);
+	if (ui)
+	{
+		ui->autorelease();
+		return ui;
+	}
+	CC_SAFE_DELETE(ui);
+	return nullptr;
+}
+
 //VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
 //	, const int coin) :
 //IUserProfileUIInGame(pParent)
@@ -525,5 +561,10 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 			Director::getInstance()->replaceScene(ShopLayer::createScene(1));
 		}
 	}
+
+}
+
+UserProfileUIInMainScene::~UserProfileUIInMainScene()
+{
 
 }

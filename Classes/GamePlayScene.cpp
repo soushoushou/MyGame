@@ -222,7 +222,7 @@ bool GamePlayScene::initPlayerProfile()
 	cocos2d::Size Size = Director::getInstance()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = new HerizelUserProfileUI(this);
+		m_pUser = HerizelUserProfileUI::create(this);
         m_pUser->setProfileProperty(cocos2d::Vec2(160,550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
 	}
 	return true;
