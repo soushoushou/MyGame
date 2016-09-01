@@ -5,13 +5,13 @@
 #include "NiuPoker.h"
 #include "NiuPlayer.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "iOSAudio/CDMiOSAudioPlay.h"
+#include "CDMRecordObject.h"
 #endif
 
 USING_NS_CC;
 
-BOOL isRecording;
-CDMiOSAudioPlay *m_audioPlay;
+bool isRecording;
+CDMRecordObject *m_recordObject;
 
 enum ButtonTag{
     /** 准备 */
@@ -142,8 +142,8 @@ bool GamePlayScene::init()
 	if (!xiPai()) return false;
     schedule(schedule_selector(GamePlayScene::update));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    isRecording=NO;
-    m_audioPlay=[[CDMiOSAudioPlay alloc] init];
+    isRecording=false;
+    m_recordObject=new CDMRecordObject();
 #endif
 	return true;
 }
@@ -236,7 +236,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             case TAG_RECORD_BTN:{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 log("录音");
-                [m_audioPlay AudioRecording];
+                m_recordObject->StartRecord();
 #endif
             }
                 break;
@@ -306,7 +306,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			}
             case TAG_RECORD_BTN:{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                [m_audioPlay playAudio];
+                m_recordObject->StartPlay();
 #endif
             }
                 break;
