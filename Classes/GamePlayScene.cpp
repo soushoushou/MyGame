@@ -11,7 +11,10 @@
 USING_NS_CC;
 
 bool isRecording;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 CDMRecordObject *m_recordObject;
+#endif
+
 
 enum ButtonTag{
     /** 准备 */
