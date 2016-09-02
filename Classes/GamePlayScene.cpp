@@ -15,6 +15,12 @@ bool isRecording;
 CDMRecordObject *m_recordObject;
 #endif
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#include <android/log.h>
+#endif
+
 
 enum ButtonTag{
     /** 准备 */
@@ -203,14 +209,15 @@ bool GamePlayScene::initButtons()
 	m_chatBtn = Button::create("game/chat.png");
 	m_chatBtn->setTag(TAG_CHAT_BTN);
 	m_chatBtn->setScale9Enabled(true);
-	m_chatBtn->setPosition(Vec2(Size.width - 120, 80));
+	m_chatBtn->setPosition(Vec2(Size.width - 200, 80));
 	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_chatBtn,100);
 
+	//语音按钮
     m_recordBtn = Button::create("game/record.png","game/record-pressed.png");
     m_recordBtn->setTag(TAG_RECORD_BTN);
     m_recordBtn->setScale9Enabled(true);
-    m_recordBtn->setPosition(Vec2(Size.width - 50, 80));
+    m_recordBtn->setPosition(Vec2(Size.width - 100, 80));
     m_recordBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
     this->addChild(m_recordBtn,100);
     
@@ -222,7 +229,7 @@ bool GamePlayScene::initPlayerProfile()
 	cocos2d::Size Size = Director::getInstance()->getWinSize();
 	if (!m_pUser)
 	{
-		m_pUser = HerizelUserProfileUI::create(this);
+		m_pUser = new HerizelUserProfileUI(this);
         m_pUser->setProfileProperty(cocos2d::Vec2(160,550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
 	}
 	return true;
@@ -237,10 +244,25 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
         switch (tag)
         {
             case TAG_RECORD_BTN:{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                log("录音");
-                m_recordObject->StartRecord();
-#endif
+				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)	//判断当前平台为ios平台
+					log("录音");
+					m_recordObject->StartRecord();
+				#endif
+
+				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
+					JniMethodInfo minfo;//定义Jni函数信息结构体
+					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
+					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "recordAudio", "()V");
+
+					if (!isHave) {
+						CCLog("jni:此函数不存在");
+					}else{
+						CCLog("jni:此函数存在");
+						//调用此函数
+						minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,823);
+					}
+					CCLog("jni-java函数执行完毕");
+				#endif
             }
                 break;
             default:
@@ -308,11 +330,27 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				break;
 			}
             case TAG_RECORD_BTN:{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                m_recordObject->StartPlay();
-#endif
-            }
+				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+					m_recordObject->StartPlay();
+				#endif
+            
+				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
+					JniMethodInfo minfo;//定义Jni函数信息结构体
+					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
+					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "startPlay", "()V");
+
+					if (!isHave) {
+						CCLog("jni:此函数不存在");
+					}else{
+						CCLog("jni:此函数存在");
+						//调用此函数
+						minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,823);
+					}
+					CCLog("jni-java函数执行完毕");
+				#endif
+			
                 break;
+			}
             default:
                 break;
 		}
