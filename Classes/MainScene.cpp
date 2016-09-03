@@ -6,6 +6,7 @@
 #include "GamePlayScene.h"
 #include "ShopLayer.h"
 #include "Help.h"
+#include "LoginScene.h"
 
 using namespace ui;
 
@@ -311,7 +312,7 @@ void MainScene::onExit()
 
 void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
 	log("button call back. tag: %d", pNode->getTag());
-
+	Director::getInstance()->replaceScene(LoginScene::createScene());
 }
 
 
