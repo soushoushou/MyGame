@@ -17,6 +17,7 @@ public:
 	map<string, vector<int>> getPokes();
 	void playerReady(string name);
 	bool isAllReady();
+	void quitRoom(const string& name);
 private:
 	DebugSimpleServer();
 	void createPoke();				//随机生成扑克

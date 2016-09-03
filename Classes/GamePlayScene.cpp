@@ -47,8 +47,8 @@ enum ButtonTag{
 
 
 GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
-m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL)
-
+m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL), m_pUserLeft(NULL), m_pUserRight(NULL), m_pUserTopLeft(NULL),
+m_pUserTopRight(NULL)
 {
     m_player = new NiuPlayer();
     m_playerRight = new NiuPlayer();
@@ -64,6 +64,7 @@ m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL)
 }
 
 GamePlayScene::~GamePlayScene(){
+	DebugSimpleServer::getInstance()->quitRoom("alw");
 	CC_SAFE_DELETE(m_player);
 	CC_SAFE_DELETE(m_playerRight);
 	CC_SAFE_DELETE(m_playerTopRight);
@@ -97,7 +98,7 @@ void GamePlayScene::update(float delta)
                 if (!m_timeLayer && m_bReady)
                 {
                     m_timeLayer = TimeLayer::create();
-                    addChild(m_timeLayer);
+                    addChild(m_timeLayer,50);
                 }
                 if (m_timeLayer && m_timeLayer->canRemove())
                 {
@@ -145,6 +146,10 @@ bool GamePlayScene::init()
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initPlayerProfile()) return false;	//初始化玩家信息
+	if (!initPlayerLeftProfile()) return false;	//初始化左侧玩家信息
+	if (!initPlayerRightProfile()) return false;	//初始化左侧玩家信息
+	if (!initPlayerTopLeftProfile()) return false;	//初始化顶部左侧玩家信息
+	if (!initPlayerTopRightProfile()) return false;	//初始化顶部左侧玩家信息
 	srand((unsigned)time(NULL));//初始化随机种子
 	if (!initPlayer()) return false;
 	if (!createPokers()) return false;
@@ -168,22 +173,23 @@ bool GamePlayScene::initBackground()
 	spriteBK->setPosition(cocos2d::Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
     
-    m_pRoomNumberLabel = LabelTTF::create("房间号:008", "Arial", 25);
+    m_pRoomNumberLabel = Label::create("房间号:008", "Arial", 25);
     if (!m_pRoomNumberLabel) return false;
     m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
-    m_pRoomNumberLabel->setColor(Color3B(255, 255, 255));
+    m_pRoomNumberLabel->setColor(Color3B(128, 85, 30));
+	//m_pRoomNumberLabel->enableOutline(Color4B(255, 0, 0, 255),4);
     this->addChild(m_pRoomNumberLabel);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
     if (!m_pNoticeLabel) return false;
     m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 290));
-    m_pNoticeLabel->setColor(Color3B(255, 255, 255));
+	m_pNoticeLabel->setColor(Color3B(128, 85, 30));
     this->addChild(m_pNoticeLabel);
     
     m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
     if (!m_pModelLabel) return false;
     m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
-    m_pModelLabel->setColor(Color3B(255, 255, 255));
+	m_pModelLabel->setColor(Color3B(220, 163, 59));
     this->addChild(m_pModelLabel);
 	return true;
 }
@@ -199,7 +205,7 @@ bool GamePlayScene::initButtons()
 	m_startGameBtn->setScale9Enabled(true);
 	m_startGameBtn->setPosition(cocos2d::Vec2(Size.width / 2, Size.height / 2 - 150));
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-	this->addChild(m_startGameBtn);
+	this->addChild(m_startGameBtn,51);
 
 	//设置按钮
 	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)));
@@ -231,6 +237,54 @@ bool GamePlayScene::initPlayerProfile()
 	{
 		m_pUser = new HerizelUserProfileUI(this);
         m_pUser->setProfileProperty(cocos2d::Vec2(160,550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
+	}
+	return true;
+}
+
+bool GamePlayScene::initPlayerLeftProfile()
+{
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
+	if (!m_pUserLeft)
+	{
+		m_pUserLeft = VerticalUserProfileUI::create(this);
+		m_pUserLeft->setProfileProperty(cocos2d::Vec2(80, 330), "MainScene/timo.png", "MM", 13300, 13333, 1);
+		m_pUserLeft->showBanker(true);
+		m_pUserLeft->showMultiple(true);
+	}
+	return true;
+}
+
+bool GamePlayScene::initPlayerRightProfile()
+{
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
+	if (!m_pUserRight)
+	{
+		m_pUserRight = VerticalUserProfileUI::create(this);
+		m_pUserRight->setProfileProperty(cocos2d::Vec2(1050, 330), "MainScene/timo.png", "GG", 10000, 1333, 1);
+		//m_pUserRight->showBanker(true);
+		m_pUserRight->showMultiple(true);
+	}
+	return true;
+}
+
+bool GamePlayScene::initPlayerTopLeftProfile()
+{
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
+	if (!m_pUserTopLeft)
+	{
+		m_pUserTopLeft = HerizelUserProfileUI::create(this);
+		m_pUserTopLeft->setProfileProperty(cocos2d::Vec2(400, 130), "MainScene/timo.png", "sicong", 17000, 1400, 3);
+	}
+	return true;
+}
+
+bool GamePlayScene::initPlayerTopRightProfile()
+{
+	cocos2d::Size Size = Director::getInstance()->getWinSize();
+	if (!m_pUserTopRight)
+	{
+		m_pUserTopRight = HerizelUserProfileUI::create(this);
+		m_pUserTopRight->setProfileProperty(cocos2d::Vec2(760, 130), "MainScene/timo.png", "jianlin", 17000, 1400, 3);
 	}
 	return true;
 }
@@ -363,16 +417,16 @@ bool GamePlayScene::initPlayer(){
     m_player->setPoint(cocos2d::Vec2(Size.width / 2, Size.height / 6-20));
     m_player->setPlayerClass(PlayerType_Me);
     //设置玩家右的位置
-    m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3, Size.height / 2));
+    m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
     m_playerRight->setPlayerClass(PlayerType_Right);
     //设置玩家上二的位置
-    m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3, Size.height / 6 * 5));
+    m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130));
     m_playerTopRight->setPlayerClass(PlayerType_TopRight);
     //设置玩家上一的位置
-    m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4, Size.height / 6 * 5));
+    m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130));
     m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
     //设置玩家左的位置
-    m_playerLeft->setPoint(Vec2(65, Size.height / 2));
+    m_playerLeft->setPoint(Vec2(165, Size.height / 2 - 30));
     m_playerLeft->setPlayerClass(PlayerType_Left);
 
 	return true;
@@ -500,7 +554,7 @@ void GamePlayScene::showHogButton()
         
         m_notHogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
         
-        this->addChild(m_notHogBtn);
+        this->addChild(m_notHogBtn,51);
         /** 抢庄 */
         m_HogBtn = Button::create("game/hog_button.png","game/hog_button_pressed.png");
         
@@ -510,7 +564,7 @@ void GamePlayScene::showHogButton()
         
         m_HogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
         
-        this->addChild(m_HogBtn);
+        this->addChild(m_HogBtn,51);
         
         float btnwidth=m_notHogBtn->getContentSize().width;
         float height=Size.height *0.5 - 150;
@@ -547,27 +601,27 @@ void GamePlayScene::showChooseMultipleButton()
         m_OneBtn = Button::create("game/button_02.png","game/button-pressed_02.png");
         m_OneBtn->setScale9Enabled(true);
         m_OneBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-        this->addChild(m_OneBtn);
+        this->addChild(m_OneBtn,51);
         /** 二倍 */
         m_TwoBtn = Button::create("game/button_05.png","game/button-pressed_05.png");
         m_TwoBtn->setScale9Enabled(true);
         m_TwoBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-        this->addChild(m_TwoBtn);
+        this->addChild(m_TwoBtn,51);
         /** 三倍 */
         m_ThreeBtn = Button::create("game/button_07.png","game/button-pressed_07.png");
         m_ThreeBtn->setScale9Enabled(true);
         m_ThreeBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-        this->addChild(m_ThreeBtn);
+        this->addChild(m_ThreeBtn,51);
         /** 四倍 */
         m_FourBtn = Button::create("game/button_09.png","game/button-pressed_09.png");
         m_FourBtn->setScale9Enabled(true);
         m_FourBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-        this->addChild(m_FourBtn);
+        this->addChild(m_FourBtn,51);
         /** 五倍 */
         m_FiveBtn = Button::create("game/button_11.png","game/button-pressed_11.png");
         m_FiveBtn->setScale9Enabled(true);
         m_FiveBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
-        this->addChild(m_FiveBtn);
+        this->addChild(m_FiveBtn,51);
         
         m_OneBtn->setTag(TAG_MUL_ONE);
         m_TwoBtn->setTag(TAG_MUL_TWO);

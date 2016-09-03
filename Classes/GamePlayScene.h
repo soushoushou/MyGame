@@ -47,6 +47,10 @@ private:
 	bool initBackground();
 	bool initButtons();
 	bool initPlayerProfile();	//初始化玩家信息
+	bool initPlayerLeftProfile();	//初始化左侧玩家信息
+	bool initPlayerRightProfile();	//初始化右侧玩家信息
+	bool initPlayerTopLeftProfile();//初始化顶部左一侧玩家信息
+	bool initPlayerTopRightProfile();//初始化顶部左二侧玩家信息
 	/** 初始化玩家信息 */
 	bool initPlayer();
 	/** 生成一个牌 */
@@ -79,6 +83,10 @@ private:
 	ChatLayer* m_chatLayer;
 
 	IUserProfileUIInGame* m_pUser;	//当前用户
+	IUserProfileUIInGame* m_pUserLeft;	//玩家左
+	IUserProfileUIInGame* m_pUserRight;	//玩家右
+	IUserProfileUIInGame* m_pUserTopLeft;	//玩家顶部左一
+	IUserProfileUIInGame* m_pUserTopRight;	//玩家顶部左二
 	/** 设置 */
 	SettingMenuInPlaying *m_btnSetting;
 	/** 聊天 */
@@ -132,7 +140,7 @@ private:
     bool m_creatMulBtn;
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
-	LabelTTF *m_pRoomNumberLabel;
+	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
 

@@ -42,6 +42,21 @@ string DebugSimpleServer::createPlayerName()
 	return result;
 }
 
+void DebugSimpleServer::quitRoom(const string& name)
+{
+	m_mutex.lock();
+	for (vector<string>::iterator iter = m_vecPlayersInRoom.begin(); iter < m_vecPlayersInRoom.end(); ++iter)
+	{
+		if (name == *iter)
+		{
+			m_vecPlayersInRoom.erase(iter);
+			break;
+		}
+	}
+	m_alwInRoom = false;
+	m_mutex.unlock();
+}
+
 //²úÉúÆË¿Ë
 void DebugSimpleServer::createPoke()
 {
