@@ -223,7 +223,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 		case TAG_CREATEROOM_BTN:
 		{
-			NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack, this));
+			//NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack, this));
 			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
 			//pl->setTitle("hhh");
 			//pl->setContentText("hhhh", 20, 60, 250);

@@ -5,6 +5,11 @@
 USING_NS_CC;
 
 
+void LoginScene::onCreateUserResponse(void* responseData)
+{
+	log("in response!");
+}
+
 Scene* LoginScene::createScene()
 {
 	// 'scene' is an autorelease object
@@ -72,22 +77,9 @@ bool LoginScene::init()
 	// add the sprite as a child to this layer
 	this->addChild(sprite, 0);
 
-	m_pSocket = new CGameSocket;
-	m_pSocket->Create("120.24.180.25", 333,30,true);
 	S_CreatePlayerReq s;
-	if (m_pSocket->SendMsg((char*)&s, s.m_packageLen))
-	{
-		m_pSocket->Flush();
-	}
-	S_CreatePlayerACK ss;
-	int size = sizeof(ss);
-	if (m_pSocket->ReceiveMsg(&ss,size))
-	{
-		if (ss.m_seq == PP_DOUNIU_CREAT_ACCOUNT_ACK)
-		{
-			int jj = 0;
-		}
-	}
+	
+	NetworkManger::getInstance()->SendRequest_CreateUser(s, CC_CALLBACK_1(LoginScene::onCreateUserResponse,this));
 	
 	return true;
 }
