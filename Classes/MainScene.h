@@ -18,7 +18,7 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 	virtual ~MainScene();
-	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);		
+	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *response);
 	void update(float delta);
 	void buttonCallback(CCNode* pSender);
