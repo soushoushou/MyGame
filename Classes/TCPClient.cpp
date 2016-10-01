@@ -8,7 +8,7 @@ CTCPClient::CTCPClient()
 	// 初始化
 	memset(m_bufOutput, 0, sizeof(m_bufOutput));
 	memset(m_bufInput, 0, sizeof(m_bufInput));
-	if (Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true))
+	if (!Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true))
 	{
 		log("connect server error!");
 		return;
@@ -282,7 +282,7 @@ bool CTCPClient::hasError()
 	}
 
 	return false;
-	}
+}
 
 // 从网络中读取尽可能多的数据，实际向服务器请求数据的地方
 bool CTCPClient::recvFromSock(void)

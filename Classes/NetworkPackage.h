@@ -54,26 +54,29 @@ struct S_CreatePlayerReq
 //创建角色响应
 struct S_CreatePlayerACK
 {
-	S_CreatePlayerACK() :m_seq(0), m_size(sizeof(this)){}
-	short m_size;
-	int m_seq;
-	unsigned long long m_playerID;
+	S_CreatePlayerACK() :m_packageLen(8),m_cmd(0),m_statusCode(0){}
+	short m_packageLen;
+	short m_cmd;
+	int m_statusCode;				//0失败，1成功，2敏感词
 };
 
 //获取角色信息请求
 struct S_GetPlayerInfoReq
 {
-	S_GetPlayerInfoReq() :m_seq(PP_DOUNIU_GET_ROLEINFO_REQ){}
-	int m_seq;
+	S_GetPlayerInfoReq() :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ),m_packageLen(4+sizeof(m_playerID)),m_playerID(0){}
+	short m_packageLen;
+	short m_cmd;
 	unsigned long long m_playerID;
 };
 
 //获取角色信息响应
 struct S_GetPlayerInfoACK
 {
-	S_GetPlayerInfoACK() :m_seq(0){}
-	int m_seq;
+	S_GetPlayerInfoACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
 	unsigned long long m_playerID;
+	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
 	int m_currentDiamond;
@@ -82,47 +85,54 @@ struct S_GetPlayerInfoACK
 //创建房间请求
 struct S_CreateRoomReq
 {
-	S_CreateRoomReq() :m_seq(PP_DOUNIU_CREATE_ROOM_REQ){}
-	int m_seq;
+	S_CreateRoomReq() :m_cmd(PP_DOUNIU_CREATE_ROOM_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //创建房间响应
 struct S_CreateRoomACK
 {
-	S_CreateRoomACK() :m_seq(0){}
-	int m_seq;
+	S_CreateRoomACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
 	int m_roomID;
 };
 
 //加入房间请求
 struct S_JoinRoomReq
 {
-	S_JoinRoomReq() :m_seq(PP_DOUNIU_JOIN_ROOM_REQ){}
-	int m_seq;
+	S_JoinRoomReq() :m_cmd(PP_DOUNIU_JOIN_ROOM_REQ),m_packageLen(8){}
+	short m_packageLen;
+	short m_cmd;
 	int m_roomID;
 };
 
 //加入房间响应
 struct S_JoinRoomACK
 {
-	S_JoinRoomACK() :m_seq(0){}
-	int m_seq;
-	int m_isOK;
+	S_JoinRoomACK() :m_cmd(0), m_isOK(0){}
+	short m_packageLen;
+	short m_cmd;
+	int m_isOK;					//0失败，1成功
 	int m_roomID;
 };
 
 //查询战绩请求
 struct S_SearchZhanjiReq
 {
-	S_SearchZhanjiReq() :m_seq(PP_DOUNIU_QUERY_ZHANJI_REQ){}
-	int m_seq;
+	S_SearchZhanjiReq() :m_cmd(PP_DOUNIU_QUERY_ZHANJI_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //查询战绩响应
 struct S_SearchZhanjiACK
 {
-	S_SearchZhanjiACK() :m_seq(0){}
-	int m_seq;
+	S_SearchZhanjiACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
+	short m_zhanjiLen;
 	string m_zhanji;
 };
 
@@ -130,107 +140,124 @@ struct S_SearchZhanjiACK
 //退出房间请求
 struct S_QuitRoomReq
 {
-	S_QuitRoomReq() :m_seq(PP_DOUNIU_QUIT_ROOM_REQ){}
-	int m_seq;
+	S_QuitRoomReq() :m_cmd(PP_DOUNIU_QUIT_ROOM_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //退出房间响应
 struct S_QuitRoomACK
 {
-	S_QuitRoomACK() :m_seq(0){}
-	int m_seq;
-	int m_isOK;
+	S_QuitRoomACK() :m_cmd(0), m_isOK(0){}
+	short m_packageLen;
+	short m_cmd;
+	int m_isOK;			//0失败，1成功
 	int m_roomID;
 };
 
 //准备游戏请求
 struct S_ReadyPlayReq
 {
-	S_ReadyPlayReq() :m_seq(PP_DOUNIU_READY_REQ){}
-	int m_seq;
+	S_ReadyPlayReq() :m_cmd(PP_DOUNIU_READY_REQ), m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
-//准备游戏响应,未知
+//准备游戏响应
 struct S_ReadyPlayACK
 {
-	S_ReadyPlayACK() :m_seq(0){}
-	int m_seq;
+	S_ReadyPlayACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
+	int m_isOK;						//0失败，1成功
 };
 
 //发牌请求
 struct S_FaPaiReq
 {
-	S_FaPaiReq() :m_seq(PP_DOUNIU_FAPAI_REQ){}
-	int m_seq;
+	S_FaPaiReq() :m_cmd(PP_DOUNIU_FAPAI_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //发牌响应
 struct S_FaPaiACK
 {
-	S_FaPaiACK() :m_seq(0){}
-	int m_seq;
+	S_FaPaiACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
+	short m_pokerlilstLen;
 	string m_pokerList;
 };
 
 //摊牌请求
 struct S_TanPaiReq
 {
-	S_TanPaiReq() :m_seq(PP_DOUNIU_TANPAI_REQ){}
-	int m_seq;
+	S_TanPaiReq() :m_cmd(PP_DOUNIU_TANPAI_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //摊牌响应
 struct S_TanPaiACK
 {
-	S_TanPaiACK() :m_seq(0){}
-	int m_seq;
+	S_TanPaiACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
 	int m_isSmaller;//0:大,1:小
 };
 
 //冲钻石请求
 struct S_BuyDiamondReq
 {
-	S_BuyDiamondReq() :m_seq(PP_DOUNIU_CHONGZHI_REQ){}
-	int m_seq;
+	S_BuyDiamondReq() :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(8), m_wantBuy(0){}
+	short m_packageLen;
+	short m_cmd;
 	int m_wantBuy;
 };
 
 //冲钻石响应
 struct S_BuyDiamondACK
 {
-	S_BuyDiamondACK() :m_seq(0){}
-	int m_seq;
+	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
+	short m_packageLen;
+	short m_cmd;
+	int m_isOK;
 	int m_currentDiamond;
 };
 
 //抢庒请求
 struct S_QiangZhuangReq
 {
-	S_QiangZhuangReq() :m_seq(PP_DOUNIU_QIANGZHUANG_REQ){}
-	int m_seq;
+	S_QiangZhuangReq() :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ),m_packageLen(4){}
+	short m_packageLen;
+	short m_cmd;
 };
 
 //抢庒响应
 struct S_QiangZhuangACK
 {
-	S_QiangZhuangACK() :m_seq(0){}
-	int m_seq;
+	S_QiangZhuangACK() :m_cmd(0),m_ZhuangJiaID(0){}
+	short m_packageLen;
+	short m_cmd;
 	unsigned long long m_ZhuangJiaID;
 };
 
 //押注请求
 struct S_YaZhuReq
 {
-	S_YaZhuReq() :m_seq(PP_DOUNIU_YAZHU_REQ){}
-	int m_seq;
+	S_YaZhuReq() :m_cmd(PP_DOUNIU_YAZHU_REQ),m_packageLen(8){}
+	short m_packageLen;
+	short m_cmd;
 	int m_beishu;
 };
 
 //押注响应
 struct S_YaZhuACK
 {
-	S_YaZhuACK() :m_seq(0){}
-	int m_seq;
+	S_YaZhuACK() :m_cmd(0){}
+	short m_packageLen;
+	short m_cmd;
 	int m_isOK;
 };
 #pragma pack(4)
