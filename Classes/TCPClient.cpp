@@ -28,7 +28,7 @@ void CTCPClient::NetworkThreadFunc()
 		{
 			char buf[g_nMaxRequsetDataSize];
 			memset(buf, 0, g_nMaxRequsetDataSize);
-			int rcvSize = 0;
+			int rcvSize = g_nMaxRequsetDataSize;
 			if (ReceiveMsg(buf, rcvSize))
 			{
 				char* responseData = new char[rcvSize];
@@ -38,6 +38,11 @@ void CTCPClient::NetworkThreadFunc()
 			}
 		}
 		m_requestMutex.unlock();
+#ifdef _WIN32
+		Sleep(30);
+#else
+		usleep(30*1000); // takes microseconds
+#endif
 	}
 }
 
@@ -105,17 +110,6 @@ bool CTCPClient::Create(const char* pszServerIP, int nServerPort, int nBlockSec,
 		}
 	}
 
-#ifdef WIN32
-	DWORD nMode = 1;
-	int nRes = ioctlsocket(m_sockClient, FIONBIO, &nMode);
-	if (nRes == SOCKET_ERROR) {
-		closeSocket();
-		return false;
-	}
-#else
-	// 设置为非阻塞方式
-	fcntl(m_sockClient, F_SETFL, O_NONBLOCK);
-#endif
 
 	unsigned long serveraddr = inet_addr(pszServerIP);
 	if (serveraddr == INADDR_NONE)	// 检查IP地址格式错误
@@ -137,6 +131,17 @@ bool CTCPClient::Create(const char* pszServerIP, int nServerPort, int nBlockSec,
 		}
 		else	// WSAWOLDBLOCK
 		{
+#ifdef WIN32
+			DWORD nMode = 1;
+			int nRes = ioctlsocket(m_sockClient, FIONBIO, &nMode);
+			if (nRes == SOCKET_ERROR) {
+				closeSocket();
+				return false;
+			}
+#else
+			// 设置为非阻塞方式
+			fcntl(m_sockClient, F_SETFL, O_NONBLOCK);
+#endif
 			timeval timeout;
 			timeout.tv_sec = nBlockSec;
 			timeout.tv_usec = 0;

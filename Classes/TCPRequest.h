@@ -15,13 +15,13 @@ public:
 	virtual ~CTCPRequest();
 	void setResponseCallback(const TCPResponseCallback& callback);
 	void setRequestData(char* requestData, int size);
-	void runResponseCallback(void* pResponseData);
+	void runResponseCallback(void* pResponseData);			//只给CTCPClient调用
 	void* getRequestData(){ return m_dataBuf; }
 	int getRequestDataLen(){ return m_nDataLen; }
 private:
 	char m_dataBuf[g_nMaxRequsetDataSize];		//数据缓冲
 	int m_nDataLen;								//实际数据长度
-	TCPResponseCallback m_pCallback;
+	TCPResponseCallback m_pCallback;			//响应回调
 	mutex m_dataMutex;
 	
 };

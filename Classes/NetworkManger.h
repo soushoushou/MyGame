@@ -1,11 +1,9 @@
 #pragma once
 #include <string>
 #include <map>
-#include "network/HttpClient.h"
 #include "TCPClient.h"
 #include "TCPRequest.h"
 USING_NS_CC;
-using namespace network;
 using namespace std;
 
 //ÍøÂçÍ¨ÐÅÀà

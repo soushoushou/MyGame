@@ -35,7 +35,7 @@ USING_NS_CC;
 const string g_strServerIP = "120.24.180.25";
 const int g_nServerPort = 333;
 #define _MAX_MSGSIZE 16 * 1024		// 暂定一个消息最大为16k
-#define BLOCKSECONDS	1			// 读取函数阻塞时间
+#define BLOCKSECONDS	30			// 读取函数阻塞时间
 #define INBUFSIZE	(64*1024)		//	具体尺寸根据剖面报告调整  接收数据的缓存
 #define OUTBUFSIZE	(8*1024)		// 具体尺寸根据剖面报告调整。 发送数据的缓存，当不超过8K时，FLUSH只需要SEND一次
 

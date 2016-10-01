@@ -315,28 +315,3 @@ void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
 	Director::getInstance()->replaceScene(LoginScene::createScene());
 }
 
-
-void MainScene::onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *response)
-{
-	if (!response)
-	{
-		return;
-	}
-	int statusCode = response->getResponseCode();
-	char statusString[64] = {};
-	sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
-	log("response code: %d", statusCode);
-	if (!response->isSucceed())
-	{
-		log("response failed");
-		log("error buffer: %s", response->getErrorBuffer());
-		return;
-	}
-	std::vector<char> *buffer = response->getResponseData();
-	std::string s;
-	for (unsigned int i = 0; i < buffer->size(); i++)
-	{
-		s.push_back((*buffer)[i]);
-	}
-	log("%s",s.c_str());
-}

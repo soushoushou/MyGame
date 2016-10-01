@@ -19,7 +19,6 @@ public:
 	virtual void onExit();
 	virtual ~MainScene();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
-	void onCreateRoomNetworkCallBack(HttpClient *sender, HttpResponse *response);
 	void update(float delta);
 	void buttonCallback(CCNode* pSender);
 private:
@@ -30,7 +29,6 @@ private:
 	void flushNoticeLabel(float delta);			//ÖØ»æ¹«¸æ
 
 private:
-	typedef std::function<void(HttpClient* client, HttpResponse* response)> ccHttpRequestCallback;
 	LabelTTF* m_pNoticeLabel;
 	UserProfileUI* m_pUser;
 	Sprite* m_spRoundRectInNotice;		
