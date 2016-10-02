@@ -7,11 +7,11 @@ USING_NS_CC;
 
 void LoginScene::onCreateUserResponse(void* responseData)
 {
-	log("in response!");
-	S_CreatePlayerACK* ss = (S_CreatePlayerACK*)(responseData);
-	ss->m_packageLen = ntohs(ss->m_packageLen);
-	ss->m_cmd = ntohs(ss->m_cmd);
-	ss->m_statusCode = ntohs(ss->m_statusCode);
+	log("LoginScene::onCreateUserResponse get data!");
+	S_CreatePlayerACK ss = S_CreatePlayerACK::convertDataFromBinaryData(responseData);
+	char buf[1024];
+	sprintf(buf, "len:%d,cmd:%d,status:%d", ss.m_packageLen, ss.m_cmd, ss.m_statusCode);
+	log(buf);
 }
 
 Scene* LoginScene::createScene()
@@ -83,8 +83,8 @@ bool LoginScene::init()
 
 	S_CreatePlayerReq s("alw_223","ALWWW",1);
 	
-	NetworkManger::getInstance()->SendRequest_CreateUser(s, CC_CALLBACK_1(LoginScene::onCreateUserResponse,this));
-	
+	NetworkManger::getInstance()->SendRequest_CreateUser(s, ALW_CALLBACK_1(LoginScene::onCreateUserResponse,this));
+
 	return true;
 }
 void LoginScene::loading() {

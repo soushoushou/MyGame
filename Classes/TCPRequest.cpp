@@ -49,6 +49,6 @@ void CTCPRequest::setResponseCallback(const TCPResponseCallback& callback)
 void CTCPRequest::runResponseCallback(void* pResponseData)
 {
 	m_dataMutex.lock();
-	m_pCallback(this,pResponseData);
+	m_pCallback(pResponseData);
 	m_dataMutex.unlock();
 }

@@ -42,6 +42,11 @@ using namespace std;
 #define PP_DOUNIU_YAZHU_REQ			(50018)
 #define PP_DOUNIU_YAZHU_ACK			(50019)
 
+//8字节主机序转网络序
+unsigned __int64 my_htonll(unsigned __int64 val);
+
+//8字节网络序转主机序
+unsigned __int64 my_ntohll(unsigned __int64 val);
 
 //包结构
 //创建角色请求
@@ -80,6 +85,21 @@ struct S_CreatePlayerReq
 struct S_CreatePlayerACK
 {
 	S_CreatePlayerACK() :m_packageLen(8),m_cmd(0),m_statusCode(0){}
+	//静态函数，用于将二进制数据转换成该结构体
+	static S_CreatePlayerACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_CreatePlayerACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		return s;
+	}
 	short m_packageLen;
 	short m_cmd;
 	int m_statusCode;				//0失败，1成功，2敏感词
@@ -88,26 +108,54 @@ struct S_CreatePlayerACK
 //获取角色信息请求
 struct S_GetPlayerInfoReq
 {
-	S_GetPlayerInfoReq(unsigned long long playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ),m_packageLen(8+sizeof(m_playerID)),
+	S_GetPlayerInfoReq(unsigned __int64 playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
 	m_key(0),m_playerID(playerID)
 	{
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_playerID = htonl(m_playerID);
+		m_playerID = my_htonll(m_playerID);
 	}
 	short m_packageLen;
 	int	  m_key;							//迷之序列号
 	short m_cmd;
-	unsigned long long m_playerID;
+	unsigned __int64 m_playerID;
 };
 
 //获取角色信息响应
 struct S_GetPlayerInfoACK
 {
 	S_GetPlayerInfoACK() :m_cmd(0){}
+	//静态函数，用于将二进制数据转换成该结构体
+	static S_GetPlayerInfoACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_GetPlayerInfoACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
+		pData += 8;
+		memcpy(&s.m_playerNameLen, pData, 2);
+		s.m_playerNameLen = ntohs(s.m_playerNameLen);
+		pData += 2;
+		char buf[1024];
+		memcpy(buf, pData, s.m_playerNameLen);
+		s.m_strPlayerName = buf;
+		pData += s.m_playerNameLen;
+		memcpy(&s.m_sex, pData, 2);
+		s.m_sex = ntohl(s.m_sex);
+		pData += 4;
+		memcpy(&s.m_currentDiamond, pData, 4);
+		s.m_currentDiamond = ntohl(s.m_currentDiamond);
+		return s;
+	}
 	short m_packageLen;
 	short m_cmd;
-	unsigned long long m_playerID;
+	unsigned __int64 m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
@@ -131,6 +179,22 @@ struct S_CreateRoomReq
 struct S_CreateRoomACK
 {
 	S_CreateRoomACK() :m_cmd(0){}
+
+	static S_CreateRoomACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_CreateRoomACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_roomID, pData, 4);
+		s.m_roomID = ntohl(s.m_roomID);
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_roomID;
@@ -155,6 +219,25 @@ struct S_JoinRoomReq
 struct S_JoinRoomACK
 {
 	S_JoinRoomACK() :m_cmd(0), m_isOK(0){}
+
+	static S_JoinRoomACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_JoinRoomACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isOK, pData, 4);
+		s.m_isOK = ntohl(s.m_isOK);
+		pData += 4;
+		memcpy(&s.m_roomID, pData, 4);
+		s.m_roomID = ntohl(s.m_roomID);
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_isOK;					//0失败，1成功
@@ -178,6 +261,26 @@ struct S_SearchZhanjiReq
 struct S_SearchZhanjiACK
 {
 	S_SearchZhanjiACK() :m_cmd(0){}
+
+	static S_SearchZhanjiACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_SearchZhanjiACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_zhanjiLen, pData, 2);
+		s.m_zhanjiLen = ntohl(s.m_zhanjiLen);
+		pData += 2;
+		char buf[2048];
+		memcpy(buf, pData, s.m_zhanjiLen);
+		s.m_zhanji = buf;
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	short m_zhanjiLen;
@@ -193,6 +296,7 @@ struct S_QuitRoomReq
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
 	}
+
 	short m_packageLen;
 	int	  m_key;							//迷之序列号
 	short m_cmd;
@@ -202,6 +306,25 @@ struct S_QuitRoomReq
 struct S_QuitRoomACK
 {
 	S_QuitRoomACK() :m_cmd(0), m_isOK(0){}
+
+	static S_QuitRoomACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_QuitRoomACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isOK, pData, 4);
+		s.m_isOK = ntohl(s.m_isOK);
+		pData += 4;
+		memcpy(&s.m_roomID, pData, 4);
+		s.m_roomID = ntohl(s.m_roomID);
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_isOK;			//0失败，1成功
@@ -225,6 +348,22 @@ struct S_ReadyPlayReq
 struct S_ReadyPlayACK
 {
 	S_ReadyPlayACK() :m_cmd(0){}
+
+	static S_ReadyPlayACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_ReadyPlayACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isOK, pData, 4);
+		s.m_isOK = ntohl(s.m_isOK);
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_isOK;						//0失败，1成功
@@ -247,6 +386,26 @@ struct S_FaPaiReq
 struct S_FaPaiACK
 {
 	S_FaPaiACK() :m_cmd(0){}
+
+	static S_FaPaiACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_FaPaiACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_pokerlilstLen, pData, 2);
+		s.m_pokerlilstLen = ntohs(s.m_pokerlilstLen);
+		pData += 2;
+		char buf[2048];
+		memcpy(buf, pData, s.m_packageLen);
+		s.m_pokerList = buf;
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	short m_pokerlilstLen;
@@ -270,6 +429,22 @@ struct S_TanPaiReq
 struct S_TanPaiACK
 {
 	S_TanPaiACK() :m_cmd(0){}
+
+	static S_TanPaiACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_TanPaiACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isSmaller, pData, 4);
+		s.m_isSmaller = ntohl(s.m_isSmaller);
+		return s;
+	}
+	
 	short m_packageLen;
 	short m_cmd;
 	int m_isSmaller;//0:大,1:小
@@ -294,6 +469,25 @@ struct S_BuyDiamondReq
 struct S_BuyDiamondACK
 {
 	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
+
+	static S_BuyDiamondACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_BuyDiamondACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isOK, pData, 4);
+		s.m_isOK = ntohl(s.m_isOK);
+		pData += 4;
+		memcpy(&s.m_currentDiamond, pData, 4);
+		s.m_currentDiamond = ntohl(s.m_currentDiamond);
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_isOK;
@@ -316,9 +510,26 @@ struct S_QiangZhuangReq
 struct S_QiangZhuangACK
 {
 	S_QiangZhuangACK() :m_cmd(0),m_ZhuangJiaID(0){}
+
+	static S_QiangZhuangACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_QiangZhuangACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_ZhuangJiaID, pData, 4);
+		s.m_ZhuangJiaID = my_ntohll(s.m_ZhuangJiaID);
+
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
-	unsigned long long m_ZhuangJiaID;
+	unsigned __int64 m_ZhuangJiaID;
 };
 
 //押注请求
@@ -339,6 +550,23 @@ struct S_YaZhuReq
 struct S_YaZhuACK
 {
 	S_YaZhuACK() :m_cmd(0){}
+
+	static S_YaZhuACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_YaZhuACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_isOK, pData, 4);
+		s.m_isOK = my_ntohll(s.m_isOK);
+
+		return s;
+	}
+
 	short m_packageLen;
 	short m_cmd;
 	int m_isOK;

@@ -6,7 +6,10 @@ using namespace std;
 USING_NS_CC;
 
 const int g_nMaxRequsetDataSize = 8 * 1024;
-typedef std::function<void(Ref*, void* pResponseData)> TCPResponseCallback;			//响应回调原型
+typedef std::function<void(void* pResponseData)> TCPResponseCallback;			//响应回调原型
+
+//注册回调的宏
+#define ALW_CALLBACK_1(__selector__,__target__) std::bind(&__selector__,__target__, std::placeholders::_1)
 
 class CTCPRequest:public Ref
 {
