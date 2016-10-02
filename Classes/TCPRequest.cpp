@@ -1,4 +1,5 @@
 #include "TCPRequest.h"
+#include "NetworkPackage.h"
 #include <string>
 using namespace std;
 
@@ -12,6 +13,15 @@ CTCPRequest::CTCPRequest() :m_nDataLen(0), m_pCallback(nullptr)
 
 CTCPRequest::~CTCPRequest()
 {
+}
+
+int checkCPUendian(){
+	union {
+		unsigned int a;
+		unsigned char b;
+	}c;
+	c.a = 1;
+	return (c.b == 1);
 }
 
 void CTCPRequest::setRequestData(char* requestData, int size)

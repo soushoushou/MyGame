@@ -35,6 +35,7 @@ void CTCPClient::NetworkThreadFunc()
 				memcpy(responseData, buf, rcvSize);
 				m_pRequest->runResponseCallback(responseData);
 				delete[] responseData;
+				m_pRequest = nullptr;
 			}
 		}
 		m_requestMutex.unlock();
@@ -219,54 +220,82 @@ bool CTCPClient::ReceiveMsg(void* pBuf, int& nSize)
 		return false;
 	}
 
-	// 检查是否有一个消息(小于2则无法获取到消息长度)
-	if (m_nInbufLen < 2) {
-		//  如果没有请求成功  或者   如果没有数据则直接返回
-		if (!recvFromSock() || m_nInbufLen < 2) {		// 这个m_nInbufLen更新了
-			return false;
-		}
-	}
-
-	// 计算要拷贝的消息的大小（一个消息，大小为整个消息的第一个16字节），因为环形缓冲区，所以要分开计算
-	int packsize = (unsigned char)m_bufInput[m_nInbufStart] +
-		(unsigned char)m_bufInput[(m_nInbufStart + 1) % INBUFSIZE] * 256; // 注意字节序，高位+低位
-
-	// 检测消息包尺寸错误 暂定最大16k
-	if (packsize <= 0 || packsize > _MAX_MSGSIZE) {
-		m_nInbufLen = 0;		// 直接清空INBUF
-		m_nInbufStart = 0;
+	int rcvLen = recvFromSock();
+	if (rcvLen <= 0)
+	{
 		return false;
 	}
-
-	// 检查消息是否完整(如果将要拷贝的消息大于此时缓冲区数据长度，需要再次请求接收剩余数据)
-	if (packsize > m_nInbufLen) {
-		// 如果没有请求成功   或者    依然无法获取到完整的数据包  则返回，直到取得完整包
-		if (!recvFromSock() || packsize > m_nInbufLen) {	// 这个m_nInbufLen已更新
-			return false;
-		}
-	}
-
 	// 复制出一个消息
-	if (m_nInbufStart + packsize > INBUFSIZE) {
+	if (m_nInbufStart + rcvLen > INBUFSIZE) {
 		// 如果一个消息有回卷（被拆成两份在环形缓冲区的头尾）
 		// 先拷贝环形缓冲区末尾的数据
 		int copylen = INBUFSIZE - m_nInbufStart;
 		memcpy(pBuf, m_bufInput + m_nInbufStart, copylen);
 
 		// 再拷贝环形缓冲区头部的剩余部分
-		memcpy((unsigned char *)pBuf + copylen, m_bufInput, packsize - copylen);
-		nSize = packsize;
+		memcpy((unsigned char *)pBuf + copylen, m_bufInput, rcvLen - copylen);
+		nSize = rcvLen;
 	}
 	else {
 		// 消息没有回卷，可以一次拷贝出去
-		memcpy(pBuf, m_bufInput + m_nInbufStart, packsize);
-		nSize = packsize;
+		memcpy(pBuf, m_bufInput + m_nInbufStart, rcvLen);
+		nSize = rcvLen;
 	}
-
 	// 重新计算环形缓冲区头部位置
-	m_nInbufStart = (m_nInbufStart + packsize) % INBUFSIZE;
-	m_nInbufLen -= packsize;
-	return	true;
+	m_nInbufStart = (m_nInbufStart + rcvLen) % INBUFSIZE;
+	m_nInbufLen -= rcvLen;
+	return true;
+	
+	
+
+	//// 检查是否有一个消息(小于2则无法获取到消息长度)
+	//if (m_nInbufLen < 2) {
+	//	//  如果没有请求成功  或者   如果没有数据则直接返回
+	//	if (!recvFromSock() || m_nInbufLen < 2) {		// 这个m_nInbufLen更新了
+	//		return false;
+	//	}
+	//}
+
+	//// 计算要拷贝的消息的大小（一个消息，大小为整个消息的第一个16字节），因为环形缓冲区，所以要分开计算
+	//int packsize = (unsigned char)m_bufInput[m_nInbufStart] +
+	//	(unsigned char)m_bufInput[(m_nInbufStart + 1) % INBUFSIZE] * 256; // 注意字节序，高位+低位
+
+	//// 检测消息包尺寸错误 暂定最大16k
+	//if (packsize <= 0 || packsize > _MAX_MSGSIZE) {
+	//	m_nInbufLen = 0;		// 直接清空INBUF
+	//	m_nInbufStart = 0;
+	//	return false;
+	//}
+
+	//// 检查消息是否完整(如果将要拷贝的消息大于此时缓冲区数据长度，需要再次请求接收剩余数据)
+	//if (packsize > m_nInbufLen) {
+	//	// 如果没有请求成功   或者    依然无法获取到完整的数据包  则返回，直到取得完整包
+	//	if (!recvFromSock() || packsize > m_nInbufLen) {	// 这个m_nInbufLen已更新
+	//		return false;
+	//	}
+	//}
+
+	//// 复制出一个消息
+	//if (m_nInbufStart + packsize > INBUFSIZE) {
+	//	// 如果一个消息有回卷（被拆成两份在环形缓冲区的头尾）
+	//	// 先拷贝环形缓冲区末尾的数据
+	//	int copylen = INBUFSIZE - m_nInbufStart;
+	//	memcpy(pBuf, m_bufInput + m_nInbufStart, copylen);
+
+	//	// 再拷贝环形缓冲区头部的剩余部分
+	//	memcpy((unsigned char *)pBuf + copylen, m_bufInput, packsize - copylen);
+	//	nSize = packsize;
+	//}
+	//else {
+	//	// 消息没有回卷，可以一次拷贝出去
+	//	memcpy(pBuf, m_bufInput + m_nInbufStart, packsize);
+	//	nSize = packsize;
+	//}
+
+	//// 重新计算环形缓冲区头部位置
+	//m_nInbufStart = (m_nInbufStart + packsize) % INBUFSIZE;
+	//m_nInbufLen -= packsize;
+	//return	true;
 }
 
 bool CTCPClient::hasError()
@@ -285,10 +314,10 @@ bool CTCPClient::hasError()
 }
 
 // 从网络中读取尽可能多的数据，实际向服务器请求数据的地方
-bool CTCPClient::recvFromSock(void)
+int CTCPClient::recvFromSock(void)
 {
 	if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
-		return false;
+		return 0 ;
 	}
 
 	// 接收第一段数据
@@ -309,7 +338,7 @@ bool CTCPClient::recvFromSock(void)
 		m_nInbufLen += inlen;
 
 		if (m_nInbufLen > INBUFSIZE) {
-			return false;
+			return 0;
 		}
 
 		// 接收第二段数据(一次接收没有完成，接收第二段数据)
@@ -321,35 +350,34 @@ bool CTCPClient::recvFromSock(void)
 			if (inlen > 0) {
 				m_nInbufLen += inlen;
 				if (m_nInbufLen > INBUFSIZE) {
-					return false;
+					return 0;
 				}
 			}
 			else if (inlen == 0) {
 				Destroy();
-				return false;
+				return 0;
 			}
 			else {
 				// 连接已断开或者错误（包括阻塞）
 				if (hasError()) {
 					Destroy();
-					return false;
+					return 0;
 				}
 			}
 		}
 	}
 	else if (inlen == 0) {
-		Destroy();
-		return false;
+		return 0;
 	}
 	else {
 		// 连接已断开或者错误（包括阻塞）
 		if (hasError()) {
 			Destroy();
-			return false;
+			return 0;
 		}
 	}
 
-	return true;
+	return inlen;
 }
 
 bool CTCPClient::Flush(void)		//? 如果 OUTBUF > SENDBUF 则需要多次SEND（）

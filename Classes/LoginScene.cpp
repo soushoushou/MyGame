@@ -8,6 +8,10 @@ USING_NS_CC;
 void LoginScene::onCreateUserResponse(void* responseData)
 {
 	log("in response!");
+	S_CreatePlayerACK* ss = (S_CreatePlayerACK*)(responseData);
+	ss->m_packageLen = ntohs(ss->m_packageLen);
+	ss->m_cmd = ntohs(ss->m_cmd);
+	ss->m_statusCode = ntohs(ss->m_statusCode);
 }
 
 Scene* LoginScene::createScene()
@@ -77,7 +81,7 @@ bool LoginScene::init()
 	// add the sprite as a child to this layer
 	this->addChild(sprite, 0);
 
-	S_CreatePlayerReq s;
+	S_CreatePlayerReq s("alw_223","ALWWW",1);
 	
 	NetworkManger::getInstance()->SendRequest_CreateUser(s, CC_CALLBACK_1(LoginScene::onCreateUserResponse,this));
 	
