@@ -1,5 +1,5 @@
 #include "TCPClient.h"
-
+#include "NetworkManger.h"
 
 CTCPClient::CTCPClient()
 {
@@ -35,10 +35,8 @@ void CTCPClient::NetworkThreadFunc()
 			int rcvSize = g_nMaxRequsetDataSize;
 			if (ReceiveMsg(buf, rcvSize))
 			{
-				char* responseData = new char[rcvSize];
-				memcpy(responseData, buf, rcvSize);
-				m_pRequest->runResponseCallback(responseData);
-				delete[] responseData;
+				//往消息队列添加ack
+				NetworkManger::getInstance()->pushACKQueue(buf, rcvSize);
 				m_pRequest = nullptr;
 			}
 			else
@@ -260,6 +258,15 @@ bool CTCPClient::ReceiveMsg(void* pBuf, int& nSize)
 	return true;
 }
 
+bool CTCPClient::isConnected()
+{
+	if (m_sockClient == INVALID_SOCKET)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool CTCPClient::hasError()
 {
 #ifdef WIN32
@@ -368,7 +375,6 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 	}
 	else {
 		if (hasError()) {
-			Destroy();
 			return false;
 		}
 	}

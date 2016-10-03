@@ -45,15 +45,15 @@ public:
 	~CTCPClient();
 
 	bool sendTCPRequset(CTCPRequest* request);
-	
-
+	bool	Create(const char* pszServerIP, int nServerPort, int nBlockSec = BLOCKSECONDS, bool bKeepAlive = false);
+	void	Destroy(void);
+	bool isConnected();
 private:
 	
-	bool	Create(const char* pszServerIP, int nServerPort, int nBlockSec = BLOCKSECONDS, bool bKeepAlive = false);
 	void	NetworkThreadFunc();					//处理网络IO的线程函数
 	bool	Flush(void);
 	bool	Check(void);
-	void	Destroy(void);
+	
 	SOCKET	GetSocket(void) const { return m_sockClient; }
 	bool	ReceiveMsg(void* pBuf, int& nSize);
 	bool	SendMsg(void* pBuf, int nSize);

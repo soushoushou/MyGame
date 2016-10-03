@@ -15,15 +15,6 @@ CTCPRequest::~CTCPRequest()
 {
 }
 
-int checkCPUendian(){
-	union {
-		unsigned int a;
-		unsigned char b;
-	}c;
-	c.a = 1;
-	return (c.b == 1);
-}
-
 void CTCPRequest::setRequestData(char* requestData, int size)
 {
 	m_dataMutex.lock();
@@ -36,19 +27,5 @@ void CTCPRequest::setRequestData(char* requestData, int size)
 	}
 	memcpy(m_dataBuf, requestData, size);
 	m_nDataLen = size;
-	m_dataMutex.unlock();
-}
-
-void CTCPRequest::setResponseCallback(const TCPResponseCallback& callback)
-{
-	m_dataMutex.lock();
-	m_pCallback = callback;
-	m_dataMutex.unlock();
-}
-
-void CTCPRequest::runResponseCallback(void* pResponseData)
-{
-	m_dataMutex.lock();
-	m_pCallback(pResponseData);
 	m_dataMutex.unlock();
 }

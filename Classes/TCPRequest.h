@@ -16,9 +16,7 @@ class CTCPRequest:public Ref
 public:
 	CTCPRequest();
 	virtual ~CTCPRequest();
-	void setResponseCallback(const TCPResponseCallback& callback);
 	void setRequestData(char* requestData, int size);
-	void runResponseCallback(void* pResponseData);			//只给CTCPClient调用
 	void* getRequestData(){ return m_dataBuf; }
 	int getRequestDataLen(){ return m_nDataLen; }
 private:

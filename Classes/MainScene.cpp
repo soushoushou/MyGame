@@ -55,13 +55,6 @@ bool MainScene::init()
 	return true;
 }
 
-Scene* MainScene::createScene()
-{
-	Scene* scene = Scene::create();
-	MainScene* p = MainScene::create();
-	scene->addChild(p);
-	return scene;
-}
 
 //初始化背景
 bool MainScene::initBackground()
@@ -143,6 +136,16 @@ bool MainScene::initButtons()
 	Button* pShopBtn = Button::create("MainScene/shop-normal.png", "MainScene/shop-pressed.png");
 	if (!pShopBtn) return false;
 
+	this->addChild(pCreateRoomBtn);
+	this->addChild(pJoinRoomBtn);
+	this->addChild(pShopBtn);
+
+	this->addChild(pRankBtn);
+
+	this->addChild(pFreedomFightBtn);
+	this->addChild(pSettingBtn);
+	this->addChild(pBackBtn);
+	this->addChild(pNoticeBtn);
 	
 	pJoinRoomBtn->setTag(TAG_JOINGAME_BTN);
 	pCreateRoomBtn->setTag(TAG_CREATEROOM_BTN);
@@ -180,16 +183,7 @@ bool MainScene::initButtons()
 	pBackBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 	pNoticeBtn->addTouchEventListener(CC_CALLBACK_2(MainScene::onBtnTouch, this));
 
-	this->addChild(pCreateRoomBtn);
-	this->addChild(pJoinRoomBtn);
-	this->addChild(pShopBtn);
 
-	this->addChild(pRankBtn);
-
-	this->addChild(pFreedomFightBtn);
-	this->addChild(pSettingBtn);
-	this->addChild(pBackBtn);
-	this->addChild(pNoticeBtn);
 	return true;
 }
 

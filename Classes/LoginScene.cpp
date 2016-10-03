@@ -4,29 +4,6 @@
 #include "GameSocket.h"
 USING_NS_CC;
 
-void LoginScene::onCreateUserResponse(void* responseData)
-{
-	log("LoginScene::onCreateUserResponse get data!");
-	S_CreatePlayerACK ss = S_CreatePlayerACK::convertDataFromBinaryData(responseData);
-	char buf[1024];
-	sprintf(buf, "len:%d,cmd:%d,status:%d", ss.m_packageLen, ss.m_cmd, ss.m_statusCode);
-	log(buf);
-
-	//auto item = this->getChildByName("login_button");
-	//item->setVisible(false);
-	//loading();
-
-	//CCTransitionScene * reScene = NULL;
-	//CCScene * s = MainScene::scene();
-	//float t = 1.2f;
-
-	////    CCTransitionJumpZoom
-	////    作用： 创建一个跳动的过渡动画
-	////    参数1：过渡动作的时间
-	////    参数2：切换到目标场景的对象
-	//reScene = CCTransitionJumpZoom::create(t, s);
-	//CCDirector::sharedDirector()->replaceScene(reScene);
-}
 
 Scene* LoginScene::createScene()
 {
@@ -43,6 +20,44 @@ Scene* LoginScene::createScene()
 	return scene;
 }
 
+void LoginScene::update(float dt)
+{
+	//查看ack消息队列是否为空
+	if (!NetworkManger::getInstance()->ackQueueIsEmpty())
+	{
+		short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
+		//判断该ack的协议号是不是10001
+		if (cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK)			
+		{
+			//获取响应数据
+			S_CreatePlayerACK ack =S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+			log("LoginScene::onCreateUserResponse get data!");
+			char buf[1024];
+			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_statusCode);
+			log(buf);
+
+			NetworkManger::getInstance()->shutDownNetwork();
+
+			//更新ui
+			auto item = this->getChildByName("login_button");
+			item->setVisible(false);
+			loading();
+
+			CCTransitionScene * reScene = NULL;
+			CCScene * s = MainScene::scene();
+			float t = 1.2f;
+
+			//    CCTransitionJumpZoom
+			//    作用： 创建一个跳动的过渡动画
+			//    参数1：过渡动作的时间
+			//    参数2：切换到目标场景的对象
+			reScene = CCTransitionJumpZoom::create(t, s);
+			CCDirector::sharedDirector()->replaceScene(reScene);
+		}
+	}
+}
+
 // on "init" you need to initialize your instance
 bool LoginScene::init()
 {
@@ -52,6 +67,8 @@ bool LoginScene::init()
 	{
 		return false;
 	}
+
+	NetworkManger::getInstance()->startNetwork();
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -94,6 +111,9 @@ bool LoginScene::init()
 
 	// add the sprite as a child to this layer
 	this->addChild(sprite, 0);
+
+	//启动update函数，可用于主线程监听ack消息
+	schedule(schedule_selector(LoginScene::update));
 
 	return true;
 }
@@ -146,9 +166,10 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 {
 	//auto scene = Director::getInstance()->getRunningScene();
 
-	S_CreatePlayerReq s("alw_223", "ALWWW", 1);
+	S_CreatePlayerReq ss("alw_223", "ALWWW", 1);
 
-	NetworkManger::getInstance()->SendRequest_CreateUser(s, ALW_CALLBACK_1(LoginScene::onCreateUserResponse, this));
+	NetworkManger::getInstance()->SendRequest_CreateUser(ss);
+
 
 
 	//auto director = Director::getInstance();

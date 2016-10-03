@@ -48,6 +48,42 @@ unsigned __int64 my_htonll(unsigned __int64 val);
 //8字节网络序转主机序
 unsigned __int64 my_ntohll(unsigned __int64 val);
 
+//响应数据块
+struct S_ACKResponse
+{
+	S_ACKResponse(){
+		memset(m_buf, 0, 3 * 1024);
+		m_len = 0;
+	}
+	S_ACKResponse(void* data, int size)
+	{
+		memset(m_buf, 0, 3 * 1024);
+		memcpy(m_buf, data, size);
+		m_len = size;
+	}
+	S_ACKResponse(const S_ACKResponse& s)
+	{
+		if (this == &s)
+		{
+			return;
+		}
+		memcpy(m_buf, s.m_buf, s.m_len);
+		m_len = s.m_len;
+	}
+	S_ACKResponse operator = (S_ACKResponse& s)
+	{
+		if (this == &s)
+		{
+			return *this;
+		}
+		memcpy(m_buf, s.m_buf, s.m_len);
+		m_len = s.m_len;
+		return *this;
+	}
+	char m_buf[3 * 1024];
+	int m_len;
+};
+
 //包结构
 //创建角色请求
 #pragma pack(1)

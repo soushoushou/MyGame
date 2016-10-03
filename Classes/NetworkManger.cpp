@@ -32,7 +32,7 @@ NetworkManger::~NetworkManger()
 
 
 
-bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -64,13 +64,13 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData,
 	
 	//发送
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete [] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -83,13 +83,13 @@ bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData, c
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -104,14 +104,14 @@ bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData, c
 
 	bool ret = false;
 	
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 
 	return ret;
 }
 
-bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -124,13 +124,13 @@ bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData, const TCPRe
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -144,13 +144,13 @@ bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestD
 	memcpy(pIndex, ((char*)&requestData.m_playerID), 8);
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -164,12 +164,12 @@ bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData, const
 	memcpy(pIndex, ((char*)&requestData.m_roomID), 4);
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -182,13 +182,13 @@ bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData,
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -201,13 +201,13 @@ bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData, const
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -220,13 +220,13 @@ bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData, con
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -239,13 +239,13 @@ bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestDat
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -258,13 +258,13 @@ bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData, const TCP
 	pIndex += 2;
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 {
 	//处理数据
 	char* dataBuf = new char[requestData.m_packageLen];
@@ -278,20 +278,89 @@ bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData, const TCPRe
 	memcpy(pIndex, ((char*)&requestData.m_beishu), 4);
 
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen), responseCallback);
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
 }
 
-bool NetworkManger::SendRequest(void* requestData, int size, const TCPResponseCallback& responseCallback)
+bool NetworkManger::SendRequest(void* requestData, int size)
 {
 	CTCPRequest *request = new CTCPRequest;
 	request->retain();
 	request->setRequestData((char*)requestData, size);
-	request->setResponseCallback(responseCallback);
 	bool ret = false;
 	ret= m_tcpClient.sendTCPRequset(request);
 	request->release();
 	return ret;
+}
+
+void NetworkManger::shutDownNetwork()
+{
+	m_tcpClient.Destroy();
+}
+
+void NetworkManger::startNetwork()
+{
+	if (!m_tcpClient.isConnected())
+	{
+		m_tcpClient.Create(g_strServerIP.c_str(), g_nServerPort);
+	}
+}
+
+bool  NetworkManger::CACKResponseQueue::isEmpty()
+{
+	return m_queue.empty();
+}
+
+S_ACKResponse NetworkManger::CACKResponseQueue::getFrontFromQueue()
+{
+	if (m_queue.empty())
+	{
+		S_ACKResponse S;
+		return S;
+	}
+	return m_queue.front();
+}
+
+void NetworkManger::CACKResponseQueue::pushACKResponse(void* responseData, int size)
+{
+	S_ACKResponse s(responseData, size);
+	m_queue.push_back(s);
+}
+
+void NetworkManger::CACKResponseQueue::popACKResponse()
+{
+	if (!m_queue.empty())
+	{
+		m_queue.pop_front();
+	}
+}
+
+bool NetworkManger::ackQueueIsEmpty()
+{
+	return m_ackQueue.isEmpty();
+}
+
+void NetworkManger::pushACKQueue(void* data, int size)
+{
+	m_ackQueue.pushACKResponse(data, size);
+}
+
+void NetworkManger::popACKQueue()
+{
+	m_ackQueue.popACKResponse();
+}
+
+short NetworkManger::getQueueFrontACKCmd()
+{
+	short cmd = 0;
+	S_ACKResponse s = m_ackQueue.getFrontFromQueue();
+	memcpy(&cmd, s.m_buf + 2, 2);
+	return ntohs(cmd);
+}
+
+void* NetworkManger::getQueueFrontACKBinaryData()
+{
+	return m_ackQueue.getFrontFromQueue().m_buf;
 }
