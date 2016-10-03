@@ -41,14 +41,14 @@ const int g_nServerPort = 333/*9999*/;
 
 class CTCPClient {
 public:
-	static CTCPClient *getInstance();
-	static void destroyInstance();
+	CTCPClient(void);
+	~CTCPClient();
 
 	bool sendTCPRequset(CTCPRequest* request);
 	
 
 private:
-	CTCPClient(void);
+	
 	bool	Create(const char* pszServerIP, int nServerPort, int nBlockSec = BLOCKSECONDS, bool bKeepAlive = false);
 	void	NetworkThreadFunc();					//处理网络IO的线程函数
 	bool	Flush(void);
@@ -64,7 +64,7 @@ private:
 	SOCKET	m_sockClient;
 
 	// 发送数据缓冲
-	char	m_bufOutput[OUTBUFSIZE];	//? 可优化为指针数组
+	char	m_bufOutput[OUTBUFSIZE];	// 可优化为指针数组
 	int		m_nOutbufLen;
 
 	// 环形缓冲区
@@ -72,7 +72,6 @@ private:
 	int		m_nInbufLen;
 	int		m_nInbufStart;				// INBUF使用循环式队列，该变量为队列起点，0 - (SIZE-1)
 
-	static CTCPClient* m_pTCPClient;
 	CTCPRequest* m_pRequest;
 	mutex m_requestMutex;
 };

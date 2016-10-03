@@ -1,7 +1,7 @@
 #include "AppDelegate.h"
 #include "MainScene.h"
 #include "LoginScene.h"
-#include "SimpleAudioEngine.h"   
+#include "SimpleAudioEngine.h"  
 
 using namespace CocosDenshion;
 
@@ -13,6 +13,7 @@ static cocos2d::Size mediumResolutionSize = cocos2d::Size(1136, 640);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {
+	NetworkManger::getInstance();
 }
 
 AppDelegate::~AppDelegate()

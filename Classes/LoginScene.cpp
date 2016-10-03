@@ -86,6 +86,21 @@ void LoginScene::onCreateUserResponse(void* responseData)
 	char buf[1024];
 	sprintf(buf, "len:%d,cmd:%d,status:%d", ss.m_packageLen, ss.m_cmd, ss.m_statusCode);
 	log(buf);
+
+	//auto item = this->getChildByName("login_button");
+	//item->setVisible(false);
+	//loading();
+
+	//CCTransitionScene * reScene = NULL;
+	//CCScene * s = MainScene::scene();
+	//float t = 1.2f;
+
+	////    CCTransitionJumpZoom
+	////    作用： 创建一个跳动的过渡动画
+	////    参数1：过渡动作的时间
+	////    参数2：切换到目标场景的对象
+	//reScene = CCTransitionJumpZoom::create(t, s);
+	//CCDirector::sharedDirector()->replaceScene(reScene);
 }
 
 Scene* LoginScene::createScene()
@@ -155,10 +170,6 @@ bool LoginScene::init()
 	// add the sprite as a child to this layer
 	this->addChild(sprite, 0);
 
-	S_CreatePlayerReq s("alw_223","ALWWW",1);
-	
-	NetworkManger::getInstance()->SendRequest_CreateUser(s, ALW_CALLBACK_1(LoginScene::onCreateUserResponse,this));
-
 	return true;
 }
 void LoginScene::loading() {
@@ -209,20 +220,11 @@ void LoginScene::loading() {
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
 	//auto scene = Director::getInstance()->getRunningScene();
-	auto item = this->getChildByName("login_button");
-	item->setVisible(false);
-	loading();
 
-	CCTransitionScene * reScene = NULL;
-	CCScene * s = MainScene::scene();
-	float t = 1.2f;
+	S_CreatePlayerReq s("alw_223", "ALWWW", 1);
 
-	//    CCTransitionJumpZoom
-	//    作用： 创建一个跳动的过渡动画
-	//    参数1：过渡动作的时间
-	//    参数2：切换到目标场景的对象
-	    reScene = CCTransitionJumpZoom ::create(t , s);
-	   CCDirector::sharedDirector()->replaceScene(reScene);
+	NetworkManger::getInstance()->SendRequest_CreateUser(s, ALW_CALLBACK_1(LoginScene::onCreateUserResponse, this));
+
 
 	//auto director = Director::getInstance();
 	//auto scene = MainScene::scene();
