@@ -45,7 +45,6 @@ PopupLayer::PopupLayer() :
 #define TAG_9_BTN 21
 #define TAG_DEL_BTN 22
 #define TAG_JOINROOM_BTN 23
-
 PopupLayer::~PopupLayer() {
 	CC_SAFE_RELEASE(m__pMenu);
 	CC_SAFE_RELEASE(m__sfBackGround);
@@ -95,6 +94,7 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
 	layer->m_dialogContentSize = dialogSize;
 	auto size = Director::getInstance()->getWinSize();
+
 	
 	auto pEditBox_roomNum = EditBox::create(CCSizeMake(493, 87), Scale9Sprite::create("popuplayer/EditBoxBg.png"));
 	//auto size = Director::getInstance()->getWinSize();
@@ -110,7 +110,7 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	pEditBox_roomNum->setDelegate(layer);
 	pEditBox_roomNum->attachWithIME();
 
-	layer->addChild(pEditBox_roomNum,10,10);
+	layer->addChild(pEditBox_roomNum,10);
 	LabelTTF* label = LabelTTF::create(g_inputRoomNum, "", 36);
 	label->setPosition(ccp(roomNumPosition.x - pEditBox_roomNum->getContentSize().width / 2 - 20 - label->getContentSize().width / 2, roomNumPosition.y));
 	label->setColor(Color3B(255, 255, 255));
@@ -122,11 +122,6 @@ PopupLayer* PopupLayer::joinRoomDialog(const char* backgroundImage, Size dialogS
 	sendBtn->setScaleY(80 / sendBtn->getContentSize().height);
 	sendBtn->setPosition(ccp(roomNumPosition.x+pEditBox_roomNum->getContentSize().width/2+5+sendBtn->getContentSize().width/2, roomNumPosition.y));
 	sendBtn->setTag(TAG_SEND_BTN);
-
-	//获取编辑框内的文字
-	//pEditBox_roomNum->setText("123");
-	CCLOG("Text:%s", pEditBox_roomNum->getText());
-
 	sendBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(sendBtn, 20);
 	return layer;
@@ -143,14 +138,12 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	auto editBgPs =ccp((size.width) / 2, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
 	sprite->setPosition(editBgPs);
 	layer->addChild(sprite,10);
-
-	
-LabelTTF* numLabel = LabelTTF::create("", "", 40);
+	LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	numLabel->setPosition(editBgPs);
 	numLabel->setName("numLabel");
 	numLabel->setColor(Color3B(0, 0, 0));
 	layer->addChild(numLabel, 10);
-	LabelTTF* titleLable = LabelTTF::create("title", "", 40);
+	LabelTTF* titleLable = LabelTTF::create("请输入房间号", "", 40);
 	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
 	titleLable->setColor(Color3B(0, 0, 0));
 	layer->addChild(titleLable, 10);
@@ -183,7 +176,7 @@ LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	if (!m8Btn) return NULL;
 	Button* m9Btn = Button::create("popuplayer/9.png", "popuplayer/9_pressed.png");
 	if (!m9Btn) return NULL;
-	Button* delBtn = Button::create("popuplayer/delete.png", "popuplayer/delete-pressed.png");
+	Button* delBtn = Button::create("popuplayer/delete.png", "popuplayer/delete_pressed.png");
 	if (!delBtn) return NULL;
 	Button* sendBtn = Button::create("popuplayer/sendBtnJoin.png", "popuplayer/sendBtnJoin_pressed.png");
 	if (!sendBtn) return NULL;
@@ -247,7 +240,8 @@ LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	sendBtn->setPosition(sendBtnPosition);
 	sendBtn->setTag(TAG_JOINROOM_BTN);
 	sendBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
-	layer->addChild(sendBtn, 10);	return layer;
+	layer->addChild(sendBtn, 10);
+	return layer;
 }
 PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialogSize) {
 
@@ -800,11 +794,11 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 	{
 		Button* butten = (Button*)pSender;
 		unsigned int tag = butten->getTag();
-if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
+		if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
 			LabelTTF* label = (LabelTTF *)butten->getParent()->getChildByName("numLabel");
 			if (label == NULL)
 				return;
-			string num = label->getString();
+			string num = (string)label->getString();
 			int count = num.length();
 			if (tag <= TAG_9_BTN)
 			{
@@ -835,7 +829,8 @@ if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
 				Director::getInstance()->replaceScene(GamePlayScene::createScene());
 			}
 			return;
-		}		switch (tag)
+		}
+		switch (tag)
 		{
 		case TAG_CREATEROOM_BTN:
 			Director::getInstance()->replaceScene(GamePlayScene::createScene());
@@ -843,18 +838,13 @@ if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
 		case TAG_CLOSEDIALOG_BTN:
 			butten->getParent()->removeFromParent();
 			break;
-		case TAG_SEND_BTN:
-		{
-			//获取房间号
-			//auto s = this->getChildByTag(10);
-			/*auto s = pEditBox_roomNum->getText();
-			CCLOG("offset=%s", s);*/
-			Director::getInstance()->replaceScene(GamePlayScene::createScene());
+		case TAG_SEND_BTN:						
+				Director::getInstance()->replaceScene(GamePlayScene::createScene());			
 			break;
-		}
 		case TAG_LOGOUT_BTN:
 			butten->getParent()->removeFromParent();
 			break;
+
 		case TAG_BACK_BTN:
 			if (m_callback&& m_callbackListener) {
 				(m_callbackListener->*m_callback)(butten);
@@ -919,6 +909,8 @@ void PopupLayer::onEnter() {
 		NULL
 	);
 	background->runAction(popupLayer);
+
+
 
 }
 

@@ -3,7 +3,81 @@
 #include "MainScene.h"
 #include "GameSocket.h"
 USING_NS_CC;
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <sys/types.h>
+#include <in.h>
+#include <filio.h>
+#include <errno.h>
+#include <curl.h>
+#include <fcntl.h>
+extern int errno;
+#define ZERO (fd_set *)0
+int iptoint(const char *ip)
+{
+	return ntohl(inet_addr(ip));
+}
+int inttoip(int ip_num, char *ip)
+{
+	strcpy(ip, (char *)inet_ntoa(htonl(ip_num)));
+}
+int connect_test(const char *proxy, int port)
+{
+	int sock;
+	struct sockaddr_in s_addr;
+	struct fd_set mask;
+	struct timeval timeout;
+	unsigned long flag = 1;
+	/*创建套接字*/
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock == -1)
+	{
+		return 0;
+	}
+	s_addr.sin_family = AF_INET;
+	s_addr.sin_addr.s_addr = htonl(iptoint(proxy)); // 要扫描的地址
+	s_addr.sin_port = htons(port); // 要扫描的端口
+								   /*调用ioctlsocket()设置套接字为非阻塞模式*/
+	if (fcntl(sock, F_SETFL, &flag) == -1)
+	{
+		return 0;
+	}
+	/*调用connect()连接远程主机端口*/
+	connect(sock, (struct sockaddr*) &s_addr, sizeof(s_addr));
+	timeout.tv_sec = 5; // 超时限制为18秒
+	timeout.tv_usec = 0;
+	FD_ZERO(&mask); // 清空集合mask
+	FD_SET(sock, &mask); // 将sock放入集合mask中
 
+	int len = sizeof(int);
+	int error;
+	/*用select() 处理扫描结果*/
+	switch (select(sock + 1, ZERO, &mask, ZERO, &timeout))
+	{
+		/*select error*/
+	case -1:
+		close(sock);
+		return 0;
+		/*超时*/
+	case 0:
+		close(sock);
+		return 0;
+		/**/
+	default:
+		printf("123\n");
+		/*针对防火墙*/
+		getsockopt(sock, SOL_SOCKET, SO_ERROR, &error, &len);
+		/*关闭sock*/
+		close(sock);
+		printf("error:%d\n", error);
+
+		if (error == 0)
+			return 1;
+		else
+			return 0;
+	}
+}
 
 void LoginScene::onCreateUserResponse(void* responseData)
 {
