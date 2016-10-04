@@ -12,6 +12,7 @@ USING_NS_CC;
 #include <errno.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #define SOCKET int
 #define SOCKET_ERROR -1

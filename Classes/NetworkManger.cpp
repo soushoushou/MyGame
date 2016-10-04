@@ -34,7 +34,7 @@ NetworkManger::~NetworkManger()
 
 bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -47,13 +47,19 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 	pIndex += 2;
 	for (int i = 0; i <= requestData.m_account.length(); ++i)
 	{
-		(char)(*pIndex++) = requestData.m_account[i];
-	}
-	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
+//		*pIndex = requestData.m_account[i];
+        memcpy(pIndex,requestData.m_account.c_str(),requestData.m_account.length());
+        pIndex+=requestData.m_account.length();
+        
+    }
+    memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
 	for (int i = 0; i <= requestData.m_roleName.length(); ++i)
 	{
-		(char)(*pIndex++) = requestData.m_roleName[i];
+//		(char)(*pIndex) = requestData.m_roleName[i];
+//        pIndex++;
+        memcpy(pIndex,requestData.m_roleName.c_str(),requestData.m_roleName.length());
+        pIndex+=requestData.m_roleName.length();
 	}
 	memcpy(pIndex, ((char*)&requestData.m_sex), 4);
 	pIndex += 4;
@@ -62,7 +68,7 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 	memcpy(pIndex, ((char*)&requestData.m_yanZhengTime), 4);
 	pIndex += 4;
 	
-	//·¢ËÍ
+	//âˆ‘Â¢Ã€Ã•
 	bool ret = false;
 	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
@@ -72,7 +78,7 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 
 bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -91,7 +97,7 @@ bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 
 bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -113,7 +119,7 @@ bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 
 bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -132,7 +138,7 @@ bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 
 bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -152,7 +158,7 @@ bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestD
 
 bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -171,7 +177,7 @@ bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 
 bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -190,7 +196,7 @@ bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 
 bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -209,7 +215,7 @@ bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 
 bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -228,7 +234,7 @@ bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 
 bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -247,7 +253,7 @@ bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestDat
 
 bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
@@ -266,7 +272,7 @@ bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 
 bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 {
-	//´¦ÀíÊı¾İ
+	//Â¥Â¶Â¿ÃŒÂ ËÃ¦â€º
 	char* dataBuf = new char[requestData.m_packageLen];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);

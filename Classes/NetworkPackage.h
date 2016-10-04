@@ -16,7 +16,7 @@
 
 #endif
 using namespace std;
-//°üºê
+//âˆÂ¸âˆ«Ã
 #define PP_DOUNIU_CREAT_ACCOUNT_REQ	(10000)
 #define PP_DOUNIU_CREAT_ACCOUNT_ACK	(10001)
 #define PP_DOUNIU_GET_ROLEINFO_REQ	(10002)
@@ -42,13 +42,14 @@ using namespace std;
 #define PP_DOUNIU_YAZHU_REQ			(50018)
 #define PP_DOUNIU_YAZHU_ACK			(50019)
 
-//8×Ö½ÚÖ÷»úĞò×ªÍøÂçĞò
-unsigned __int64 my_htonll(unsigned __int64 val);
 
-//8×Ö½ÚÍøÂçĞò×ªÖ÷»úĞò
-unsigned __int64 my_ntohll(unsigned __int64 val);
+//8â—ŠÃ·Î©â„Ã·ËœÂªË™â€“Ãšâ—Šâ„¢Ã•Â¯Â¬Ãâ€“Ãš
+unsigned long long my_htonll(unsigned long long val);
 
-//ÏìÓ¦Êı¾İ¿é
+//8â—ŠÃ·Î©â„Ã•Â¯Â¬Ãâ€“Ãšâ—Šâ„¢Ã·ËœÂªË™â€“Ãš
+unsigned long long my_ntohll(unsigned long long val);
+
+//Å“Ãâ€Â¶Â ËÃ¦â€ºÃ¸Ãˆ
 struct S_ACKResponse
 {
 	S_ACKResponse(){
@@ -84,8 +85,8 @@ struct S_ACKResponse
 	int m_len;
 };
 
-//°ü½á¹¹
-//´´½¨½ÇÉ«ÇëÇó
+//âˆÂ¸Î©Â·Ï€Ï€
+//Â¥Â¥Î©Â®Î©Â«â€¦Â´Â«ÃÂ«Ã›
 #pragma pack(1)
 struct S_CreatePlayerReq
 {
@@ -95,7 +96,7 @@ struct S_CreatePlayerReq
 		m_strAccountLen = m_account.length()+1;
 		m_strRoleNameLen = m_roleName.length()+1;
 		m_packageLen = 4 + 4 + 2 + m_strAccountLen + 2 + m_strRoleNameLen + 4 + 4 + 4;
-		//×ª»»×Ö½ÚĞò
+		//â—Šâ„¢ÂªÂªâ—ŠÃ·Î©â„â€“Ãš
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_strAccountLen = htons(m_strAccountLen);
@@ -105,23 +106,23 @@ struct S_CreatePlayerReq
 		m_yanZhengTime = htonl(m_yanZhengTime);
 
 	}
-	short m_packageLen;						//°ü³¤
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
-	short m_cmd;							//Ğ­ÒéºÅ
-	short m_strAccountLen;					//ÕËºÅ³¤¶È
-	string m_account;						//ÕËºÅ
-	short m_strRoleNameLen;					//½ÇÉ«Ãû³¤¶È
-	string m_roleName;						//½ÇÉ«Ãû
-	int m_sex;								//ĞÔ±ğ
-	int m_yanZhengMa;						//ÑéÖ¤Âë	
-	int m_yanZhengTime;						//ÑéÖ¤Ê±¼ä
+	short m_packageLen;						//âˆÂ¸â‰¥Â§
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
+	short m_cmd;							//â€“â‰ â€œÃˆâˆ«â‰ˆ
+	short m_strAccountLen;					//â€™Ã€âˆ«â‰ˆâ‰¥Â§âˆ‚Â»
+	string m_account;						//â€™Ã€âˆ«â‰ˆ
+	short m_strRoleNameLen;					//Î©Â«â€¦Â´âˆšËšâ‰¥Â§âˆ‚Â»
+	string m_roleName;						//Î©Â«â€¦Â´âˆšËš
+	int m_sex;								//â€“â€˜Â±ï£¿
+	int m_yanZhengMa;						//â€”ÃˆÃ·Â§Â¬Ã	
+	int m_yanZhengTime;						//â€”ÃˆÃ·Â§Â Â±Âºâ€°
 };
 
-//´´½¨½ÇÉ«ÏìÓ¦
+//Â¥Â¥Î©Â®Î©Â«â€¦Â´Å“Ãâ€Â¶
 struct S_CreatePlayerACK
 {
 	S_CreatePlayerACK() :m_packageLen(8),m_cmd(0),m_statusCode(0){}
-	//¾²Ì¬º¯Êı£¬ÓÃÓÚ½«¶ş½øÖÆÊı¾İ×ª»»³É¸Ã½á¹¹Ìå
+	//Ã¦â‰¤ÃƒÂ¨âˆ«Ã˜Â ËÂ£Â¨â€âˆšâ€â„Î©Â´âˆ‚Ë›Î©Â¯Ã·âˆ†Â ËÃ¦â€ºâ—Šâ„¢ÂªÂªâ‰¥â€¦âˆâˆšÎ©Â·Ï€Ï€ÃƒÃ‚
 	static S_CreatePlayerACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -138,13 +139,13 @@ struct S_CreatePlayerACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	int m_statusCode;				//0Ê§°Ü£¬1³É¹¦£¬2Ãô¸Ğ´Ê
+	int m_statusCode;				//0Â ÃŸâˆâ€¹Â£Â¨1â‰¥â€¦Ï€Â¶Â£Â¨2âˆšÃ™âˆâ€“Â¥Â 
 };
 
-//»ñÈ¡½ÇÉ«ĞÅÏ¢ÇëÇó
+//ÂªÃ’Â»Â°Î©Â«â€¦Â´â€“â‰ˆÅ“Â¢Â«ÃÂ«Ã›
 struct S_GetPlayerInfoReq
 {
-	S_GetPlayerInfoReq(unsigned __int64 playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
+	S_GetPlayerInfoReq(unsigned long long playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
 	m_key(0),m_playerID(playerID)
 	{
 		m_packageLen = htons(m_packageLen);
@@ -152,16 +153,16 @@ struct S_GetPlayerInfoReq
 		m_playerID = my_htonll(m_playerID);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
-	unsigned __int64 m_playerID;
+	unsigned long long m_playerID;
 };
 
-//»ñÈ¡½ÇÉ«ĞÅÏ¢ÏìÓ¦
+//ÂªÃ’Â»Â°Î©Â«â€¦Â´â€“â‰ˆÅ“Â¢Å“Ãâ€Â¶
 struct S_GetPlayerInfoACK
 {
 	S_GetPlayerInfoACK() :m_cmd(0){}
-	//¾²Ì¬º¯Êı£¬ÓÃÓÚ½«¶ş½øÖÆÊı¾İ×ª»»³É¸Ã½á¹¹Ìå
+	//Ã¦â‰¤ÃƒÂ¨âˆ«Ã˜Â ËÂ£Â¨â€âˆšâ€â„Î©Â´âˆ‚Ë›Î©Â¯Ã·âˆ†Â ËÃ¦â€ºâ—Šâ„¢ÂªÂªâ‰¥â€¦âˆâˆšÎ©Â·Ï€Ï€ÃƒÃ‚
 	static S_GetPlayerInfoACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -173,7 +174,7 @@ struct S_GetPlayerInfoACK
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
-		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
+		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
 		pData += 8;
 		memcpy(&s.m_playerNameLen, pData, 2);
 		s.m_playerNameLen = ntohs(s.m_playerNameLen);
@@ -191,14 +192,14 @@ struct S_GetPlayerInfoACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	unsigned __int64 m_playerID;
+	unsigned long long m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
 	int m_currentDiamond;
 };
 
-//´´½¨·¿¼äÇëÇó
+//Â¥Â¥Î©Â®âˆ‘Ã¸Âºâ€°Â«ÃÂ«Ã›
 struct S_CreateRoomReq
 {
 	S_CreateRoomReq() :m_cmd(PP_DOUNIU_CREATE_ROOM_REQ),m_packageLen(8),m_key(0)
@@ -207,11 +208,11 @@ struct S_CreateRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//´´½¨·¿¼äÏìÓ¦
+//Â¥Â¥Î©Â®âˆ‘Ã¸Âºâ€°Å“Ãâ€Â¶
 struct S_CreateRoomACK
 {
 	S_CreateRoomACK() :m_cmd(0){}
@@ -236,7 +237,7 @@ struct S_CreateRoomACK
 	int m_roomID;
 };
 
-//¼ÓÈë·¿¼äÇëÇó
+//Âºâ€Â»Ãâˆ‘Ã¸Âºâ€°Â«ÃÂ«Ã›
 struct S_JoinRoomReq
 {
 	S_JoinRoomReq(int roomID) :m_cmd(PP_DOUNIU_JOIN_ROOM_REQ),m_packageLen(12),m_key(0)
@@ -246,12 +247,12 @@ struct S_JoinRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 	int m_roomID;
 };
 
-//¼ÓÈë·¿¼äÏìÓ¦
+//Âºâ€Â»Ãâˆ‘Ã¸Âºâ€°Å“Ãâ€Â¶
 struct S_JoinRoomACK
 {
 	S_JoinRoomACK() :m_cmd(0), m_isOK(0){}
@@ -276,11 +277,11 @@ struct S_JoinRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;					//0Ê§°Ü£¬1³É¹¦
+	int m_isOK;					//0Â ÃŸâˆâ€¹Â£Â¨1â‰¥â€¦Ï€Â¶
 	int m_roomID;
 };
 
-//²éÑ¯Õ½¼¨ÇëÇó
+//â‰¤Ãˆâ€”Ã˜â€™Î©ÂºÂ®Â«ÃÂ«Ã›
 struct S_SearchZhanjiReq
 {
 	S_SearchZhanjiReq() :m_cmd(PP_DOUNIU_QUERY_ZHANJI_REQ),m_packageLen(8),m_key(0)
@@ -289,11 +290,11 @@ struct S_SearchZhanjiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//²éÑ¯Õ½¼¨ÏìÓ¦
+//â‰¤Ãˆâ€”Ã˜â€™Î©ÂºÂ®Å“Ãâ€Â¶
 struct S_SearchZhanjiACK
 {
 	S_SearchZhanjiACK() :m_cmd(0){}
@@ -324,7 +325,7 @@ struct S_SearchZhanjiACK
 };
 
 
-//ÍË³ö·¿¼äÇëÇó
+//Ã•Ã€â‰¥Ë†âˆ‘Ã¸Âºâ€°Â«ÃÂ«Ã›
 struct S_QuitRoomReq
 {
 	S_QuitRoomReq() :m_cmd(PP_DOUNIU_QUIT_ROOM_REQ),m_packageLen(8),m_key(0)
@@ -334,11 +335,11 @@ struct S_QuitRoomReq
 	}
 
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//ÍË³ö·¿¼äÏìÓ¦
+//Ã•Ã€â‰¥Ë†âˆ‘Ã¸Âºâ€°Å“Ãâ€Â¶
 struct S_QuitRoomACK
 {
 	S_QuitRoomACK() :m_cmd(0), m_isOK(0){}
@@ -363,11 +364,11 @@ struct S_QuitRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;			//0Ê§°Ü£¬1³É¹¦
+	int m_isOK;			//0Â ÃŸâˆâ€¹Â£Â¨1â‰¥â€¦Ï€Â¶
 	int m_roomID;
 };
 
-//×¼±¸ÓÎÏ·ÇëÇó
+//â—ŠÂºÂ±âˆâ€Å’Å“âˆ‘Â«ÃÂ«Ã›
 struct S_ReadyPlayReq
 {
 	S_ReadyPlayReq() :m_cmd(PP_DOUNIU_READY_REQ), m_packageLen(8),m_key(0)
@@ -376,11 +377,11 @@ struct S_ReadyPlayReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//×¼±¸ÓÎÏ·ÏìÓ¦
+//â—ŠÂºÂ±âˆâ€Å’Å“âˆ‘Å“Ãâ€Â¶
 struct S_ReadyPlayACK
 {
 	S_ReadyPlayACK() :m_cmd(0){}
@@ -402,10 +403,10 @@ struct S_ReadyPlayACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;						//0Ê§°Ü£¬1³É¹¦
+	int m_isOK;						//0Â ÃŸâˆâ€¹Â£Â¨1â‰¥â€¦Ï€Â¶
 };
 
-//·¢ÅÆÇëÇó
+//âˆ‘Â¢â‰ˆâˆ†Â«ÃÂ«Ã›
 struct S_FaPaiReq
 {
 	S_FaPaiReq() :m_cmd(PP_DOUNIU_FAPAI_REQ),m_packageLen(8),m_key(0)
@@ -414,11 +415,11 @@ struct S_FaPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//·¢ÅÆÏìÓ¦
+//âˆ‘Â¢â‰ˆâˆ†Å“Ãâ€Â¶
 struct S_FaPaiACK
 {
 	S_FaPaiACK() :m_cmd(0){}
@@ -448,7 +449,7 @@ struct S_FaPaiACK
 	string m_pokerList;
 };
 
-//Ì¯ÅÆÇëÇó
+//ÃƒÃ˜â‰ˆâˆ†Â«ÃÂ«Ã›
 struct S_TanPaiReq
 {
 	S_TanPaiReq() :m_cmd(PP_DOUNIU_TANPAI_REQ),m_packageLen(8),m_key(0)
@@ -457,11 +458,11 @@ struct S_TanPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//Ì¯ÅÆÏìÓ¦
+//ÃƒÃ˜â‰ˆâˆ†Å“Ãâ€Â¶
 struct S_TanPaiACK
 {
 	S_TanPaiACK() :m_cmd(0){}
@@ -483,10 +484,10 @@ struct S_TanPaiACK
 	
 	short m_packageLen;
 	short m_cmd;
-	int m_isSmaller;//0:´ó,1:Ğ¡
+	int m_isSmaller;//0:Â¥Ã›,1:â€“Â°
 };
 
-//³å×êÊ¯ÇëÇó
+//â‰¥Ã‚â—ŠÃÂ Ã˜Â«ÃÂ«Ã›
 struct S_BuyDiamondReq
 {
 	S_BuyDiamondReq(int wantBuy) :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(12), m_wantBuy(0),m_key(0)
@@ -496,12 +497,12 @@ struct S_BuyDiamondReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 	int m_wantBuy;
 };
 
-//³å×êÊ¯ÏìÓ¦
+//â‰¥Ã‚â—ŠÃÂ Ã˜Å“Ãâ€Â¶
 struct S_BuyDiamondACK
 {
 	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
@@ -530,7 +531,7 @@ struct S_BuyDiamondACK
 	int m_currentDiamond;
 };
 
-//ÇÀáÇëÇó
+//Â«Â¿Ã©Â·Â«ÃÂ«Ã›
 struct S_QiangZhuangReq
 {
 	S_QiangZhuangReq() :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ),m_packageLen(8),m_key(0){
@@ -538,11 +539,11 @@ struct S_QiangZhuangReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 };
 
-//ÇÀáÏìÓ¦
+//Â«Â¿Ã©Â·Å“Ãâ€Â¶
 struct S_QiangZhuangACK
 {
 	S_QiangZhuangACK() :m_cmd(0),m_ZhuangJiaID(0){}
@@ -565,10 +566,10 @@ struct S_QiangZhuangACK
 
 	short m_packageLen;
 	short m_cmd;
-	unsigned __int64 m_ZhuangJiaID;
+	unsigned long long m_ZhuangJiaID;
 };
 
-//Ñº×¢ÇëÇó
+//â€”âˆ«â—ŠÂ¢Â«ÃÂ«Ã›
 struct S_YaZhuReq
 {
 	S_YaZhuReq(int beishu) :m_cmd(PP_DOUNIU_YAZHU_REQ),m_packageLen(12),m_key(0){
@@ -577,12 +578,12 @@ struct S_YaZhuReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//ÃÔÖ®ĞòÁĞºÅ
+	int	  m_key;							//âˆšâ€˜Ã·Ã†â€“ÃšÂ¡â€“âˆ«â‰ˆ
 	short m_cmd;
 	int m_beishu;
 };
 
-//Ñº×¢ÏìÓ¦
+//â€”âˆ«â—ŠÂ¢Å“Ãâ€Â¶
 struct S_YaZhuACK
 {
 	S_YaZhuACK() :m_cmd(0){}
