@@ -44,13 +44,13 @@ using namespace std;
 #define PP_DOUNIU_YAZHU_REQ			(50018)
 #define PP_DOUNIU_YAZHU_ACK			(50019)
 
-//8字节主机序转网络序
+//8字节主机序转网络�?
 unsigned __int64 my_htonll(unsigned __int64 val);
 
-//8字节网络序转主机序
+//8字节网络序转主机�?
 unsigned __int64 my_ntohll(unsigned __int64 val);
 
-//响应数据块
+//响应数据�?
 struct S_ACKResponse
 {
 	S_ACKResponse(){
@@ -86,7 +86,7 @@ struct S_ACKResponse
 	int m_len;
 };
 
-//包结构
+//包结�?
 //创建角色请求
 #pragma pack(1)
 struct S_CreatePlayerReq
@@ -97,7 +97,7 @@ struct S_CreatePlayerReq
 		m_strAccountLen = m_account.length()+1;
 		m_strRoleNameLen = m_roleName.length()+1;
 		m_packageLen = 4 + 4 + 2 + m_strAccountLen + 2 + m_strRoleNameLen + 4 + 4 + 4;
-		//转换字节序
+		//转换字节�?
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_strAccountLen = htons(m_strAccountLen);
@@ -108,14 +108,14 @@ struct S_CreatePlayerReq
 
 	}
 	short m_packageLen;						//包长
-	int	  m_key;							//迷之序列号
-	short m_cmd;							//协议号
+	int	  m_key;							//迷之序列�?
+	short m_cmd;							//协议�?
 	short m_strAccountLen;					//账号长度
 	string m_account;						//账号
-	short m_strRoleNameLen;					//角色名长度
-	string m_roleName;						//角色名
+	short m_strRoleNameLen;					//角色名长�?
+	string m_roleName;						//角色�?
 	int m_sex;								//性别
-	int m_yanZhengMa;						//验证码	
+	int m_yanZhengMa;						//验证�?
 	int m_yanZhengTime;						//验证时间
 };
 
@@ -123,7 +123,7 @@ struct S_CreatePlayerReq
 struct S_CreatePlayerACK
 {
 	S_CreatePlayerACK() :m_packageLen(8),m_cmd(0),m_statusCode(0){}
-	//静态函数，用于将二进制数据转换成该结构体
+	//静态函数，用于将二进制数据转换成该结构�?
 	static S_CreatePlayerACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -140,7 +140,7 @@ struct S_CreatePlayerACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	int m_statusCode;				//0失败，1成功，2敏感词
+	int m_statusCode;				//0失败�?成功�?敏感�?
 };
 //登录请求
 struct S_LoginReq
@@ -157,7 +157,7 @@ struct S_LoginReq
 		//m_nickName = my_htonll(m_nickName);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 	int m_checkTime;
 	int m_checkNum;
@@ -168,7 +168,7 @@ struct S_LoginReq
 struct S_LoginACK
 {
 	S_LoginACK() :m_cmd(0) {}
-	//静态函数，用于将二进制数据转换成该结构体
+	//静态函数，用于将二进制数据转换成该结构�?
 	static S_LoginACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -221,7 +221,7 @@ struct S_GetPlayerInfoReq
 		m_playerID = my_htonll(m_playerID);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 	unsigned __int64 m_playerID;
 };
@@ -230,7 +230,7 @@ struct S_GetPlayerInfoReq
 struct S_GetPlayerInfoACK
 {
 	S_GetPlayerInfoACK() :m_cmd(0){}
-	//静态函数，用于将二进制数据转换成该结构体
+	//静态函数，用于将二进制数据转换成该结构�?
 	static S_GetPlayerInfoACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -276,7 +276,7 @@ struct S_CreateRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -315,7 +315,7 @@ struct S_JoinRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 	int m_roomID;
 };
@@ -345,7 +345,7 @@ struct S_JoinRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;					//0失败，1成功
+	int m_isOK;					//0失败�?成功
 	int m_roomID;
 };
 
@@ -358,7 +358,7 @@ struct S_SearchZhanjiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -393,7 +393,7 @@ struct S_SearchZhanjiACK
 };
 
 
-//退出房间请求
+//退出房间请�?
 struct S_QuitRoomReq
 {
 	S_QuitRoomReq() :m_cmd(PP_DOUNIU_QUIT_ROOM_REQ),m_packageLen(8),m_key(0)
@@ -403,11 +403,11 @@ struct S_QuitRoomReq
 	}
 
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
-//退出房间响应
+//退出房间响�?
 struct S_QuitRoomACK
 {
 	S_QuitRoomACK() :m_cmd(0), m_isOK(0){}
@@ -432,7 +432,7 @@ struct S_QuitRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;			//0失败，1成功
+	int m_isOK;			//0失败�?成功
 	int m_roomID;
 };
 
@@ -445,7 +445,7 @@ struct S_ReadyPlayReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -471,7 +471,7 @@ struct S_ReadyPlayACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;						//0失败，1成功
+	int m_isOK;						//0失败�?成功
 };
 
 //发牌请求
@@ -483,7 +483,7 @@ struct S_FaPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -526,7 +526,7 @@ struct S_TanPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -552,10 +552,10 @@ struct S_TanPaiACK
 	
 	short m_packageLen;
 	short m_cmd;
-	int m_isSmaller;//0:大,1:小
+	int m_isSmaller;//0:�?1:�?
 };
 
-//冲钻石请求
+//冲钻石请�?
 struct S_BuyDiamondReq
 {
 	S_BuyDiamondReq(int wantBuy) :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(12), m_wantBuy(0),m_key(0)
@@ -565,12 +565,12 @@ struct S_BuyDiamondReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 	int m_wantBuy;
 };
 
-//冲钻石响应
+//冲钻石响�?
 struct S_BuyDiamondACK
 {
 	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
@@ -607,7 +607,7 @@ struct S_QiangZhuangReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 };
 
@@ -646,7 +646,7 @@ struct S_YaZhuReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//迷之序列号
+	int	  m_key;							//迷之序列�?
 	short m_cmd;
 	int m_beishu;
 };

@@ -55,14 +55,22 @@ void LoginScene::update(float dt)
 			S_ReadyPlayReq pr;
 			S_FaPaiReq fp;
 			S_TanPaiReq tp;		
-			//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
-			NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
+			S_BuyDiamondReq sb(2100);
+			S_QiangZhuangReq sq;
+			S_YaZhuReq sy(3);
+
+
+			NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
+			//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
 			//NetworkManger::getInstance()->SendRequest_JoinRoom(jr);	
 			//NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
 			//NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
 			//NetworkManger::getInstance()->SendRequest_ReadyPlay(pr);
 			//NetworkManger::getInstance()->SendRequest_FaPai(fp);
 			//NetworkManger::getInstance()->SendRequest_TanPai(tp);
+			//NetworkManger::getInstance()->SendRequest_BuyDiamond(sb);
+			//NetworkManger::getInstance()->SendRequest_QiangZhuang(sq);
+			//NetworkManger::getInstance()->SendRequest_YaZhu(sy);
 			//auto item = this->getChildByName("login_button");
 			//item->setVisible(false);
 			//loading();
@@ -195,6 +203,37 @@ void LoginScene::update(float dt)
 
 			//NetworkManger::getInstance()->shutDownNetwork();
 		}
+		if (cmd == PP_DOUNIU_YAZHU_ACK)				//押注响应，50019
+		{
+			//获取响应数据
+			S_YaZhuACK ack = S_YaZhuACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+			log("LoginScene::onYaZhuResponse get data!");
+			char buf[1024];
+			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK);
+			log(buf);
+		}
+		if (cmd == PP_DOUNIU_QIANGZHUANG_ACK)		//抢庄响应，50017
+		{
+			//获取响应数据
+			S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+			log("LoginScene::onQiangZhuangResponse get data!");
+			char buf[1024];
+			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_ZhuangJiaID);
+			log(buf);
+		}
+		if (cmd == PP_DOUNIU_CHONGZHI_ACK)			//充值响应，50015
+		{
+			//获取响应数据
+			S_BuyDiamondACK ack = S_BuyDiamondACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+			log("LoginScene::onBuyDiamondResponse get data!");
+			char buf[1024];
+			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK, ack.m_currentDiamond);
+			log(buf);
+		}
+
 	}
 }
 
@@ -306,7 +345,7 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 {
 	//auto scene = Director::getInstance()->getRunningScene();
 
-	S_CreatePlayerReq ss("s", "s", 3);
+	S_CreatePlayerReq ss("a", "a", 3);
 	S_GetPlayerInfoReq s1(1);
 	S_CreateRoomReq cr;
 	S_JoinRoomReq jr(1);
@@ -315,7 +354,7 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 	S_ReadyPlayReq pr;
 	S_FaPaiReq fp;
 	S_TanPaiReq tp;
-	S_LoginReq lg("s", 1, 1);
+	S_LoginReq lg("a", 1, 1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(ss);
 	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
 	//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
