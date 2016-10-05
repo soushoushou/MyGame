@@ -75,7 +75,32 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 	delete [] dataBuf;
 	return ret;
 }
+bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
+{
+	char* dataBuf = new char[requestData.m_packageLen];
+	char* pIndex = dataBuf;
+	memcpy(pIndex, &requestData, 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_key), 4);
+	pIndex += 4;
+	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
+	pIndex += 2;
+	for (int i = 0; i <= requestData.m_roleName.length(); ++i)
+	{
+		(char)(*pIndex++) = requestData.m_roleName[i];
+	}
+	memcpy(pIndex, ((char*)&requestData.m_checkTime), 4);
+	pIndex += 4;
+	memcpy(pIndex, ((char*)&requestData.m_checkNum), 4);
+	pIndex += 4;
+	bool ret = false;
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
+	delete[] dataBuf;
+	return ret;
+}
 bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›

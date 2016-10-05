@@ -16,11 +16,13 @@
 
 #endif
 using namespace std;
-//∞¸∫Í
+//包宏
 #define PP_DOUNIU_CREAT_ACCOUNT_REQ	(10000)
 #define PP_DOUNIU_CREAT_ACCOUNT_ACK	(10001)
 #define PP_DOUNIU_GET_ROLEINFO_REQ	(10002)
 #define PP_DOUNIU_GET_ROLEINFO_ACK	(10003)
+#define PP_DOUNIU_LOGIN_ACCOUNT_REQ	(10004)
+#define PP_DOUNIU_LOGIN_ACCOUNT_ACK	(10005)
 #define PP_DOUNIU_CREATE_ROOM_REQ	(50000)
 #define PP_DOUNIU_CREATE_ROOM_ACK	(50001)
 #define PP_DOUNIU_JOIN_ROOM_REQ		(50002)
@@ -42,14 +44,13 @@ using namespace std;
 #define PP_DOUNIU_YAZHU_REQ			(50018)
 #define PP_DOUNIU_YAZHU_ACK			(50019)
 
+//8字节主机序转网络序
+unsigned __int64 my_htonll(unsigned __int64 val);
 
-//8◊÷Ω⁄÷˜ª˙–Ú◊™Õ¯¬Á–Ú
-unsigned long long my_htonll(unsigned long long val);
+//8字节网络序转主机序
+unsigned __int64 my_ntohll(unsigned __int64 val);
 
-//8◊÷Ω⁄Õ¯¬Á–Ú◊™÷˜ª˙–Ú
-unsigned long long my_ntohll(unsigned long long val);
-
-//œÏ”¶ ˝æ›øÈ
+//响应数据块
 struct S_ACKResponse
 {
 	S_ACKResponse(){
@@ -85,8 +86,8 @@ struct S_ACKResponse
 	int m_len;
 };
 
-//∞¸Ω·ππ
-//¥¥Ω®Ω«…´«Î«Û
+//包结构
+//创建角色请求
 #pragma pack(1)
 struct S_CreatePlayerReq
 {
@@ -96,7 +97,7 @@ struct S_CreatePlayerReq
 		m_strAccountLen = m_account.length()+1;
 		m_strRoleNameLen = m_roleName.length()+1;
 		m_packageLen = 4 + 4 + 2 + m_strAccountLen + 2 + m_strRoleNameLen + 4 + 4 + 4;
-		//◊™ªª◊÷Ω⁄–Ú
+		//转换字节序
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_strAccountLen = htons(m_strAccountLen);
@@ -106,23 +107,23 @@ struct S_CreatePlayerReq
 		m_yanZhengTime = htonl(m_yanZhengTime);
 
 	}
-	short m_packageLen;						//∞¸≥§
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
-	short m_cmd;							//–≠“È∫≈
-	short m_strAccountLen;					//’À∫≈≥§∂»
-	string m_account;						//’À∫≈
-	short m_strRoleNameLen;					//Ω«…´√˚≥§∂»
-	string m_roleName;						//Ω«…´√˚
-	int m_sex;								//–‘±
-	int m_yanZhengMa;						//—È÷§¬Î	
-	int m_yanZhengTime;						//—È÷§ ±º‰
+	short m_packageLen;						//包长
+	int	  m_key;							//迷之序列号
+	short m_cmd;							//协议号
+	short m_strAccountLen;					//账号长度
+	string m_account;						//账号
+	short m_strRoleNameLen;					//角色名长度
+	string m_roleName;						//角色名
+	int m_sex;								//性别
+	int m_yanZhengMa;						//验证码	
+	int m_yanZhengTime;						//验证时间
 };
 
-//¥¥Ω®Ω«…´œÏ”¶
+//创建角色响应
 struct S_CreatePlayerACK
 {
 	S_CreatePlayerACK() :m_packageLen(8),m_cmd(0),m_statusCode(0){}
-	//æ≤Ã¨∫Ø ˝£¨”√”⁄Ω´∂˛Ω¯÷∆ ˝æ›◊™ªª≥…∏√Ω·ππÃÂ
+	//静态函数，用于将二进制数据转换成该结构体
 	static S_CreatePlayerACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -139,13 +140,80 @@ struct S_CreatePlayerACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	int m_statusCode;				//0 ß∞‹£¨1≥…π¶£¨2√Ù∏–¥ 
+	int m_statusCode;				//0失败，1成功，2敏感词
 };
+//登录请求
+struct S_LoginReq
+{
+	S_LoginReq(string nickName,int checkTime,int checkNum) :m_cmd(PP_DOUNIU_LOGIN_ACCOUNT_REQ), m_packageLen(18 + sizeof(m_roleName)),
+		m_key(0), m_roleName(nickName),m_checkTime(checkTime),m_checkNum(checkNum)
+	{
+		m_strRoleNameLen = m_roleName.length() + 1;
+		m_packageLen = htons(m_packageLen);
+		m_cmd = htons(m_cmd);
+		m_checkTime = htonl(checkTime);
+		m_checkNum = htonl(checkNum);
+		m_strRoleNameLen=htons(m_strRoleNameLen);;
+		//m_nickName = my_htonll(m_nickName);
+	}
+	short m_packageLen;
+	int	  m_key;							//迷之序列号
+	short m_cmd;
+	int m_checkTime;
+	int m_checkNum;
+	short m_strRoleNameLen;
+	string m_roleName;
+};
+//获取登录响应
+struct S_LoginACK
+{
+	S_LoginACK() :m_cmd(0) {}
+	//静态函数，用于将二进制数据转换成该结构体
+	static S_LoginACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_LoginACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
 
-//ªÒ»°Ω«…´–≈œ¢«Î«Û
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		memcpy(&s.m_userID, pData, 8);
+		s.m_userID = my_ntohll(unsigned __int64(s.m_userID));
+		pData += 8;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
+		pData += 8;
+		memcpy(&s.m_playerNameLen, pData, 2);
+		s.m_playerNameLen = ntohs(s.m_playerNameLen);
+		pData += 2;
+		char buf[1024];
+		memcpy(buf, pData, s.m_playerNameLen);
+		s.m_strPlayerName = buf;
+		pData += s.m_playerNameLen;
+		memcpy(&s.m_sex, pData, 2);
+		s.m_sex = ntohl(s.m_sex);
+		pData += 4;
+		return s;
+	}
+	short m_packageLen;
+	short m_cmd;
+	int m_statusCode;
+	unsigned __int64 m_playerID;
+	unsigned __int64 m_userID;
+	short m_playerNameLen;
+	string m_strPlayerName;
+	int m_sex;
+};
+//获取角色信息请求
 struct S_GetPlayerInfoReq
 {
-	S_GetPlayerInfoReq(unsigned long long playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
+	S_GetPlayerInfoReq(unsigned __int64 playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
 	m_key(0),m_playerID(playerID)
 	{
 		m_packageLen = htons(m_packageLen);
@@ -153,16 +221,16 @@ struct S_GetPlayerInfoReq
 		m_playerID = my_htonll(m_playerID);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
-	unsigned long long m_playerID;
+	unsigned __int64 m_playerID;
 };
 
-//ªÒ»°Ω«…´–≈œ¢œÏ”¶
+//获取角色信息响应
 struct S_GetPlayerInfoACK
 {
 	S_GetPlayerInfoACK() :m_cmd(0){}
-	//æ≤Ã¨∫Ø ˝£¨”√”⁄Ω´∂˛Ω¯÷∆ ˝æ›◊™ªª≥…∏√Ω·ππÃÂ
+	//静态函数，用于将二进制数据转换成该结构体
 	static S_GetPlayerInfoACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -174,7 +242,7 @@ struct S_GetPlayerInfoACK
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
-		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
+		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
 		pData += 8;
 		memcpy(&s.m_playerNameLen, pData, 2);
 		s.m_playerNameLen = ntohs(s.m_playerNameLen);
@@ -192,14 +260,14 @@ struct S_GetPlayerInfoACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	unsigned long long m_playerID;
+	unsigned __int64 m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
 	int m_currentDiamond;
 };
 
-//¥¥Ω®∑øº‰«Î«Û
+//创建房间请求
 struct S_CreateRoomReq
 {
 	S_CreateRoomReq() :m_cmd(PP_DOUNIU_CREATE_ROOM_REQ),m_packageLen(8),m_key(0)
@@ -208,11 +276,11 @@ struct S_CreateRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//¥¥Ω®∑øº‰œÏ”¶
+//创建房间响应
 struct S_CreateRoomACK
 {
 	S_CreateRoomACK() :m_cmd(0){}
@@ -237,7 +305,7 @@ struct S_CreateRoomACK
 	int m_roomID;
 };
 
-//º”»Î∑øº‰«Î«Û
+//加入房间请求
 struct S_JoinRoomReq
 {
 	S_JoinRoomReq(int roomID) :m_cmd(PP_DOUNIU_JOIN_ROOM_REQ),m_packageLen(12),m_key(0)
@@ -247,12 +315,12 @@ struct S_JoinRoomReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 	int m_roomID;
 };
 
-//º”»Î∑øº‰œÏ”¶
+//加入房间响应
 struct S_JoinRoomACK
 {
 	S_JoinRoomACK() :m_cmd(0), m_isOK(0){}
@@ -277,11 +345,11 @@ struct S_JoinRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;					//0 ß∞‹£¨1≥…π¶
+	int m_isOK;					//0失败，1成功
 	int m_roomID;
 };
 
-//≤È—Ø’Ωº®«Î«Û
+//查询战绩请求
 struct S_SearchZhanjiReq
 {
 	S_SearchZhanjiReq() :m_cmd(PP_DOUNIU_QUERY_ZHANJI_REQ),m_packageLen(8),m_key(0)
@@ -290,11 +358,11 @@ struct S_SearchZhanjiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//≤È—Ø’Ωº®œÏ”¶
+//查询战绩响应
 struct S_SearchZhanjiACK
 {
 	S_SearchZhanjiACK() :m_cmd(0){}
@@ -325,7 +393,7 @@ struct S_SearchZhanjiACK
 };
 
 
-//ÕÀ≥ˆ∑øº‰«Î«Û
+//退出房间请求
 struct S_QuitRoomReq
 {
 	S_QuitRoomReq() :m_cmd(PP_DOUNIU_QUIT_ROOM_REQ),m_packageLen(8),m_key(0)
@@ -335,11 +403,11 @@ struct S_QuitRoomReq
 	}
 
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//ÕÀ≥ˆ∑øº‰œÏ”¶
+//退出房间响应
 struct S_QuitRoomACK
 {
 	S_QuitRoomACK() :m_cmd(0), m_isOK(0){}
@@ -364,11 +432,11 @@ struct S_QuitRoomACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;			//0 ß∞‹£¨1≥…π¶
+	int m_isOK;			//0失败，1成功
 	int m_roomID;
 };
 
-//◊º±∏”Œœ∑«Î«Û
+//准备游戏请求
 struct S_ReadyPlayReq
 {
 	S_ReadyPlayReq() :m_cmd(PP_DOUNIU_READY_REQ), m_packageLen(8),m_key(0)
@@ -377,11 +445,11 @@ struct S_ReadyPlayReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//◊º±∏”Œœ∑œÏ”¶
+//准备游戏响应
 struct S_ReadyPlayACK
 {
 	S_ReadyPlayACK() :m_cmd(0){}
@@ -403,10 +471,10 @@ struct S_ReadyPlayACK
 
 	short m_packageLen;
 	short m_cmd;
-	int m_isOK;						//0 ß∞‹£¨1≥…π¶
+	int m_isOK;						//0失败，1成功
 };
 
-//∑¢≈∆«Î«Û
+//发牌请求
 struct S_FaPaiReq
 {
 	S_FaPaiReq() :m_cmd(PP_DOUNIU_FAPAI_REQ),m_packageLen(8),m_key(0)
@@ -415,11 +483,11 @@ struct S_FaPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//∑¢≈∆œÏ”¶
+//发牌响应
 struct S_FaPaiACK
 {
 	S_FaPaiACK() :m_cmd(0){}
@@ -449,7 +517,7 @@ struct S_FaPaiACK
 	string m_pokerList;
 };
 
-//ÃØ≈∆«Î«Û
+//摊牌请求
 struct S_TanPaiReq
 {
 	S_TanPaiReq() :m_cmd(PP_DOUNIU_TANPAI_REQ),m_packageLen(8),m_key(0)
@@ -458,11 +526,11 @@ struct S_TanPaiReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//ÃØ≈∆œÏ”¶
+//摊牌响应
 struct S_TanPaiACK
 {
 	S_TanPaiACK() :m_cmd(0){}
@@ -484,10 +552,10 @@ struct S_TanPaiACK
 	
 	short m_packageLen;
 	short m_cmd;
-	int m_isSmaller;//0:¥Û,1:–°
+	int m_isSmaller;//0:大,1:小
 };
 
-//≥Â◊Í Ø«Î«Û
+//冲钻石请求
 struct S_BuyDiamondReq
 {
 	S_BuyDiamondReq(int wantBuy) :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(12), m_wantBuy(0),m_key(0)
@@ -497,12 +565,12 @@ struct S_BuyDiamondReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 	int m_wantBuy;
 };
 
-//≥Â◊Í ØœÏ”¶
+//冲钻石响应
 struct S_BuyDiamondACK
 {
 	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
@@ -531,7 +599,7 @@ struct S_BuyDiamondACK
 	int m_currentDiamond;
 };
 
-//«¿é·«Î«Û
+//抢庒请求
 struct S_QiangZhuangReq
 {
 	S_QiangZhuangReq() :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ),m_packageLen(8),m_key(0){
@@ -539,11 +607,11 @@ struct S_QiangZhuangReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 };
 
-//«¿é·œÏ”¶
+//抢庒响应
 struct S_QiangZhuangACK
 {
 	S_QiangZhuangACK() :m_cmd(0),m_ZhuangJiaID(0){}
@@ -566,10 +634,10 @@ struct S_QiangZhuangACK
 
 	short m_packageLen;
 	short m_cmd;
-	unsigned long long m_ZhuangJiaID;
+	unsigned __int64 m_ZhuangJiaID;
 };
 
-//—∫◊¢«Î«Û
+//押注请求
 struct S_YaZhuReq
 {
 	S_YaZhuReq(int beishu) :m_cmd(PP_DOUNIU_YAZHU_REQ),m_packageLen(12),m_key(0){
@@ -578,12 +646,12 @@ struct S_YaZhuReq
 		m_cmd = htons(m_cmd);
 	}
 	short m_packageLen;
-	int	  m_key;							//√‘÷Æ–Ú¡–∫≈
+	int	  m_key;							//迷之序列号
 	short m_cmd;
 	int m_beishu;
 };
 
-//—∫◊¢œÏ”¶
+//押注响应
 struct S_YaZhuACK
 {
 	S_YaZhuACK() :m_cmd(0){}

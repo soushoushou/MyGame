@@ -19,6 +19,7 @@ public:
 	void startNetwork();
 
 	//发送各种请求，取消回调，因为子线程无法绘制UI
+	bool SendRequest_Login(const S_LoginReq& requestData);
 	bool SendRequest_CreateUser(const S_CreatePlayerReq& requestData);
 	bool SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData);
 	bool SendRequest_CreateRoom(const S_CreateRoomReq& requestData);
