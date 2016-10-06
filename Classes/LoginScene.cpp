@@ -44,7 +44,7 @@ void LoginScene::update(float dt)
 			NetworkManger::getInstance()->popACKQueue();
 			log("LoginScene::onCreateUserResponse get data!");
 			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d,id:%d", ack.m_packageLen, ack.m_cmd, ack.m_statusCode,ack.m_playerID);
+			sprintf(buf, "len:%d,cmd:%d,status:%d,id:%llu", ack.m_packageLen, ack.m_cmd, ack.m_statusCode,ack.m_playerID);
 			log(buf);
 
 			S_GetPlayerInfoReq s1(1);
@@ -154,8 +154,8 @@ void LoginScene::update(float dt)
 			NetworkManger::getInstance()->popACKQueue();
 			log("LoginScene::onCreateUserResponse get data!");
 			char buf[1024];
-//			sprintf(buf, "len:%d,cmd:%d,status:%s", ack.m_packageLen, ack.m_cmd, ack.m_zhanji);
-//			log(buf);
+			sprintf(buf, "len:%d,cmd:%d,status:%s", ack.m_packageLen, ack.m_cmd, ack.m_zhanji.c_str());
+			log(buf);
 
 			//NetworkManger::getInstance()->shutDownNetwork();
 		}
