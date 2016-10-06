@@ -45,10 +45,10 @@ using namespace std;
 #define PP_DOUNIU_YAZHU_ACK			(50019)
 
 //8字节主机序转网络�?
-unsigned __int64 my_htonll(unsigned __int64 val);
+unsigned long long my_htonll(unsigned long long val);
 
 //8字节网络序转主机�?
-unsigned __int64 my_ntohll(unsigned __int64 val);
+unsigned long long my_ntohll(unsigned long long val);
 
 //响应数据�?
 struct S_ACKResponse
@@ -184,10 +184,10 @@ struct S_LoginACK
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
 		memcpy(&s.m_userID, pData, 8);
-		s.m_userID = my_ntohll(unsigned __int64(s.m_userID));
+		s.m_userID = my_ntohll((unsigned long long)(s.m_userID));
 		pData += 8;
 		memcpy(&s.m_playerID, pData, 8);
-		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
+		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
 		pData += 8;
 		memcpy(&s.m_playerNameLen, pData, 2);
 		s.m_playerNameLen = ntohs(s.m_playerNameLen);
@@ -204,8 +204,8 @@ struct S_LoginACK
 	short m_packageLen;
 	short m_cmd;
 	int m_statusCode;
-	unsigned __int64 m_playerID;
-	unsigned __int64 m_userID;
+	unsigned long long m_playerID;
+	unsigned long long m_userID;
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
@@ -213,7 +213,7 @@ struct S_LoginACK
 //获取角色信息请求
 struct S_GetPlayerInfoReq
 {
-	S_GetPlayerInfoReq(unsigned __int64 playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
+	S_GetPlayerInfoReq(unsigned long long playerID) :m_cmd(PP_DOUNIU_GET_ROLEINFO_REQ), m_packageLen(8 + sizeof(m_playerID)),
 	m_key(0),m_playerID(playerID)
 	{
 		m_packageLen = htons(m_packageLen);
@@ -223,7 +223,7 @@ struct S_GetPlayerInfoReq
 	short m_packageLen;
 	int	  m_key;							//迷之序列�?
 	short m_cmd;
-	unsigned __int64 m_playerID;
+	unsigned long long m_playerID;
 };
 
 //获取角色信息响应
@@ -242,7 +242,7 @@ struct S_GetPlayerInfoACK
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
-		s.m_playerID = my_ntohll(unsigned __int64(s.m_playerID));
+		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
 		pData += 8;
 		memcpy(&s.m_playerNameLen, pData, 2);
 		s.m_playerNameLen = ntohs(s.m_playerNameLen);
@@ -260,7 +260,7 @@ struct S_GetPlayerInfoACK
 	}
 	short m_packageLen;
 	short m_cmd;
-	unsigned __int64 m_playerID;
+	unsigned long long m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;
@@ -634,7 +634,7 @@ struct S_QiangZhuangACK
 
 	short m_packageLen;
 	short m_cmd;
-	unsigned __int64 m_ZhuangJiaID;
+	unsigned long long m_ZhuangJiaID;
 };
 
 //押注请求
