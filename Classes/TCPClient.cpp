@@ -21,11 +21,14 @@ CTCPClient::~CTCPClient()
 
 void CTCPClient::NetworkThreadFunc()
 {
+	m_requestMutex.lock();
 	if (!Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true))
 	{
 		log("connect server error!");
+		m_requestMutex.unlock();
 		return;
 	}
+	m_requestMutex.unlock();
 	while (1)
 	{
 		m_requestMutex.lock();
@@ -50,6 +53,11 @@ void CTCPClient::NetworkThreadFunc()
 				log("errno = %d", err);
 			}
 		}
+		if (m_sockClient == INVALID_SOCKET)
+		{
+			m_requestMutex.unlock();
+			return;
+		}
 		m_requestMutex.unlock();
 #ifdef _WIN32
 		Sleep(30);
@@ -71,7 +79,10 @@ bool CTCPClient::sendTCPRequset(CTCPRequest* request)
 		log("send msg error in sendTCPRequest()!");
 		return false;
 	}
-	Flush();
+	if (!Flush())
+	{
+		return false;
+	}
 	m_pRequest = request;
 	return true;
 }
@@ -183,10 +194,10 @@ bool CTCPClient::Create(const char* pszServerIP, int nServerPort, int nBlockSec,
 
 
 
-	struct linger so_linger;
-	so_linger.l_onoff = 1;
-	so_linger.l_linger = 500;
-	setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
+	//struct linger so_linger;
+	//so_linger.l_onoff = 1;
+	//so_linger.l_linger = 500;
+	//setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
 
 	return true;
 }
@@ -301,7 +312,7 @@ int CTCPClient::recvFromSock(void)
 	// 缓冲区数据的末尾
 	savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
 	CHECKF(savepos + savelen <= INBUFSIZE);
-	int inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
+	int inlen = recv(m_sockClient, (char*)m_bufInput + savepos, savelen, 0);
 	if (inlen > 0) {
 		// 有接收到数据
 		m_nInbufLen += inlen;
@@ -315,7 +326,7 @@ int CTCPClient::recvFromSock(void)
 			int savelen = INBUFSIZE - m_nInbufLen;
 			int savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
 			CHECKF(savepos + savelen <= INBUFSIZE);
-			inlen = recv(m_sockClient, m_bufInput + savepos, savelen, 0);
+			inlen = recv(m_sockClient, (char*)m_bufInput + savepos, savelen, 0);
 			if (inlen > 0) {
 				m_nInbufLen += inlen;
 				if (m_nInbufLen > INBUFSIZE) {
@@ -358,7 +369,7 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 
 	// 发送一段数据
 	int	outsize;
-	outsize = send(m_sockClient, m_bufOutput, m_nOutbufLen, 0);
+	outsize = send(m_sockClient, (char*)m_bufOutput, m_nOutbufLen, 0);
 	if (outsize > 0) {
 		// 删除已发送的部分
 		if (m_nOutbufLen - outsize > 0) {
@@ -410,10 +421,10 @@ bool CTCPClient::Check(void)
 void CTCPClient::Destroy(void)
 {
 	// 关闭
-	struct linger so_linger;
-	so_linger.l_onoff = 1;
-	so_linger.l_linger = 500;
-	int ret = setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
+	//struct linger so_linger;
+	//so_linger.l_onoff = 1;
+	//so_linger.l_linger = 500;
+	//int ret = setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
 
 	closeSocket();
 

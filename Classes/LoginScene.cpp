@@ -26,9 +26,9 @@ void LoginScene::update(float dt)
 	if (!NetworkManger::getInstance()->ackQueueIsEmpty())
 	{
 
-		short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
+		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
 		//判断该ack的协议号是不是10005
-		log("LoginScene::connect suc",cmd);
+		log("LoginScene::connect suc cmd=%d",cmd);
 		if (cmd == PP_DOUNIU_LOGIN_ACCOUNT_ACK)
 		{
 			S_LoginACK ack = S_LoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
@@ -51,10 +51,10 @@ void LoginScene::update(float dt)
 			S_YaZhuReq sy(3);
 
 
-			NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
+			//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
 			//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
 			//NetworkManger::getInstance()->SendRequest_JoinRoom(jr);	
-			//NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
+			NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
 			//NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
 			//NetworkManger::getInstance()->SendRequest_ReadyPlay(pr);
 			//NetworkManger::getInstance()->SendRequest_FaPai(fp);
@@ -125,6 +125,8 @@ void LoginScene::update(float dt)
 			char buf[1024];
 			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
 			log(buf);
+			S_JoinRoomReq jr(ack.m_roomID);
+			NetworkManger::getInstance()->SendRequest_JoinRoom(jr);
 
 			//NetworkManger::getInstance()->shutDownNetwork();
 		}
@@ -335,7 +337,6 @@ void LoginScene::loading() {
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
 	//auto scene = Director::getInstance()->getRunningScene();
-
 	S_CreatePlayerReq ss("a", "a", 3);
 	S_GetPlayerInfoReq s1(1);
 	S_CreateRoomReq cr;

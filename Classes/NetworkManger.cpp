@@ -4,8 +4,9 @@
 
 NetworkManger* NetworkManger::m_pInstance = NULL;
 
-NetworkManger::NetworkManger()
+NetworkManger::NetworkManger() :m_tcpClient(nullptr)
 {
+	m_tcpClient = new CTCPClient;
 }
 
 NetworkManger* NetworkManger::getInstance()
@@ -28,6 +29,10 @@ void NetworkManger::destroyInstance()
 
 NetworkManger::~NetworkManger()
 {
+	if (nullptr != m_tcpClient)
+	{
+		delete m_tcpClient;
+	}
 }
 
 
@@ -39,8 +44,6 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strAccountLen), 2);
@@ -71,15 +74,12 @@ bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_roleName.length()+1);
 	pIndex += requestData.m_roleName.length() + 1;
-
 	memcpy(pIndex, ((char*)&requestData.m_checkTime), 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_checkNum), 4);
@@ -97,8 +97,6 @@ bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -116,8 +114,6 @@ bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_wantBuy, 4);
@@ -138,8 +134,6 @@ bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -157,8 +151,6 @@ bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestD
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_playerID), 8);
@@ -177,8 +169,6 @@ bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_roomID), 4);
@@ -196,8 +186,6 @@ bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -215,8 +203,6 @@ bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -234,8 +220,6 @@ bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -253,8 +237,6 @@ bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestDat
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -272,8 +254,6 @@ bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 
@@ -291,8 +271,6 @@ bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_key), 4);
-	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_beishu), 4);
@@ -310,21 +288,25 @@ bool NetworkManger::SendRequest(void* requestData, int size)
 	request->retain();
 	request->setRequestData((char*)requestData, size);
 	bool ret = false;
-	ret= m_tcpClient.sendTCPRequset(request);
+	ret= m_tcpClient->sendTCPRequset(request);
 	request->release();
 	return ret;
 }
 
 void NetworkManger::shutDownNetwork()
 {
-	m_tcpClient.Destroy();
+	if (m_tcpClient != nullptr)
+	{
+		m_tcpClient->Destroy();
+		m_tcpClient = nullptr;
+	}
 }
 
 void NetworkManger::startNetwork()
 {
-	if (!m_tcpClient.isConnected())
+	if (m_tcpClient == nullptr)
 	{
-		m_tcpClient.Create(g_strServerIP.c_str(), g_nServerPort);
+		m_tcpClient = new CTCPClient;
 	}
 }
 
@@ -374,7 +356,7 @@ void NetworkManger::popACKQueue()
 
 short NetworkManger::getQueueFrontACKCmd()
 {
-	short cmd = 0;
+	unsigned short cmd = 0;
 	S_ACKResponse s = m_ackQueue.getFrontFromQueue();
 	memcpy(&cmd, s.m_buf + 2, 2);
 	return ntohs(cmd);

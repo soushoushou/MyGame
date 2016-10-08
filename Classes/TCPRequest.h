@@ -21,7 +21,7 @@ public:
 	void* getRequestData(){ return m_dataBuf; }
 	int getRequestDataLen(){ return m_nDataLen; }
 private:
-	char m_dataBuf[g_nMaxRequsetDataSize];		//数据缓冲
+	unsigned char m_dataBuf[g_nMaxRequsetDataSize];		//数据缓冲
 	int m_nDataLen;								//实际数据长度
 	mutex m_dataMutex;
 	

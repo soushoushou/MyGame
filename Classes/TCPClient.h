@@ -65,11 +65,11 @@ private:
 	SOCKET	m_sockClient;
 
 	// 发送数据缓冲
-	char	m_bufOutput[OUTBUFSIZE];	// 可优化为指针数组
+	unsigned char	m_bufOutput[OUTBUFSIZE];	// 可优化为指针数组
 	int		m_nOutbufLen;
 
 	// 环形缓冲区
-	char	m_bufInput[INBUFSIZE];
+	unsigned char	m_bufInput[INBUFSIZE];
 	int		m_nInbufLen;
 	int		m_nInbufStart;				// INBUF使用循环式队列，该变量为队列起点，0 - (SIZE-1)
 

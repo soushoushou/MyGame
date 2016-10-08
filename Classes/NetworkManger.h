@@ -58,7 +58,7 @@ private:
 
 	CACKResponseQueue m_ackQueue;			//ack消息队列，用于主线程获得ack响应消息后进行渲染
 	static NetworkManger* m_pInstance;
-	CTCPClient m_tcpClient;
+	CTCPClient* m_tcpClient;
 	
 
 };
