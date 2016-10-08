@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-CTCPRequest::CTCPRequest() :m_nDataLen(0), m_pCallback(nullptr)
+CTCPRequest::CTCPRequest() :m_nDataLen(0)
 {
 	m_dataMutex.lock();
 	memset(m_dataBuf, 0, g_nMaxRequsetDataSize);

@@ -29,7 +29,7 @@ void CTCPClient::NetworkThreadFunc()
 	while (1)
 	{
 		m_requestMutex.lock();
-		if (m_pRequest)
+		if (m_pRequest && m_sockClient != INVALID_SOCKET)
 		{
 			char buf[g_nMaxRequsetDataSize];
 			memset(buf, 0, g_nMaxRequsetDataSize);
