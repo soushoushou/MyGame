@@ -77,8 +77,8 @@ bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
-	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_strRoleNameLen);
-	pIndex += requestData.m_strRoleNameLen;
+	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_roleName.length()+1);
+	pIndex += requestData.m_roleName.length() + 1;
 
 	memcpy(pIndex, ((char*)&requestData.m_checkTime), 4);
 	pIndex += 4;

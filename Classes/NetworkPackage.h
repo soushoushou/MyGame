@@ -145,15 +145,16 @@ struct S_CreatePlayerACK
 //登录请求
 struct S_LoginReq
 {
-	S_LoginReq(string nickName,int checkTime,int checkNum) :m_cmd(PP_DOUNIU_LOGIN_ACCOUNT_REQ), m_packageLen(18 + sizeof(m_roleName)),
+	S_LoginReq(string nickName,int checkTime,int checkNum) :m_cmd(PP_DOUNIU_LOGIN_ACCOUNT_REQ),
 		m_key(0), m_roleName(nickName),m_checkTime(checkTime),m_checkNum(checkNum)
 	{
 		m_strRoleNameLen = m_roleName.length() + 1;
+		m_packageLen = 18 + m_strRoleNameLen;
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_checkTime = htonl(checkTime);
 		m_checkNum = htonl(checkNum);
-		m_strRoleNameLen=htons(m_strRoleNameLen);;
+		m_strRoleNameLen=htons(m_strRoleNameLen);
 		//m_nickName = my_htonll(m_nickName);
 	}
 	short m_packageLen;
