@@ -7,6 +7,7 @@ CTCPClient::CTCPClient()
 	// 初始化
 	memset(m_bufOutput, 0, sizeof(m_bufOutput));
 	memset(m_bufInput, 0, sizeof(m_bufInput));
+	m_sockClient = INVALID_SOCKET;
 
 	//分离子线程
 	thread t(&CTCPClient::NetworkThreadFunc, this);
@@ -210,7 +211,6 @@ bool CTCPClient::SendMsg(void* pBuf, int nSize)
 		Flush();
 		if (m_nOutbufLen + nSize > OUTBUFSIZE) {
 			// 出错了
-			Destroy();
 			return false;
 		}
 	}
@@ -323,13 +323,11 @@ int CTCPClient::recvFromSock(void)
 				}
 			}
 			else if (inlen == 0) {
-				Destroy();
 				return 0;
 			}
 			else {
 				// 连接已断开或者错误（包括阻塞）
 				if (hasError()) {
-					Destroy();
 					return 0;
 				}
 			}
@@ -392,12 +390,10 @@ bool CTCPClient::Check(void)
 	char buf[1];
 	int	ret = recv(m_sockClient, buf, 1, MSG_PEEK);
 	if (ret == 0) {
-		Destroy();
 		return false;
 	}
 	else if (ret < 0) {
 		if (hasError()) {
-			Destroy();
 			return false;
 		}
 		else {	// 阻塞

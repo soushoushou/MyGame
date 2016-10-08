@@ -4,15 +4,6 @@
 #include "GameSocket.h"
 USING_NS_CC;
 
-//void LoginScene::onCreateUserResponse(void* responseData)
-//{
-//	log("LoginScene::onCreateUserResponse get data!");
-//	S_CreatePlayerACK ss = S_CreatePlayerACK::convertDataFromBinaryData(responseData);
-//	S_GetPlayerInfoACK ss= S_GetPlayerInfoACK::convertDataFromBinaryData(responseData);
-//	char buf[1024];
-//	sprintf(buf, "len:%d,cmd:%d,status:%d", ss.m_packageLen, ss.m_cmd, ss.m_playerID);
-//	log(buf);
-//}
 Scene* LoginScene::createScene()
 {
 	// 'scene' is an autorelease object

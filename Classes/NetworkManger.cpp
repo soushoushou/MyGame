@@ -45,22 +45,12 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strAccountLen), 2);
 	pIndex += 2;
-	for (int i = 0; i <= requestData.m_account.length(); ++i)
-	{
-//		*pIndex = requestData.m_account[i];
-        memcpy(pIndex,requestData.m_account.c_str(),requestData.m_account.length());
-        pIndex+=requestData.m_account.length();
-        
-    }
+	memcpy(pIndex, requestData.m_account.c_str(), requestData.m_strAccountLen);
+	pIndex += requestData.m_strAccountLen;
     memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
-	for (int i = 0; i <= requestData.m_roleName.length(); ++i)
-	{
-//		(char)(*pIndex) = requestData.m_roleName[i];
-//        pIndex++;
-        memcpy(pIndex,requestData.m_roleName.c_str(),requestData.m_roleName.length());
-        pIndex+=requestData.m_roleName.length();
-	}
+	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_strRoleNameLen);
+	pIndex += requestData.m_strRoleNameLen;
 	memcpy(pIndex, ((char*)&requestData.m_sex), 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_yanZhengMa), 4);
@@ -87,11 +77,9 @@ bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
-	for (int i = 0; i <= requestData.m_roleName.length(); ++i)
-	{
-        memcpy(pIndex,requestData.m_roleName.c_str(),requestData.m_roleName.length());
-        pIndex+=requestData.m_roleName.length();
-	}
+	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_strRoleNameLen);
+	pIndex += requestData.m_strRoleNameLen;
+
 	memcpy(pIndex, ((char*)&requestData.m_checkTime), 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_checkNum), 4);
