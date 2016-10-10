@@ -315,19 +315,18 @@ bool  NetworkManger::CACKResponseQueue::isEmpty()
 	return m_queue.empty();
 }
 
-S_ACKResponse NetworkManger::CACKResponseQueue::getFrontFromQueue()
+S_ACKResponse* NetworkManger::CACKResponseQueue::getFrontFromQueue()
 {
 	if (m_queue.empty())
 	{
-		S_ACKResponse S;
-		return S;
+		return nullptr;
 	}
 	return m_queue.front();
 }
 
 void NetworkManger::CACKResponseQueue::pushACKResponse(void* responseData, int size)
 {
-	S_ACKResponse s(responseData, size);
+	S_ACKResponse *s = new S_ACKResponse(responseData, size);
 	m_queue.push_back(s);
 }
 
@@ -335,6 +334,7 @@ void NetworkManger::CACKResponseQueue::popACKResponse()
 {
 	if (!m_queue.empty())
 	{
+		delete m_queue.front();
 		m_queue.pop_front();
 	}
 }
@@ -357,12 +357,12 @@ void NetworkManger::popACKQueue()
 short NetworkManger::getQueueFrontACKCmd()
 {
 	unsigned short cmd = 0;
-	S_ACKResponse s = m_ackQueue.getFrontFromQueue();
-	memcpy(&cmd, s.m_buf + 2, 2);
+	S_ACKResponse *s = m_ackQueue.getFrontFromQueue();
+	memcpy(&cmd, s->m_buf + 2, 2);
 	return ntohs(cmd);
 }
 
 void* NetworkManger::getQueueFrontACKBinaryData()
 {
-	return m_ackQueue.getFrontFromQueue().m_buf;
+	return m_ackQueue.getFrontFromQueue()->m_buf;
 }

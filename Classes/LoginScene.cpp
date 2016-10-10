@@ -52,9 +52,9 @@ void LoginScene::update(float dt)
 
 
 			//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
-			//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
+			NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
 			//NetworkManger::getInstance()->SendRequest_JoinRoom(jr);	
-			NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
+			//NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
 			//NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
 			//NetworkManger::getInstance()->SendRequest_ReadyPlay(pr);
 			//NetworkManger::getInstance()->SendRequest_FaPai(fp);
@@ -138,6 +138,10 @@ void LoginScene::update(float dt)
 			char buf[1024];
 			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
 			log(buf);
+			S_BuyDiamondReq bd(1000);
+			//NetworkManger::getInstance()->SendRequest_BuyDiamond(bd);
+			S_QuitRoomReq qr;
+			NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
 
 			//NetworkManger::getInstance()->shutDownNetwork();
 		}

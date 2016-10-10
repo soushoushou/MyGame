@@ -82,6 +82,10 @@ struct S_ACKResponse
 		m_len = s.m_len;
 		return *this;
 	}
+	~S_ACKResponse()
+	{
+		int i = 0;
+	}
 	char m_buf[3 * 1024];
 	int m_len;
 };
@@ -364,13 +368,12 @@ struct S_SearchZhanjiReq
 //查询战绩响应
 struct S_SearchZhanjiACK
 {
-	S_SearchZhanjiACK() :m_cmd(0){}
+	S_SearchZhanjiACK() :m_cmd(0),m_zhanji(""){}
 
 	static S_SearchZhanjiACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
 		S_SearchZhanjiACK s;
-		int i = 0;
 		memcpy(&s.m_packageLen, pData, 2);
 		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
@@ -380,7 +383,7 @@ struct S_SearchZhanjiACK
 		memcpy(&s.m_zhanjiLen, pData, 2);
 		s.m_zhanjiLen = ntohl(s.m_zhanjiLen);
 		pData += 2;
-		char buf[2048];
+		char buf[2048] = {0};
 		memcpy(buf, pData, s.m_zhanjiLen);
 		s.m_zhanji = buf;
 		return s;

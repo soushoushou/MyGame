@@ -50,10 +50,10 @@ private:
 		void pushACKResponse(void* responseData, int size);		//响应消息入队
 		bool isEmpty();											//判空
 		void popACKResponse();									//出队
-		S_ACKResponse getFrontFromQueue();						//获得队头数据
+		S_ACKResponse* getFrontFromQueue();						//获得队头数据
 	protected:
 	private:
-		deque<S_ACKResponse> m_queue;							//消息队列
+		deque<S_ACKResponse*> m_queue;							//消息队列
 	};
 
 	CACKResponseQueue m_ackQueue;			//ack消息队列，用于主线程获得ack响应消息后进行渲染
