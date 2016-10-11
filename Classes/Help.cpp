@@ -145,7 +145,7 @@ void Help::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		switch (tag)
 		{
 		case 1:
-			CCDirector::sharedDirector()->replaceScene(MainScene::scene());
+			//CCDirector::sharedDirector()->replaceScene(MainScene::scene());
 			break;
 		}
 	}

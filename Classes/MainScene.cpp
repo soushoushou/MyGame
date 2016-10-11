@@ -23,7 +23,8 @@ using namespace ui;
 
 
 
-MainScene::MainScene()
+MainScene::MainScene(unsigned long long playerID):
+m_playerID(playerID), m_strPlayerName(""), m_currentDiamond(0), m_currentMoney(0)
 {
 	m_pNoticeLabel = NULL;
 	m_pUser = NULL;
@@ -34,13 +35,30 @@ MainScene::~MainScene()
 {
 }
 
-Scene* MainScene::scene(){
+Scene* MainScene::scene(unsigned long long playerID){
 	Scene* scene = Scene::create();
-	MainScene * mainScene = MainScene::create();
+	MainScene * mainScene = MainScene::createMainScene(playerID);
 	if(mainScene!=nullptr)
 	scene->addChild(mainScene);
 	return scene;
 }
+
+MainScene* MainScene::createMainScene(unsigned long long playerID)
+{
+	MainScene *pRet = new(std::nothrow) MainScene(playerID); 
+    if (pRet && pRet->init()) 
+	{ 
+        pRet->autorelease(); 
+        return pRet; 
+	} 
+	else
+    {
+        delete pRet;
+        pRet = nullptr;
+        return nullptr;
+    }
+}
+
 
 //初始化各种
 bool MainScene::init()
@@ -51,6 +69,9 @@ bool MainScene::init()
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;
 	if (!initPlayerProfile()) return false;
+
+	S_GetPlayerInfoReq gpi(m_playerID);
+	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
 
 	return true;
 }
@@ -76,7 +97,7 @@ bool MainScene::initPlayerProfile()
 	if (!m_pUser)
 	{
 		m_pUser = UserProfileUIInMainScene::create(this);
-		m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", "LOVEVVV666", 13300, 13333);
+		m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
 	}
 	return true;
 }
@@ -239,7 +260,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SHOP_BTN:
 		{
 			log("shop");
-			Director::getInstance()->replaceScene(ShopLayer::createScene());
+			Director::getInstance()->replaceScene(ShopLayer::createScene(m_playerID));
 			break;
 		}
 
@@ -288,6 +309,27 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 //帧刷新
 void MainScene::update(float delta)
 {
+	if (!NetworkManger::getInstance()->ackQueueIsEmpty())
+	{
+		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
+		log("LoginScene::connect suc cmd=%d", cmd);
+		if (cmd == PP_DOUNIU_GET_ROLEINFO_ACK)
+		{
+			S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+			log("LoginScene::onCreateUserResponse get data!");
+			char buf[1024];
+			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
+			log(buf);
+
+			m_strPlayerName = ack.m_strPlayerName;
+			m_currentDiamond = ack.m_currentDiamond;
+			m_currentMoney = 0;
+
+			m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
+
+		}
+	}
 	flushNoticeLabel(delta);
 }
 

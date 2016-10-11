@@ -24,7 +24,7 @@ using namespace ui;
 
 
 
-ShopLayer::ShopLayer(int number) :m_number(number)
+ShopLayer::ShopLayer(unsigned long long playerID, int number) :m_playerID(playerID), m_number(number)
 {
 }
 
@@ -33,9 +33,9 @@ ShopLayer::~ShopLayer()
 {
 }
 
-ShopLayer* ShopLayer::create(int number)
+ShopLayer* ShopLayer::create(unsigned long long playerID, int number)
 {
-	ShopLayer *pRet = new(std::nothrow)ShopLayer(number);
+	ShopLayer *pRet = new(std::nothrow)ShopLayer(playerID,number);
 	if (pRet && pRet->init()) 
 	{ 
 	pRet->autorelease(); 
@@ -49,10 +49,10 @@ ShopLayer* ShopLayer::create(int number)
 	} 
 }
 
-Scene* ShopLayer::createScene(int number)
+Scene* ShopLayer::createScene(unsigned long long playerID, int number)
 {
 	auto scene = Scene::create();
-	auto shopLayer = ShopLayer::create(number);
+	auto shopLayer = ShopLayer::create(playerID,number);
 	scene->addChild(shopLayer);
 	return scene;
 }
@@ -552,7 +552,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_BACK_BIN:
 		{
 			log("back");
-			Director::getInstance()->replaceScene(MainScene::scene());
+			Director::getInstance()->replaceScene(MainScene::scene(m_playerID));
 			break;
 		}
 		case TAG_DIAMOND01_BIN:

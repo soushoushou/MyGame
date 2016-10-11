@@ -33,26 +33,41 @@ void LoginScene::update(float dt)
 		{
 			S_LoginACK ack = S_LoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
+			log("login get data!");
 			char buf[1024];
 			sprintf(buf, "len:%d,cmd:%d,status:%d,id:%llu", ack.m_packageLen, ack.m_cmd, ack.m_statusCode,ack.m_playerID);
 			log(buf);
 
-			S_GetPlayerInfoReq s1(1);
-			S_CreateRoomReq cr;
-			S_JoinRoomReq jr(1);
-			S_SearchZhanjiReq zj;
-			S_QuitRoomReq qr;
-			S_ReadyPlayReq pr;
-			S_FaPaiReq fp;
-			S_TanPaiReq tp;		
-			S_BuyDiamondReq sb(2100);
-			S_QiangZhuangReq sq;
-			S_YaZhuReq sy(3);
+			auto item = this->getChildByName("login_button");
+			item->setVisible(false);
+			loading();
+
+			CCTransitionScene * reScene = NULL;
+			CCScene * s = MainScene::scene(ack.m_playerID);
+			float t = 1.2f;
+
+			//    CCTransitionJumpZoom
+			//    作用： 创建一个跳动的过渡动画
+			//    参数1：过渡动作的时间
+			//    参数2：切换到目标场景的对象
+			reScene = CCTransitionJumpZoom::create(t, s);
+			CCDirector::sharedDirector()->replaceScene(reScene);
+
+			//S_GetPlayerInfoReq s1(1);
+			//S_CreateRoomReq cr;
+			//S_JoinRoomReq jr(1);
+			//S_SearchZhanjiReq zj;
+			//S_QuitRoomReq qr;
+			//S_ReadyPlayReq pr;
+			//S_FaPaiReq fp;
+			//S_TanPaiReq tp;		
+			//S_BuyDiamondReq sb(2100);
+			//S_QiangZhuangReq sq;
+			//S_YaZhuReq sy(3);
 
 
 			//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(s1);
-			NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
+			//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
 			//NetworkManger::getInstance()->SendRequest_JoinRoom(jr);	
 			//NetworkManger::getInstance()->SendRequest_SearchZhanji(zj);
 			//NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
@@ -62,174 +77,144 @@ void LoginScene::update(float dt)
 			//NetworkManger::getInstance()->SendRequest_BuyDiamond(sb);
 			//NetworkManger::getInstance()->SendRequest_QiangZhuang(sq);
 			//NetworkManger::getInstance()->SendRequest_YaZhu(sy);
-			//auto item = this->getChildByName("login_button");
-			//item->setVisible(false);
-			//loading();
 
-			//CCTransitionScene * reScene = NULL;
-			//CCScene * s = MainScene::scene();
-			//float t = 1.2f;
-
-			////    CCTransitionJumpZoom
-			////    作用： 创建一个跳动的过渡动画
-			////    参数1：过渡动作的时间
-			////    参数2：切换到目标场景的对象
-			//reScene = CCTransitionJumpZoom::create(t, s);
-			//CCDirector::sharedDirector()->replaceScene(reScene);
-			//NetworkManger::getInstance()->shutDownNetwork();
 		}
-		if (cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK)			
-		{
-			//获取响应数据
-			S_CreatePlayerACK ack =S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_statusCode);
-			log(buf);
+		//if (cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK)			
+		//{
+		//	//获取响应数据
+		//	S_CreatePlayerACK ack =S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_statusCode);
+		//	log(buf);
+		//}
+		//if (cmd == PP_DOUNIU_GET_ROLEINFO_ACK)
+		//{
+		//	S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
+		//	log(buf);
 
-		//	NetworkManger::getInstance()->shutDownNetwork();
 
-			//更新ui
-			auto item = this->getChildByName("login_button");
-			item->setVisible(false);
-			loading();
+		////	NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_CREATE_ROOM_ACK)
+		//{
+		//	S_CreateRoomACK ack = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
+		//	log(buf);
+		//	S_ReadyPlayReq rp;
+		//	NetworkManger::getInstance()->SendRequest_ReadyPlay(rp);
+		//	//S_JoinRoomReq jr(ack.m_roomID);
+		//	//NetworkManger::getInstance()->SendRequest_JoinRoom(jr);
 
-			CCTransitionScene * reScene = NULL;
-			CCScene * s = MainScene::scene();
-			float t = 1.2f;
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_JOIN_ROOM_ACK)
+		//{
+		//	S_JoinRoomACK ack = S_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
+		//	log(buf);
+		//	S_BuyDiamondReq bd(1000);
+		//	//NetworkManger::getInstance()->SendRequest_BuyDiamond(bd);
 
-			//    CCTransitionJumpZoom
-			//    作用： 创建一个跳动的过渡动画
-			//    参数1：过渡动作的时间
-			//    参数2：切换到目标场景的对象
-			reScene = CCTransitionJumpZoom::create(t, s);
-			CCDirector::sharedDirector()->replaceScene(reScene);
-		}
-		if (cmd == PP_DOUNIU_GET_ROLEINFO_ACK)
-		{
-			S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
-			log(buf);
 
-		//	NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_CREATE_ROOM_ACK)
-		{
-			S_CreateRoomACK ack = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
-			log(buf);
-			S_JoinRoomReq jr(ack.m_roomID);
-			NetworkManger::getInstance()->SendRequest_JoinRoom(jr);
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_QUERY_ZHANJI_ACK)
+		//{
+		//	S_SearchZhanjiACK ack = S_SearchZhanjiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%s", ack.m_packageLen, ack.m_cmd, ack.m_zhanji.c_str());
+		//	log(buf);
 
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_JOIN_ROOM_ACK)
-		{
-			S_JoinRoomACK ack = S_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
-			log(buf);
-			S_BuyDiamondReq bd(1000);
-			//NetworkManger::getInstance()->SendRequest_BuyDiamond(bd);
-			S_QuitRoomReq qr;
-			NetworkManger::getInstance()->SendRequest_QuitRoom(qr);
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_QUIT_ROOM_ACK)
+		//{
+		//	S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
+		//	log(buf);
 
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_QUERY_ZHANJI_ACK)
-		{
-			S_SearchZhanjiACK ack = S_SearchZhanjiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%s", ack.m_packageLen, ack.m_cmd, ack.m_zhanji.c_str());
-			log(buf);
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_READY_ACK)
+		//{
+		//	S_ReadyPlayACK ack = S_ReadyPlayACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK);
+		//	log(buf);
 
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_QUIT_ROOM_ACK)
-		{
-			S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
-			log(buf);
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_FAPAI_ACK)
+		//{
+		//	S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
+		//	log(buf);
 
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_READY_ACK)
-		{
-			S_ReadyPlayACK ack = S_ReadyPlayACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK);
-			log(buf);
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_TANPAI_ACK)
+		//{
+		//	S_TanPaiACK ack = S_TanPaiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onCreateUserResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isSmaller);
+		//	log(buf);
 
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_FAPAI_ACK)
-		{
-			S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_roomID);
-			log(buf);
-
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_TANPAI_ACK)
-		{
-			S_TanPaiACK ack = S_TanPaiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isSmaller);
-			log(buf);
-
-			//NetworkManger::getInstance()->shutDownNetwork();
-		}
-		if (cmd == PP_DOUNIU_YAZHU_ACK)				//押注响应，50019
-		{
-			//获取响应数据
-			S_YaZhuACK ack = S_YaZhuACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onYaZhuResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK);
-			log(buf);
-		}
-		if (cmd == PP_DOUNIU_QIANGZHUANG_ACK)		//抢庄响应，50017
-		{
-			//获取响应数据
-			S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onQiangZhuangResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_ZhuangJiaID);
-			log(buf);
-		}
-		if (cmd == PP_DOUNIU_CHONGZHI_ACK)			//充值响应，50015
-		{
-			//获取响应数据
-			S_BuyDiamondACK ack = S_BuyDiamondACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onBuyDiamondResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK, ack.m_currentDiamond);
-			log(buf);
-		}
+		//	//NetworkManger::getInstance()->shutDownNetwork();
+		//}
+		//if (cmd == PP_DOUNIU_YAZHU_ACK)				//押注响应，50019
+		//{
+		//	//获取响应数据
+		//	S_YaZhuACK ack = S_YaZhuACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onYaZhuResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK);
+		//	log(buf);
+		//}
+		//if (cmd == PP_DOUNIU_QIANGZHUANG_ACK)		//抢庄响应，50017
+		//{
+		//	//获取响应数据
+		//	S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onQiangZhuangResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_ZhuangJiaID);
+		//	log(buf);
+		//}
+		//if (cmd == PP_DOUNIU_CHONGZHI_ACK)			//充值响应，50015
+		//{
+		//	//获取响应数据
+		//	S_BuyDiamondACK ack = S_BuyDiamondACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log("LoginScene::onBuyDiamondResponse get data!");
+		//	char buf[1024];
+		//	sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_isOK, ack.m_currentDiamond);
+		//	log(buf);
+		//}
 
 	}
 }

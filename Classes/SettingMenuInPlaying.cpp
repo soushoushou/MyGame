@@ -89,9 +89,10 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 
 void SettingMenuInPlaying::quitRoomCallback(Node* node)
 {
-    auto s = MainScene::scene();
-    if(s)
-        Director::getInstance()->replaceScene(s);
+	//ÔÝÊ±×¢ÊÍ
+    //auto s = MainScene::scene();
+    //if(s)
+    //    Director::getInstance()->replaceScene(s);
 }
 
 void SettingMenuInPlaying::onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet)

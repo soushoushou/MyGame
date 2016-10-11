@@ -18,6 +18,7 @@ UserProfileUI::UserProfileUI(Node* pParent)
 
 UserProfileUI::~UserProfileUI()
 {
+	this->release();
 }
 
 
@@ -240,6 +241,7 @@ UserProfileUI* UserProfileUIInMainScene::create(Node* pParent)
 	UserProfileUI *ui = new (std::nothrow) UserProfileUIInMainScene(pParent);
 	if (ui)
 	{
+		ui->retain();
 		ui->autorelease();
 		return ui;
 	}
@@ -441,6 +443,10 @@ UserProfileUIInMainScene::UserProfileUIInMainScene(Node* pParent) :UserProfileUI
 	m_btnAddDiamond = NULL;
 	m_spRoundRect2 = NULL;
 	m_btnAddCoin = NULL;
+	m_spDianmond = NULL;
+	m_lblCoin = NULL;
+	m_lblDiamond = NULL;
+	m_lblPlayerName = NULL;
 }
 
 bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, const string name, const int diamond
@@ -451,89 +457,128 @@ bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, c
 		return false;
 	}
 	auto director = Director::getInstance();
-	m_spRoundRect = Sprite::create("MainScene/roundRect.png");
 	if (!m_spRoundRect)
 	{
-		return false;
+		m_spRoundRect = Sprite::create("MainScene/roundRect.png");
+		if (!m_spRoundRect)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spRoundRect);
 	}
 	m_spRoundRect->setAnchorPoint(Vec2(0, 1));
 	m_spRoundRect->setPosition(director->convertToUI(Vec2(90, 65)));
-	m_pParent->addChild(m_spRoundRect);
-	m_spHead = Sprite::create(headFileName);
+	
 	if (!m_spHead)
 	{
-		return false;
+		m_spHead = Sprite::create(headFileName);
+		if (!m_spHead)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spHead);
 	}
 	m_spHead->setAnchorPoint(Vec2(0, 1));
 	m_spHead->setPosition(director->convertToUI(pos));
-	m_pParent->addChild(m_spHead);
-	m_lblPlayerName = LabelTTF::create(name, "Arial", 25);
+	
 	if (!m_lblPlayerName)
 	{
-		return false;
+		m_lblPlayerName = LabelTTF::create(name, "Arial", 25);
+		if (!m_lblPlayerName)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_lblPlayerName);
 	}
 	m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
 	m_lblPlayerName->setPosition(director->convertToUI(Vec2(130, 27)));
-	m_pParent->addChild(m_lblPlayerName);
-	m_spDianmond = Sprite::create("MainScene/diamond.png");
+	m_lblPlayerName->setString(name);
+	
 	if (!m_spDianmond)
 	{
-		return false;
+		m_spDianmond = Sprite::create("MainScene/diamond.png");
+		if (!m_spDianmond)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spDianmond);
 	}
 	m_spDianmond->setAnchorPoint(Vec2(0, 1));
 	m_spDianmond->setPosition(director->convertToUI(Vec2(125, 65)));
-	m_pParent->addChild(m_spDianmond);
+	
 	char buf[100];
 	sprintf(buf, "%d", diamond);
 	m_nDiamond = diamond;
-	m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
 	if (!m_lblDiamond)
 	{
-		return false;
+		m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
+		if (!m_lblDiamond)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_lblDiamond);
 	}
 	m_lblDiamond->setColor(Color3B(224, 179, 9));
 	m_lblDiamond->setAnchorPoint(Vec2(0, 1));
 	m_lblDiamond->setPosition(director->convertToUI(Vec2(180, 75)));
-	m_pParent->addChild(m_lblDiamond);
-	m_btnAddDiamond = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+	m_lblDiamond->setString(buf);
+	
 	if (!m_btnAddDiamond)
 	{
-		return false;
+		m_btnAddDiamond = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+		if (!m_btnAddDiamond)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_btnAddDiamond);
 	}
 	m_btnAddDiamond->setScale9Enabled(true);
 	m_btnAddDiamond->setAnchorPoint(Vec2(0, 1));
 	m_btnAddDiamond->setPosition(director->convertToUI(Vec2(300, 63)));
-	m_pParent->addChild(m_btnAddDiamond);
 	m_btnAddDiamond->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
 
-	m_spCoin = Sprite::create("MainScene/coin.png");
 	if (!m_spCoin)
 	{
-		return false;
+		m_spCoin = Sprite::create("MainScene/coin.png");
+		if (!m_spCoin)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_spCoin);
 	}
 	m_spCoin->setAnchorPoint(Vec2(0, 1));
 	m_spCoin->setPosition(director->convertToUI(Vec2(380, 65)));
-	m_pParent->addChild(m_spCoin);
+	
 	sprintf(buf, "%d", coin);
 	m_nCoin = coin;
-	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
 	if (!m_lblCoin)
 	{
-		return false;
+		m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+		if (!m_lblCoin)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_lblCoin);
 	}
 	m_lblCoin->setColor(Color3B(224, 179, 9));
 	m_lblCoin->setAnchorPoint(Vec2(0, 1));
 	m_lblCoin->setPosition(director->convertToUI(Vec2(435, 75)));
-	m_pParent->addChild(m_lblCoin);
-	m_btnAddCoin = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+	m_lblCoin->setString(buf);
+	
 	if (!m_btnAddCoin)
 	{
-		return false;
+		m_btnAddCoin = Button::create("MainScene/addDiamond_normal.png", "MainScene/addDiamond_pressed.png");
+		if (!m_btnAddCoin)
+		{
+			return false;
+		}
+		m_pParent->addChild(m_btnAddCoin);
 	}
+
 	m_btnAddCoin->setScale9Enabled(true);
 	m_btnAddCoin->setAnchorPoint(Vec2(0, 1));
 	m_btnAddCoin->setPosition(director->convertToUI(Vec2(540, 63)));
-	m_pParent->addChild(m_btnAddCoin);
+	
 	m_btnAddCoin->addTouchEventListener(CC_CALLBACK_2(UserProfileUIInMainScene::onAddBtnTouch, this));
 	return true;
 }

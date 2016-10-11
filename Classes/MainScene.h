@@ -10,10 +10,9 @@ using namespace ui;
 class MainScene :public Layer
 {
 public:
-	MainScene();
-	static Scene* scene();
+	MainScene(unsigned long long playerID);
+	static Scene* scene(unsigned long long playerID);
 	virtual bool init();
-	CREATE_FUNC(MainScene);
 	virtual void onEnter();
 	virtual void onExit();
 	virtual ~MainScene();
@@ -26,11 +25,17 @@ private:
 	bool initNotice();
 	bool initPlayerProfile();					
 	void flushNoticeLabel(float delta);			//ÖØ»æ¹«¸æ
+	static MainScene* createMainScene(unsigned long long  playerID);
 
 private:
 	LabelTTF* m_pNoticeLabel;
 	UserProfileUI* m_pUser;
 	Sprite* m_spRoundRectInNotice;		
+
+	unsigned long long m_playerID;
+	string m_strPlayerName;
+	int m_currentDiamond;
+	int m_currentMoney;
 };
 
 

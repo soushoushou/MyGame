@@ -208,7 +208,7 @@ struct S_LoginACK
 	short m_cmd;
 	int m_statusCode;
 	unsigned long long m_playerID;
-	unsigned long long m_userID;
+	unsigned long long m_userID;			//不知道有什么卵用
 	short m_playerNameLen;
 	string m_strPlayerName;
 	int m_sex;

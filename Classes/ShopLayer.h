@@ -9,13 +9,13 @@ using namespace ui;
 class ShopLayer : public cocos2d::Layer
 {
 public:
-	ShopLayer(int number);
+	ShopLayer(unsigned long long playerID,int number = 0);
 	~ShopLayer();
-	static Scene* createScene(int number = 0);
+	static Scene* createScene(unsigned long long playerID,int number = 0);
 	//static cocos2d::Scene* createScene(String str);
 	virtual bool init();
 	//CREATE_FUNC(ShopLayer);
-	static ShopLayer* create(int number = 0);
+	static ShopLayer* create(unsigned long long playerID, int number = 0);
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	//virtual void onEnter(int number);
 
@@ -70,5 +70,6 @@ private:
 	Button* s_buyCoin06Btn;
 
 	int m_number;
+	unsigned long long m_playerID;
 };
 
