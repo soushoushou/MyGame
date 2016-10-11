@@ -1,6 +1,7 @@
 #include "UserProfileUI.h"
 #include "PopupLayer.h"
 #include "ShopLayer.h"
+#include "MainScene.h"
 
 UserProfileUI::UserProfileUI(Node* pParent)
 {
@@ -18,7 +19,6 @@ UserProfileUI::UserProfileUI(Node* pParent)
 
 UserProfileUI::~UserProfileUI()
 {
-	this->release();
 }
 
 
@@ -586,6 +586,7 @@ bool UserProfileUIInMainScene::setProfile(Vec2 pos, const string headFileName, c
 void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	Button* pBtn = dynamic_cast<Button*>(pSender);
+	MainScene* p = (MainScene*)m_pParent;
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		if (pBtn == m_btnAddCoin)
@@ -596,14 +597,16 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 			//ShopLayer * layer = (ShopLayer*)(scene->getChildren()->objectAtIndex(0));
 			//layer->value = "1";
 			//CCDirector::sharedDirector()->replaceScene(scene);
-
+			
 			//Director::getInstance()->pushScene(TransitionShrinkGrow::create(0, ShopLayer::createScene()));
-			Director::getInstance()->replaceScene(ShopLayer::createScene(0));
+			int i = p->getDiamond();
+			Director::getInstance()->replaceScene(ShopLayer::createScene(p->getPlayerID(),p->getDiamond(),p->getMoney(),0));
 		}
 		else if (pBtn == m_btnAddDiamond)
 		{
 			log("add diamond");
-			Director::getInstance()->replaceScene(ShopLayer::createScene(1));
+			int i = p->getDiamond();
+			Director::getInstance()->replaceScene(ShopLayer::createScene(p->getPlayerID(),p->getDiamond(),p->getMoney(),1));
 		}
 	}
 

@@ -258,6 +258,9 @@ struct S_GetPlayerInfoACK
 		pData += 4;
 		memcpy(&s.m_currentDiamond, pData, 4);
 		s.m_currentDiamond = ntohl(s.m_currentDiamond);
+		pData += 4;
+		memcpy(&s.m_currentMoney, pData, 4);
+		s.m_currentMoney = ntohl(s.m_currentMoney);
 		return s;
 	}
 	short m_packageLen;
@@ -267,6 +270,7 @@ struct S_GetPlayerInfoACK
 	string m_strPlayerName;
 	int m_sex;
 	int m_currentDiamond;
+	int m_currentMoney;
 };
 
 //创建房间请求

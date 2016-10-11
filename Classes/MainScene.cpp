@@ -226,6 +226,21 @@ void MainScene::flushNoticeLabel(float delta)
 	m_pNoticeLabel->setPositionX(newX);
 }
 
+int MainScene::getDiamond() const
+{
+	return m_currentDiamond;
+}
+
+int MainScene::getMoney() const
+{
+	return m_currentMoney;
+}
+
+unsigned long long MainScene::getPlayerID() const
+{
+	return m_playerID;
+}
+
 //触摸监听
 void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
@@ -245,7 +260,6 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
 
 			butten->getParent()->addChild(pl);
-
 			break;
 		}
 		case TAG_JOINGAME_BTN:
@@ -260,7 +274,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SHOP_BTN:
 		{
 			log("shop");
-			Director::getInstance()->replaceScene(ShopLayer::createScene(m_playerID));
+			Director::getInstance()->replaceScene(ShopLayer::createScene(m_playerID,m_currentDiamond,m_currentMoney));
 			break;
 		}
 

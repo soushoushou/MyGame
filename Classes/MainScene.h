@@ -19,6 +19,9 @@ public:
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void update(float delta);
 	void buttonCallback(CCNode* pSender);
+	int getDiamond() const;
+	int getMoney() const;
+	unsigned long long getPlayerID() const;
 private:
 	bool initBackground();
 	bool initButtons();

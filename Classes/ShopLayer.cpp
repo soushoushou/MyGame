@@ -24,7 +24,8 @@ using namespace ui;
 
 
 
-ShopLayer::ShopLayer(unsigned long long playerID, int number) :m_playerID(playerID), m_number(number)
+ShopLayer::ShopLayer(unsigned long long playerID, int diamond, int money, int number) :m_playerID(playerID), m_number(number)
+, m_diamond(diamond), m_money(money)
 {
 }
 
@@ -33,9 +34,9 @@ ShopLayer::~ShopLayer()
 {
 }
 
-ShopLayer* ShopLayer::create(unsigned long long playerID, int number)
+ShopLayer* ShopLayer::create(unsigned long long playerID, int diamond, int money, int number)
 {
-	ShopLayer *pRet = new(std::nothrow)ShopLayer(playerID,number);
+	ShopLayer *pRet = new(std::nothrow)ShopLayer(playerID, diamond, money, number);
 	if (pRet && pRet->init()) 
 	{ 
 	pRet->autorelease(); 
@@ -49,10 +50,10 @@ ShopLayer* ShopLayer::create(unsigned long long playerID, int number)
 	} 
 }
 
-Scene* ShopLayer::createScene(unsigned long long playerID, int number)
+Scene* ShopLayer::createScene(unsigned long long playerID, int diamond, int money, int number)
 {
 	auto scene = Scene::create();
-	auto shopLayer = ShopLayer::create(playerID,number);
+	auto shopLayer = ShopLayer::create(playerID, diamond, money, number);
 	scene->addChild(shopLayer);
 	return scene;
 }
@@ -89,7 +90,6 @@ bool ShopLayer::init()
 		buyDiamond->setColor(ccColor3B(colBegan.r, colBegan.g, colBegan.b));
 		buyCoin->setColor(ccColor3B(colBegan.r * 0.60, colBegan.g * 0.60, colBegan.b * 0.60));
 	}
-		
 
 	//onEnter();
 	return true;
@@ -139,12 +139,15 @@ bool ShopLayer::initTopMenuBar(){
 	s_coinInformationSpr->setPosition(Director::getInstance()->convertToUI(Vec2(s_coinInformationSpr->getContentSize().width / 2 + 660, s_coinInformationSpr->getContentSize().height / 2 + 16)));
 	
 	//初始化钻石、金币数量
-	LabelTTF* m_lblDiamond = LabelTTF::create("13300", "Arial", 25);
+	char buf[100] = { 0 };
+	sprintf(buf, "%d", m_diamond);
+	LabelTTF* m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
 	m_lblDiamond->setColor(Color3B(224, 179, 9));
 	m_lblDiamond->setPosition(Director::getInstance()->convertToUI(Vec2(m_lblDiamond->getContentSize().width / 2 + 430, m_lblDiamond->getContentSize().height / 2 + 26)));
 	this->addChild(m_lblDiamond);
 	
-	LabelTTF* m_lblCoin = LabelTTF::create("13000", "Arial", 25);
+	sprintf(buf, "%d", m_money);
+	LabelTTF* m_lblCoin = LabelTTF::create(buf, "Arial", 25);
 	m_lblCoin->setColor(Color3B(224, 179, 9));
 	m_lblCoin->setPosition(Director::getInstance()->convertToUI(Vec2(m_lblCoin->getContentSize().width / 2 + 700, m_lblCoin->getContentSize().height / 2 + 26)));
 	this->addChild(m_lblCoin);
