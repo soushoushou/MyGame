@@ -2,6 +2,7 @@
 #include "toolFunctions.h"
 #include "MainScene.h"
 #include "UserProfileUI.h"
+#include "NetworkManger.h"
 
 USING_NS_CC;
 
@@ -58,6 +59,24 @@ Scene* ShopLayer::createScene(unsigned long long playerID, int diamond, int mone
 	return scene;
 }
 
+void ShopLayer::update(float delta)
+{
+	if (!NetworkManger::getInstance()->ackQueueIsEmpty())
+	{
+		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
+		log("LoginScene::connect suc cmd=%d", cmd);
+		if (cmd == PP_DOUNIU_CHONGZHI_ACK)
+		{
+			S_BuyDiamondACK ack = S_BuyDiamondACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			NetworkManger::getInstance()->popACKQueue();
+
+			char buf[100] = { 0 };
+			sprintf(buf, "%d", ack.m_currentDiamond);
+			m_lblDiamond->setString(buf);
+		}
+	}
+}
+
 //初始化基本场景
 bool ShopLayer::init()
 {
@@ -91,6 +110,7 @@ bool ShopLayer::init()
 		buyCoin->setColor(ccColor3B(colBegan.r * 0.60, colBegan.g * 0.60, colBegan.b * 0.60));
 	}
 
+	scheduleUpdate();
 	//onEnter();
 	return true;
 }
@@ -141,13 +161,13 @@ bool ShopLayer::initTopMenuBar(){
 	//初始化钻石、金币数量
 	char buf[100] = { 0 };
 	sprintf(buf, "%d", m_diamond);
-	LabelTTF* m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
+	m_lblDiamond = LabelTTF::create(buf, "Arial", 25);
 	m_lblDiamond->setColor(Color3B(224, 179, 9));
 	m_lblDiamond->setPosition(Director::getInstance()->convertToUI(Vec2(m_lblDiamond->getContentSize().width / 2 + 430, m_lblDiamond->getContentSize().height / 2 + 26)));
 	this->addChild(m_lblDiamond);
 	
 	sprintf(buf, "%d", m_money);
-	LabelTTF* m_lblCoin = LabelTTF::create(buf, "Arial", 25);
+	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
 	m_lblCoin->setColor(Color3B(224, 179, 9));
 	m_lblCoin->setPosition(Director::getInstance()->convertToUI(Vec2(m_lblCoin->getContentSize().width / 2 + 700, m_lblCoin->getContentSize().height / 2 + 26)));
 	this->addChild(m_lblCoin);
@@ -563,6 +583,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND1");
 			auto diamond01Value = m_lblDiamond01->getString().c_str();
 			CCLOG("offset=%s", diamond01Value);	
+			S_BuyDiamondReq s(60);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 		}
 		case TAG_DIAMOND02_BIN:
@@ -570,6 +592,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND2");
 			auto diamond02Value = m_lblDiamond02->getString().c_str();
 			CCLOG("offset=%s", diamond02Value);
+			S_BuyDiamondReq s(390);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 		}
 		case TAG_DIAMOND03_BIN:
@@ -577,6 +601,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND3");
 			auto diamond03Value = m_lblDiamond03->getString().c_str();
 			CCLOG("offset=%s", diamond03Value);
+			S_BuyDiamondReq s(800);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 		}
 		case TAG_DIAMOND04_BIN:
@@ -584,6 +610,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND4");
 			auto diamond04Value = m_lblDiamond04->getString().c_str();
 			CCLOG("offset=%s", diamond04Value);
+			S_BuyDiamondReq s(1500);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 		}
 		case TAG_DIAMOND05_BIN:
@@ -591,6 +619,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND5");
 			auto diamond05Value = m_lblDiamond05->getString().c_str();
 			CCLOG("offset=%s", diamond05Value);
+			S_BuyDiamondReq s(3000);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 
 		}
@@ -599,6 +629,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND6");
 			auto diamond06Value = m_lblDiamond06->getString().c_str();
 			CCLOG("offset=%s", diamond06Value);
+			S_BuyDiamondReq s(9680);
+			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
 
 		}

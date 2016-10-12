@@ -17,6 +17,7 @@ public:
 	//CREATE_FUNC(ShopLayer);
 	static ShopLayer* create(unsigned long long playerID, int diamond, int money, int number = 0);
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
+	void update(float delta);
 	//virtual void onEnter(int number);
 
 private:
@@ -40,6 +41,9 @@ private:
 	MenuItemSprite* buyDiamond;		//购买钻石精灵
 	MenuItemSprite* buyCoin;		//购买金币精灵
 	ccColor3B colBegan;				//钻石、金币精灵的颜色
+
+	LabelTTF* m_lblDiamond;
+	LabelTTF* m_lblCoin;
 
 	LabelTTF* m_lblDiamond01;
 	LabelTTF* m_lblDiamond02;

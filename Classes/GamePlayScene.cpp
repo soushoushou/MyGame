@@ -46,9 +46,9 @@ enum ButtonTag{
 };
 
 
-GamePlayScene::GamePlayScene() :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
+GamePlayScene::GamePlayScene(unsigned long long playerID,int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
 m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL), m_pUserLeft(NULL), m_pUserRight(NULL), m_pUserTopLeft(NULL),
-m_pUserTopRight(NULL)
+m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID)
 {
     m_player = new NiuPlayer();
     m_playerRight = new NiuPlayer();
@@ -75,11 +75,28 @@ GamePlayScene::~GamePlayScene(){
 	
 }
 
+GamePlayScene* GamePlayScene::create(unsigned long long playerID,int roomID)
+{
 
-Scene* GamePlayScene::createScene()
+	GamePlayScene *pRet = new(std::nothrow) GamePlayScene(playerID,roomID); 
+    if (pRet && pRet->init())
+	{ 
+        pRet->autorelease(); 
+        return pRet; 
+	} 
+	else
+    {
+        delete pRet; 
+        pRet = nullptr; 
+        return nullptr; 
+    }
+}
+
+
+Scene* GamePlayScene::createScene(unsigned long long playerID,int roomID)
 {
 	auto scene = Scene::create();
-	auto gamePlayScene = GamePlayScene::create();
+	auto gamePlayScene = GamePlayScene::create(playerID,roomID);
 	scene->addChild(gamePlayScene);
 	return scene;
 }
@@ -88,6 +105,8 @@ void GamePlayScene::update(float delta)
 {
 	cocos2d::Size Size = Director::sharedDirector()->getWinSize();
 	auto server = DebugSimpleServer::getInstance();
+
+
 	switch (m_iState)
 	{
         case StartState:
@@ -173,11 +192,12 @@ bool GamePlayScene::initBackground()
 	spriteBK->setPosition(cocos2d::Point(size.width / 2, size.height / 2));
 	this->addChild(spriteBK);
     
-    m_pRoomNumberLabel = Label::create("房间号:008", "Arial", 25);
+	char buf[100] = { 0 };
+	sprintf(buf, "房间号:%d", m_roomID);
+    m_pRoomNumberLabel = Label::create(buf, "Arial", 25);
     if (!m_pRoomNumberLabel) return false;
     m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
     m_pRoomNumberLabel->setColor(Color3B(128, 85, 30));
-	//m_pRoomNumberLabel->enableOutline(Color4B(255, 0, 0, 255),4);
     this->addChild(m_pRoomNumberLabel);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
@@ -236,8 +256,10 @@ bool GamePlayScene::initPlayerProfile()
 	if (!m_pUser)
 	{
 		m_pUser = new HerizelUserProfileUI(this);
-        m_pUser->setProfileProperty(cocos2d::Vec2(160,550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333,2);
+		m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
 	}
+	//S_GetPlayerInfoReq gpi(m_playerID);
+	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
 	return true;
 }
 

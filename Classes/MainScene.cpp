@@ -327,20 +327,40 @@ void MainScene::update(float delta)
 	{
 		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
 		log("LoginScene::connect suc cmd=%d", cmd);
-		if (cmd == PP_DOUNIU_GET_ROLEINFO_ACK)
+		switch (cmd)
 		{
-			S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log("LoginScene::onCreateUserResponse get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
-			log(buf);
+			case PP_DOUNIU_GET_ROLEINFO_ACK:
+			{
+				S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				NetworkManger::getInstance()->popACKQueue();
+				log("LoginScene::onCreateUserResponse get data!");
+				char buf[1024];
+				sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
+				log(buf);
 
-			m_strPlayerName = ack.m_strPlayerName;
-			m_currentDiamond = ack.m_currentDiamond;
-			m_currentMoney = 0;
+				m_strPlayerName = ack.m_strPlayerName;
+				m_currentDiamond = ack.m_currentDiamond;
+				m_currentMoney = 0;
 
-			m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
+				m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
+			}
+			break;
+
+			case PP_DOUNIU_CREATE_ROOM_ACK:
+			{
+				S_CreateRoomACK cr = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				NetworkManger::getInstance()->popACKQueue();
+				Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+			}
+			break;
+
+			case PP_DOUNIU_JOIN_ROOM_ACK:
+			{
+				S_JoinRoomACK cr = S_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				NetworkManger::getInstance()->popACKQueue();
+				Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+			}
+			break;
 
 		}
 	}

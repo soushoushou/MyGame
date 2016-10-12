@@ -4,6 +4,7 @@
 #include "ui/UICheckBox.h"
 #include "ui/CocosGUI.h"
 #include "GamePlayScene.h"
+#include "MainScene.h"
 
 //#include "SimpleAudioEngine.h"
 
@@ -793,12 +794,13 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 	if (type == Widget::TouchEventType::ENDED)
 	{
 		Button* butten = (Button*)pSender;
+		string num;
 		unsigned int tag = butten->getTag();
 		if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
 			LabelTTF* label = (LabelTTF *)butten->getParent()->getChildByName("numLabel");
 			if (label == NULL)
 				return;
-			string num = (string)label->getString();
+			num = (string)label->getString();
 			int count = num.length();
 			if (tag <= TAG_9_BTN)
 			{
@@ -826,33 +828,39 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				}
 			}
 			if (tag == TAG_JOINROOM_BTN) {
-				Director::getInstance()->replaceScene(GamePlayScene::createScene());
+				int roomid = atoi(num.c_str());
+				S_JoinRoomReq jr(roomid);
+				NetworkManger::getInstance()->SendRequest_JoinRoom(jr);
 			}
 			return;
 		}
+
 		switch (tag)
 		{
-		case TAG_CREATEROOM_BTN:
-			Director::getInstance()->replaceScene(GamePlayScene::createScene());
-			break;
-		case TAG_CLOSEDIALOG_BTN:
-			butten->getParent()->removeFromParent();
-			break;
-		case TAG_SEND_BTN:						
-				Director::getInstance()->replaceScene(GamePlayScene::createScene());			
-			break;
-		case TAG_LOGOUT_BTN:
-			butten->getParent()->removeFromParent();
-			break;
-
-		case TAG_BACK_BTN:
-			if (m_callback&& m_callbackListener) {
-				(m_callbackListener->*m_callback)(butten);
+			case TAG_CREATEROOM_BTN:
+			{
+				S_CreateRoomReq ss;
+				NetworkManger::getInstance()->SendRequest_CreateRoom(ss);
+				break;
 			}
-			else {
+			case TAG_CLOSEDIALOG_BTN:
 				butten->getParent()->removeFromParent();
-			}
-			break;
+				break;
+			case TAG_SEND_BTN:
+				//Director::getInstance()->replaceScene(GamePlayScene::createScene(((MainScene*)this->getParent())->getPlayerID()));			
+				break;
+			case TAG_LOGOUT_BTN:
+				butten->getParent()->removeFromParent();
+				break;
+
+			case TAG_BACK_BTN:
+				if (m_callback&& m_callbackListener) {
+					(m_callbackListener->*m_callback)(butten);
+				}
+				else {
+					butten->getParent()->removeFromParent();
+				}
+				break;
 		}
 	}
 }
@@ -861,9 +869,13 @@ void PopupLayer::buttonCallBack(Ref* pSender) {
 	unsigned int tag = butten->getTag();
 	switch (tag)
 	{
-	case TAG_CREATEROOM_BTN:                                
-		Director::getInstance()->replaceScene(GamePlayScene::createScene());
+	case TAG_CREATEROOM_BTN:
+	{
+		S_CreateRoomReq cr;
+		NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
+		//Director::getInstance()->replaceScene(GamePlayScene::createScene(((MainScene*)this->getParent())->getPlayerID()));
 		break;
+	}
 	case TAG_CLOSEDIALOG_BTN:
 		this->removeFromParent();
 		break;

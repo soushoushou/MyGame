@@ -8,6 +8,7 @@
 #include "SettingMenuInPlaying.h"
 #include "UserProfileUI.h"
 #include "ChatLayer.h"
+#include "NetworkManger.h"
 
 class NiuPoker;
 class NiuPlayer;
@@ -32,13 +33,13 @@ enum UpdateType{
 class GamePlayScene : public cocos2d::Layer
 {
 public:
-    GamePlayScene();
+    GamePlayScene(unsigned long long playerID,int roomID);
     ~GamePlayScene();
-    static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene(unsigned long long playerID,int roomID);
     virtual bool init();
     void menuCloseCallback(cocos2d::Ref* pSender);
     
-    CREATE_FUNC(GamePlayScene);
+	static GamePlayScene* create(unsigned long long playerID,int roomID);
 
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
@@ -143,6 +144,10 @@ private:
 	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
+
+	unsigned long long m_playerID;
+	int m_roomID;
+
 
 };
 
