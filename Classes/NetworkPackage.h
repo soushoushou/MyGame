@@ -561,21 +561,24 @@ struct S_TanPaiACK
 //鍐查捇鐭宠姹?
 struct S_BuyDiamondReq
 {
-	S_BuyDiamondReq(int wantBuy) :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(8), m_wantBuy(0)
+	S_BuyDiamondReq(int type, int wantBuy) :m_cmd(PP_DOUNIU_CHONGZHI_REQ), m_packageLen(12), m_wantBuy(0), m_wantType(type)
 	{
 		m_wantBuy = htonl(wantBuy);
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
+		m_wantType = htonl(m_wantType);
+
 	}
 	short m_packageLen;
 	unsigned short m_cmd;
-	int m_wantBuy;
+	int m_wantType;					//0钻石，1金币
+	int m_wantBuy;					//充值数量
 };
 
 //鍐查捇鐭冲搷搴?
 struct S_BuyDiamondACK
 {
-	S_BuyDiamondACK() :m_cmd(0),m_isOK(0),m_currentDiamond(0){}
+	S_BuyDiamondACK() :m_cmd(0), m_isOK(0), m_currentNum(0){}
 
 	static S_BuyDiamondACK convertDataFromBinaryData(void* binaryData)
 	{
@@ -590,15 +593,19 @@ struct S_BuyDiamondACK
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
 		pData += 4;
-		memcpy(&s.m_currentDiamond, pData, 4);
-		s.m_currentDiamond = ntohl(s.m_currentDiamond);
+		memcpy(&s.m_buyType, pData, 4);
+		s.m_buyType = ntohl(s.m_buyType);
+		pData += 4;
+		memcpy(&s.m_currentNum, pData, 4);
+		s.m_currentNum = ntohl(s.m_currentNum);
 		return s;
 	}
 
 	short m_packageLen;
 	unsigned short m_cmd;
 	int m_isOK;
-	int m_currentDiamond;
+	int m_buyType;				//0钻石，1金币
+	int m_currentNum;			//钻石或金币
 };
 
 //鎶㈠簰璇锋眰

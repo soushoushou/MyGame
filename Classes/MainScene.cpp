@@ -340,7 +340,7 @@ void MainScene::update(float delta)
 
 				m_strPlayerName = ack.m_strPlayerName;
 				m_currentDiamond = ack.m_currentDiamond;
-				m_currentMoney = 0;
+				m_currentMoney = ack.m_currentMoney;
 
 				m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
 			}

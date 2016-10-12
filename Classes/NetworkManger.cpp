@@ -116,8 +116,9 @@ bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
+	memcpy(pIndex, (char*)&requestData.m_wantType, 4);
+	pIndex += 4;
 	memcpy(pIndex, (char*)&requestData.m_wantBuy, 4);
-
 	bool ret = false;
 	
 	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
