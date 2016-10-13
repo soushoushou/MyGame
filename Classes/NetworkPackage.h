@@ -43,6 +43,10 @@ using namespace std;
 #define PP_DOUNIU_QIANGZHUANG_ACK	(50017)
 #define PP_DOUNIU_YAZHU_REQ			(50018)
 #define PP_DOUNIU_YAZHU_ACK			(50019)
+#define PP_DOUNIU_QUICK_CHAT_REQ	(50020)
+#define PP_DOUNIU_QUICK_CHAT_ACK	(50021)
+#define PP_DOUNIU_VOICE_CHAT_REQ	(50022)
+#define PP_DOUNIU_VOICE_CHAT_ACK	(50023)
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
@@ -682,5 +686,86 @@ struct S_YaZhuACK
 	short m_packageLen;
 	unsigned short m_cmd;
 	int m_isOK;
+};
+
+//快捷聊天
+struct S_QuickChatReq 
+{
+	S_QuickChatReq(int quickChatSeq) :m_cmd(PP_DOUNIU_QUICK_CHAT_REQ), m_packageLen(8)
+	{
+		m_quickChatSeq = htonl(m_quickChatSeq);
+		m_packageLen = htons(m_packageLen);
+		m_cmd = htons(m_cmd);
+	}
+
+	short m_packageLen;
+	unsigned short m_cmd;
+	int m_quickChatSeq;			//聊天序号
+};
+
+struct S_QuickChatACK
+{
+	S_QuickChatACK() :m_cmd(0){}
+
+	static S_QuickChatACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_QuickChatACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_quickChatSeq, pData, 4);
+		s.m_quickChatSeq = ntohl(s.m_quickChatSeq);
+
+		return s;
+	}
+	short m_packageLen;
+	unsigned short m_cmd;
+	int m_quickChatSeq;			//聊天序号
+};
+
+//语音聊天
+struct S_VoiceChatReq
+{
+	S_VoiceChatReq(char* voiceBinaryData,int size) :m_cmd(PP_DOUNIU_VOICE_CHAT_REQ), m_voiceSize(size)
+	{
+		m_packageLen = htons(6 + m_voiceSize);
+		m_cmd = htons(m_cmd);
+		m_voiceSize = htons(m_voiceSize);
+		memcpy(m_voiceBuf, voiceBinaryData, size);
+	}
+
+	unsigned short m_packageLen;
+	unsigned short m_cmd;
+	unsigned short m_voiceSize;			//语音二进制数据大小
+	char m_voiceBuf[65535];				//语音缓冲
+};
+
+struct S_VoiceChatACK
+{
+	S_VoiceChatACK() :m_cmd(0){}
+	static S_VoiceChatACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_VoiceChatACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_voiceSize, pData, 2);
+		s.m_voiceSize = ntohl(s.m_voiceSize);
+		pData += 2;
+		memcpy(s.m_voiceBuf, (char*)binaryData, s.m_voiceSize);
+		return s;
+	}
+	short m_packageLen;
+	unsigned short m_cmd;
+	unsigned short m_voiceSize;			//语音二进制数据大小
+	char m_voiceBuf[65535];				//语音缓冲
 };
 #pragma pack(4)
