@@ -228,7 +228,7 @@ bool GamePlayScene::initButtons()
 	this->addChild(m_startGameBtn,51);
 
 	//设置按钮
-	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)));
+	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)),m_playerID);
     m_btnSetting->retain();
 
 	//聊天按钮
@@ -391,14 +391,14 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 				//快捷聊天内容以及音乐地址
 				vector<pair<string, string>> quickMessage;
-				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play game", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("play game play", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("1a", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("2aa", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("3aa", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("4aaa", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("5aaaa", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("6aaaaa", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("7bb", "game/message1.mp3"));
+				quickMessage.push_back(pair<string, string>("8bbb", "game/message1.mp3"));
 
 				m_chatLayer->createListView(quickMessage);
 

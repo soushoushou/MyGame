@@ -3,15 +3,15 @@
 #include "PopupLayer.h"
 
 
-SettingMenuInPlaying::SettingMenuInPlaying(Node* parent) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
-m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL)
+SettingMenuInPlaying::SettingMenuInPlaying(Node* parent, unsigned long long playerID) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
+m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL), m_playerID(playerID)
 {
 	m_pParent = parent;
 	init(parent);
 }
 
-SettingMenuInPlaying::SettingMenuInPlaying(Node* parent,Vec2 pos) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
-m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL)
+SettingMenuInPlaying::SettingMenuInPlaying(Node* parent, Vec2 pos, unsigned long long playerID) :m_spFrame(NULL), m_spDropdownFrame(NULL), m_btnOptions(NULL),
+m_btnDestoryRoom(NULL), m_btnQuitRoom(NULL), m_btnSetting(NULL), m_btnStatus(NORMAL), m_playerID(playerID)
 {
 	m_pParent = parent;
 	init(parent);
@@ -89,10 +89,9 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 
 void SettingMenuInPlaying::quitRoomCallback(Node* node)
 {
-	//ÔÝÊ±×¢ÊÍ
-    //auto s = MainScene::scene();
-    //if(s)
-    //    Director::getInstance()->replaceScene(s);
+	auto s = MainScene::scene(m_playerID);
+	if (s)
+		Director::getInstance()->replaceScene(s);
 }
 
 void SettingMenuInPlaying::onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet)

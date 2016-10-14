@@ -8,8 +8,8 @@ using namespace ui;
 class SettingMenuInPlaying:public Ref
 {
 public:
-	SettingMenuInPlaying(Node* parent);
-	SettingMenuInPlaying(Node* parent,Vec2 pos);				//pos为ui坐标
+	SettingMenuInPlaying(Node* parent,unsigned long long playerID);
+	SettingMenuInPlaying(Node* parent, Vec2 pos, unsigned long long playerID);				//pos为ui坐标
 	void setPos(Vec2 pos);						//pos为ui坐标
 	virtual ~SettingMenuInPlaying();	
 	void onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet);
@@ -31,5 +31,6 @@ private:
 	Button* m_btnDestoryRoom;			//解散房间
 	Button* m_btnOptions;				//选项
 	Node* m_pParent;
+	unsigned long long m_playerID;
 };
 

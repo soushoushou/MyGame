@@ -190,7 +190,6 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SEND_BTN:
 		{
 			log("send chat");
-			
 			break;
 		}
 		case TAG_CLOSE_BTN:
@@ -203,6 +202,7 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			log("quick chat");	
 			SimpleAudioEngine::getInstance()->playEffect(button->getName().c_str());
+		
 			this->removeFromParent();
 			break;
 		}

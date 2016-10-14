@@ -382,6 +382,7 @@ void MainScene::onExit()
 
 void MainScene::buttonCallback(cocos2d::CCNode *pNode) {
 	log("button call back. tag: %d", pNode->getTag());
+	NetworkManger::getInstance()->shutDownNetwork();
 	Director::getInstance()->replaceScene(LoginScene::createScene());
 }
 
