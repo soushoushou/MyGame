@@ -123,7 +123,7 @@ void DebugSimpleServer::update()
 				//有概率玩家进入房间
 				if (rand() % 10000 < 1)
 				{
-					if (rand() % 100 < 1)
+					if (rand() % 10000 < 1)
 					{
 						m_vecPlayersInRoom.push_back(createPlayerName());
 					}

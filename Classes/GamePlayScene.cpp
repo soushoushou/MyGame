@@ -46,9 +46,9 @@ enum ButtonTag{
 };
 
 
-GamePlayScene::GamePlayScene(unsigned long long playerID,int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
+GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
 m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL), m_pUserLeft(NULL), m_pUserRight(NULL), m_pUserTopLeft(NULL),
-m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID)
+m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID), m_playerInRoom(4, 0), m_playerProfileInfo(4)
 {
     m_player = new NiuPlayer();
     m_playerRight = new NiuPlayer();
@@ -61,6 +61,20 @@ m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID)
     m_creatHogBtn=false;
     m_creatMulBtn=false;
     m_playNum=1;
+
+	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
+	m_playerProfileInfo[0].profilePos = Point(80, 330);
+	m_playerProfileInfo[0].profileType = 1;
+	m_playerProfileInfo[0].playerPos = Point(165, Size.height / 2 - 30);
+	m_playerProfileInfo[1].profilePos = Point(400, 130);
+	m_playerProfileInfo[1].profileType = 0;
+	m_playerProfileInfo[1].playerPos = Point(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130);
+	m_playerProfileInfo[2].profilePos = Point(760, 130);
+	m_playerProfileInfo[2].profileType = 0;
+	m_playerProfileInfo[2].playerPos = Point(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130);
+	m_playerProfileInfo[3].profilePos = Point(1050, 330);
+	m_playerProfileInfo[3].profileType = 1;
+	m_playerProfileInfo[3].playerPos = Point(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30);
 }
 
 GamePlayScene::~GamePlayScene(){
@@ -105,6 +119,24 @@ void GamePlayScene::update(float delta)
 {
 	cocos2d::Size Size = Director::sharedDirector()->getWinSize();
 	auto server = DebugSimpleServer::getInstance();
+
+	NetworkManger *pNet = NetworkManger::getInstance();
+	if (!pNet->ackQueueIsEmpty())
+	{
+		switch (pNet->getQueueFrontACKCmd())
+		{
+		case PP_DOUNIU_GET_ROLEINFO_ACK:
+			{
+				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				m_pUser = new HerizelUserProfileUI(this);
+				m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney, 2);
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 
 	switch (m_iState)
@@ -165,14 +197,14 @@ bool GamePlayScene::init()
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initPlayerProfile()) return false;	//初始化玩家信息
-	if (!initPlayerLeftProfile()) return false;	//初始化左侧玩家信息
-	if (!initPlayerRightProfile()) return false;	//初始化左侧玩家信息
-	if (!initPlayerTopLeftProfile()) return false;	//初始化顶部左侧玩家信息
-	if (!initPlayerTopRightProfile()) return false;	//初始化顶部左侧玩家信息
+	//if (!initPlayerLeftProfile()) return false;	//初始化左侧玩家信息
+	//if (!initPlayerRightProfile()) return false;	//初始化左侧玩家信息
+	//if (!initPlayerTopLeftProfile()) return false;	//初始化顶部左侧玩家信息
+	//if (!initPlayerTopRightProfile()) return false;	//初始化顶部左侧玩家信息
 	srand((unsigned)time(NULL));//初始化随机种子
 	if (!initPlayer()) return false;
 	if (!createPokers()) return false;
-	if (!xiPai()) return false;
+	//if (!xiPai()) return false;
     schedule(schedule_selector(GamePlayScene::update));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     isRecording=false;
@@ -197,19 +229,19 @@ bool GamePlayScene::initBackground()
     m_pRoomNumberLabel = Label::create(buf, "Arial", 25);
     if (!m_pRoomNumberLabel) return false;
     m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
-    m_pRoomNumberLabel->setColor(Color3B(128, 85, 30));
+	m_pRoomNumberLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pRoomNumberLabel);
     
     m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
     if (!m_pNoticeLabel) return false;
     m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 290));
-	m_pNoticeLabel->setColor(Color3B(128, 85, 30));
+	m_pNoticeLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pNoticeLabel);
     
     m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
     if (!m_pModelLabel) return false;
     m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
-	m_pModelLabel->setColor(Color3B(220, 163, 59));
+	m_pModelLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pModelLabel);
 	return true;
 }
@@ -252,14 +284,16 @@ bool GamePlayScene::initButtons()
 
 bool GamePlayScene::initPlayerProfile()
 {
-	cocos2d::Size Size = Director::getInstance()->getWinSize();
-	if (!m_pUser)
-	{
-		m_pUser = new HerizelUserProfileUI(this);
-		m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
-	}
-	//S_GetPlayerInfoReq gpi(m_playerID);
-	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
+	//cocos2d::Size Size = Director::getInstance()->getWinSize();
+	//if (!m_pUser)
+	//{
+	//	m_pUser = new HerizelUserProfileUI(this);
+	//	m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
+	//}
+
+	S_GetPlayerInfoReq gpi(m_playerID);
+	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
+
 	return true;
 }
 
@@ -442,18 +476,20 @@ bool GamePlayScene::initPlayer(){
 	//设置主玩家的位置
     m_player->setPoint(cocos2d::Vec2(Size.width / 2, Size.height / 6-20));
     m_player->setPlayerClass(PlayerType_Me);
-    //设置玩家右的位置
-    m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
-    m_playerRight->setPlayerClass(PlayerType_Right);
-    //设置玩家上二的位置
-    m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130));
-    m_playerTopRight->setPlayerClass(PlayerType_TopRight);
-    //设置玩家上一的位置
-    m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130));
-    m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
-    //设置玩家左的位置
-    m_playerLeft->setPoint(Vec2(165, Size.height / 2 - 30));
-    m_playerLeft->setPlayerClass(PlayerType_Left);
+
+	//注释。。不符合逻辑
+    ////设置玩家右的位置
+    //m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
+    //m_playerRight->setPlayerClass(PlayerType_Right);
+    ////设置玩家上二的位置
+    //m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130));
+    //m_playerTopRight->setPlayerClass(PlayerType_TopRight);
+    ////设置玩家上一的位置
+    //m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130));
+    //m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
+    ////设置玩家左的位置
+    //m_playerLeft->setPoint(Vec2(165, Size.height / 2 - 30));
+    //m_playerLeft->setPlayerClass(PlayerType_Left);
 
 	return true;
 }
