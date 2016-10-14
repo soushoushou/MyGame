@@ -80,6 +80,14 @@ private:
     /** 选择倍数超时事件 */
     void notChooseMulAction(float dt);
 private:
+	//其余4个玩家的玩家位置和头像位置
+	struct PlayerAndProfilePos 
+	{
+		Point playerPos;
+		Point profilePos;
+		int profileType;		//0为水平，1为垂直
+	};
+
 	TimeLayer* m_timeLayer;
 	ChatLayer* m_chatLayer;
 
@@ -147,8 +155,8 @@ private:
 
 	unsigned long long m_playerID;
 	int m_roomID;
-
-
+	vector<PlayerAndProfilePos> m_playerProfileInfo;
+	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
 };
 
 
