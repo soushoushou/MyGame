@@ -3,7 +3,8 @@
 #include "toolFunctions.h"
 #include "ui/UIEditBox/UIEditBox.h"
 #include "ui/CocosGUI.h"
-#include "SimpleAudioEngine.h"   
+#include "SimpleAudioEngine.h"
+#include "GameSocket.h"
 
 using namespace CocosDenshion;
 
@@ -19,18 +20,18 @@ public:
 	virtual bool init();
 	CREATE_FUNC(ChatLayer);
 
-	//≥ı ºªØ±≥æ∞
+	//初始化聊天背景
 	bool initChatBG();
-	//…Ë÷√ ‰»ÎøÚ
-	bool createListView(const vector<pair<string, string>> quickMessage);
+	//创建快捷聊天
+	bool createListView();
 
 	void selectedItemEvent(cocos2d::Ref *pSender, ListViewEventType type);
 
-	//≥ı ºªØ±ÍÃ‚
+	//初始化标题
 	bool initTitle();
-	//≥ı ºªØ∞¥≈•
+	//初始化按钮
 	bool initButton();
-	//…Ë÷√ ‰»ÎøÚ
+	//初始化编辑框
 	bool initEditBox();
 
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
@@ -40,12 +41,15 @@ public:
 	virtual void editBoxTextChanged(EditBox* editBox, const std::string &text);
 	virtual void editBoxReturn(EditBox *editBox);
 
+	//模拟从服务器取得数据
+	bool readMessage(const vector<pair<string, string>> quickMessage);
 
 protected:
 	Sprite* m_pFrameSprtie;							//œ˚œ¢øÚæ´¡È
 
 private:
 	ListView* lv;
-
+	vector<pair<string, string>> my_quickMessage;
+	CGameSocket* m_pSocket;
 };
 

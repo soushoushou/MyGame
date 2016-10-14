@@ -400,7 +400,11 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				quickMessage.push_back(pair<string, string>("7bb", "game/message1.mp3"));
 				quickMessage.push_back(pair<string, string>("8bbb", "game/message1.mp3"));
 
-				m_chatLayer->createListView(quickMessage);
+
+
+				//m_chatLayer->createListView(quickMessage);
+				m_chatLayer->readMessage(quickMessage);
+				m_chatLayer->createListView();
 
 				addChild(m_chatLayer,500);
 				break;

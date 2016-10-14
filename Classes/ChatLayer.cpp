@@ -135,7 +135,14 @@ bool ChatLayer::initEditBox()
 	return true;
 }
 
-bool ChatLayer::createListView(const vector<pair<string, string>> quickMessage)
+//模拟已读取聊天
+bool ChatLayer::readMessage(const vector<pair<string, string>> quickMessage){
+	my_quickMessage = quickMessage;
+
+	return true;
+}
+
+bool ChatLayer::createListView()
 {
 	Size size = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -151,15 +158,16 @@ bool ChatLayer::createListView(const vector<pair<string, string>> quickMessage)
 	lv->addEventListenerListView(this, listvieweventselector(ChatLayer::selectedItemEvent));
 	this->addChild(lv);
 
-	for (int i = 0; i < quickMessage.size(); ++i)
+	for (int i = 0; i < my_quickMessage.size(); ++i)
 	{
 		auto button = Button::create("game/chat-line.png");
 		button->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
 		button->setScale9Enabled(true);
-		button->setName(quickMessage[i].second);
+		//button->setName(my_quickMessage[i].second);
+		button->setTag(i + 100);
 		button->addTouchEventListener(CC_CALLBACK_2(ChatLayer::onBtnTouch, this));
 
-		LabelTTF* quickLable = LabelTTF::create(quickMessage[i].first, "fonts/arial.ttf", 30);
+		LabelTTF* quickLable = LabelTTF::create(my_quickMessage[i].first, "fonts/arial.ttf", 30);
 		//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
 		quickLable->setPosition(Point(size.width / 2 - 350, size.height / 2 - 285));
 		button->addChild(quickLable);
@@ -190,6 +198,7 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SEND_BTN:
 		{
 			log("send chat");
+			
 			break;
 		}
 		case TAG_CLOSE_BTN:
@@ -198,11 +207,14 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			this->removeFromParent();
 			break;
 		}
+
 		default:
 		{
-			log("quick chat");	
-			SimpleAudioEngine::getInstance()->playEffect(button->getName().c_str());
-		
+			log("quick chat");
+
+			int i = tag - 100;//获取第几个快捷聊天
+
+			SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[i].second.c_str());
 			this->removeFromParent();
 			break;
 		}
