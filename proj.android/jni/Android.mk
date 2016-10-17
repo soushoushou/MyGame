@@ -30,7 +30,12 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/SettingMenuInPlaying.cpp \
 				   ../../Classes/ShopLayer.cpp \
 				   ../../Classes/NetworkManger.cpp \
-				   ../../Classes/Tool.cpp
+				   ../../Classes/Tool.cpp \
+				   ../../Classes/GameSocket.cpp \
+				   ../../Classes/Global.cpp \
+				   ../../Classes/NetworkPackage.cpp \
+				   ../../Classes/TCPClient.cpp \
+				   ../../Classes/TCPRequest.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

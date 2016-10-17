@@ -34,9 +34,9 @@ void LoginScene::update(float dt)
 			S_LoginACK ack = S_LoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
 			log("login get data!");
-			char buf[1024];
-			sprintf(buf, "len:%d,cmd:%d,status:%d,id:%llu", ack.m_packageLen, ack.m_cmd, ack.m_statusCode,ack.m_playerID);
-			log(buf);
+			//char buf[1024];
+			//sprintf(buf, "len:%d,cmd:%d,status:%d,id:%llu", ack.m_packageLen, ack.m_cmd, ack.m_statusCode,ack.m_playerID);
+			//log(buf);
 
 			auto item = this->getChildByName("login_button");
 			item->setVisible(false);

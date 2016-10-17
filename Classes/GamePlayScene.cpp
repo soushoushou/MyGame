@@ -4,7 +4,7 @@
 #include "Global.h"
 #include "NiuPoker.h"
 #include "NiuPlayer.h"
-#include "direct.h"
+//#include "direct.h"
 #include <fstream>
 using namespace std;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

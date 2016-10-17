@@ -32,7 +32,8 @@ public class Audio {
             Log.e(LOG_TAG, "prepare() failed");  
         }  
         mRecorder.start();
-        Log.e(LOG_TAG, "start record！");  
+        Log.e(LOG_TAG, "start record！");
+         
 	}
 	
 	public static void startPlay(){

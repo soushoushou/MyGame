@@ -41,7 +41,8 @@
                       android:smallScreens="true"
                       android:normalScreens="true"
                       android:largeScreens="true"
-                      android:xlargeScreens="true"/>
+                      android:xlargeScreens="true"
+                      android:fitsSystemWindows="true"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest> 
