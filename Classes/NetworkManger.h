@@ -32,7 +32,7 @@ public:
 	bool SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData);
 	bool SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData);
 	bool SendRequest_YaZhu(const S_YaZhuReq& requestData);
-
+	bool SendRequest_VoiceChat(const S_VoiceChatReq& requestData);
 	//消息队列相关
 	bool ackQueueIsEmpty();						//消息队列是否为空
 	void pushACKQueue(void* data, int size);	//入队

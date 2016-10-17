@@ -4,6 +4,9 @@
 #include "Global.h"
 #include "NiuPoker.h"
 #include "NiuPlayer.h"
+#include "direct.h"
+#include <fstream>
+using namespace std;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "CDMRecordObject.h"
 #endif
@@ -447,7 +450,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 					m_recordObject->StartPlay();
 				#endif
-            
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo minfo;//定义Jni函数信息结构体
 					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
@@ -459,10 +461,23 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 						CCLog("jni:此函数存在");
 						//调用此函数
 						minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,823);
+						fstream _file;
+						_file.open("/ione.pcm", ios::in);
+						if (!_file)
+						{
+							log("video file notin");
+						}
+						else
+						{
+							char* buf = Load_File_JSON("/ione.pcm");
+							S_VoiceChatReq vcr(buf, strlen(buf));
+							NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
+							log("video file in");
+						}
 					}
 					CCLog("jni-java函数执行完毕");
 				#endif
-			
+
                 break;
 			}
             default:
@@ -470,7 +485,30 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 }
+char* GamePlayScene::Load_File_JSON(const char* filename)
+{
+	FILE *fp; char *str; long flength;
 
+	fp = fopen(filename, "rb");
+	if (!fp)
+	{
+		log("!!FILE open ERROR \n");
+		return NULL;
+	}
+
+	fseek(fp, 0, SEEK_END);
+	flength = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	str = (char*)malloc(flength * sizeof(char));
+	assert(str != NULL);
+
+	fread(str, flength, 1, fp);
+	printf("%s\n", str);
+	fclose(fp);
+
+	return str;
+}
 bool GamePlayScene::initPlayer(){
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	//设置主玩家的位置

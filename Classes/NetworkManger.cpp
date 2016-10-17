@@ -282,7 +282,24 @@ bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 	delete[] dataBuf;
 	return ret;
 }
+bool NetworkManger::SendRequest_VoiceChat(const S_VoiceChatReq& requestData)
+{
+	//¥¶¿Ì ˝æ›
+	char* dataBuf = new char[requestData.m_packageLen];
+	char* pIndex = dataBuf;
+	memcpy(pIndex, &requestData, 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_voiceSize), 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_voiceBuf), requestData.m_voiceSize);
+	bool ret = false;
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 
+	delete[] dataBuf;
+	return ret;
+}
 bool NetworkManger::SendRequest(void* requestData, int size)
 {
 	CTCPRequest *request = new CTCPRequest;
