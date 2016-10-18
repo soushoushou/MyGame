@@ -95,3 +95,43 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 	}
 	return false;
 }
+
+bool SiteManager::showZhuangJia(unsigned long long playerID)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			m_pUserProfileVecs[i]->showBanker();
+			return true;
+		}
+		
+	}
+	return false;
+}
+
+bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			m_pUserProfileVecs[i]->setMultiple(multiple);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool SiteManager::showMultiple(unsigned long long playerID)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			m_pUserProfileVecs[i]->showMultiple();
+			return true;
+		}
+	}
+	return false;
+}

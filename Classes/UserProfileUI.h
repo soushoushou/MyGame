@@ -36,7 +36,8 @@ public:
 	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
 	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple) = 0;
 	virtual void showMultiple(bool isShow = true) = 0;												//显示倍数
-	virtual void showBanker(bool isShow = true) = 0;													//显示庄家框
+	virtual void showBanker(bool isShow = true) = 0;												//显示庄家框
+	bool setMultiple(int multiple);																	//设置倍数
 	virtual ~IUserProfileUIInGame()
 	{
 		m_spBankerFrame->removeFromParent();

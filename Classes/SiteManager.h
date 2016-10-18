@@ -20,9 +20,11 @@ public:
 	//离开座位
 	bool leaveSite(unsigned long long playerID);
 	//设置倍数
-	bool setMultiple(unsigned long long playerID);
+	bool setMultiple(unsigned long long playerID, int multiple);
+	//显示倍数
+	bool showMultiple(unsigned long long playerID);
 	//设置庄家
-	bool setZhuangJia(unsigned long long playerID);
+	bool showZhuangJia(unsigned long long playerID);
 
 private:
 	struct PlayerAndProfilePos

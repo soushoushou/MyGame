@@ -151,6 +151,33 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 	return true;
 }
 
+bool IUserProfileUIInGame::setMultiple(int multiple)
+{
+	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
+	if (!m_lblMultiple)
+	{
+		m_lblMultiple = LabelTTF::create(txts[multiple], "Arial", 30);
+		if (!m_lblMultiple)
+		{
+			return false;
+		}
+		m_lblMultiple->setColor(Color3B::GREEN);
+		m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
+		m_lblMultiple->setAnchorPoint(Vec2(0, 1));
+		if (m_spFrame->getPosition().y <= 100)
+		{
+			m_lblMultiple->setPosition(Vec2(15, 150));
+		}
+		else
+			m_lblMultiple->setPosition(Vec2(15, -10));
+		m_spFrame->addChild(m_lblMultiple);
+	}
+	m_lblMultiple->setString(txts[multiple]);
+	showMultiple(false);
+	showBanker(false);
+	return true;
+}
+
 VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent) :IUserProfileUIInGame(pParent)
 {
 
