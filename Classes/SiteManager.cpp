@@ -2,7 +2,7 @@
 
 
 SiteManager::SiteManager(Node* parent) :m_pUserProfileVecs(5, nullptr), m_playerInRoom(5, 0), m_playerProfileInfo(5),
-m_inRoomPlayer(5, nullptr), m_pParent(parent), m_inRoomPlayerID(5,0)
+m_inRoomPlayer(5, nullptr), m_pParent(parent), m_inRoomPlayerID(5, 0)
 {
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	m_playerProfileInfo[0].profilePos = Point(160, 550);

@@ -3,10 +3,11 @@
 #include "cocos2d.h"
 #include "UserProfileUI.h"
 #include "NiuPlayer.h"
+#include "NiuPoker.h"
+#include "PorkerManager.h"
 #include <vector>
 using namespace std;
 USING_NS_CC;
-
 
 //管理游戏中的玩家座位
 class SiteManager
@@ -26,7 +27,9 @@ public:
 	//设置庄家
 	bool showZhuangJia(unsigned long long playerID);
 
+
 private:
+	//玩家和头像位置信息
 	struct PlayerAndProfilePos
 	{
 		Point playerPos;
@@ -40,7 +43,9 @@ private:
 	vector<IUserProfileUIInGame*> m_pUserProfileVecs;			//头像UI，第0个是当前玩家头像
 	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
 	vector<unsigned long long> m_inRoomPlayerID;				//0为不存在
-	
+
 	Node* m_pParent;
+
+	friend class PorkerManager;
 };
 

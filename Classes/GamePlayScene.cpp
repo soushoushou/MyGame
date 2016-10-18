@@ -153,12 +153,13 @@ void GamePlayScene::update(float delta)
         case StartState:
         {
 			///暂时测试用
+			static bool flag = true;
 			static int ccc = 2;
 			static int bbb = 22;
 			char buf[10] = { 0 };
 			sprintf(buf, "%d", bbb);
 			string name = buf;
-			if (rand()%100==2)
+			if (rand()%100==2 && flag)
 			{
 				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
 				if (rand() % 3 == 1)
@@ -170,23 +171,38 @@ void GamePlayScene::update(float delta)
 				++ccc;
 				++bbb;
 			}
+			if (rand()%100 == 3)
+			{
+				if (!m_timeLayer && m_bReady)
+				{
+					m_timeLayer = TimeLayer::create();
+					addChild(m_timeLayer, 50);
+				}
+				if (m_timeLayer && m_timeLayer->canRemove())
+				{
+					m_timeLayer->setVisible(false);
+					m_startGameBtn->setVisible(false);
+					m_iState = SendPokerState;
+				}
+				flag = false;
+			}
 			//////////////////////////////////////////////////////////////////////////
 
 
 		    //倒计时
             if (server->isAllReady())
             {
-                if (!m_timeLayer && m_bReady)
-                {
-                    m_timeLayer = TimeLayer::create();
-                    addChild(m_timeLayer,50);
-                }
-                if (m_timeLayer && m_timeLayer->canRemove())
-                {
-                    m_timeLayer->setVisible(false);
-                    m_startGameBtn->setVisible(false);
-                    m_iState = SendPokerState;
-                }
+				if (!m_timeLayer && m_bReady)
+				{
+					m_timeLayer = TimeLayer::create();
+					addChild(m_timeLayer, 50);
+				}
+				if (m_timeLayer && m_timeLayer->canRemove())
+				{
+					m_timeLayer->setVisible(false);
+					m_startGameBtn->setVisible(false);
+					m_iState = SendPokerState;
+				}
             }
             break;
         }
@@ -592,6 +608,7 @@ bool GamePlayScene::createPokers(){
 	} while (0);
 	return isRet;
 }
+
 #pragma mark-洗牌
 bool GamePlayScene::xiPai(){
     cocos2d::Size Size = Director::getInstance()->getVisibleSize();
