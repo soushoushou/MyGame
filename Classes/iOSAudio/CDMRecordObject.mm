@@ -26,3 +26,7 @@ void CDMRecordObject::StartRecord(){
 void CDMRecordObject::StartPlay(){
     [m_audioPlay playAudio];
 }
+
+void CDMRecordObject::convertToMp3(){
+    [m_audioPlay audio_PCMtoMP3];
+}

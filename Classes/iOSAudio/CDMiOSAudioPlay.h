@@ -13,10 +13,20 @@
     NSURL *recordedFile;
     AVAudioPlayer *player;
     AVAudioRecorder *recorder;
+    char *binayData;
     
 }
+/**
+ *  播放录音
+ */
 -(void)playAudio;
+/**
+ *  开始录音
+ */
 -(void)AudioRecording;
-
+/**
+ *  转码
+ */
+- (void)audio_PCMtoMP3;
 
 @end
