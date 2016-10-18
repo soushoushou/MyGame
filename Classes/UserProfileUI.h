@@ -39,7 +39,12 @@ public:
 	virtual void showBanker(bool isShow = true) = 0;													//ÏÔÊ¾×¯¼Ò¿ò
 	virtual ~IUserProfileUIInGame()
 	{
-		int i = 0;
+		m_spBankerFrame->removeFromParent();
+		m_lblMultiple->removeFromParent();
+		if (m_spFrame)
+		{
+			m_spFrame->removeFromParent();
+		}
 	}
 protected:
 	Sprite* m_spBankerFrame;

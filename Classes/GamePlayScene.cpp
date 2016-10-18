@@ -133,7 +133,6 @@ void GamePlayScene::update(float delta)
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
-				m_pSiteManager->leaveSite(m_playerID);
 			}
 			break;
 		case PP_DOUNIU_VOICE_CHAT_ACK:
@@ -153,23 +152,26 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
-			//static int ccc = 1;
-			//static int bbb = 22;
-			//char buf[10] = { 0 };
-			//sprintf(buf, "%d", bbb);
-			//string name = buf;
-			//if (rand()%100==2)
-			//{
-			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-			//	//if (rand() % 3 == 1)
-			//	//{
-			//	//	static int iii = 1;
-			//	//	m_pSiteManager->leaveSite(iii);
-			//	//	++iii;
-			//	//}
-			//	++ccc;
-			//	++bbb;
-			//}
+			///暂时测试用
+			static int ccc = 2;
+			static int bbb = 22;
+			char buf[10] = { 0 };
+			sprintf(buf, "%d", bbb);
+			string name = buf;
+			if (rand()%100==2)
+			{
+				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+				if (rand() % 3 == 1)
+				{
+					static int iii = 2;
+					m_pSiteManager->leaveSite(iii);
+					++iii;
+				}
+				++ccc;
+				++bbb;
+			}
+			//////////////////////////////////////////////////////////////////////////
+
 
 		    //倒计时
             if (server->isAllReady())

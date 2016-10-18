@@ -33,6 +33,11 @@ m_playerID(playerID), m_strPlayerName(""), m_currentDiamond(0), m_currentMoney(0
 
 MainScene::~MainScene()
 {
+	if (m_pUser)
+	{
+		delete m_pUser;
+		m_pUser = nullptr;
+	}
 }
 
 Scene* MainScene::scene(unsigned long long playerID){
@@ -260,8 +265,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
 
 			butten->getParent()->addChild(pl);
-			//m_pUser->release();
-			/*delete m_pUser;*/
+	
 			break;
 		}
 		case TAG_JOINGAME_BTN:
