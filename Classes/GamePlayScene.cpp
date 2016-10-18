@@ -136,6 +136,13 @@ void GamePlayScene::update(float delta)
 				m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney, 2);
 			}
 			break;
+		case PP_DOUNIU_VOICE_CHAT_ACK:
+		{
+			log("voice ack uc");
+			S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+			pNet->popACKQueue();
+			log(s.m_packageLen);
+		}
 		default:
 			break;
 		}
@@ -365,14 +372,15 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo minfo;//定义Jni函数信息结构体
 					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
-					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "recordAudio", "()V");
+					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "recordAudio", "()Ljava/lang/String;");
 
+					jobject jobj;
 					if (!isHave) {
 						CCLog("jni:此函数不存在");
 					}else{
 						CCLog("jni:此函数存在");
 						//调用此函数
-						minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,823);
+						jobj = minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID,823);
 					}
 					CCLog("jni-java函数执行完毕");
 				#endif
@@ -453,25 +461,26 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo minfo;//定义Jni函数信息结构体
 					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
-					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "startPlay", "()V");
+					bool isHave = JniHelper::getStaticMethodInfo(minfo, "com/video/android/Audio", "startPlay", "()Ljava/lang/String;");
+
+					jobject jobj;
 
 					if (!isHave) {
 						CCLog("jni:此函数不存在");
 					}else{
 						CCLog("jni:此函数存在");
 						//调用此函数
-						minfo.env->CallStaticVoidMethod(minfo.classID, minfo.methodID,823);
+						jstring js_pkn = (jstring)minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID,823);
+						std::string str_pkn = JniHelper::jstring2string(js_pkn);  
 						fstream _file;
-						_file.open("/ione.pcm", ios::in);
+						_file.open(str_pkn, ios::in);
 						if (!_file)
 						{
 							log("video file notin");
 						}
 						else
 						{
-							char* buf = Load_File_JSON("/ione.pcm");
-							S_VoiceChatReq vcr(buf, strlen(buf));
-							NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
+							Load_File_JSON(str_pkn.data());
 							log("video file in");
 						}
 					}
@@ -485,15 +494,14 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 }
-char* GamePlayScene::Load_File_JSON(const char* filename)
+void GamePlayScene::Load_File_JSON(const char* filename)
 {
 	FILE *fp; char *str; long flength;
-
 	fp = fopen(filename, "rb");
 	if (!fp)
 	{
 		log("!!FILE open ERROR \n");
-		return NULL;
+		return;
 	}
 
 	fseek(fp, 0, SEEK_END);
@@ -506,8 +514,9 @@ char* GamePlayScene::Load_File_JSON(const char* filename)
 	fread(str, flength, 1, fp);
 	printf("%s\n", str);
 	fclose(fp);
-
-	return str;
+	S_VoiceChatReq vcr(str, flength * sizeof(char));
+	NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
+	log("send");
 }
 bool GamePlayScene::initPlayer(){
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();

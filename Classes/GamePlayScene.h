@@ -152,7 +152,7 @@ private:
 	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
-	char* Load_File_JSON(const char* filename);//二进制读取录音文件
+	void Load_File_JSON(const char* filename);//二进制读取录音文件
 	unsigned long long m_playerID;
 	int m_roomID;
 	vector<PlayerAndProfilePos> m_playerProfileInfo;
