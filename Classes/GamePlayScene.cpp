@@ -51,7 +51,7 @@ enum ButtonTag{
 
 GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
 m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL), m_pUserLeft(NULL), m_pUserRight(NULL), m_pUserTopLeft(NULL),
-m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID), m_playerInRoom(4, 0), m_playerProfileInfo(4)
+m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID), m_playerInRoom(4, 0), m_playerProfileInfo(4)/*, m_pSiteManager(nullptr)*/
 {
     m_player = new NiuPlayer();
     m_playerRight = new NiuPlayer();
@@ -132,8 +132,8 @@ void GamePlayScene::update(float delta)
 			{
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				m_pUser = new HerizelUserProfileUI(this);
-				m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney, 2);
+				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
+				m_pSiteManager->leaveSite(m_playerID);
 			}
 			break;
 		case PP_DOUNIU_VOICE_CHAT_ACK:
@@ -153,6 +153,24 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
+			//static int ccc = 1;
+			//static int bbb = 22;
+			//char buf[10] = { 0 };
+			//sprintf(buf, "%d", bbb);
+			//string name = buf;
+			//if (rand()%100==2)
+			//{
+			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+			//	//if (rand() % 3 == 1)
+			//	//{
+			//	//	static int iii = 1;
+			//	//	m_pSiteManager->leaveSite(iii);
+			//	//	++iii;
+			//	//}
+			//	++ccc;
+			//	++bbb;
+			//}
+
 		    //倒计时
             if (server->isAllReady())
             {
@@ -203,7 +221,7 @@ bool GamePlayScene::init()
 	{
 		return false;
 	}
-
+	m_pSiteManager = new SiteManager(this);
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initPlayerProfile()) return false;	//初始化玩家信息
@@ -526,8 +544,8 @@ bool GamePlayScene::initPlayer(){
 
 	//注释。。不符合逻辑
     ////设置玩家右的位置
-    //m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
-    //m_playerRight->setPlayerClass(PlayerType_Right);
+	m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
+	m_playerRight->setPlayerClass(PlayerType_Right);
     ////设置玩家上二的位置
     //m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130));
     //m_playerTopRight->setPlayerClass(PlayerType_TopRight);

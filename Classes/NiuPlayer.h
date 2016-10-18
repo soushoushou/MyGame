@@ -6,12 +6,13 @@
 //
 //
 
-#ifndef NiuPlayer_h
-#define NiuPlayer_h
+//#ifndef NiuPlayer_h
+//#define NiuPlayer_h
+#pragma once
 
 #include <stdio.h>
 #include "cocos2d.h"
-#include "GamePlayScene.h"
+//#include "GamePlayScene.h"
 
 USING_NS_CC;
 
@@ -50,4 +51,4 @@ private:
 	CC_SYNTHESIZE(PlayerType, m_iPlayerClass, PlayerClass);
     Sprite *m_multiImg;
 };
-#endif /* NiuPlayer_h */
+//#endif /* NiuPlayer_h */

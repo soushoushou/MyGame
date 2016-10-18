@@ -9,6 +9,7 @@
 #include "UserProfileUI.h"
 #include "ChatLayer.h"
 #include "NetworkManger.h"
+#include "SiteManager.h"
 
 class NiuPoker;
 class NiuPlayer;
@@ -152,8 +153,7 @@ private:
 	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
-	void Load_File_JSON(const char* filename);//二进制读取录音文件
-	unsigned long long m_playerID;
+void Load_File_JSON(const char* filename);//二进制读取录音文件SiteManager* m_pSiteManager;	unsigned long long m_playerID;
 	int m_roomID;
 	vector<PlayerAndProfilePos> m_playerProfileInfo;
 	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐

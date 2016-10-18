@@ -27,46 +27,6 @@ HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent) :IUserProfileUIInGame(
 
 }
 
-//HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
-//	, const int coin) :
-//IUserProfileUIInGame(pParent)
-//{
-//	auto director = Director::getInstance();
-//	m_spFrame = Sprite::create("MainScene/userProfileFrame.png");
-//	pParent->addChild(m_spFrame);
-//	m_spFrame->setPosition(director->convertToUI(pos));
-//	m_spHead = Sprite::create(headFileName);
-//	m_spHead->setPosition(Vec2(55, 55));
-//	m_spFrame->addChild(m_spHead);
-//	m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
-//	m_lblPlayerName->setAnchorPoint(Vec2(0, 1));
-//	m_lblPlayerName->setPosition(Vec2(110,90));
-//	m_spFrame->addChild(m_lblPlayerName);
-//	m_spCoin = Sprite::create("MainScene/coin.png");
-//	m_spCoin->setAnchorPoint(Vec2(0, 1));
-//	m_spCoin->setPosition(Vec2(105, 55));
-//	m_spFrame->addChild(m_spCoin);
-//	char buf[100];
-//	sprintf(buf, "%d", diamond);
-//	m_nCoin = diamond;
-//	m_lblCoin = LabelTTF::create(buf, "Arial", 25);
-//	m_lblCoin->setColor(Color3B(224, 179, 9));
-//	m_lblCoin->setAnchorPoint(Vec2(0, 1));
-//	m_lblCoin->setPosition(Vec2(165, 45));
-//	m_spFrame->addChild(m_lblCoin);
-//
-//	if (m_lblMultiple)
-//	{
-//		m_lblMultiple->release();
-//	}
-//	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
-//	m_lblMultiple = LabelTTF::create(txts[m_nMultiple], "Arial", 30);
-//	m_lblMultiple->setColor(Color3B::GREEN);
-//	m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
-//	m_lblMultiple->setAnchorPoint(Vec2(0, 1));
-//	m_lblMultiple->setPosition(Vec2(15, -10));
-//	m_spFrame->addChild(m_lblMultiple);
-//}
 
 void HerizelUserProfileUI::showMultiple(bool isShow /* = true */)
 {
@@ -217,7 +177,7 @@ IUserProfileUIInGame* VerticalUserProfileUI::create(Node* pParent)
 	IUserProfileUIInGame *ui = new (std::nothrow) VerticalUserProfileUI(pParent);
 	if (ui)
 	{
-		ui->autorelease();
+		//ui->retain();
 		return ui;
 	}
 	CC_SAFE_DELETE(ui);
@@ -229,7 +189,7 @@ IUserProfileUIInGame* HerizelUserProfileUI::create(Node* pParent)
 	IUserProfileUIInGame *ui = new (std::nothrow) HerizelUserProfileUI(pParent);
 	if (ui)
 	{
-		ui->autorelease();
+		//ui->retain();
 		return ui;
 	}
 	CC_SAFE_DELETE(ui);
@@ -241,41 +201,13 @@ UserProfileUI* UserProfileUIInMainScene::create(Node* pParent)
 	UserProfileUI *ui = new (std::nothrow) UserProfileUIInMainScene(pParent);
 	if (ui)
 	{
-		ui->retain();
-		ui->autorelease();
+		//ui->retain();
 		return ui;
 	}
 	CC_SAFE_DELETE(ui);
 	return nullptr;
 }
 
-//VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent,Vec2 pos, const string headFileName, const string name, const int diamond
-//	, const int coin) :
-//IUserProfileUIInGame(pParent)
-//{
-//	auto director = Director::getInstance();
-//	m_spFrame = Sprite::create("MainScene/userProfileFrameV.png");
-//	pParent->addChild(m_spFrame);
-//	m_spFrame->setPosition(director->convertToUI(pos));
-//	m_spHead = Sprite::create(headFileName);
-//	m_spHead->setPosition(Vec2(62, 120));
-//	m_spFrame->addChild(m_spHead);
-//	m_lblPlayerName = LabelTTF::create(name, "Arial", 20);
-//	m_lblPlayerName->setPosition(Vec2(m_spFrame->getContentSize().width / 2, 60));
-//	m_spFrame->addChild(m_lblPlayerName);
-//	m_spCoin = Sprite::create("MainScene/coin.png");
-//	m_spCoin->setAnchorPoint(Vec2(0, 1));
-//	m_spCoin->setPosition(Vec2(5, 45));
-//	m_spFrame->addChild(m_spCoin);
-//	char buf[100];
-//	sprintf(buf, "%d", diamond);
-//	m_nCoin = diamond;
-//	m_lblCoin = LabelTTF::create(buf, "Arial", 20);
-//	m_lblCoin->setColor(Color3B(255, 252, 0));
-//	m_lblCoin->setAnchorPoint(Vec2(0, 1));
-//	m_lblCoin->setPosition(Vec2(55, 35));
-//	m_spFrame->addChild(m_lblCoin);
-//}
 
 bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond
 	, const int coin, const int multiple)
@@ -591,14 +523,6 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 	{
 		if (pBtn == m_btnAddCoin)
 		{
-			//log("add coin");
-
-			//CCScene  * scene = ShopLayer::createScene();
-			//ShopLayer * layer = (ShopLayer*)(scene->getChildren()->objectAtIndex(0));
-			//layer->value = "1";
-			//CCDirector::sharedDirector()->replaceScene(scene);
-			
-			//Director::getInstance()->pushScene(TransitionShrinkGrow::create(0, ShopLayer::createScene()));
 			int i = p->getDiamond();
 			Director::getInstance()->replaceScene(ShopLayer::createScene(p->getPlayerID(),p->getDiamond(),p->getMoney(),0));
 		}
@@ -614,5 +538,5 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 
 UserProfileUIInMainScene::~UserProfileUIInMainScene()
 {
-
+	m_spRoundRect->removeAllChildren();
 }

@@ -8,7 +8,7 @@ USING_NS_CC;
 using namespace ui;
 
 //基类
-class UserProfileUI:public Ref
+class UserProfileUI/*:public Ref*/
 {
 public:
 	UserProfileUI(Node* pParent);
@@ -37,7 +37,10 @@ public:
 	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple) = 0;
 	virtual void showMultiple(bool isShow = true) = 0;												//显示倍数
 	virtual void showBanker(bool isShow = true) = 0;													//显示庄家框
-	virtual ~IUserProfileUIInGame(){}
+	virtual ~IUserProfileUIInGame()
+	{
+		int i = 0;
+	}
 protected:
 	Sprite* m_spBankerFrame;
 	LabelTTF* m_lblMultiple;

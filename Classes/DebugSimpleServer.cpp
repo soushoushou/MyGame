@@ -42,6 +42,24 @@ string DebugSimpleServer::createPlayerName()
 	return result;
 }
 
+playerInfo DebugSimpleServer::getQueueFront()
+{
+	return m_queue.front();
+}
+
+bool DebugSimpleServer::isEmpty()
+{
+	return m_queue.empty();
+}
+
+void DebugSimpleServer::pop()
+{
+	if (!m_queue.empty())
+	{
+		m_queue.pop();
+	}
+}
+
 void DebugSimpleServer::quitRoom(const string& name)
 {
 	m_mutex.lock();
@@ -116,34 +134,37 @@ void DebugSimpleServer::update()
 	while (1)
 	{
 		m_mutex.lock();
-		if (m_alwInRoom)
-		{
-			if (m_vecPlayersInRoom.size() < 5)
-			{
-				//有概率玩家进入房间
-				if (rand() % 10000 < 1)
-				{
-					if (rand() % 10000 < 1)
-					{
-						m_vecPlayersInRoom.push_back(createPlayerName());
-					}
-				}
-			}
-		}
-		else
-		{
-			if (m_vecPlayersInRoom.size() < 4)
-			{
-				//有概率玩家进入房间
-				if (rand() % 10000 < 1)
-				{
-					if (rand() % 100 < 1)
-					{
-						m_vecPlayersInRoom.push_back(createPlayerName());
-					}
-				}
-			}
-		}
+
+		//if (m_alwInRoom)
+		//{
+		//	if (m_vecPlayersInRoom.size() < 5)
+		//	{
+		//		//有概率玩家进入房间
+		//		if (rand() % 10000 < 1)
+		//		{
+		//			if (rand() % 1000 < 1)
+		//			{
+		//				string name = createPlayerName();
+		//				m_vecPlayersInRoom.push_back(name);
+		//			}
+		//		}
+		//	}
+		//}
+		//else
+		//{
+		//	if (m_vecPlayersInRoom.size() < 4)
+		//	{
+		//		//有概率玩家进入房间
+		//		if (rand() % 10000 < 1)
+		//		{
+		//			if (rand() % 1000 < 1)
+		//			{
+		//				string name = createPlayerName();
+		//				m_vecPlayersInRoom.push_back(name);
+		//			}
+		//		}
+		//	}
+		//}
 	
 		m_mutex.unlock();
 	}
