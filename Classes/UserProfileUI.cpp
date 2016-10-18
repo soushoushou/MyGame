@@ -538,5 +538,6 @@ void UserProfileUIInMainScene::onAddBtnTouch(Ref *pSender, Widget::TouchEventTyp
 
 UserProfileUIInMainScene::~UserProfileUIInMainScene()
 {
-	m_spRoundRect->removeAllChildren();
+	//m_btnAddCoin->release();
+	//m_btnAddDiamond->release();
 }

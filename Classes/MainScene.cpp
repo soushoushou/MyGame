@@ -261,7 +261,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 			butten->getParent()->addChild(pl);
 			//m_pUser->release();
-			//delete m_pUser;
+			/*delete m_pUser;*/
 			break;
 		}
 		case TAG_JOINGAME_BTN:
