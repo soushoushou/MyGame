@@ -492,7 +492,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			}
             case TAG_RECORD_BTN:{
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-					m_recordObject->StartPlay();
+                    m_recordObject->convertToMp3();
+//					m_recordObject->StartPlay();
 				#endif
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo minfo;//定义Jni函数信息结构体
