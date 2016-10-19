@@ -10,6 +10,7 @@
 #include "ChatLayer.h"
 #include "NetworkManger.h"
 #include "SiteManager.h"
+#include "PorkerManager.h"
 
 class NiuPoker;
 class NiuPlayer;
@@ -45,6 +46,7 @@ public:
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void update(float delta);
+	void func(Node* pSender, void* pData);
 private:
 	bool initBackground();
 	bool initButtons();
@@ -66,7 +68,7 @@ private:
 	/** 发牌移动动画 */
 	void MovePk(NiuPlayer* play, NiuPoker* pk);
 
-	void func(Node* pSender, void* pData);
+	
     
     /** 初始化抢庄和不抢按钮 */
     void showHogButton();
@@ -157,8 +159,12 @@ private:
 	int m_roomID;
 	unsigned long long m_playerID;
 	SiteManager* m_pSiteManager;
+	PorkerManager* m_pPorkerManager;
 	vector<PlayerAndProfilePos> m_playerProfileInfo;
 	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
+
+	//本地测试用
+	vector<unsigned long long> m_testID;
 };
 
 

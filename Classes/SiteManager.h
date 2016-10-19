@@ -3,11 +3,11 @@
 #include "cocos2d.h"
 #include "UserProfileUI.h"
 #include "NiuPlayer.h"
-#include "NiuPoker.h"
-#include "PorkerManager.h"
 #include <vector>
 using namespace std;
 USING_NS_CC;
+
+class PorkerManager;
 
 //管理游戏中的玩家座位
 class SiteManager

@@ -3,6 +3,7 @@
 
 CTCPClient::CTCPClient()
 {
+	m_flag = false;
 	m_pRequest = nullptr;
 	// ≥ı ºªØ
 	memset(m_bufOutput, 0, sizeof(m_bufOutput));
@@ -17,6 +18,10 @@ CTCPClient::CTCPClient()
 CTCPClient::~CTCPClient()
 {
 	Destroy();
+	m_flag = true;
+	while (m_flag)
+	{
+	}
 }
 
 void CTCPClient::NetworkThreadFunc()
@@ -56,6 +61,7 @@ void CTCPClient::NetworkThreadFunc()
 		if (m_sockClient == INVALID_SOCKET)
 		{
 			m_requestMutex.unlock();
+			m_flag = false;
 			return;
 		}
 		m_requestMutex.unlock();

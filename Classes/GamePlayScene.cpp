@@ -133,6 +133,7 @@ void GamePlayScene::update(float delta)
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
+				m_testID.push_back(s.m_playerID);
 			}
 			break;
 		case PP_DOUNIU_VOICE_CHAT_ACK:
@@ -162,10 +163,19 @@ void GamePlayScene::update(float delta)
 			if (rand()%100==2 && flag)
 			{
 				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+				m_testID.push_back(ccc);
 				if (rand() % 3 == 1)
 				{
 					static int iii = 2;
 					m_pSiteManager->leaveSite(iii);
+					for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+					{
+						if (*iter == iii)
+						{
+							m_testID.erase(iter);
+							break;
+						}
+					}
 					++iii;
 				}
 				++ccc;
@@ -189,26 +199,41 @@ void GamePlayScene::update(float delta)
 			//////////////////////////////////////////////////////////////////////////
 
 
-		    //倒计时
-            if (server->isAllReady())
-            {
-				if (!m_timeLayer && m_bReady)
-				{
-					m_timeLayer = TimeLayer::create();
-					addChild(m_timeLayer, 50);
-				}
-				if (m_timeLayer && m_timeLayer->canRemove())
-				{
-					m_timeLayer->setVisible(false);
-					m_startGameBtn->setVisible(false);
-					m_iState = SendPokerState;
-				}
-            }
+		  //  //倒计时
+    //        if (server->isAllReady())
+    //        {
+				//if (!m_timeLayer && m_bReady)
+				//{
+				//	m_timeLayer = TimeLayer::create();
+				//	addChild(m_timeLayer, 50);
+				//}
+				//if (m_timeLayer && m_timeLayer->canRemove())
+				//{
+				//	m_timeLayer->setVisible(false);
+				//	m_startGameBtn->setVisible(false);
+				//	m_iState = SendPokerState;
+				//}
+    //        }
             break;
         }
-        case SendPokerState:
-			//发牌
-            SendPk();
+		case SendPokerState:
+			{
+				//发牌
+				vector<S_PlayerPorker> porkers;
+				for (int i = 0; i < m_testID.size(); ++i)
+				{
+					S_PlayerPorker s;
+					s.playerID = m_testID[i];
+					for (int j = 0; j < 5; ++j)
+					{
+						s.vecPorkerIndex[j] = rand() % 52;
+					}
+					porkers.push_back(s);
+				}
+				m_pPorkerManager->SendPorker(porkers);
+				m_iState = HogState;
+				showHogButton();
+			}
             break;
         case HogState:{
             if (m_timeLayer && m_timeLayer->canRemove())
@@ -240,6 +265,7 @@ bool GamePlayScene::init()
 		return false;
 	}
 	m_pSiteManager = new SiteManager(this);
+	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initPlayerProfile()) return false;	//初始化玩家信息

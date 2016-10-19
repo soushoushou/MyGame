@@ -75,4 +75,5 @@ private:
 
 	CTCPRequest* m_pRequest;
 	mutex m_requestMutex;
+	bool m_flag;
 };
