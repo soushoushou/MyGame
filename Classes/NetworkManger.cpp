@@ -377,7 +377,8 @@ short NetworkManger::getQueueFrontACKCmd()
 	unsigned short cmd = 0;
 	S_ACKResponse *s = m_ackQueue.getFrontFromQueue();
 	memcpy(&cmd, s->m_buf + 2, 2);
-	return ntohs(cmd);
+	unsigned short tt = ntohs(cmd);
+	return tt;
 }
 
 void* NetworkManger::getQueueFrontACKBinaryData()

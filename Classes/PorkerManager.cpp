@@ -16,7 +16,7 @@ void PorkerManager::MovePk(NiuPlayer* play, NiuPoker* pk)
 {
 	MoveTo* move;
 	__CCCallFuncND* func;
-	float time = 1;
+	float time = 0.05;
 	play->getArrPk()->addObject(pk);
 	move = MoveTo::create(time, play->getPoint());
 	func = __CCCallFuncND::create(m_pParent, callfuncND_selector(GamePlayScene::func), play);
@@ -100,11 +100,20 @@ void PorkerManager::ShowAllPorkers()
 
 void PorkerManager::EmptyAllPorkers()
 {
+	int count = 0;
+	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	for (int i = 0; i < m_pSitManager->m_inRoomPlayer.size(); ++i)
 	{
 		if (m_pSitManager->m_inRoomPlayer[i] != nullptr)
 		{
 			m_pSitManager->m_inRoomPlayer[i]->emptyAllPokers();
+			++count;
 		}
+	}
+	for (int i = 0; i < 52; i++) {
+		NiuPoker* pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
+		pk->setPosition(Vec2(Size.width / 2, Size.height / 2));
+		pk->showLast();
+		pk->setVisible(true);
 	}
 }

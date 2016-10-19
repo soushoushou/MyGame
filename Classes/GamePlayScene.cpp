@@ -98,9 +98,10 @@ void GamePlayScene::update(float delta)
 	NetworkManger *pNet = NetworkManger::getInstance();
 	if (!pNet->ackQueueIsEmpty())
 	{
-		switch (pNet->getQueueFrontACKCmd())
+		unsigned short cmd = pNet->getQueueFrontACKCmd();
+		switch (cmd)
 		{
-		case PP_DOUNIU_GET_ROLEINFO_ACK:
+			case PP_DOUNIU_GET_ROLEINFO_ACK:
 			{
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
@@ -108,13 +109,23 @@ void GamePlayScene::update(float delta)
 				m_testID.push_back(s.m_playerID);
 			}
 			break;
-		case PP_DOUNIU_VOICE_CHAT_ACK:
-		{
-			log("voice ack uc");
-			S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
-			pNet->popACKQueue();
-			log(s.m_packageLen);
-		}
+			case PP_DOUNIU_VOICE_CHAT_ACK:
+			{
+				log("voice ack uc");
+				S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				log(s.m_packageLen);
+				
+			}
+			break;
+			case PP_DOUNIU_FAPAI_ACK:
+			{
+				log("fapai ack uc");
+				S_FaPaiACK s = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				
+			}	
+			break;
 		default:
 			break;
 		}
@@ -132,7 +143,7 @@ void GamePlayScene::update(float delta)
 			char buf[10] = { 0 };
 			sprintf(buf, "%d", bbb);
 			string name = buf;
-			if (rand()%100<10 && flag && m_testID.size()<5)
+			if (rand()%100<50 && flag && m_testID.size()<5)
 			{
 				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
 				m_testID.push_back(ccc);
@@ -153,7 +164,7 @@ void GamePlayScene::update(float delta)
 				++ccc;
 				++bbb;
 			}
-			if (rand()%100 == 3)
+			if (m_testID.size()==5)
 			{
 				if (!m_timeLayer && m_bReady)
 				{
@@ -192,13 +203,18 @@ void GamePlayScene::update(float delta)
 			{
 				//发牌
 				vector<S_PlayerPorker> porkers;
+				vector<int> ttt(52, 0);
+				for (int i = 0; i < 52; ++i)
+				{
+					ttt[i] = i;
+				}
 				for (int i = 0; i < m_testID.size(); ++i)
 				{
 					S_PlayerPorker s;
 					s.playerID = m_testID[i];
 					for (int j = 0; j < 5; ++j)
 					{
-						s.vecPorkerIndex[j] = rand() % 52;
+						s.vecPorkerIndex[j] = ttt[(i) * 5 + j];
 					}
 					porkers.push_back(s);
 				}
@@ -249,6 +265,7 @@ bool GamePlayScene::init()
 #endif
 	m_pSiteManager = new SiteManager(this);
 	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
+
 	return true;
 }
 
@@ -656,5 +673,6 @@ void GamePlayScene::startNewPlay(){
 	m_pPorkerManager->EmptyAllPorkers();
     m_iState = SendPokerState;
     schedule(schedule_selector(GamePlayScene::update));
+	m_pPorkerManager->ShowAllPorkers();
 }
 
