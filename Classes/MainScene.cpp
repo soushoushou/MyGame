@@ -340,9 +340,6 @@ void MainScene::update(float delta)
 				S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
 				log("LoginScene::onCreateUserResponse get data!");
-				//char buf[1024];
-				//sprintf(buf, "len:%d,cmd:%d,status:%d", ack.m_packageLen, ack.m_cmd, ack.m_playerID);
-				//log(buf);
 
 				m_strPlayerName = ack.m_strPlayerName;
 				m_currentDiamond = ack.m_currentDiamond;

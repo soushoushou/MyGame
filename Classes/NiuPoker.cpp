@@ -64,18 +64,22 @@ NiuPoker* NiuPoker::copy(){
 void NiuPoker::printPoker(){
 	switch (this->m_huaSe) {
 	case HeiTao:
-		log("ºÚÌÒ %d", this->m_num);
+		log("heitao %d", this->m_num);
 		break;
 	case HongTao:
-		log("ºìÌÒ %d", this->m_num);
+		log("hongtao %d", this->m_num);
 		break;
 	case MeiHua:
-		log("Ã·»¨ %d", this->m_num);
+		log("meihua %d", this->m_num);
 		break;
 	case FangKuai:
-		log("·½Æ¬ %d", this->m_num);
+		log("fangkuai %d", this->m_num);
+		break;
+	case Gui:
+		log("gui %d", this->m_num);
 		break;
 	default:
+		log("other");
 		break;
 	}
 }

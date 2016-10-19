@@ -9,13 +9,14 @@ PorkerManager::PorkerManager(Node* parent, SiteManager* pSite) :m_pParent(parent
 
 PorkerManager::~PorkerManager()
 {
+	m_arrPokers->release();
 }
 
 void PorkerManager::MovePk(NiuPlayer* play, NiuPoker* pk)
 {
 	MoveTo* move;
 	__CCCallFuncND* func;
-	float time = 0.05;
+	float time = 1;
 	play->getArrPk()->addObject(pk);
 	move = MoveTo::create(time, play->getPoint());
 	func = __CCCallFuncND::create(m_pParent, callfuncND_selector(GamePlayScene::func), play);
@@ -26,6 +27,9 @@ void PorkerManager::MovePk(NiuPlayer* play, NiuPoker* pk)
 
 bool PorkerManager::createPokers()	
 {
+	m_arrPokers = __Array::create();
+	m_arrPokers->retain();
+	Size sz = Director::getInstance()->getVisibleSize();
 	bool isRet = false;
 	do
 	{
@@ -38,7 +42,9 @@ bool PorkerManager::createPokers()
 				pk = selectPoker(i, j);
 				m_pParent->addChild(pk);
 				m_arrPokers->addObject(pk);
-				pk->setVisible(false);
+				pk->showLast();
+				pk->setPosition(Vec2(sz.width / 2, sz.height / 2));
+				pk->setVisible(true);
 			}
 		}
 		isRet = true;
@@ -61,10 +67,14 @@ NiuPoker* PorkerManager::selectPoker(int huaSe, int num)
 
 void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 {
+	int count = 0;
+	//第几张牌
 	for (int kk = 0; kk < 5; ++kk)
 	{
+		//第几个人
 		for (int i = 0; i < porkers.size(); ++i)
 		{
+			//发牌
 			for (int j = 0; j < m_pSitManager->m_inRoomPlayerID.size(); ++j)
 			{
 				if (porkers[i].playerID == m_pSitManager->m_inRoomPlayerID[j])
@@ -74,5 +84,27 @@ void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 				}
 			}
 		}
-	}		
+	}
+}
+
+void PorkerManager::ShowAllPorkers()
+{
+	for (int i = 0; i < m_pSitManager->m_inRoomPlayer.size(); ++i)
+	{
+		if (m_pSitManager->m_inRoomPlayer[i] != nullptr)
+		{
+			m_pSitManager->m_inRoomPlayer[i]->showAllPokers();
+		}
+	}
+}
+
+void PorkerManager::EmptyAllPorkers()
+{
+	for (int i = 0; i < m_pSitManager->m_inRoomPlayer.size(); ++i)
+	{
+		if (m_pSitManager->m_inRoomPlayer[i] != nullptr)
+		{
+			m_pSitManager->m_inRoomPlayer[i]->emptyAllPokers();
+		}
+	}
 }

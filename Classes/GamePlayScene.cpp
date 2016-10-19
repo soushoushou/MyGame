@@ -49,45 +49,17 @@ enum ButtonTag{
 };
 
 
-GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false), m_isSend(true),
-m_iSendPk(0), m_iState(StartState), m_btnSetting(NULL), m_pUser(NULL), m_pUserLeft(NULL), m_pUserRight(NULL), m_pUserTopLeft(NULL),
-m_pUserTopRight(NULL), m_playerID(playerID), m_roomID(roomID), m_playerInRoom(4, 0), m_playerProfileInfo(4)/*, m_pSiteManager(nullptr)*/
+GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
+m_iState(StartState), m_btnSetting(NULL),m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr)
 {
-    m_player = new NiuPlayer();
-    m_playerRight = new NiuPlayer();
-    m_playerTopRight = new NiuPlayer();
-    m_playerTopLeft = new NiuPlayer();
-	m_playerLeft = new NiuPlayer();
-
-	m_arrPokers = __Array::create();
-	m_arrPokers->retain();
     m_creatHogBtn=false;
     m_creatMulBtn=false;
     m_playNum=1;
 
-	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
-	m_playerProfileInfo[0].profilePos = Point(80, 330);
-	m_playerProfileInfo[0].profileType = 1;
-	m_playerProfileInfo[0].playerPos = Point(165, Size.height / 2 - 30);
-	m_playerProfileInfo[1].profilePos = Point(400, 130);
-	m_playerProfileInfo[1].profileType = 0;
-	m_playerProfileInfo[1].playerPos = Point(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130);
-	m_playerProfileInfo[2].profilePos = Point(760, 130);
-	m_playerProfileInfo[2].profileType = 0;
-	m_playerProfileInfo[2].playerPos = Point(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130);
-	m_playerProfileInfo[3].profilePos = Point(1050, 330);
-	m_playerProfileInfo[3].profileType = 1;
-	m_playerProfileInfo[3].playerPos = Point(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30);
 }
 
 GamePlayScene::~GamePlayScene(){
 	DebugSimpleServer::getInstance()->quitRoom("alw");
-	CC_SAFE_DELETE(m_player);
-	CC_SAFE_DELETE(m_playerRight);
-	CC_SAFE_DELETE(m_playerTopRight);
-	CC_SAFE_DELETE(m_playerTopLeft);
-	CC_SAFE_DELETE(m_playerTopLeft);
-	CC_SAFE_RELEASE(m_arrPokers);
 	CC_SAFE_RELEASE(m_btnSetting);
 	
 }
@@ -160,7 +132,7 @@ void GamePlayScene::update(float delta)
 			char buf[10] = { 0 };
 			sprintf(buf, "%d", bbb);
 			string name = buf;
-			if (rand()%100==2 && flag)
+			if (rand()%100<10 && flag && m_testID.size()<5)
 			{
 				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
 				m_testID.push_back(ccc);
@@ -264,24 +236,19 @@ bool GamePlayScene::init()
 	{
 		return false;
 	}
-	m_pSiteManager = new SiteManager(this);
-	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
+
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initPlayerProfile()) return false;	//初始化玩家信息
-	//if (!initPlayerLeftProfile()) return false;	//初始化左侧玩家信息
-	//if (!initPlayerRightProfile()) return false;	//初始化左侧玩家信息
-	//if (!initPlayerTopLeftProfile()) return false;	//初始化顶部左侧玩家信息
-	//if (!initPlayerTopRightProfile()) return false;	//初始化顶部左侧玩家信息
 	srand((unsigned)time(NULL));//初始化随机种子
-	if (!initPlayer()) return false;
-	if (!createPokers()) return false;
-	//if (!xiPai()) return false;
+
     schedule(schedule_selector(GamePlayScene::update));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     isRecording=false;
     m_recordObject=new CDMRecordObject();
 #endif
+	m_pSiteManager = new SiteManager(this);
+	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
 	return true;
 }
 
@@ -356,66 +323,13 @@ bool GamePlayScene::initButtons()
 
 bool GamePlayScene::initPlayerProfile()
 {
-	//cocos2d::Size Size = Director::getInstance()->getWinSize();
-	//if (!m_pUser)
-	//{
-	//	m_pUser = new HerizelUserProfileUI(this);
-	//	m_pUser->setProfileProperty(cocos2d::Vec2(160, 550), "MainScene/timo.png", "LOVEVVV666", 13300, 13333, 2);
-	//}
-
 	S_GetPlayerInfoReq gpi(m_playerID);
 	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
 
 	return true;
 }
 
-bool GamePlayScene::initPlayerLeftProfile()
-{
-	cocos2d::Size Size = Director::getInstance()->getWinSize();
-	if (!m_pUserLeft)
-	{
-		m_pUserLeft = VerticalUserProfileUI::create(this);
-		m_pUserLeft->setProfileProperty(cocos2d::Vec2(80, 330), "MainScene/timo.png", "MM", 13300, 13333, 1);
-		m_pUserLeft->showBanker(true);
-		m_pUserLeft->showMultiple(true);
-	}
-	return true;
-}
 
-bool GamePlayScene::initPlayerRightProfile()
-{
-	cocos2d::Size Size = Director::getInstance()->getWinSize();
-	if (!m_pUserRight)
-	{
-		m_pUserRight = VerticalUserProfileUI::create(this);
-		m_pUserRight->setProfileProperty(cocos2d::Vec2(1050, 330), "MainScene/timo.png", "GG", 10000, 1333, 1);
-		//m_pUserRight->showBanker(true);
-		m_pUserRight->showMultiple(true);
-	}
-	return true;
-}
-
-bool GamePlayScene::initPlayerTopLeftProfile()
-{
-	cocos2d::Size Size = Director::getInstance()->getWinSize();
-	if (!m_pUserTopLeft)
-	{
-		m_pUserTopLeft = HerizelUserProfileUI::create(this);
-		m_pUserTopLeft->setProfileProperty(cocos2d::Vec2(400, 130), "MainScene/timo.png", "sicong", 17000, 1400, 3);
-	}
-	return true;
-}
-
-bool GamePlayScene::initPlayerTopRightProfile()
-{
-	cocos2d::Size Size = Director::getInstance()->getWinSize();
-	if (!m_pUserTopRight)
-	{
-		m_pUserTopRight = HerizelUserProfileUI::create(this);
-		m_pUserTopRight->setProfileProperty(cocos2d::Vec2(760, 130), "MainScene/timo.png", "jianlin", 17000, 1400, 3);
-	}
-	return true;
-}
 
 void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
@@ -581,129 +495,16 @@ void GamePlayScene::Load_File_JSON(const char* filename)
 	NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
 	log("send");
 }
-bool GamePlayScene::initPlayer(){
-	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
-	//设置主玩家的位置
-    m_player->setPoint(cocos2d::Vec2(Size.width / 2, Size.height / 6-20));
-    m_player->setPlayerClass(PlayerType_Me);
 
-	//注释。。不符合逻辑
-    ////设置玩家右的位置
-	m_playerRight->setPoint(cocos2d::Vec2(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30));
-	m_playerRight->setPlayerClass(PlayerType_Right);
-    ////设置玩家上二的位置
-    //m_playerTopRight->setPoint(cocos2d::Vec2(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130));
-    //m_playerTopRight->setPlayerClass(PlayerType_TopRight);
-    ////设置玩家上一的位置
-    //m_playerTopLeft->setPoint(Vec2(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130));
-    //m_playerTopLeft->setPlayerClass(PlayerType_TopLeft);
-    ////设置玩家左的位置
-    //m_playerLeft->setPoint(Vec2(165, Size.height / 2 - 30));
-    //m_playerLeft->setPlayerClass(PlayerType_Left);
-
-	return true;
-}
-
-NiuPoker* GamePlayScene::selectPoker(int huaSe, int num){
-	NiuPoker* pk;
-    char path[256] = { 0 };
-    sprintf(path, "pokerBig/%d_%d@2x.png", huaSe,num);
-    pk = NiuPoker::create("poker.png", cocos2d::Rect(0, 0, pkWidth_small, pkHeight_small));
-    pk->setHuaSe(huaSe);
-	pk->setNum(num);
-	pk->setGameMain(this);
-	return pk;
-}
-
-bool GamePlayScene::createPokers(){
-	bool isRet = false;
-	do
-	{
-		NiuPoker* pk;
-		//创建52个牌
-		for (int i = 1; i<=4; ++i)
-		{
-			for (int j = 1; j <= 13; ++j)
-			{
-				pk = selectPoker(i, j);
-				this->addChild(pk);
-				this->m_arrPokers->addObject(pk);
-                pk->setVisible(false);
-			}
-		}
-		isRet = true;
-	} while (0);
-	return isRet;
-}
-
-#pragma mark-洗牌
-bool GamePlayScene::xiPai(){
-    cocos2d::Size Size = Director::getInstance()->getVisibleSize();
-	bool isRet = false;
-	do
-	{
-		for (int i = 0; i<52; ++i)
-		{
-			NiuPoker* pk1 = (NiuPoker*)m_arrPokers->getRandomObject();
-			NiuPoker* pk2 = (NiuPoker*)m_arrPokers->getRandomObject();
-			m_arrPokers->exchangeObject(pk1, pk2);
-		}
-		isRet = true;
-	} while (0);
-    for (int i=0; i<25; i++) {
-        NiuPoker* pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
-        pk->setPosition(Vec2(Size.width / 2, Size.height / 2));
-        pk->showLast();
-        pk->setVisible(true);
-    }
-	return isRet;
-}
-
-void GamePlayScene::SendPk(){
-	NiuPoker* pk;
-	if (m_iSendPk<25)
-	{
-		pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(m_iSendPk);
-		if (m_iSendPk % 5 == 0)
-			MovePk(m_player, pk);
-		else if (m_iSendPk % 4 == 1)
-			MovePk(m_playerRight, pk);
-		else if (m_iSendPk % 4 == 2)
-			MovePk(m_playerTopRight, pk);
-		else if (m_iSendPk % 4 == 3)
-			MovePk(m_playerTopLeft, pk);
-		else
-			MovePk(m_playerLeft, pk);
-		++m_iSendPk;
-		//        m_isSend=false;
-	}
-    else{
-        m_iState = HogState;
-        showHogButton();
-    }
-}
 
 void GamePlayScene::func(Node* pSender, void* pData){
 	NiuPlayer* play = (NiuPlayer*)pData;
 	play->updatePkWeiZhi();
-	//    m_isSend = true;
 }
 
-void GamePlayScene::MovePk(NiuPlayer* play, NiuPoker* pk)
-{
-	MoveTo* move;
-	__CCCallFuncND* func;
-	float time = 0.05;
-	play->getArrPk()->addObject(pk);
-	move = MoveTo::create(time, play->getPoint());
-	func = __CCCallFuncND::create(this, callfuncND_selector(GamePlayScene::func), play);
-	Sequence* sequence = Sequence::create(move, func, NULL);
-	pk->runAction(sequence);
-}
 
 void GamePlayScene::menuCloseCallback(Ref* pSender)
 {
-	//Close the cocos2d-x game scene and quit the application
 	Director::getInstance()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -836,11 +637,7 @@ void GamePlayScene::notChooseMulAction(float dt){
 
 #pragma mark-显示结果
 void GamePlayScene::showCompare(){
-    m_player->showAllPokers();
-    m_playerRight->showAllPokers();
-    m_playerTopRight->showAllPokers();
-    m_playerTopLeft->showAllPokers();
-    m_playerLeft->showAllPokers();
+	m_pPorkerManager->ShowAllPorkers();
     m_playNum++;
     if (m_playNum<=10) {
         auto delayTime = DelayTime::create(3.0);
@@ -856,13 +653,7 @@ void GamePlayScene::startNewPlay(){
     char path[256] = { 0 };
     sprintf(path, "第%d局", m_playNum);
     m_pNoticeLabel->setString(path);
-    m_player->emptyAllPokers();
-    m_playerRight->emptyAllPokers();
-    m_playerTopRight->emptyAllPokers();
-    m_playerTopLeft->emptyAllPokers();
-    m_playerLeft->emptyAllPokers();
-    xiPai();
-    m_iSendPk=0;
+	m_pPorkerManager->EmptyAllPorkers();
     m_iState = SendPokerState;
     schedule(schedule_selector(GamePlayScene::update));
 }

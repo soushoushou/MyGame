@@ -841,6 +841,7 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			{
 				S_CreateRoomReq ss;
 				NetworkManger::getInstance()->SendRequest_CreateRoom(ss);
+
 				break;
 			}
 			case TAG_CLOSEDIALOG_BTN:

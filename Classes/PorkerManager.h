@@ -20,6 +20,8 @@ public:
 	PorkerManager(Node* parent,SiteManager* pSite);
 	virtual ~PorkerManager();
 	void SendPorker(const vector<S_PlayerPorker>& porkers);			//∑¢≈∆
+	void ShowAllPorkers();
+	void EmptyAllPorkers();
 	
 private:
 	bool createPokers();
@@ -28,7 +30,6 @@ private:
 	void MovePk(NiuPlayer* play, NiuPoker* pk);				
 private:
 	__Array* m_arrPokers;				//52’≈≈∆
-
 	Node* m_pParent;
 	SiteManager* m_pSitManager;
 };
