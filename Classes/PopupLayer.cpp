@@ -144,7 +144,7 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	numLabel->setName("numLabel");
 	numLabel->setColor(Color3B(0, 0, 0));
 	layer->addChild(numLabel, 10);
-	LabelTTF* titleLable = LabelTTF::create("ÇëÊäÈë·¿¼äºÅ", "", 40);
+	LabelTTF* titleLable = LabelTTF::create("please enter No", "", 40);
 	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
 	titleLable->setColor(Color3B(0, 0, 0));
 	layer->addChild(titleLable, 10);
