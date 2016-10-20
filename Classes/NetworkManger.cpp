@@ -372,7 +372,7 @@ void NetworkManger::popACKQueue()
 	m_ackQueue.popACKResponse();
 }
 
-short NetworkManger::getQueueFrontACKCmd()
+unsigned short NetworkManger::getQueueFrontACKCmd()
 {
 	unsigned short cmd = 0;
 	S_ACKResponse *s = m_ackQueue.getFrontFromQueue();

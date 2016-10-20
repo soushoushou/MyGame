@@ -208,6 +208,13 @@ void GamePlayScene::update(float delta)
 				{
 					ttt[i] = i;
 				}
+				for (int i = 0; i < 25; ++i)
+				{
+					int t = rand() % 52;
+					int c = ttt[t];
+					ttt[t] = ttt[i];
+					ttt[i] = c;
+				}
 				for (int i = 0; i < m_testID.size(); ++i)
 				{
 					S_PlayerPorker s;

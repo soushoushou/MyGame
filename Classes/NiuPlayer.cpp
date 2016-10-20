@@ -63,7 +63,7 @@ void NiuPlayer::updatePkWeiZhi(){
 			pk->showLast_small();
             pk->setPosition(Vec2(x + num*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
             pk->setContentSize(Size(pkWidth_small, pkHeight_small));
-			//pk->setLocalZOrder(num+1);
+			pk->setLocalZOrder(num+1);
 		}
 		++num;
 	}

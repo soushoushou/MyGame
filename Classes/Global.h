@@ -8,12 +8,12 @@ const int pkJianJu = 20;//牌与牌之间的间距
 //花色
 enum HuaSe
 {
-	HeiTao = 0,//花色比较：黑桃>红桃>草花>方块
+	HeiTao = 1,//花色比较：黑桃>红桃>草花>方块
 	HongTao,
 	MeiHua,
 	FangKuai,
 	Gui,
-	HuaSeBM = 4     //花色背面
+	HuaSeBM     //花色背面
 };
 //牌号
 enum PaiHao

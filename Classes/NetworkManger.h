@@ -37,7 +37,7 @@ public:
 	bool ackQueueIsEmpty();						//消息队列是否为空
 	void pushACKQueue(void* data, int size);	//入队
 	void popACKQueue();							//出队
-	short getQueueFrontACKCmd();				//获得队头结点的协议号
+	unsigned short getQueueFrontACKCmd();				//获得队头结点的协议号
 	void* getQueueFrontACKBinaryData();			//获得对头结点的二进制数据
 private:
 	NetworkManger();

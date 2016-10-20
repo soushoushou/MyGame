@@ -79,7 +79,7 @@ void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 			{
 				if (porkers[i].playerID == m_pSitManager->m_inRoomPlayerID[j])
 				{
-					MovePk(m_pSitManager->m_inRoomPlayer[j], (NiuPoker*)m_arrPokers->getObjectAtIndex(porkers[i].vecPorkerIndex[kk]));
+					MovePk(m_pSitManager->m_inRoomPlayer[j], ((NiuPoker*)m_arrPokers->getObjectAtIndex(porkers[i].vecPorkerIndex[kk])));
 					break;
 				}
 			}
