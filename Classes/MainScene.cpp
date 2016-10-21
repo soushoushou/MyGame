@@ -332,7 +332,7 @@ void MainScene::update(float delta)
 	if (!NetworkManger::getInstance()->ackQueueIsEmpty())
 	{
 		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
-		log("LoginScene::connect suc cmd=%d", cmd);
+		log("MainScene::connect suc cmd=%d", cmd);
 		switch (cmd)
 		{
 			case PP_DOUNIU_GET_ROLEINFO_ACK:

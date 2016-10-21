@@ -94,7 +94,6 @@ void GamePlayScene::update(float delta)
 {
 	cocos2d::Size Size = Director::sharedDirector()->getWinSize();
 	auto server = DebugSimpleServer::getInstance();
-
 	NetworkManger *pNet = NetworkManger::getInstance();
 	if (!pNet->ackQueueIsEmpty())
 	{
@@ -103,6 +102,7 @@ void GamePlayScene::update(float delta)
 		{
 			case PP_DOUNIU_GET_ROLEINFO_ACK:
 			{
+				log("info ack uc");
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
@@ -126,7 +126,19 @@ void GamePlayScene::update(float delta)
 				
 			}	
 			break;
+		break;
+		case PP_DOUNIU_FAPAI_ACK:
+		{
+			log("fapai ack uc");
+			S_FaPaiACK s = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+			pNet->popACKQueue();
+			log(s.m_pokerList.c_str());
+		}
+		break;
 		default:
+			S_FaPaiACK s = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+			pNet->popACKQueue();
+			log(s.m_pokerlilstLen);
 			break;
 		}
 	}
@@ -347,9 +359,8 @@ bool GamePlayScene::initButtons()
 
 bool GamePlayScene::initPlayerProfile()
 {
-	S_GetPlayerInfoReq gpi(m_playerID);
-	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
-
+	S_FaPaiReq fp;
+	NetworkManger::getInstance()->SendRequest_FaPai(fp);
 	return true;
 }
 
@@ -397,10 +408,11 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             case TAG_START_BTN:
             {
                 log("start game");
+			//	showWinDialog();
 				button->setTouchEnabled(false);
 				button->loadTextures("game/startgamePressed.png", "");
 				//模拟当所有玩家都准备好后再倒计时
-				m_bReady = !m_bReady;
+				m_bReady =!m_bReady;
 				DebugSimpleServer::getInstance()->playerReady("alw");
                 break;
             }
@@ -430,6 +442,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             }
 			case TAG_CHAT_BTN:
 			{
+
+
 				log("chat");
 				auto Size = Director::getInstance()->getWinSize();
 				m_chatLayer = ChatLayer::create();
@@ -481,7 +495,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 						}
 						else
 						{
-							Load_File_JSON(str_pkn.data());
+							Load_File_SEND(str_pkn.data());
 							log("video file in");
 						}
 					}
@@ -495,7 +509,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 }
-void GamePlayScene::Load_File_JSON(const char* filename)
+void GamePlayScene::Load_File_SEND(const char* filename)
 {
 	FILE *fp; char *str; long flength;
 	fp = fopen(filename, "rb");
@@ -587,7 +601,34 @@ void GamePlayScene::notHogBtnAction(){
     m_iState=CompareState;
     showCompare();
 }
-
+void GamePlayScene::showWinDialog() {
+	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/win.png", Size(600, 600));
+	vector<pair<int, int>> quickMessage;
+	quickMessage.push_back(pair<int, int>(1, +1200));
+	quickMessage.push_back(pair<int, int>(2, -1200));
+	quickMessage.push_back(pair<int, int>(3, 0));
+	quickMessage.push_back(pair<int, int>(4, 2400));
+	quickMessage.push_back(pair<int, int>(5, -1200));
+	quickMessage.push_back(pair<int, int>(6, -1200));
+	quickMessage.push_back(pair<int, int>(7, -1200));
+	quickMessage.push_back(pair<int, int>(8, -1111111));
+	pl->createListView(quickMessage);
+	this->addChild(pl,100);
+}
+void GamePlayScene::showLoseDialog() {
+	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/lose.png", Size(600, 600));
+	vector<pair<int, int>> quickMessage;
+	quickMessage.push_back(pair<int, int>(1, +1200));
+	quickMessage.push_back(pair<int, int>(2, -1200));
+	quickMessage.push_back(pair<int, int>(3, 0));
+	quickMessage.push_back(pair<int, int>(4, 2400));
+	quickMessage.push_back(pair<int, int>(5, -1200));
+	quickMessage.push_back(pair<int, int>(6, -1200));
+	quickMessage.push_back(pair<int, int>(7, -1200));
+	quickMessage.push_back(pair<int, int>(8, -1111111));
+	pl->createListView(quickMessage);
+	this->addChild(pl);
+}
 #pragma mark-显示倍数按钮
 void GamePlayScene::showChooseMultipleButton()
 {

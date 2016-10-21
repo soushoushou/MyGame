@@ -11,7 +11,7 @@
 #include "NetworkManger.h"
 #include "SiteManager.h"
 #include "PorkerManager.h"
-
+#include "PopupLayer.h"
 class NiuPoker;
 class NiuPlayer;
 USING_NS_CC;
@@ -70,6 +70,10 @@ private:
     /** 选择倍数超时事件 */
     void notChooseMulAction(float dt);
 	void Load_File_JSON(const char* filename);//二进制读取录音文件SiteManager* m_pSiteManager;	unsigned long long m_playerID;
+	/** 显示胜利对话框 */
+	void showWinDialog();
+	/** 显示失败对话框 */
+	void showLoseDialog();
 private:
 	//其余4个玩家的玩家位置和头像位置
 	struct PlayerAndProfilePos 
@@ -114,7 +118,7 @@ private:
 	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
-	
+	void Load_File_SEND(const char* filename);//二进制读取录音文件SiteManager* m_pSiteManager;	unsigned long long m_playerID;
 	int m_roomID;
 	unsigned long long m_playerID;
 	SiteManager* m_pSiteManager;
