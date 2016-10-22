@@ -20,5 +20,8 @@ public:
 	CREATE_FUNC(LoginScene);
 private:
 	CGameSocket* m_pSocket;
+
+	//≤‚ ‘’À∫≈
+	vector<pair<string, string>> m_testPort;
 };
 

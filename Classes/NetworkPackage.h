@@ -47,6 +47,7 @@ using namespace std;
 #define PP_DOUNIU_QUICK_CHAT_ACK	(50021)
 #define PP_DOUNIU_VOICE_CHAT_REQ	(50022)
 #define PP_DOUNIU_VOICE_CHAT_ACK	(50023)
+#define PP_DOUNIU_MEMBER_INFO_ACK	(50024)	
 
 //8å­—èŠ‚ä¸»æœºåºè½¬ç½‘ç»œåº?
 unsigned long long my_htonll(unsigned long long val);
@@ -767,5 +768,50 @@ struct S_VoiceChatACK
 	unsigned short m_cmd;
 	unsigned short m_voiceSize;			//ÓïÒô¶ş½øÖÆÊı¾İ´óĞ¡
 	char m_voiceBuf[65535];				//ÓïÒô»º³å
+};
+
+//in game
+struct S_GetMemberInfoACK
+{
+	S_GetMemberInfoACK() :m_cmd(0){}
+	//é™æ€å‡½æ•°ï¼Œç”¨äºå°†äºŒè¿›åˆ¶æ•°æ®è½¬æ¢æˆè¯¥ç»“æ„ä½?
+	static S_GetMemberInfoACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_GetMemberInfoACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
+		pData += 8;
+		memcpy(&s.m_playerNameLen, pData, 2);
+		s.m_playerNameLen = ntohs(s.m_playerNameLen);
+		pData += 2;
+		char buf[1024];
+		memcpy(buf, pData, s.m_playerNameLen);
+		s.m_strPlayerName = buf;
+		pData += s.m_playerNameLen;
+		memcpy(&s.m_sex, pData, 4);
+		s.m_sex = ntohl(s.m_sex);
+		pData += 4;
+		memcpy(&s.m_currentDiamond, pData, 4);
+		s.m_currentDiamond = ntohl(s.m_currentDiamond);
+		pData += 4;
+		memcpy(&s.m_currentMoney, pData, 4);
+		s.m_currentMoney = ntohl(s.m_currentMoney);
+		return s;
+	}
+	short m_packageLen;
+	short m_cmd;
+	unsigned long long m_playerID;
+	short m_playerNameLen;
+	string m_strPlayerName;
+	int m_sex;
+	int m_currentDiamond;
+	int m_currentMoney;
 };
 #pragma pack(4)

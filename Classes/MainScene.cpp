@@ -321,7 +321,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			butten->getParent()->addChild(pl);
 			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			break;
-		}
+			}
 		}
 
 	}
@@ -353,6 +353,9 @@ void MainScene::update(float delta)
 			{
 				S_CreateRoomACK cr = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
+				char buf[100] = { 0 };
+				sprintf(buf, "roomID=%d", cr.m_roomID);
+				log(buf);
 				Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
 			}
 			break;
