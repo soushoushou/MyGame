@@ -133,14 +133,7 @@ void GamePlayScene::update(float delta)
 				m_pSiteManager->joinSite(ack.m_playerID, ack.m_strPlayerName, ack.m_currentDiamond, ack.m_currentMoney);
 			}
 			break;
-		break;
-		case PP_DOUNIU_FAPAI_ACK:
-		{
-			log("fapai ack uc");
-			S_FaPaiACK s = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
-			pNet->popACKQueue();
-			log(s.m_pokerList.c_str());
-		}		default:
+			default:
 			break;
 		}
 	}
@@ -361,8 +354,8 @@ bool GamePlayScene::initButtons()
 
 bool GamePlayScene::initPlayerProfile()
 {
-	S_FaPaiReq fp;
-	NetworkManger::getInstance()->SendRequest_FaPai(fp);
+	S_GetPlayerInfoReq fp(m_playerID);
+	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(fp);
 	return true;
 }
 
