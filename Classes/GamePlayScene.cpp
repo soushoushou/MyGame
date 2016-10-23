@@ -161,50 +161,50 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
-			///暂时测试用
-			static bool flag = true;
-			static int ccc = 2;
-			static int bbb = 22;
-			char buf[10] = { 0 };
-			sprintf(buf, "%d", bbb);
-			string name = buf;
-			if (rand()%100<50 && flag && m_testID.size()<5)
-			{
-				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-				m_testID.push_back(ccc);
-				if (rand() % 3 == 1)
-				{
-					static int iii = 2;
-					m_pSiteManager->leaveSite(iii);
-					for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
-					{
-						if (*iter == iii)
-						{
-							m_testID.erase(iter);
-							break;
-						}
-					}
-					++iii;
-				}
-				++ccc;
-				++bbb;
-			}
-			if (m_testID.size()==5)
-			{
-				if (!m_timeLayer && m_bReady)
-				{
-					m_timeLayer = TimeLayer::create();
-					addChild(m_timeLayer, 50);
-				}
-				if (m_timeLayer && m_timeLayer->canRemove())
-				{
-					m_timeLayer->setVisible(false);
-					m_startGameBtn->setVisible(false);
-					m_iState = SendPokerState;
-				}
-				flag = false;
-			}
-			//////////////////////////////////////////////////////////////////////////
+			/////暂时测试用
+			//static bool flag = true;
+			//static int ccc = 2;
+			//static int bbb = 22;
+			//char buf[10] = { 0 };
+			//sprintf(buf, "%d", bbb);
+			//string name = buf;
+			//if (rand()%100<50 && flag && m_testID.size()<5)
+			//{
+			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+			//	m_testID.push_back(ccc);
+			//	if (rand() % 3 == 1)
+			//	{
+			//		static int iii = 2;
+			//		m_pSiteManager->leaveSite(iii);
+			//		for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+			//		{
+			//			if (*iter == iii)
+			//			{
+			//				m_testID.erase(iter);
+			//				break;
+			//			}
+			//		}
+			//		++iii;
+			//	}
+			//	++ccc;
+			//	++bbb;
+			//}
+			//if (m_testID.size()==5)
+			//{
+			//	if (!m_timeLayer && m_bReady)
+			//	{
+			//		m_timeLayer = TimeLayer::create();
+			//		addChild(m_timeLayer, 50);
+			//	}
+			//	if (m_timeLayer && m_timeLayer->canRemove())
+			//	{
+			//		m_timeLayer->setVisible(false);
+			//		m_startGameBtn->setVisible(false);
+			//		m_iState = SendPokerState;
+			//	}
+			//	flag = false;
+			//}
+			////////////////////////////////////////////////////////////////////////////
 
 
 		    //倒计时
