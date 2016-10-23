@@ -353,10 +353,16 @@ void MainScene::update(float delta)
 			{
 				S_CreateRoomACK cr = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
-				char buf[100] = { 0 };
-				sprintf(buf, "roomID=%d", cr.m_roomID);
-				log(buf);
-				Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+				if (cr.m_statusCode == 0)
+				{
+					char buf[100] = { 0 };
+					sprintf(buf, "roomID=%d", cr.m_roomID);
+					log(buf);
+					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+				}
+				else
+					log("in update but create room failed");
+
 			}
 			break;
 
@@ -364,7 +370,14 @@ void MainScene::update(float delta)
 			{
 				S_JoinRoomACK cr = S_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
-				Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+				if (cr.m_isOK == 0)
+				{
+					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+				}
+				else
+				{
+					log("in update but join room failed");
+				}
 			}
 			break;
 

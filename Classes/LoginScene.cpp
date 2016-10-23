@@ -34,22 +34,27 @@ void LoginScene::update(float dt)
 		{
 			S_LoginACK ack = S_LoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
-			log("login get data!");
+			if (ack.m_statusCode != 0)
+			{
+				log("in update but login failed");
+			}
+			else
+			{
+				auto item = this->getChildByName("login_button");
+				item->setVisible(false);
+				loading();
 
-			auto item = this->getChildByName("login_button");
-			item->setVisible(false);
-			loading();
+				CCTransitionScene * reScene = NULL;
+				CCScene * s = MainScene::scene(ack.m_playerID);
+				float t = 1.2f;
 
-			CCTransitionScene * reScene = NULL;
-			CCScene * s = MainScene::scene(ack.m_playerID);
-			float t = 1.2f;
-
-			//    CCTransitionJumpZoom
-			//    作用： 创建一个跳动的过渡动画
-			//    参数1：过渡动作的时间
-			//    参数2：切换到目标场景的对象
-			reScene = CCTransitionJumpZoom::create(t, s);
-			CCDirector::sharedDirector()->replaceScene(reScene);
+				//    CCTransitionJumpZoom
+				//    作用： 创建一个跳动的过渡动画
+				//    参数1：过渡动作的时间
+				//    参数2：切换到目标场景的对象
+				reScene = CCTransitionJumpZoom::create(t, s);
+				CCDirector::sharedDirector()->replaceScene(reScene);
+			}
 		}
 		else if (cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK)
 		{

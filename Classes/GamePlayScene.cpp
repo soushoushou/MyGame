@@ -147,13 +147,13 @@ void GamePlayScene::update(float delta)
 						m_pSiteManager->leaveSite(ack.m_playerID);
 					}
 				}
-				//else {
-				//	auto s = MainScene::scene(m_playerID);
-				//	if (s)
-				//	{
-				//		Director::getInstance()->replaceScene(s);
-				//	}
-				//}
+				else {
+					auto s = MainScene::scene(m_playerID);
+					if (s)
+					{
+						Director::getInstance()->replaceScene(s);
+					}
+				}
 			}
 			break;
 			case PP_DOUNIU_MEMBER_INFO_ACK:

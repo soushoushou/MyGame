@@ -480,12 +480,16 @@ struct S_ReadyPlayACK
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
+		pData += 4;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll(s.m_playerID);
 		return s;
 	}
 
 	short m_packageLen;
 	unsigned short m_cmd;
 	int m_isOK;						//0失败�?成功
+	unsigned long long m_playerID;
 };
 
 //发牌请求
