@@ -527,6 +527,7 @@ void GamePlayScene::Load_File_SEND(const char* filename)
 	S_VoiceChatReq vcr(str, flength * sizeof(char));
 	NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
 	log("send");
+	free(str);
 }
 
 
