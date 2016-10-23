@@ -368,6 +368,11 @@ void MainScene::update(float delta)
 			}
 			break;
 
+			case PP_DOUNIU_QUIT_ROOM_ACK:
+			{
+				NetworkManger::getInstance()->popACKQueue();
+			}
+			break;
 		}
 	}
 	flushNoticeLabel(delta);

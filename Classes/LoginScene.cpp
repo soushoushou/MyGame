@@ -3,6 +3,7 @@
 #include "MainScene.h"
 #include "GameSocket.h"
 #include <utility>
+#include <fstream>
 USING_NS_CC;
 
 Scene* LoginScene::createScene()
@@ -172,9 +173,15 @@ void LoginScene::loading() {
 
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
+	//fstream ifs("test.txt");
+	//string id;
+	//ifs >> id;
+	//ifs.close();
 
 	S_LoginReq lg("a", 1, 1);
 	NetworkManger::getInstance()->SendRequest_Login(lg);
+
+
 
 	//for (int i = 0; i < m_testPort.size(); ++i)
 	//{
