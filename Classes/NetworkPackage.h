@@ -806,7 +806,7 @@ struct S_GetMemberInfoACK
 		return s;
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	unsigned long long m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;

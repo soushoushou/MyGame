@@ -13,7 +13,7 @@ class PorkerManager;
 class SiteManager
 {
 public:
-	SiteManager(Node* parent);
+	SiteManager(Node* parent,unsigned long long currentPlayerID);
 	virtual ~SiteManager();
 
 	//玩家找个位置坐下
@@ -43,6 +43,8 @@ private:
 	vector<IUserProfileUIInGame*> m_pUserProfileVecs;			//头像UI，第0个是当前玩家头像
 	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
 	vector<unsigned long long> m_inRoomPlayerID;				//0为不存在
+
+	unsigned long long m_currentPlayerID;						//自己的ID
 
 	Node* m_pParent;
 

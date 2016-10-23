@@ -277,7 +277,7 @@ bool GamePlayScene::init()
     isRecording=false;
     m_recordObject=new CDMRecordObject();
 #endif
-	m_pSiteManager = new SiteManager(this);
+	m_pSiteManager = new SiteManager(this,m_playerID);
 	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
 
 	return true;

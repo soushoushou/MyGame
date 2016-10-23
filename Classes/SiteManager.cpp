@@ -1,8 +1,8 @@
 #include "SiteManager.h"
 
 
-SiteManager::SiteManager(Node* parent) :m_pUserProfileVecs(5, nullptr), m_playerInRoom(5, 0), m_playerProfileInfo(5),
-m_inRoomPlayer(5, nullptr), m_pParent(parent), m_inRoomPlayerID(5, 0)
+SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pUserProfileVecs(5, nullptr), m_playerInRoom(5, 0), m_playerProfileInfo(5),
+m_inRoomPlayer(5, nullptr), m_pParent(parent), m_inRoomPlayerID(5, 0), m_currentPlayerID(currentPlayerID)
 {
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	m_playerProfileInfo[0].profilePos = Point(160, 550);
@@ -46,33 +46,48 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 {
 	for (int i = 0; i < m_playerInRoom.size(); ++i)
 	{
-		if (m_playerInRoom[i] == 0)
-		{
-			switch (m_playerProfileInfo[i].profileType)
-			{
-			case 0:
+
+			if (m_currentPlayerID == playerID && m_playerInRoom[0] == 0)
 			{
 				m_pUserProfileVecs[i] = HerizelUserProfileUI::create(m_pParent);
-				m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money,0);
+				m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money, 0);
 				m_inRoomPlayer[i] = new NiuPlayer;
 				m_inRoomPlayer[i]->setPoint(m_playerProfileInfo[i].playerPos);
 				m_inRoomPlayer[i]->setPlayerClass(PlayerType(i));
+				m_playerInRoom[i] = 1;
+				m_inRoomPlayerID[i] = playerID;
+				return true;
 			}
-			break;
-			case 1:
+			else
 			{
-				m_pUserProfileVecs[i] = VerticalUserProfileUI::create(m_pParent);
-				m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money,0);
-				m_inRoomPlayer[i] = new NiuPlayer;
-				m_inRoomPlayer[i]->setPoint(m_playerProfileInfo[i].playerPos);
-				m_inRoomPlayer[i]->setPlayerClass(PlayerType(i));
+				if (m_playerInRoom[i] == 0)
+				{
+					switch (m_playerProfileInfo[i].profileType)
+					{
+					case 0:
+					{
+						m_pUserProfileVecs[i] = HerizelUserProfileUI::create(m_pParent);
+						m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money, 0);
+						m_inRoomPlayer[i] = new NiuPlayer;
+						m_inRoomPlayer[i]->setPoint(m_playerProfileInfo[i].playerPos);
+						m_inRoomPlayer[i]->setPlayerClass(PlayerType(i));
+					}
+					break;
+					case 1:
+					{
+						m_pUserProfileVecs[i] = VerticalUserProfileUI::create(m_pParent);
+						m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money, 0);
+						m_inRoomPlayer[i] = new NiuPlayer;
+						m_inRoomPlayer[i]->setPoint(m_playerProfileInfo[i].playerPos);
+						m_inRoomPlayer[i]->setPlayerClass(PlayerType(i));
+					}
+					break;
+					}
+				}
+				m_playerInRoom[i] = 1;
+				m_inRoomPlayerID[i] = playerID;
+				return true;
 			}
-			break;
-			}
-			m_playerInRoom[i] = 1;
-			m_inRoomPlayerID[i] = playerID;
-			return true;
-		}
 	}
 	return false;
 }
