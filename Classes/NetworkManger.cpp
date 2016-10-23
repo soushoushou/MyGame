@@ -40,20 +40,23 @@ NetworkManger::~NetworkManger()
 bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_strAccountLen), 2);
+	short len = requestData.m_strAccountLen;
+	memcpy(pIndex, ((char*)&len), 2);
+	len = ntohs(len);
 	pIndex += 2;
-	memcpy(pIndex, requestData.m_account.c_str(), requestData.m_strAccountLen);
-	pIndex += requestData.m_strAccountLen;
-    memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
+	memcpy(pIndex, requestData.m_account.c_str(), len);
+	pIndex += len;
+	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
+	len = ntohs(requestData.m_strRoleNameLen);
 	pIndex += 2;
-	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_strRoleNameLen);
-	pIndex += requestData.m_strRoleNameLen;
+	memcpy(pIndex, requestData.m_roleName.c_str(), len);
+	pIndex += len;
 	memcpy(pIndex, ((char*)&requestData.m_sex), 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_yanZhengMa), 4);
@@ -70,7 +73,7 @@ bool NetworkManger::SendRequest_CreateUser(const S_CreatePlayerReq& requestData)
 }
 bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 {
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -78,8 +81,9 @@ bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strRoleNameLen), 2);
 	pIndex += 2;
-	memcpy(pIndex, requestData.m_roleName.c_str(), requestData.m_roleName.length()+1);
-	pIndex += requestData.m_roleName.length() + 1;
+	int len = ntohs(requestData.m_strRoleNameLen);
+	memcpy(pIndex, requestData.m_roleName.c_str(), len);
+	pIndex += len;
 	memcpy(pIndex, ((char*)&requestData.m_checkTime), 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_checkNum), 4);
@@ -93,7 +97,7 @@ bool NetworkManger::SendRequest_Login(const S_LoginReq& requestData)
 bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -110,7 +114,7 @@ bool NetworkManger::SendRequest_CreateRoom(const S_CreateRoomReq& requestData)
 bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -131,7 +135,7 @@ bool NetworkManger::SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData)
 bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -148,7 +152,7 @@ bool NetworkManger::SendRequest_FaPai(const S_FaPaiReq& requestData)
 bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -166,7 +170,7 @@ bool NetworkManger::SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestD
 bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -183,7 +187,7 @@ bool NetworkManger::SendRequest_JoinRoom(const S_JoinRoomReq& requestData)
 bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -200,7 +204,7 @@ bool NetworkManger::SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData)
 bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -217,7 +221,7 @@ bool NetworkManger::SendRequest_QuitRoom(const S_QuitRoomReq& requestData)
 bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -234,7 +238,7 @@ bool NetworkManger::SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData)
 bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -251,7 +255,7 @@ bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestDat
 bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -268,7 +272,7 @@ bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -285,7 +289,7 @@ bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 bool NetworkManger::SendRequest_VoiceChat(const S_VoiceChatReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[requestData.m_packageLen];
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData, 2);
 	pIndex += 2;
@@ -293,7 +297,8 @@ bool NetworkManger::SendRequest_VoiceChat(const S_VoiceChatReq& requestData)
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_voiceSize), 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_voiceBuf), requestData.m_voiceSize);
+	int size = ntohs(requestData.m_voiceSize);
+	memcpy(pIndex, ((char*)&requestData.m_voiceBuf), size);
 	bool ret = false;
 	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
 

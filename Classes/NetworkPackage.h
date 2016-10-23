@@ -117,7 +117,7 @@ struct S_CreatePlayerReq
 
 	}
 	short m_packageLen;						//åŒ…é•¿
-	short m_cmd;							//åè®®å?
+	unsigned short m_cmd;							//åè®®å?
 	short m_strAccountLen;					//è´¦å·é•¿åº¦
 	string m_account;						//è´¦å·
 	short m_strRoleNameLen;					//è§’è‰²åé•¿åº?
@@ -147,7 +147,7 @@ struct S_CreatePlayerACK
 		return s;
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	int m_statusCode;				//0å¤±è´¥ï¼?æˆåŠŸï¼?æ•æ„Ÿè¯?
 };
 //ç™»å½•è¯·æ±‚
@@ -165,7 +165,7 @@ struct S_LoginReq
 		m_strRoleNameLen=htons(m_strRoleNameLen);
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	int m_checkTime;
 	int m_checkNum;
 	short m_strRoleNameLen;
@@ -210,7 +210,7 @@ struct S_LoginACK
 		return s;
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	int m_statusCode;
 	unsigned long long m_playerID;
 	unsigned long long m_userID;			//²»ÖªµÀÓĞÊ²Ã´ÂÑÓÃ
@@ -229,7 +229,7 @@ struct S_GetPlayerInfoReq
 		m_playerID = my_htonll(m_playerID);
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	unsigned long long m_playerID;
 };
 
@@ -269,7 +269,7 @@ struct S_GetPlayerInfoACK
 		return s;
 	}
 	short m_packageLen;
-	short m_cmd;
+	unsigned short m_cmd;
 	unsigned long long m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
