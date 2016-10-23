@@ -116,11 +116,12 @@ bool LoginScene::init()
 	schedule(schedule_selector(LoginScene::update));
 
 	//≤‚ ‘’À∫≈
-	m_testPort.push_back(make_pair("b", "b"));
 	m_testPort.push_back(make_pair("c", "c"));
 	m_testPort.push_back(make_pair("e", "e"));
 	m_testPort.push_back(make_pair("d", "d"));
 	m_testPort.push_back(make_pair("e", "e"));
+	m_testPort.push_back(make_pair("f", "f"));
+	m_testPort.push_back(make_pair("g", "g"));
 
 	return true;
 }

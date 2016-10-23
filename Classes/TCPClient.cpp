@@ -87,6 +87,7 @@ bool CTCPClient::sendTCPRequset(CTCPRequest* request)
 	}
 	if (!Flush())
 	{
+		log("send error");
 		return false;
 	}
 	m_pRequest = request;
