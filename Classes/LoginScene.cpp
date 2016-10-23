@@ -116,12 +116,12 @@ bool LoginScene::init()
 	schedule(schedule_selector(LoginScene::update));
 
 	//²âÊÔÕËºÅ
-	m_testPort.push_back(make_pair("h", "h"));
-	m_testPort.push_back(make_pair("i", "i"));
-	m_testPort.push_back(make_pair("j", "j"));
-	m_testPort.push_back(make_pair("k", "k"));
-	m_testPort.push_back(make_pair("l", "l"));
-	m_testPort.push_back(make_pair("m", "m"));
+	m_testPort.push_back(make_pair("haaaha", "haaab"));
+	m_testPort.push_back(make_pair("hbaaha", "iaaab"));
+	m_testPort.push_back(make_pair("hcaaha", "jaaab"));
+	m_testPort.push_back(make_pair("hdaaha", "kaaab"));
+	m_testPort.push_back(make_pair("heaaha", "laaab"));
+	m_testPort.push_back(make_pair("hfaaha", "maaab"));
 
 	return true;
 }
@@ -173,14 +173,14 @@ void LoginScene::loading() {
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
 
-	S_LoginReq lg("a", 1, 1);
-	NetworkManger::getInstance()->SendRequest_Login(lg);
+	//S_LoginReq lg("a", 1, 1);
+	//NetworkManger::getInstance()->SendRequest_Login(lg);
 
-	//for (int i = 0; i < m_testPort.size(); ++i)
-	//{
-	//	pair<string, string> t = m_testPort[i];
-	//	S_CreatePlayerReq s(t.first, t.second, 0);
-	//	NetworkManger::getInstance()->SendRequest_CreateUser(s);
-	//}
+	for (int i = 0; i < m_testPort.size(); ++i)
+	{
+		pair<string, string> t = m_testPort[i];
+		S_CreatePlayerReq s(t.first, t.second, 0);
+		NetworkManger::getInstance()->SendRequest_CreateUser(s);
+	}
 
 }

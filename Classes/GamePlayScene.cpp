@@ -126,6 +126,24 @@ void GamePlayScene::update(float delta)
 				
 			}	
 			break;
+			case PP_DOUNIU_QUIT_ROOM_ACK:
+			{
+				log("quit room ack");
+				S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				if (ack.m_isOK == 0)
+				{
+					if (m_playerID == ack.m_playerID)
+					{
+						log("quit room error");
+					}
+					else
+					{
+						m_pSiteManager->leaveSite(ack.m_playerID);
+					}
+				}
+			}
+			break;
 			case PP_DOUNIU_MEMBER_INFO_ACK:
 			{
 				S_GetMemberInfoACK ack = S_GetMemberInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());

@@ -438,6 +438,9 @@ struct S_QuitRoomACK
 		pData += 4;
 		memcpy(&s.m_roomID, pData, 4);
 		s.m_roomID = ntohl(s.m_roomID);
+		pData += 4;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll(s.m_playerID);
 		return s;
 	}
 
@@ -445,6 +448,7 @@ struct S_QuitRoomACK
 	unsigned short m_cmd;
 	int m_isOK;			//0失败�?成功
 	int m_roomID;
+	unsigned long long m_playerID;
 };
 
 //准备游戏请求
