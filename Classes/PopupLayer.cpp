@@ -397,6 +397,36 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 	return layer;}
+
+PopupLayer* PopupLayer::wlDialog(const char* backgroundImage, Size dialogSize, const vector<pair<int, int>> quickMessage) {
+
+	layer = PopupLayer::create();
+
+	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
+	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	auto size = Director::getInstance()->getWinSize();
+	LabelTTF* label = LabelTTF::create("player", "", 40);
+	label->setPosition(size.width / 4, (size.height / 2 + dialogSize.height / 2 - 35));
+	label->setColor(Color3B(0, 0, 0));
+	layer->addChild(label, 10);
+	LabelTTF* label2 = LabelTTF::create("score", "", 40);
+	label2->setPosition(size.width /3* 4, (size.height / 2 + dialogSize.height / 2 - 35));
+	label2->setColor(Color3B(0, 0, 0));
+	layer->addChild(label2, 10);
+	//auto item = MenuItemImage::create(
+	//	"popuplayer/close.png",
+	//	"popuplayer/close_pressed.png",
+	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
+	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	if (!closeBtn) return NULL;
+	//auto contentSize = item->getContentSize;
+	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	closeBtn->setPosition(closePosition);
+	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
+	layer->addChild(closeBtn, 20);
+	return layer;
+}
 bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 {
 	Size size = Director::getInstance()->getVisibleSize();

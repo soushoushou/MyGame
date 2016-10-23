@@ -55,6 +55,7 @@ void LoginScene::update(float dt)
 		{
 			S_CreatePlayerACK ack = S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
+			log(ack.m_statusCode);
 		}
 	}
 }
@@ -173,12 +174,9 @@ void LoginScene::loading() {
 
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
-	//fstream ifs("test.txt");
-	//string id;
-	//ifs >> id;
-	//ifs.close();
-
-	S_LoginReq lg("a", 1, 1);
+	S_CreatePlayerReq cr("b2","b2",1);
+	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
+	S_LoginReq lg("b", 1, 1);
 	NetworkManger::getInstance()->SendRequest_Login(lg);
 
 

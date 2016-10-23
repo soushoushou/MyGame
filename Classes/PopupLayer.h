@@ -23,6 +23,8 @@ public:
 	static PopupLayer* createRoomDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* joinRoomWith9Dialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* recordDialog(const char* backgroundImage, Size dialogSize);
+	static PopupLayer* wlDialog(const char* backgroundImage, Size dialogSize, const vector<pair<int, int>> quickMessage);
+	static PopupLayer* loseDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* settingDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* joinRoomDialog(const char* backgroundImage, Size dialogSize);
 	static PopupLayer* backDialog(const char* backgroundImage, Size dialogSize, const char* title, const char* content);

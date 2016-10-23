@@ -4,6 +4,7 @@
 #include "Global.h"
 #include "NiuPoker.h"
 #include "NiuPlayer.h"
+#include "MainScene.h"
 //#include "direct.h"
 #include <fstream>
 using namespace std;
@@ -140,6 +141,13 @@ void GamePlayScene::update(float delta)
 					else
 					{
 						m_pSiteManager->leaveSite(ack.m_playerID);
+					}
+				}
+				else {
+					auto s = MainScene::scene(m_playerID);
+					if (s)
+					{
+						Director::getInstance()->replaceScene(s);
 					}
 				}
 			}
