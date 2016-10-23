@@ -82,7 +82,9 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 		}
 		else if (pBtn == m_btnDestoryRoom)
 		{
-			log("3333");
+			auto dialog = PopupLayer::backDialog("popuplayer/backbg.png", Size(610, 399), "quit room", "Are you sure?");
+			m_pParent->addChild(dialog, 999);
+			dialog->setCallbackFunc(this, callfuncN_selector(SettingMenuInPlaying::quitRoomCallback));
 		}
 	}
 }
@@ -91,7 +93,11 @@ void SettingMenuInPlaying::quitRoomCallback(Node* node)
 {
 	auto s = MainScene::scene(m_playerID);
 	if (s)
+	{
+		S_QuitRoomReq req;
+		NetworkManger::getInstance()->SendRequest_QuitRoom(req);
 		Director::getInstance()->replaceScene(s);
+	}
 }
 
 void SettingMenuInPlaying::onOptionsTouch(Ref* pSender, Widget::TouchEventType evnet)
