@@ -63,7 +63,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 			}
 			else
 			{
-				if (m_playerInRoom[i] == 0)
+				if (m_playerInRoom[i] == 0 && i != 0)
 				{
 					switch (m_playerProfileInfo[i].profileType)
 					{
