@@ -136,20 +136,24 @@ void GamePlayScene::update(float delta)
 				{
 					if (m_playerID == ack.m_playerID)
 					{
-						log("quit room error");
+						auto s = MainScene::scene(m_playerID);
+						if (s)
+						{
+							Director::getInstance()->replaceScene(s);
+						}
 					}
 					else
 					{
 						m_pSiteManager->leaveSite(ack.m_playerID);
 					}
 				}
-				else {
-					auto s = MainScene::scene(m_playerID);
-					if (s)
-					{
-						Director::getInstance()->replaceScene(s);
-					}
-				}
+				//else {
+				//	auto s = MainScene::scene(m_playerID);
+				//	if (s)
+				//	{
+				//		Director::getInstance()->replaceScene(s);
+				//	}
+				//}
 			}
 			break;
 			case PP_DOUNIU_MEMBER_INFO_ACK:

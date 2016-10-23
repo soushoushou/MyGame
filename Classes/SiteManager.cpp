@@ -1,9 +1,16 @@
 #include "SiteManager.h"
 
 
-SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pUserProfileVecs(5, nullptr), m_playerInRoom(5, 0), m_playerProfileInfo(5),
-m_inRoomPlayer(5, nullptr), m_pParent(parent), m_inRoomPlayerID(5, 0), m_currentPlayerID(currentPlayerID)
+SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pParent(parent), m_currentPlayerID(currentPlayerID)
 {
+	for (int i = 0; i < 5; ++i)
+	{
+		m_playerInRoom.push_back(0);
+		m_inRoomPlayer.push_back(nullptr);
+		m_inRoomPlayerID.push_back(0);
+		m_pUserProfileVecs.push_back(nullptr);
+		m_playerProfileInfo.push_back(PlayerAndProfilePos());
+	}
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	m_playerProfileInfo[0].profilePos = Point(160, 550);
 	m_playerProfileInfo[0].profileType = 0;
