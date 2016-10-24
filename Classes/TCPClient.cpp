@@ -52,8 +52,18 @@ void CTCPClient::NetworkThreadFunc()
 			{
 #ifdef WIN32
 				int err = WSAGetLastError();
+				if (err == 10053)
+				{
+					log("will reconnecting server!");
+					ReconnectServer();
+				}
 #else
 				int err = errno;
+				if (err == 60)
+				{
+					log("will reconnecting server!");
+					ReconnectServer();
+				}
 #endif
 				log("errno = %d", err);
 			}
@@ -390,12 +400,37 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 		}
 	}
 	else {
-		if (hasError()) {
-			return false;
+		int err = hasError();
+#ifdef WIN32
+		if (err == 10053)
+		{
+			log("will reconnecting server!");
+			
 		}
+#else
+		if (err == 60)
+		{
+			log("will reconnecting server!");
+		}
+#endif
+		ReconnectServer();
+		return false;
 	}
 
 	return true;
+}
+
+
+void CTCPClient::ReconnectServer()
+{
+	Destroy();
+	m_flag = true;
+	while (m_flag)
+	{
+	}
+	//分离子线程
+	thread t(&CTCPClient::NetworkThreadFunc, this);
+	t.detach();
 }
 
 bool CTCPClient::Check(void)

@@ -181,16 +181,16 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 {
 	//S_CreatePlayerReq cr("b2","b2",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
-	S_LoginReq lg("a", 1, 1);
-	NetworkManger::getInstance()->SendRequest_Login(lg);
+	//S_LoginReq lg("a", 1, 1);
+	//NetworkManger::getInstance()->SendRequest_Login(lg);
 
 
 
-	//for (int i = 0; i < m_testPort.size(); ++i)
-	//{
-	//	pair<string, string> t = m_testPort[i];
-	//	S_CreatePlayerReq s(t.first, t.second, 0);
-	//	NetworkManger::getInstance()->SendRequest_CreateUser(s);
-	//}
+	for (int i = 0; i < m_testPort.size(); ++i)
+	{
+		pair<string, string> t = m_testPort[i];
+		S_CreatePlayerReq s(t.first, t.second, 0);
+		NetworkManger::getInstance()->SendRequest_CreateUser(s);
+	}
 
 }

@@ -163,6 +163,17 @@ void GamePlayScene::update(float delta)
 				m_pSiteManager->joinSite(ack.m_playerID, ack.m_strPlayerName, ack.m_currentDiamond, ack.m_currentMoney);
 			}
 			break;
+			case PP_DOUNIU_READY_ACK:
+			{
+				S_ReadyPlayACK ack = S_ReadyPlayACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				if (ack.m_isOK == 0)
+				{
+					log("ready successed!");
+				}
+				else
+					log("ready failed!");
+			}
 			default:
 			break;
 		}
@@ -438,7 +449,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				button->loadTextures("game/startgamePressed.png", "");
 				//模拟当所有玩家都准备好后再倒计时
 				m_bReady =!m_bReady;
-				DebugSimpleServer::getInstance()->playerReady("alw");
+				S_ReadyPlayReq req;
+				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
                 break;
             }
             case TAG_HOG_BTN:
