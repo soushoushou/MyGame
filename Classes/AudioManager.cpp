@@ -8,7 +8,12 @@
 
 #include "AudioManager.h"
 #include "NetworkManger.h"
-static AudioManager* m_pInstance = NULL;
+
+AudioManager* AudioManager::m_pInstance = NULL;
+
+AudioManager::AudioManager() :data(nullptr), length(0){
+
+}
 
 AudioManager* AudioManager::getInstance()
 {
@@ -50,6 +55,16 @@ void AudioManager::binaryConvertedToFile_Rev(const char *filePath,const char* bi
     ofstream out(filePath,ios::binary);
     out.write(binaryData,length);
     out.close();
+}
+
+
+void AudioManager::destroyInstance()
+{
+	if (m_pInstance)
+	{
+		delete m_pInstance;
+		m_pInstance = NULL;
+	}
 }
 
 

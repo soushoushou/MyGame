@@ -2,6 +2,7 @@
 #include "MainScene.h"
 #include "LoginScene.h"
 #include "SimpleAudioEngine.h"  
+#include "AudioManager.h"
 
 using namespace CocosDenshion;
 
@@ -14,16 +15,13 @@ static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
 
 AppDelegate::AppDelegate() {
 	NetworkManger::getInstance();
+	AudioManager::getInstance();
 }
 
 AppDelegate::~AppDelegate()
 {
-	NetworkManger* P = NetworkManger::getInstance();
-	if (P)
-	{
-		delete P;
-		P = NULL;
-	}
+	NetworkManger::destroyInstance();
+	AudioManager::destroyInstance();
 }
 
 // if you want a different context, modify the value of glContextAttrs
