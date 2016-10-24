@@ -118,7 +118,6 @@ private:
 	Label *m_pRoomNumberLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
-	void Load_File_SEND(const char* filename);//二进制读取录音文件SiteManager* m_pSiteManager;	unsigned long long m_playerID;
 	int m_roomID;
 	unsigned long long m_playerID;
 	SiteManager* m_pSiteManager;

@@ -7,6 +7,7 @@
 #include "MainScene.h"
 //#include "direct.h"
 #include <fstream>
+#include "AudioManager.h"
 using namespace std;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "CDMRecordObject.h"
@@ -507,8 +508,11 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			}
             case TAG_RECORD_BTN:{
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                    m_recordObject->convertToMp3();
-//					m_recordObject->StartPlay();
+                log("播放");
+                if (m_recordObject->convertToMp3()) {
+                    AudioManager::getInstance()->fileConvertedToBinary_Send(m_recordObject->path);
+                    AudioManager::getInstance()->binaryConvertedToFile_Rev(m_recordObject->path, AudioManager::getInstance()->data, AudioManager::getInstance()->length);
+                }
 				#endif
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo minfo;//定义Jni函数信息结构体
@@ -546,32 +550,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 }
-void GamePlayScene::Load_File_SEND(const char* filename)
-{
-	FILE *fp; char *str; long flength;
-	fp = fopen(filename, "rb");
-	if (!fp)
-	{
-		log("!!FILE open ERROR \n");
-		return;
-	}
-
-	fseek(fp, 0, SEEK_END);
-	flength = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-
-	str = (char*)malloc(flength * sizeof(char));
-	assert(str != NULL);
-
-	fread(str, flength, 1, fp);
-	printf("%s\n", str);
-	fclose(fp);
-	S_VoiceChatReq vcr(str, flength * sizeof(char));
-	NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
-	log("send");
-	free(str);
-}
-
 
 void GamePlayScene::func(Node* pSender, void* pData){
 	NiuPlayer* play = (NiuPlayer*)pData;
