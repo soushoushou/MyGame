@@ -123,12 +123,12 @@ bool LoginScene::init()
 	schedule(schedule_selector(LoginScene::update));
 
 	//≤‚ ‘’À∫≈
-	m_testPort.push_back(make_pair("haaaha", "haaab"));
-	m_testPort.push_back(make_pair("hbaaha", "iaaab"));
-	m_testPort.push_back(make_pair("hcaaha", "jaaab"));
-	m_testPort.push_back(make_pair("hdaaha", "kaaab"));
-	m_testPort.push_back(make_pair("heaaha", "laaab"));
-	m_testPort.push_back(make_pair("hfaaha", "maaab"));
+	m_testPort.push_back(make_pair("haaahb", "habab"));
+	m_testPort.push_back(make_pair("hbaahb", "iabab"));
+	m_testPort.push_back(make_pair("hcaahb", "jabab"));
+	m_testPort.push_back(make_pair("hdaahb", "kabab"));
+	m_testPort.push_back(make_pair("heaahb", "labab"));
+	m_testPort.push_back(make_pair("hfaahb", "mabab"));
 
 	return true;
 }

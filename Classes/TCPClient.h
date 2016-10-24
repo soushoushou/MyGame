@@ -52,6 +52,7 @@ public:
 private:
 	void   ReconnectServer();
 	void	NetworkThreadFunc();					//处理网络IO的线程函数
+	void	ReconnectFunc();						//重连线程函数
 	bool	Flush(void);
 	bool	Check(void);
 	

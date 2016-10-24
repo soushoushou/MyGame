@@ -420,16 +420,21 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 	return true;
 }
 
-
-void CTCPClient::ReconnectServer()
+void CTCPClient::ReconnectFunc()
 {
 	Destroy();
 	m_flag = true;
-	while (m_flag)
-	{
-	}
-	//分离子线程
+	while (m_flag);
+	while (!Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true));
 	thread t(&CTCPClient::NetworkThreadFunc, this);
+	t.detach();
+}
+
+
+void CTCPClient::ReconnectServer()
+{
+	//分离子线程
+	thread t(&CTCPClient::ReconnectFunc, this);
 	t.detach();
 }
 
