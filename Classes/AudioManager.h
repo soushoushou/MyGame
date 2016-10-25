@@ -20,10 +20,11 @@ public:
 	static void destroyInstance();
     void fileConvertedToBinary_Send(const char* filePath);
     void binaryConvertedToFile_Rev(const char* filePath,const char* binaryData,long length);
-private:
-	AudioManager();
+public:
     char* data;
     long length;
+private:
+	AudioManager();
 	static AudioManager* m_pInstance;
 };
 

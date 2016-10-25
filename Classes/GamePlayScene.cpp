@@ -16,9 +16,6 @@ using namespace std;
 USING_NS_CC;
 
 bool isRecording;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-CDMRecordObject *m_recordObject;
-#endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -57,6 +54,10 @@ m_iState(StartState), m_btnSetting(NULL),m_playerID(playerID), m_roomID(roomID),
     m_creatHogBtn=false;
     m_creatMulBtn=false;
     m_playNum=1;
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//    m_recordObject=new CDMRecordObject();
+//#endif
+    
 
 }
 
@@ -116,7 +117,12 @@ void GamePlayScene::update(float delta)
 				log("voice ack uc");
 				S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				log(s.m_packageLen);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+                AudioManager::getInstance()->binaryConvertedToFile_Rev(m_recordObject->destPath, s.m_voiceBuf, s.m_voiceSize);
+                m_recordObject->StartPlay();
+#endif
+                
+                log(s.m_packageLen);
 				
 			}
 			break;
@@ -508,10 +514,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			}
             case TAG_RECORD_BTN:{
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                log("播放");
+                log("发送");
                 if (m_recordObject->convertToMp3()) {
                     AudioManager::getInstance()->fileConvertedToBinary_Send(m_recordObject->path);
-                    AudioManager::getInstance()->binaryConvertedToFile_Rev(m_recordObject->path, AudioManager::getInstance()->data, AudioManager::getInstance()->length);
                 }
 				#endif
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台

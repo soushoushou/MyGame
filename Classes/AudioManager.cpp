@@ -43,8 +43,8 @@ void AudioManager::fileConvertedToBinary_Send(const char *filePath){
     fread(str, flength, 1, fp);
     printf("%s\n", str);
     fclose(fp);
-//    S_VoiceChatReq vcr(str, flength * sizeof(char));
-//    NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
+    S_VoiceChatReq vcr(str, flength * sizeof(char));
+    NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
     data=str;
     length=flength;
     log("send audio file");
@@ -52,6 +52,7 @@ void AudioManager::fileConvertedToBinary_Send(const char *filePath){
 }
 
 void AudioManager::binaryConvertedToFile_Rev(const char *filePath,const char* binaryData,long length){
+    log("目标路径%s", filePath);
     ofstream out(filePath,ios::binary);
     out.write(binaryData,length);
     out.close();

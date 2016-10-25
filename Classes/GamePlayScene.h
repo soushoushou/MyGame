@@ -14,6 +14,7 @@
 #include "PopupLayer.h"
 class NiuPoker;
 class NiuPlayer;
+class CDMRecordObject;
 USING_NS_CC;
 using namespace ui;
 
@@ -69,7 +70,6 @@ private:
     void notHogBtnAction();
     /** 选择倍数超时事件 */
     void notChooseMulAction(float dt);
-	void Load_File_JSON(const char* filename);//二进制读取录音文件SiteManager* m_pSiteManager;	unsigned long long m_playerID;
 	/** 显示胜利对话框 */
 	void showWinDialog();
 	/** 显示失败对话框 */
@@ -122,7 +122,9 @@ private:
 	unsigned long long m_playerID;
 	SiteManager* m_pSiteManager;
 	PorkerManager* m_pPorkerManager;
-
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    CDMRecordObject *m_recordObject;
+#endif
 	//本地测试用
 	vector<unsigned long long> m_testID;
 };

@@ -70,7 +70,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	// run
 	director->runWithScene(scene);
 	//¿ªÊ¼²¥·Å±³¾°ÒôÀÖ
-    SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3");
+//    SimpleAudioEngine::getInstance()->playBackgroundMusic("game/background.mp3");
   
 	
 
