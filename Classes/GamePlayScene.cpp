@@ -180,6 +180,7 @@ void GamePlayScene::update(float delta)
 				}
 				else
 					log("ready failed!");
+				break;
 			}
 			case PP_DOUNIU_GAME_START_ACK:
 			{
