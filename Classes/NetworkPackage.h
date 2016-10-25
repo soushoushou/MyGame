@@ -48,6 +48,7 @@ using namespace std;
 #define PP_DOUNIU_VOICE_CHAT_REQ	(50022)
 #define PP_DOUNIU_VOICE_CHAT_ACK	(50023)
 #define PP_DOUNIU_MEMBER_INFO_ACK	(50024)	
+#define PP_DOUNIU_GAME_START_ACK	(50025)
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
@@ -746,7 +747,6 @@ struct S_VoiceChatReq
 		m_voiceSize = htons(m_voiceSize);
 		memcpy(m_voiceBuf, voiceBinaryData, size);
 	}
-
 	unsigned short m_packageLen;
 	unsigned short m_cmd;
 	unsigned short m_voiceSize;			//语音二进制数据大小
@@ -767,7 +767,7 @@ struct S_VoiceChatACK
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 		memcpy(&s.m_voiceSize, pData, 2);
-		s.m_voiceSize = ntohl(s.m_voiceSize);
+		s.m_voiceSize = ntohs(s.m_voiceSize);
 		pData += 2;
 		memcpy(s.m_voiceBuf, (char*)binaryData, s.m_voiceSize);
 		return s;
@@ -821,5 +821,25 @@ struct S_GetMemberInfoACK
 	int m_sex;
 	int m_currentDiamond;
 	int m_currentMoney;
+};
+
+//游戏开始
+struct S_GameStartACK 
+{
+	S_GameStartACK() :m_cmd(0){}
+	static S_GameStartACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_GameStartACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		return s;
+	}
+	short m_packageLen;
+	unsigned short m_cmd;
 };
 #pragma pack(4)

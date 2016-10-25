@@ -181,6 +181,22 @@ void GamePlayScene::update(float delta)
 				else
 					log("ready failed!");
 			}
+			case PP_DOUNIU_GAME_START_ACK:
+			{
+				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				if (!m_timeLayer && m_bReady)
+				{
+					m_timeLayer = TimeLayer::create();
+					addChild(m_timeLayer, 50);
+				}
+				if (m_timeLayer && m_timeLayer->canRemove())
+				{
+					m_timeLayer->setVisible(false);
+					m_startGameBtn->setVisible(false);
+					m_iState = SendPokerState;
+				}
+			}
 			default:
 			break;
 		}
@@ -237,21 +253,21 @@ void GamePlayScene::update(float delta)
 			////////////////////////////////////////////////////////////////////////////
 
 
-		    //倒计时
-            if (server->isAllReady())
-            {
-				if (!m_timeLayer && m_bReady)
-				{
-					m_timeLayer = TimeLayer::create();
-					addChild(m_timeLayer, 50);
-				}
-				if (m_timeLayer && m_timeLayer->canRemove())
-				{
-					m_timeLayer->setVisible(false);
-					m_startGameBtn->setVisible(false);
-					m_iState = SendPokerState;
-				}
-            }
+		  //  //倒计时
+    //        if (server->isAllReady())
+    //        {
+				//if (!m_timeLayer && m_bReady)
+				//{
+				//	m_timeLayer = TimeLayer::create();
+				//	addChild(m_timeLayer, 50);
+				//}
+				//if (m_timeLayer && m_timeLayer->canRemove())
+				//{
+				//	m_timeLayer->setVisible(false);
+				//	m_startGameBtn->setVisible(false);
+				//	m_iState = SendPokerState;
+				//}
+    //        }
             break;
         }
 		case SendPokerState:
