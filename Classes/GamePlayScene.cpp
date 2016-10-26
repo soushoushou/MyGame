@@ -125,15 +125,7 @@ void GamePlayScene::update(float delta)
                 log(s.m_packageLen);
 				
 			}
-			break;
-			case PP_DOUNIU_FAPAI_ACK:
-			{
-				log("fapai ack uc");
-				S_FaPaiACK s = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
-				pNet->popACKQueue();
-				
-			}	
-			break;
+			break;	
 			case PP_DOUNIU_QUIT_ROOM_ACK:
 			{
 				log("quit room ack");
@@ -183,12 +175,14 @@ void GamePlayScene::update(float delta)
 				}
 				else
 					log("ready failed!");
-				break;
 			}
+			break;
 			case PP_DOUNIU_GAME_START_ACK:
 			{
 				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
+				S_FaPaiReq s;
+				NetworkManger::getInstance()->SendRequest_FaPai(s);
 				if (!m_timeLayer && m_bReady)
 				{
 					m_timeLayer = TimeLayer::create();
@@ -199,7 +193,15 @@ void GamePlayScene::update(float delta)
 					m_timeLayer->setVisible(false);
 					m_startGameBtn->setVisible(false);
 					m_iState = SendPokerState;
-				}
+				}	
+			}
+			break;
+			case PP_DOUNIU_FAPAI_ACK:
+			{
+				S_FaPaiACK ack = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				int j = 0;
+				break;
 			}
 			default:
 			break;

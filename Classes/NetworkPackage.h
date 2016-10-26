@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #ifdef WIN32
 #include <windows.h>
 #include <WinSock.h>
@@ -520,19 +521,32 @@ struct S_FaPaiACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_pokerlilstLen, pData, 2);
-		s.m_pokerlilstLen = ntohs(s.m_pokerlilstLen);
-		pData += 2;
-		char buf[2048];
-		memcpy(buf, pData, s.m_packageLen);
-		s.m_pokerList = buf;
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		int nPlayers = (s.m_packageLen - 8) / 28;
+		for (int i = 0; i < nPlayers; ++i)
+		{
+			unsigned long long playerID = 0;
+			memcpy(&playerID, pData, 8);
+			s.m_playerID.push_back(playerID);
+			pData += 8;
+			for (int j = 0; j < 5; ++j)
+			{
+				int poker = 0;
+				memcpy(&poker, pData, 4);
+				pData += 4;
+				s.m_pokers.push_back(poker);
+			}
+		}
 		return s;
 	}
 
 	short m_packageLen;
 	unsigned short m_cmd;
-	short m_pokerlilstLen;
-	string m_pokerList;
+	int m_statusCode;				//0³É¹¦1Ê§°Ü
+	vector<unsigned long long> m_playerID;
+	vector<int> m_pokers;
 };
 
 //æ‘Šç‰Œè¯·æ±‚
