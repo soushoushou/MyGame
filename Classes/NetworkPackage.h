@@ -529,6 +529,7 @@ struct S_FaPaiACK
 		{
 			unsigned long long playerID = 0;
 			memcpy(&playerID, pData, 8);
+			playerID = my_ntohll(playerID);
 			s.m_playerID.push_back(playerID);
 			pData += 8;
 			for (int j = 0; j < 5; ++j)
@@ -536,6 +537,7 @@ struct S_FaPaiACK
 				int poker = 0;
 				memcpy(&poker, pData, 4);
 				pData += 4;
+				poker = ntohl(poker);
 				s.m_pokers.push_back(poker);
 			}
 		}
