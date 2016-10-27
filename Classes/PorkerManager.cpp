@@ -1,7 +1,7 @@
 #include "PorkerManager.h"
 #include "GamePlayScene.h"
 
-PorkerManager::PorkerManager(Node* parent, SiteManager* pSite) :m_pParent(parent), m_pSitManager(pSite)
+PorkerManager::PorkerManager(Node* parent, SiteManager* pSite) :m_pParent(parent), m_pSitManager(pSite), m_currentPokerActionIndex(0)
 {
 	createPokers();
 }
@@ -16,12 +16,20 @@ void PorkerManager::MovePk(NiuPlayer* play, NiuPoker* pk)
 {
 	MoveTo* move;
 	__CCCallFuncND* func;
-	float time = 0.05;
+	float time = 0.25;
 	play->getArrPk()->addObject(pk);
 	move = MoveTo::create(time, play->getPoint());
-	func = __CCCallFuncND::create(m_pParent, callfuncND_selector(GamePlayScene::func), play);
+	func = __CCCallFuncND::create(m_pParent, callfuncND_selector(PorkerManager::PokerAction::updatePokerPos), play);
 	Sequence* sequence = Sequence::create(move, func, NULL);
-	pk->runAction(sequence);
+	sequence->setTag(0);
+	sequence->retain();
+	m_poker2Actions.push_back(make_pair(pk, sequence));
+}
+
+void PorkerManager::PokerAction::updatePokerPos(Node* pSender, void* pData)
+{
+	NiuPlayer* play = (NiuPlayer*)pData;
+	play->updatePkWeiZhi();
 }
 
 
@@ -67,7 +75,6 @@ NiuPoker* PorkerManager::selectPoker(int huaSe, int num)
 
 void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 {
-	int count = 0;
 	//第几张牌
 	for (int kk = 0; kk < 5; ++kk)
 	{
@@ -85,6 +92,36 @@ void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 			}
 		}
 	}
+}
+
+bool PorkerManager::RunActions()
+{
+	if (m_currentPokerActionIndex < m_poker2Actions.size())
+	{
+		//没跑的动画
+		if (m_poker2Actions[m_currentPokerActionIndex].second->getTag() == 0 && 
+			m_poker2Actions[m_currentPokerActionIndex].first->getNumberOfRunningActions() == 0)
+		{
+			m_poker2Actions[m_currentPokerActionIndex].first->runAction(m_poker2Actions[m_currentPokerActionIndex].second);
+			m_poker2Actions[m_currentPokerActionIndex].second->setTag(1);
+			return false;
+		}
+		if (!m_poker2Actions[m_currentPokerActionIndex].second->isDone())
+		{
+			return false;
+		}
+		else
+			++m_currentPokerActionIndex;
+	}
+	else
+	{
+		for (int i = 0; i < m_poker2Actions.size(); ++i)
+		{
+			m_poker2Actions[i].second->setTag(0);
+		}
+		return true;
+	}
+	return false;
 }
 
 void PorkerManager::ShowAllPorkers()
@@ -116,4 +153,10 @@ void PorkerManager::EmptyAllPorkers()
 		pk->showLast();
 		pk->setVisible(true);
 	}
+	m_currentPokerActionIndex = 0;
+	for (int i = 0; i < m_poker2Actions.size(); ++i)
+	{
+		m_poker2Actions[i].second->release();
+	}
+	m_poker2Actions.clear();
 }

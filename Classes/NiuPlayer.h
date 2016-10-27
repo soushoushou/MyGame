@@ -50,5 +50,6 @@ private:
 	CC_SYNTHESIZE(cocos2d::Point, m_point, Point);
 	CC_SYNTHESIZE(PlayerType, m_iPlayerClass, PlayerClass);
     Sprite *m_multiImg;
+	int m_sendPokerCount;				//发牌动画计数
 };
 //#endif /* NiuPlayer_h */

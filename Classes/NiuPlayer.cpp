@@ -10,7 +10,7 @@
 #include "NiuPoker.h"
 
 
-NiuPlayer::NiuPlayer()
+NiuPlayer::NiuPlayer() :m_sendPokerCount(0)
 {
 	m_arrPk = __Array::create();
 	m_arrPk->retain();
@@ -23,9 +23,10 @@ NiuPlayer::~NiuPlayer()
 void NiuPlayer::updatePkWeiZhi(){
 	Size size = Director::getInstance()->getVisibleSize();
 	int x, y;
+
 	if (m_iPlayerClass == PlayerType_Me)
 	{
-		x = size.width / 2 - ((m_arrPk->count() - 1)*(pkWidth_Big+pkJianJu) + pkWidth_Big) / 2;
+		x = size.width / 2 - ((m_arrPk->count()-1)*(pkWidth_Big+pkJianJu) + pkWidth_Big) / 2;
 		y = m_point.y;
 	}
 	else
@@ -33,39 +34,59 @@ void NiuPlayer::updatePkWeiZhi(){
 		x = m_point.x;
 		y = m_point.y;
 	}
-
-	int num = 0;
-	Ref* object;
-	for (int i = 0; m_arrPk->count() != 0 && i < m_arrPk->count() - 1; ++i)
+	NiuPoker* pk = dynamic_cast<NiuPoker*>(m_arrPk->getObjectAtIndex(m_sendPokerCount));
+	if (m_iPlayerClass == PlayerType_Me)
 	{
-		for (int j = 0; j < m_arrPk->count() - 1 - i; ++j)
-		{
-			NiuPoker* pk1 = (NiuPoker*)m_arrPk->getObjectAtIndex(j);
-			NiuPoker* pk2 = (NiuPoker*)m_arrPk->getObjectAtIndex(j + 1);
-			if (pk1->getNum() < pk2->getNum())
-				m_arrPk->exchangeObject(pk1, pk2);
-		}
-	}
-	CCARRAY_FOREACH(m_arrPk, object){
-		NiuPoker* pk = (NiuPoker*)object;
-		
-		if (m_iPlayerClass == PlayerType_Me)
-		{
-            if(num==m_arrPk->count()-1)
-                pk->showLast();
-            else
-                pk->showFront();
-            pk->setPosition(Vec2(x + num*(pkWidth_Big+pkJianJu) + pkWidth_Big / 2, y));
-            pk->setContentSize(Size(pkWidth_Big, pkHeight_Big));
-		}
+		if (m_sendPokerCount ==m_arrPk->count()-1)
+			pk->showLast();
 		else
-		{
-			pk->showLast_small();
-            pk->setPosition(Vec2(x + num*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
-            pk->setContentSize(Size(pkWidth_small, pkHeight_small));
-			pk->setLocalZOrder(num+1);
-		}
-		++num;
+			pk->showFront();
+		pk->setPosition(Vec2(x + m_sendPokerCount*(pkWidth_Big + pkJianJu) + pkWidth_Big / 2, y));
+		pk->setContentSize(Size(pkWidth_Big, pkHeight_Big));
+	}
+	else
+	{
+		pk->showLast_small();
+		pk->setPosition(Vec2(x + m_sendPokerCount*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
+		pk->setContentSize(Size(pkWidth_small, pkHeight_small));
+		pk->setLocalZOrder(m_sendPokerCount + 1);
+	}
+	++m_sendPokerCount;
+	//Ref* object;
+	//for (int i = 0; /*m_arrPk->count()*/m_sendPokerCount != 0 && i < /*m_arrPk->count() - 1*/m_sendPokerCount-1; ++i)
+	//{
+	//	for (int j = 0; j < /*m_arrPk->count() - 1 - i*/m_sendPokerCount-1-i; ++j)
+	//	{
+	//		NiuPoker* pk1 = (NiuPoker*)m_arrPk->getObjectAtIndex(j);
+	//		NiuPoker* pk2 = (NiuPoker*)m_arrPk->getObjectAtIndex(j + 1);
+	//		if (pk1->getNum() < pk2->getNum())
+	//			m_arrPk->exchangeObject(pk1, pk2);
+	//	}
+	//}
+	//CCARRAY_FOREACH(m_arrPk, object){
+	//	NiuPoker* pk = (NiuPoker*)object;
+	//	
+	//	if (m_iPlayerClass == PlayerType_Me)
+	//	{
+	//		if (num ==/*m_arrPk->count()-1*/m_sendPokerCount-1)
+ //               pk->showLast();
+ //           else
+ //               pk->showFront();
+ //           pk->setPosition(Vec2(x + num*(pkWidth_Big+pkJianJu) + pkWidth_Big / 2, y));
+ //           pk->setContentSize(Size(pkWidth_Big, pkHeight_Big));
+	//	}
+	//	else
+	//	{
+	//		pk->showLast_small();
+ //           pk->setPosition(Vec2(x + num*pkWidth_Big*0.3 + pkWidth_Big*0.5, y));
+ //           pk->setContentSize(Size(pkWidth_small, pkHeight_small));
+	//		pk->setLocalZOrder(num+1);
+	//	}
+	//	++num;
+	//}
+	if (m_sendPokerCount >= 5)
+	{
+		m_sendPokerCount = 0;
 	}
 }
 

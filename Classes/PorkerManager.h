@@ -3,6 +3,7 @@
 #include <vector>
 #include "NiuPoker.h"
 #include "SiteManager.h"
+#include <utility>
 using namespace std;
 USING_NS_CC;
 
@@ -22,6 +23,7 @@ public:
 	void SendPorker(const vector<S_PlayerPorker>& porkers);			//发牌
 	void ShowAllPorkers();
 	void EmptyAllPorkers();
+	bool RunActions();												//运行发牌动画，返回true则代表所有动画结束
 	
 private:
 	bool createPokers();
@@ -29,8 +31,17 @@ private:
 	/** 发牌移动动画 */
 	void MovePk(NiuPlayer* play, NiuPoker* pk);				
 private:
+
+	class PokerAction:public Ref
+	{
+	public:
+		void updatePokerPos(Node* pSender, void* pData);
+	};
+
 	__Array* m_arrPokers;				//52张牌
 	Node* m_pParent;
 	SiteManager* m_pSitManager;
+	vector<pair<NiuPoker*, Sequence*> > m_poker2Actions;			//扑克和动画的映射
+	int m_currentPokerActionIndex;									//当前扑克动画序号
 };
 

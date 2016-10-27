@@ -126,6 +126,7 @@ private:
     CDMRecordObject *m_recordObject;
 #endif
 	bool m_bGameStart;
+	vector<unsigned long long > m_testID;
 };
 
 
