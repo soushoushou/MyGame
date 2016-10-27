@@ -199,6 +199,13 @@ void GamePlayScene::update(float delta)
 				showHogButton();
 				break;
 			}
+			case PP_DOUNIU_TANPAI_ACK:
+			{
+				S_TanPaiACK ack = S_TanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				showCompare();
+			}
+			break;
 			default:
 			break;
 		}
@@ -271,37 +278,37 @@ void GamePlayScene::update(float delta)
 			}
             break;
         }
-		case SendPokerState:
-			{
-				////发牌
-				//vector<S_PlayerPorker> porkers;
-				//vector<int> ttt(52, 0);
-				//for (int i = 0; i < 52; ++i)
-				//{
-				//	ttt[i] = i;
-				//}
-				//for (int i = 0; i < 25; ++i)
-				//{
-				//	int t = rand() % 52;
-				//	int c = ttt[t];
-				//	ttt[t] = ttt[i];
-				//	ttt[i] = c;
-				//}
-				//for (int i = 0; i < m_testID.size(); ++i)
-				//{
-				//	S_PlayerPorker s;
-				//	s.playerID = m_testID[i];
-				//	for (int j = 0; j < 5; ++j)
-				//	{
-				//		s.vecPorkerIndex[j] = ttt[(i) * 5 + j];
-				//	}
-				//	porkers.push_back(s);
-				//}
-				//m_pPorkerManager->SendPorker(porkers);
-				//m_iState = HogState;
-				//showHogButton();
-			}
-            break;
+		//case SendPokerState:
+		//	{
+		//		////发牌
+		//		//vector<S_PlayerPorker> porkers;
+		//		//vector<int> ttt(52, 0);
+		//		//for (int i = 0; i < 52; ++i)
+		//		//{
+		//		//	ttt[i] = i;
+		//		//}
+		//		//for (int i = 0; i < 25; ++i)
+		//		//{
+		//		//	int t = rand() % 52;
+		//		//	int c = ttt[t];
+		//		//	ttt[t] = ttt[i];
+		//		//	ttt[i] = c;
+		//		//}
+		//		//for (int i = 0; i < m_testID.size(); ++i)
+		//		//{
+		//		//	S_PlayerPorker s;
+		//		//	s.playerID = m_testID[i];
+		//		//	for (int j = 0; j < 5; ++j)
+		//		//	{
+		//		//		s.vecPorkerIndex[j] = ttt[(i) * 5 + j];
+		//		//	}
+		//		//	porkers.push_back(s);
+		//		//}
+		//		//m_pPorkerManager->SendPorker(porkers);
+		//		//m_iState = HogState;
+		//		//showHogButton();
+		//	}
+  //          break;
         case HogState:{
             if (m_timeLayer && m_timeLayer->canRemove())
             {
@@ -637,7 +644,9 @@ void GamePlayScene::notHogBtnAction(){
     m_HogBtn->setVisible(false);
     m_timeLayer->stopTimer();
     m_iState=CompareState;
-    showCompare();
+	S_TanPaiReq s;
+	NetworkManger::getInstance()->SendRequest_TanPai(s);
+    //showCompare();
 }
 void GamePlayScene::showWinDialog() {
 	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/win.png", Size(600, 600));
@@ -735,7 +744,9 @@ void GamePlayScene::notChooseMulAction(float dt){
     m_FourBtn->setVisible(false);
     m_FiveBtn->setVisible(false);
     m_timeLayer->stopTimer();
-    showCompare();
+	S_TanPaiReq s;
+	NetworkManger::getInstance()->SendRequest_TanPai(s);
+    /*showCompare();*/
 }
 
 #pragma mark-显示结果
