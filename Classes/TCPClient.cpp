@@ -52,18 +52,18 @@ void CTCPClient::NetworkThreadFunc()
 			{
 #ifdef WIN32
 				int err = WSAGetLastError();
-				if (err == 10053)
-				{
-					log("will reconnecting server!");
-					ReconnectServer();
-				}
+				//if (err == 10053 || err == 0)
+				//{
+				//	log("will reconnecting server!");
+				//	ReconnectServer();
+				//}
 #else
 				int err = errno;
-				if (err == 60)
-				{
-					log("will reconnecting server!");
-					ReconnectServer();
-				}
+				//if (err == 60 || err == 0)
+				//{
+				//	log("will reconnecting server!");
+				//	ReconnectServer();
+				//}
 #endif
 				log("errno = %d", err);
 			}
@@ -425,7 +425,6 @@ void CTCPClient::ReconnectFunc()
 	Destroy();
 	m_flag = true;
 	while (m_flag);
-	while (!Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true));
 	thread t(&CTCPClient::NetworkThreadFunc, this);
 	t.detach();
 }
