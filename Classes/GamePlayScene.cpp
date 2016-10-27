@@ -196,6 +196,7 @@ void GamePlayScene::update(float delta)
 					porkers.push_back(s);
 				}
 				m_pPorkerManager->SendPorker(porkers);
+				m_iState = SendPokerState;
 				break;
 			}
 			case PP_DOUNIU_TANPAI_ACK:
@@ -296,9 +297,9 @@ void GamePlayScene::update(float delta)
 				{
 					m_timeLayer->setVisible(false);
 					m_startGameBtn->setVisible(false);
-					m_iState = SendPokerState;
-					S_FaPaiReq s;
-					NetworkManger::getInstance()->SendRequest_FaPai(s);
+					//m_iState = SendPokerState;
+					//S_FaPaiReq s;
+					//NetworkManger::getInstance()->SendRequest_FaPai(s);
 				}
 			}
             break;
