@@ -173,7 +173,6 @@ void GamePlayScene::update(float delta)
 			{
 				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				S_FaPaiReq s;
 				m_bGameStart = true;
 	
 			}
@@ -761,5 +760,7 @@ void GamePlayScene::startNewPlay(){
     m_iState = SendPokerState;
     schedule(schedule_selector(GamePlayScene::update));
 	m_pPorkerManager->ShowAllPorkers();
+	S_FaPaiReq s;
+	NetworkManger::getInstance()->SendRequest_FaPai(s);
 }
 
