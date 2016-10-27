@@ -49,7 +49,7 @@ enum ButtonTag{
 
 
 GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
-m_iState(StartState), m_btnSetting(NULL),m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr)
+m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr), m_bGameStart(false)
 {
     m_creatHogBtn=false;
     m_creatMulBtn=false;
@@ -109,7 +109,6 @@ void GamePlayScene::update(float delta)
 				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
-				m_testID.push_back(s.m_playerID);
 			}
 			break;
 			case PP_DOUNIU_VOICE_CHAT_ACK:
@@ -146,13 +145,6 @@ void GamePlayScene::update(float delta)
 						m_pSiteManager->leaveSite(ack.m_playerID);
 					}
 				}
-				else {
-					auto s = MainScene::scene(m_playerID);
-					if (s)
-					{
-						Director::getInstance()->replaceScene(s);
-					}
-				}
 			}
 			break;
 			case PP_DOUNIU_MEMBER_INFO_ACK:
@@ -182,25 +174,30 @@ void GamePlayScene::update(float delta)
 				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				S_FaPaiReq s;
-				NetworkManger::getInstance()->SendRequest_FaPai(s);
-				if (!m_timeLayer && m_bReady)
-				{
-					m_timeLayer = TimeLayer::create();
-					addChild(m_timeLayer, 50);
-				}
-				if (m_timeLayer && m_timeLayer->canRemove())
-				{
-					m_timeLayer->setVisible(false);
-					m_startGameBtn->setVisible(false);
-					m_iState = SendPokerState;
-				}	
+				m_bGameStart = true;
+	
 			}
 			break;
 			case PP_DOUNIU_FAPAI_ACK:
 			{
 				S_FaPaiACK ack = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				int j = 0;
+
+				//发牌
+				vector<S_PlayerPorker> porkers;
+				for (int i = 0; i < ack.m_playerID.size(); ++i)
+				{
+					S_PlayerPorker s;
+					s.playerID = ack.m_playerID[i];
+					for (int j = 0; j < 5; ++j)
+					{
+						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j];
+					}
+					porkers.push_back(s);
+				}
+				m_pPorkerManager->SendPorker(porkers);
+				m_iState = HogState;
+				showHogButton();
 				break;
 			}
 			default:
@@ -257,54 +254,53 @@ void GamePlayScene::update(float delta)
 			//	flag = false;
 			//}
 			////////////////////////////////////////////////////////////////////////////
-
-
-		  //  //倒计时
-    //        if (server->isAllReady())
-    //        {
-				//if (!m_timeLayer && m_bReady)
-				//{
-				//	m_timeLayer = TimeLayer::create();
-				//	addChild(m_timeLayer, 50);
-				//}
-				//if (m_timeLayer && m_timeLayer->canRemove())
-				//{
-				//	m_timeLayer->setVisible(false);
-				//	m_startGameBtn->setVisible(false);
-				//	m_iState = SendPokerState;
-				//}
-    //        }
+			if (m_bGameStart)
+			{
+				if (!m_timeLayer && m_bReady)
+				{
+					m_timeLayer = TimeLayer::create();
+					addChild(m_timeLayer, 50);
+				}
+				if (m_timeLayer && m_timeLayer->canRemove())
+				{
+					m_timeLayer->setVisible(false);
+					m_startGameBtn->setVisible(false);
+					m_iState = SendPokerState;
+					S_FaPaiReq s;
+					NetworkManger::getInstance()->SendRequest_FaPai(s);
+				}
+			}
             break;
         }
 		case SendPokerState:
 			{
-				//发牌
-				vector<S_PlayerPorker> porkers;
-				vector<int> ttt(52, 0);
-				for (int i = 0; i < 52; ++i)
-				{
-					ttt[i] = i;
-				}
-				for (int i = 0; i < 25; ++i)
-				{
-					int t = rand() % 52;
-					int c = ttt[t];
-					ttt[t] = ttt[i];
-					ttt[i] = c;
-				}
-				for (int i = 0; i < m_testID.size(); ++i)
-				{
-					S_PlayerPorker s;
-					s.playerID = m_testID[i];
-					for (int j = 0; j < 5; ++j)
-					{
-						s.vecPorkerIndex[j] = ttt[(i) * 5 + j];
-					}
-					porkers.push_back(s);
-				}
-				m_pPorkerManager->SendPorker(porkers);
-				m_iState = HogState;
-				showHogButton();
+				////发牌
+				//vector<S_PlayerPorker> porkers;
+				//vector<int> ttt(52, 0);
+				//for (int i = 0; i < 52; ++i)
+				//{
+				//	ttt[i] = i;
+				//}
+				//for (int i = 0; i < 25; ++i)
+				//{
+				//	int t = rand() % 52;
+				//	int c = ttt[t];
+				//	ttt[t] = ttt[i];
+				//	ttt[i] = c;
+				//}
+				//for (int i = 0; i < m_testID.size(); ++i)
+				//{
+				//	S_PlayerPorker s;
+				//	s.playerID = m_testID[i];
+				//	for (int j = 0; j < 5; ++j)
+				//	{
+				//		s.vecPorkerIndex[j] = ttt[(i) * 5 + j];
+				//	}
+				//	porkers.push_back(s);
+				//}
+				//m_pPorkerManager->SendPorker(porkers);
+				//m_iState = HogState;
+				//showHogButton();
 			}
             break;
         case HogState:{

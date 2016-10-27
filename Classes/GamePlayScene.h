@@ -125,8 +125,7 @@ private:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     CDMRecordObject *m_recordObject;
 #endif
-	//本地测试用
-	vector<unsigned long long> m_testID;
+	bool m_bGameStart;
 };
 
 
