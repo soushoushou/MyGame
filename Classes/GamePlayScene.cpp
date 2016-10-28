@@ -191,7 +191,7 @@ void GamePlayScene::update(float delta)
 					s.playerID = ack.m_playerID[i];
 					for (int j = 0; j < 5; ++j)
 					{
-						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j-1];
+						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j]-1;
 					}
 					porkers.push_back(s);
 				}
