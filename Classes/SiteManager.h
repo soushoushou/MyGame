@@ -5,6 +5,7 @@
 #include "NiuPlayer.h"
 #include <vector>
 #include <mutex>
+#include <array>
 using namespace std;
 USING_NS_CC;
 
@@ -39,11 +40,11 @@ private:
 	};
 
 private:
-	vector<NiuPlayer*> m_inRoomPlayer;
-	vector<PlayerAndProfilePos> m_playerProfileInfo;			//位置信息
-	vector<IUserProfileUIInGame*> m_pUserProfileVecs;			//头像UI，第0个是当前玩家头像
-	vector<int> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
-	vector<unsigned long long> m_inRoomPlayerID;				//0为不存在
+	array<NiuPlayer*,5> m_inRoomPlayer;
+	array<PlayerAndProfilePos,5> m_playerProfileInfo;			//位置信息
+	array<IUserProfileUIInGame*,5> m_pUserProfileVecs;			//头像UI，第0个是当前玩家头像
+	array<int,5> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
+	array<unsigned long long,5> m_inRoomPlayerID;				//0为不存在
 
 	unsigned long long m_currentPlayerID;						//自己的ID
 

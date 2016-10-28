@@ -4,18 +4,13 @@
 SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pParent(parent), m_currentPlayerID(currentPlayerID)
 {
 	m_lock.lock();
-	m_playerInRoom.clear();
-	m_inRoomPlayer.clear();
-	m_inRoomPlayerID.clear();
-	m_pUserProfileVecs.clear();
-	m_playerProfileInfo.clear();
+
 	for (int i = 0; i < 5; ++i)
 	{
-		m_playerInRoom.push_back(0);
-		m_inRoomPlayer.push_back(nullptr);
-		m_inRoomPlayerID.push_back(0);
-		m_pUserProfileVecs.push_back(nullptr);
-		m_playerProfileInfo.push_back(PlayerAndProfilePos());
+		m_playerInRoom[i] = 0;
+		m_inRoomPlayer[i] = nullptr;
+		m_inRoomPlayerID[i] = 0;
+		m_pUserProfileVecs[i] = nullptr;
 	}
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	m_playerProfileInfo[0].profilePos = Point(160, 550);
