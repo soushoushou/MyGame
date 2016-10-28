@@ -3,6 +3,12 @@
 
 SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pParent(parent), m_currentPlayerID(currentPlayerID)
 {
+	m_lock.lock();
+	m_playerInRoom.clear();
+	m_inRoomPlayer.clear();
+	m_inRoomPlayerID.clear();
+	m_pUserProfileVecs.clear();
+	m_playerProfileInfo.clear();
 	for (int i = 0; i < 5; ++i)
 	{
 		m_playerInRoom.push_back(0);
@@ -27,11 +33,13 @@ SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pP
 	m_playerProfileInfo[4].profilePos = Point(1050, 330);
 	m_playerProfileInfo[4].profileType = 1;
 	m_playerProfileInfo[4].playerPos = Point(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30);
+	m_lock.unlock();
 }
 
 
 SiteManager::~SiteManager()
 {
+	m_lock.lock();
 	for (int i = 0; i < m_pUserProfileVecs.size(); ++i)
 	{
 		if (m_pUserProfileVecs[i] != nullptr)
@@ -46,6 +54,7 @@ SiteManager::~SiteManager()
 			delete m_inRoomPlayer[i];
 		}
 	}
+	m_lock.unlock();
 }
 
 //×øÏÂ×ùÎ»
@@ -58,6 +67,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 			{
 				if (m_playerInRoom[0] == 0)
 				{
+					m_lock.lock();
 					m_pUserProfileVecs[i] = HerizelUserProfileUI::create(m_pParent);
 					m_pUserProfileVecs[i]->setProfileProperty(m_playerProfileInfo[i].profilePos, "MainScene/timo.png", playerName, diamond, money, 0);
 					m_inRoomPlayer[i] = new NiuPlayer;
@@ -65,6 +75,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 					m_inRoomPlayer[i]->setPlayerClass(PlayerType(i));
 					m_playerInRoom[i] = 1;
 					m_inRoomPlayerID[i] = playerID;
+					m_lock.unlock();
 					return true;
 				}
 			}
@@ -72,6 +83,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 			{
 				if (m_playerInRoom[i] == 0 && i != 0)
 				{
+					m_lock.lock();
 					switch (m_playerProfileInfo[i].profileType)
 					{
 					case 0:
@@ -95,6 +107,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 					}
 					m_playerInRoom[i] = 1;
 					m_inRoomPlayerID[i] = playerID;
+					m_lock.unlock();
 					return true;
 				}
 
@@ -111,12 +124,14 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
+			m_lock.lock();
 			delete m_pUserProfileVecs[i];
 			m_pUserProfileVecs[i] = nullptr;
 			delete m_inRoomPlayer[i];
 			m_inRoomPlayer[i] = nullptr;
 			m_playerInRoom[i] = 0;
 			m_inRoomPlayerID[i] = 0;
+			m_lock.unlock();
 			return true;
 		}
 	}
@@ -129,7 +144,9 @@ bool SiteManager::showZhuangJia(unsigned long long playerID)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
+			m_lock.lock();
 			m_pUserProfileVecs[i]->showBanker();
+			m_lock.unlock();
 			return true;
 		}
 		
@@ -143,7 +160,9 @@ bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
+			m_lock.lock();
 			m_pUserProfileVecs[i]->setMultiple(multiple);
+			m_lock.unlock();
 			return true;
 		}
 	}
@@ -156,7 +175,9 @@ bool SiteManager::showMultiple(unsigned long long playerID)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
+			m_lock.lock();
 			m_pUserProfileVecs[i]->showMultiple();
+			m_lock.unlock();
 			return true;
 		}
 	}

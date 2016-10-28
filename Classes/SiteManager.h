@@ -4,6 +4,7 @@
 #include "UserProfileUI.h"
 #include "NiuPlayer.h"
 #include <vector>
+#include <mutex>
 using namespace std;
 USING_NS_CC;
 
@@ -49,5 +50,6 @@ private:
 	Node* m_pParent;
 
 	friend class PorkerManager;
+	mutex m_lock;
 };
 
