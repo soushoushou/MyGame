@@ -398,21 +398,23 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	layer->addChild(closeBtn, 20);
 	return layer;}
 
-PopupLayer* PopupLayer::wlDialog(const char* backgroundImage, Size dialogSize, const vector<pair<int, int>> quickMessage) {
+PopupLayer* PopupLayer::wlDialog(const char* backgroundImage, Size dialogSize) {
 
 	layer = PopupLayer::create();
 
 	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
 	auto size = Director::getInstance()->getWinSize();
-	LabelTTF* label = LabelTTF::create("player", "", 40);
-	label->setPosition(size.width / 4, (size.height / 2 + dialogSize.height / 2 - 35));
-	label->setColor(Color3B(0, 0, 0));
+	Size v_size = Director::getInstance()->getVisibleSize();
+	LabelTTF* label = LabelTTF::create("player", "fonts/arial.ttf", 40);
+	label->setPosition(size.width / 2 - 80, (size.height / 2 + dialogSize.height / 2 - 235));
+	
 	layer->addChild(label, 10);
-	LabelTTF* label2 = LabelTTF::create("score", "", 40);
-	label2->setPosition(size.width /3* 4, (size.height / 2 + dialogSize.height / 2 - 35));
-	label2->setColor(Color3B(0, 0, 0));
+	LabelTTF* label2 = LabelTTF::create("score", "fonts/arial.ttf", 40);
+	label2->setPosition(size.width / 2 +80, (size.height / 2 + dialogSize.height / 2 - 235));
+	
 	layer->addChild(label2, 10);
+	layer->m_dialogContentSize = dialogSize;
 	//auto item = MenuItemImage::create(
 	//	"popuplayer/close.png",
 	//	"popuplayer/close_pressed.png",
@@ -499,6 +501,66 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 		layout->setBackGroundImageScale9Enabled(true);
 		layout->setTouchEnabled(true);
 		layout->setContentSize(Size(650, 70));
+
+		layout->addChild(button);
+		lv->pushBackCustomItem(layout);
+	}
+	lv->setItemsMargin(10);
+
+	return true;
+}
+bool PopupLayer::createWLListView(const vector<pair<int, int>> quickMessage)
+{
+	Size size = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	lv = ListView::create();
+	lv->setDirection(ui::ScrollView::Direction::VERTICAL);	//设置为垂直方向
+	lv->setBounceEnabled(true);
+	lv->setTouchEnabled(true);
+	//lv->setBackGroundImage("game/chat_bg.png");
+	lv->setBackGroundImageScale9Enabled(true);
+	lv->setContentSize(Size(700,500));
+	lv->setAnchorPoint(Point(0.5, 0.5));
+	lv->setPosition(Point(size.width / 2, size.height / 2-200));
+	//lv->addEventListenerListView(this, listvieweventselector(ChatLayer::selectedItemEvent));
+	this->addChild(lv, 10);
+	for (int i = 0; i < quickMessage.size(); ++i)
+	{
+		auto button = Button::create("game/chat-line.png");
+		button->setPosition(Point(size.width / 2 - 220, size.height / 2 - 320));
+		button->setScale9Enabled(true);
+		//button->setName(quickMessage[i].second);
+		//button->addTouchEventListener(CC_CALLBACK_2(ChatLayer::onBtnTouch, this));
+		stringstream ss;
+		ss << quickMessage[i].first;
+		string s1 = ss.str();
+		stringstream ss2;
+		ss2 << quickMessage[i].second;
+		string s2 = ss2.str();
+		LabelTTF* roomNumLable = LabelTTF::create(s1, "fonts/arial.ttf", 30);
+		LabelTTF* rankLable = LabelTTF::create(s2, "fonts/arial.ttf", 30);
+		//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
+		roomNumLable->setPosition(Point(size.width / 2 - 450, size.height / 2 - 285));
+		rankLable->setPosition(Point(size.width / 2 - 230, size.height / 2 - 285));
+		button->addChild(roomNumLable);
+		button->addChild(rankLable);
+		if (quickMessage[i].second>0)
+		{
+			rankLable->setColor(Color3B(255, 255, 0));
+		}
+		else if (quickMessage[i].second<0)
+		{
+			rankLable->setColor(Color3B(0, 0, 255));
+		}
+		else
+		{
+			rankLable->setColor(Color3B(255, 255, 255));
+		}
+		//item的布局
+		auto layout = Layout::create();
+		layout->setBackGroundImageScale9Enabled(true);
+		layout->setTouchEnabled(true);
+		layout->setContentSize(Size(650,50));
 
 		layout->addChild(button);
 		lv->pushBackCustomItem(layout);

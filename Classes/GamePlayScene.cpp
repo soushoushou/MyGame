@@ -204,7 +204,7 @@ void GamePlayScene::update(float delta)
 			{
 				S_FaPaiACK ack = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-
+				log("fapai");
 				//发牌
 				vector<S_PlayerPorker> porkers;
 				for (int i = 0; i < ack.m_playerID.size(); ++i)
@@ -501,7 +501,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             case TAG_START_BTN:
             {
                 log("start game");
-			//	showWinDialog();
+				//showWinDialog();
 				button->setTouchEnabled(false);
 				button->loadTextures("game/startgamePressed.png", "");
 				//模拟当所有玩家都准备好后再倒计时
@@ -707,17 +707,14 @@ void GamePlayScene::notHogBtnAction(){
 	//showCompare();
 }
 void GamePlayScene::showWinDialog() {
-	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/win.png", Size(600, 600));
+	PopupLayer* pl = PopupLayer::wlDialog("popuplayer/win.png", Size(600, 600));
 	vector<pair<int, int>> quickMessage;
 	quickMessage.push_back(pair<int, int>(1, +1200));
 	quickMessage.push_back(pair<int, int>(2, -1200));
 	quickMessage.push_back(pair<int, int>(3, 0));
 	quickMessage.push_back(pair<int, int>(4, 2400));
 	quickMessage.push_back(pair<int, int>(5, -1200));
-	quickMessage.push_back(pair<int, int>(6, -1200));
-	quickMessage.push_back(pair<int, int>(7, -1200));
-	quickMessage.push_back(pair<int, int>(8, -1111111));
-	pl->createListView(quickMessage);
+	pl->createWLListView(quickMessage);
 	this->addChild(pl,100);
 }
 void GamePlayScene::showLoseDialog() {
@@ -728,10 +725,7 @@ void GamePlayScene::showLoseDialog() {
 	quickMessage.push_back(pair<int, int>(3, 0));
 	quickMessage.push_back(pair<int, int>(4, 2400));
 	quickMessage.push_back(pair<int, int>(5, -1200));
-	quickMessage.push_back(pair<int, int>(6, -1200));
-	quickMessage.push_back(pair<int, int>(7, -1200));
-	quickMessage.push_back(pair<int, int>(8, -1111111));
-	pl->createListView(quickMessage);
+	pl->createWLListView(quickMessage);
 	this->addChild(pl);
 }
 #pragma mark-显示倍数按钮
