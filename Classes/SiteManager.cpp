@@ -1,10 +1,11 @@
 #include "SiteManager.h"
 
 
-SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) :m_pParent(parent), m_currentPlayerID(currentPlayerID)
+SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) 
 {
 	m_lock.lock();
-
+	m_pParent = parent;
+	m_currentPlayerID = currentPlayerID;
 	for (int i = 0; i < 5; ++i)
 	{
 		m_playerInRoom[i] = 0;
