@@ -191,12 +191,11 @@ void GamePlayScene::update(float delta)
 					s.playerID = ack.m_playerID[i];
 					for (int j = 0; j < 5; ++j)
 					{
-						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j];
+						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j-1];
 					}
 					porkers.push_back(s);
 				}
 				m_pPorkerManager->SendPorker(porkers);
-				m_iState = SendPokerState;
 				break;
 			}
 			case PP_DOUNIU_TANPAI_ACK:
@@ -297,9 +296,8 @@ void GamePlayScene::update(float delta)
 				{
 					m_timeLayer->setVisible(false);
 					m_startGameBtn->setVisible(false);
-					//m_iState = SendPokerState;
-					//S_FaPaiReq s;
-					//NetworkManger::getInstance()->SendRequest_FaPai(s);
+					S_FaPaiReq s;
+					NetworkManger::getInstance()->SendRequest_FaPai(s);
 				}
 			}
             break;

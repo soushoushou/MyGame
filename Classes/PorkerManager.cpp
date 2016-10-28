@@ -43,11 +43,11 @@ bool PorkerManager::createPokers()
 	{
 		NiuPoker* pk;
 		//´´½¨52¸öÅÆ
-		for (int i = 1; i <= 4; ++i)
+		for (int i = 1; i <= 13; ++i)
 		{
-			for (int j = 1; j <= 13; ++j)
+			for (int j = 1; j <= 4; ++j)
 			{
-				pk = selectPoker(i, j);
+				pk = selectPoker(j, i);
 				m_pParent->addChild(pk);
 				m_arrPokers->addObject(pk);
 				pk->showLast();
