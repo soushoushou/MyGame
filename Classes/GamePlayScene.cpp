@@ -153,6 +153,10 @@ void GamePlayScene::update(float delta)
 						m_pSiteManager->leaveSite(ack.m_playerID);
 					}
 				}
+				else
+				{
+					log("quit room but failed!");
+				}
 			}
 			break;
 			case PP_DOUNIU_YAZHU_ACK:
@@ -164,6 +168,12 @@ void GamePlayScene::update(float delta)
 					log("ya zhu success!");
 					S_TanPaiReq t;
 					NetworkManger::getInstance()->SendRequest_TanPai(t);
+					m_OneBtn->setVisible(false);
+					m_TwoBtn->setVisible(false);
+					m_ThreeBtn->setVisible(false);
+					m_FourBtn->setVisible(false);
+					m_FiveBtn->setVisible(false);
+					m_timeLayer->stopTimer();
 				}
 				else
 					log("ya zhu failed!");
