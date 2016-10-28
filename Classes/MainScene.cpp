@@ -355,9 +355,9 @@ void MainScene::update(float delta)
 				NetworkManger::getInstance()->popACKQueue();
 				if (cr.m_statusCode == 0)
 				{
-					char buf[100] = { 0 };
+					/*char buf[100] = { 0 };
 					sprintf(buf, "roomID=%d", cr.m_roomID);
-					log(buf);
+					log(buf);*/
 					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
 				}
 				else

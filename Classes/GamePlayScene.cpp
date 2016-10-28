@@ -184,9 +184,9 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ready successed!");
-					char buf[100] = { 0 };
+					/*char buf[100] = { 0 };
 					sprintf(buf, "ready player id = %d", ack.m_playerID);
-					log(buf);
+					log(buf);*/
 				}
 				else
 					log("ready failed!");
@@ -623,7 +623,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 						}
 						else
 						{
-							Load_File_SEND(str_pkn.data());
+							//Load_File_SEND(str_pkn.data());
+							AudioManager::getInstance()->fileConvertedToBinary_Send(str_pkn.data());
 							log("video file in");
 						}
 					}
