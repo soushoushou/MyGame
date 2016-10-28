@@ -126,6 +126,13 @@ void GamePlayScene::update(float delta)
 				
 			}
 			break;	
+			case PP_DOUNIU_QIANGZHUANG_ACK:
+			{
+				S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
+			}
+			break;
 			case PP_DOUNIU_QUIT_ROOM_ACK:
 			{
 				log("quit room ack");
@@ -146,6 +153,21 @@ void GamePlayScene::update(float delta)
 						m_pSiteManager->leaveSite(ack.m_playerID);
 					}
 				}
+			}
+			break;
+			case PP_DOUNIU_YAZHU_ACK:
+			{
+				S_YaZhuACK ack = S_YaZhuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				if (ack.m_isOK == 0)
+				{
+					log("ya zhu success!");
+					S_TanPaiReq t;
+					NetworkManger::getInstance()->SendRequest_TanPai(t);
+				}
+				else
+					log("ya zhu failed!");
+
 			}
 			break;
 			case PP_DOUNIU_MEMBER_INFO_ACK:
@@ -317,7 +339,7 @@ void GamePlayScene::update(float delta)
             if (m_timeLayer && m_timeLayer->canRemove())
             {
                 notHogBtnAction();
-                unschedule(schedule_selector(GamePlayScene::update));
+                //unschedule(schedule_selector(GamePlayScene::update));
             }
             break;
         }
@@ -325,7 +347,7 @@ void GamePlayScene::update(float delta)
             if (m_timeLayer && m_timeLayer->canRemove())
             {
                 notChooseMulAction(0);
-                unschedule(schedule_selector(GamePlayScene::update));
+                //unschedule(schedule_selector(GamePlayScene::update));
             }
             break;
             
@@ -488,12 +510,21 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
                 break;
             }
-            case TAG_HOG_BTN:
+            case TAG_HOG_BTN:			//抢庒
             {
-                notHogBtnAction();
+				m_notHogBtn->setVisible(false);
+				m_HogBtn->setVisible(false);
+				m_timeLayer->stopTimer();
+				m_iState = CompareState;
+				S_QiangZhuangReq s;
+				NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
+				int beishu = rand() % 5 + 1;
+				S_YaZhuReq t(beishu);
+				NetworkManger::getInstance()->SendRequest_YaZhu(t);
+                //notHogBtnAction();
                 break;
             }
-            case TAG_NOT_HOG_BTN:
+            case TAG_NOT_HOG_BTN:		//不抢庒
             {
                 m_notHogBtn->setVisible(false);
                 m_HogBtn->setVisible(false);
@@ -502,16 +533,39 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 showChooseMultipleButton();
                 break;
             }
-            case TAG_MUL_ONE:
-            case TAG_MUL_TWO:
-            case TAG_MUL_THERE:
-            case TAG_MUL_FOUR:
-            case TAG_MUL_FIVE:{
-                notChooseMulAction(0);
+			case TAG_MUL_ONE:
+			{
+				S_YaZhuReq s(1);
+				NetworkManger::getInstance()->SendRequest_YaZhu(s);
+			}
+				break;
+			case TAG_MUL_TWO:
+			{
+				S_YaZhuReq s(2);
+				NetworkManger::getInstance()->SendRequest_YaZhu(s);
+			}
+				break;
+			case TAG_MUL_THERE:
+			{
+				S_YaZhuReq s(3);
+				NetworkManger::getInstance()->SendRequest_YaZhu(s);
+			}
+				break;
+			case TAG_MUL_FOUR:
+			{
+				S_YaZhuReq s(4);
+				NetworkManger::getInstance()->SendRequest_YaZhu(s);
+			}
+				break;
+			case TAG_MUL_FIVE:
+			{
+				S_YaZhuReq s(5);
+				NetworkManger::getInstance()->SendRequest_YaZhu(s);
+			}
+                //notChooseMulAction(0);
 //                m_player->showMulti(tag-TAG_MUL_ONE+1,this);
 //                scheduleOnce(schedule_selector(GamePlayScene::notChooseMulAction), 10.0f);
                 break;
-            }
 			case TAG_CHAT_BTN:
 			{
 
@@ -642,10 +696,14 @@ void GamePlayScene::notHogBtnAction(){
     m_notHogBtn->setVisible(false);
     m_HogBtn->setVisible(false);
     m_timeLayer->stopTimer();
-    m_iState=CompareState;
-	S_TanPaiReq s;
-	NetworkManger::getInstance()->SendRequest_TanPai(s);
-    //showCompare();
+	int beishu = rand() % 5 + 1;
+	S_YaZhuReq s(beishu);
+	NetworkManger::getInstance()->SendRequest_YaZhu(s);
+	m_iState = CompareState;
+    //m_iState=CompareState;
+	//S_TanPaiReq s;
+	//NetworkManger::getInstance()->SendRequest_TanPai(s);
+	//showCompare();
 }
 void GamePlayScene::showWinDialog() {
 	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/win.png", Size(600, 600));
@@ -743,9 +801,13 @@ void GamePlayScene::notChooseMulAction(float dt){
     m_FourBtn->setVisible(false);
     m_FiveBtn->setVisible(false);
     m_timeLayer->stopTimer();
-	S_TanPaiReq s;
-	NetworkManger::getInstance()->SendRequest_TanPai(s);
-    //showCompare();
+	int beishu = rand() % 5 + 1;
+	S_YaZhuReq s(beishu);
+	NetworkManger::getInstance()->SendRequest_YaZhu(s);
+	m_iState = CompareState;
+	//S_TanPaiReq s;
+	//NetworkManger::getInstance()->SendRequest_TanPai(s);
+	//showCompare();
 }
 
 #pragma mark-显示结果
@@ -767,7 +829,6 @@ void GamePlayScene::startNewPlay(){
     sprintf(path, "第%d局", m_playNum);
     m_pNoticeLabel->setString(path);
 	m_pPorkerManager->EmptyAllPorkers();
-    //m_iState = SendPokerState;
 	S_FaPaiReq s;
 	NetworkManger::getInstance()->SendRequest_FaPai(s);
 }
