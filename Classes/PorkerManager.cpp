@@ -16,7 +16,6 @@ void PorkerManager::MovePk(NiuPlayer* play, NiuPoker* pk)
 {
 	MoveTo* move;
 	__CCCallFuncND* func;
-	Vec2 pos = play->getPoint();
 	float time = 0.25;
 	play->getArrPk()->addObject(pk);
 	move = MoveTo::create(time, play->getPoint());

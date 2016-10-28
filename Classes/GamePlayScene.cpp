@@ -645,7 +645,7 @@ void GamePlayScene::notHogBtnAction(){
     m_iState=CompareState;
 	S_TanPaiReq s;
 	NetworkManger::getInstance()->SendRequest_TanPai(s);
-    showCompare();
+    //showCompare();
 }
 void GamePlayScene::showWinDialog() {
 	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/win.png", Size(600, 600));
@@ -745,7 +745,7 @@ void GamePlayScene::notChooseMulAction(float dt){
     m_timeLayer->stopTimer();
 	S_TanPaiReq s;
 	NetworkManger::getInstance()->SendRequest_TanPai(s);
-    showCompare();
+    //showCompare();
 }
 
 #pragma mark-显示结果
