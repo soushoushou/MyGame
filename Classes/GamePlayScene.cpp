@@ -298,6 +298,7 @@ void GamePlayScene::update(float delta)
 					m_startGameBtn->setVisible(false);
 					S_FaPaiReq s;
 					NetworkManger::getInstance()->SendRequest_FaPai(s);
+					m_bGameStart = false;
 				}
 			}
             break;
