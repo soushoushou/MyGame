@@ -196,6 +196,7 @@ void GamePlayScene::update(float delta)
 					porkers.push_back(s);
 				}
 				m_pPorkerManager->SendPorker(porkers);
+				m_iState = SendPokerState;
 				break;
 			}
 			case PP_DOUNIU_TANPAI_ACK:
@@ -261,7 +262,7 @@ void GamePlayScene::update(float delta)
 			//		vector<int> ttt(52, 0);
 			//		for (int i = 0; i < 52; ++i)
 			//		{
-			//			ttt[i] = i;
+			//			ttt[i] = i+1;
 			//		}
 			//		for (int i = 0; i < 25; ++i)
 			//		{
@@ -276,7 +277,7 @@ void GamePlayScene::update(float delta)
 			//			s.playerID = m_testID[i];
 			//			for (int j = 0; j < 5; ++j)
 			//			{
-			//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j];
+			//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j]-1;
 			//			}
 			//			porkers.push_back(s);
 			//		}
@@ -284,7 +285,7 @@ void GamePlayScene::update(float delta)
 			//	}
 			//	flag = false;
 			//}
-			//////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////
 			if (m_bGameStart)
 			{
 				if (!m_timeLayer && m_bReady)
@@ -581,11 +582,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 break;
 		}
 	}
-}
-
-void GamePlayScene::func(Node* pSender, void* pData){
-	NiuPlayer* play = (NiuPlayer*)pData;
-	play->updatePkWeiZhi();
 }
 
 

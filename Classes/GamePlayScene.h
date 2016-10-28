@@ -47,7 +47,6 @@ public:
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void update(float delta);
-	void func(Node* pSender, void* pData);
 private:
 	bool initBackground();
 	bool initButtons();
