@@ -767,7 +767,7 @@ void GamePlayScene::startNewPlay(){
     sprintf(path, "第%d局", m_playNum);
     m_pNoticeLabel->setString(path);
 	m_pPorkerManager->EmptyAllPorkers();
-    m_iState = SendPokerState;
+    //m_iState = SendPokerState;
 	S_FaPaiReq s;
 	NetworkManger::getInstance()->SendRequest_FaPai(s);
 }
