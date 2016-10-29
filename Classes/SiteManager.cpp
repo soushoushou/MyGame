@@ -138,17 +138,19 @@ bool SiteManager::showZhuangJia(unsigned long long playerID)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
-		if (m_inRoomPlayerID[i] == playerID)
+		if (m_pUserProfileVecs[i])
 		{
-			m_lock.lock();
-			m_pUserProfileVecs[i]->showBanker();
-			m_lock.unlock();
+			if (m_inRoomPlayerID[i] == playerID)
+			{
+				m_lock.lock();
+				m_pUserProfileVecs[i]->showBanker();
+				m_lock.unlock();
+			}
+			else
+			{
+				m_pUserProfileVecs[i]->showBanker(false);
+			}
 		}
-		else
-		{
-			m_pUserProfileVecs[i]->showBanker(false);
-		}
-		
 	}
 	return true;
 }
