@@ -143,11 +143,14 @@ bool SiteManager::showZhuangJia(unsigned long long playerID)
 			m_lock.lock();
 			m_pUserProfileVecs[i]->showBanker();
 			m_lock.unlock();
-			return true;
+		}
+		else
+		{
+			m_pUserProfileVecs[i]->showBanker(false);
 		}
 		
 	}
-	return false;
+	return true;
 }
 
 bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
