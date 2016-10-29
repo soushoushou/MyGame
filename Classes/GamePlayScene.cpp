@@ -175,10 +175,15 @@ void GamePlayScene::update(float delta)
 					log("ya zhu success!");
 					S_TanPaiReq t;
 					NetworkManger::getInstance()->SendRequest_TanPai(t);
+					if(m_OneBtn!=nullptr)
 					m_OneBtn->setVisible(false);
+					if (m_TwoBtn != nullptr)
 					m_TwoBtn->setVisible(false);
+					if (m_ThreeBtn != nullptr)
 					m_ThreeBtn->setVisible(false);
+					if (m_FourBtn != nullptr)
 					m_FourBtn->setVisible(false);
+					if (m_FiveBtn != nullptr)
 					m_FiveBtn->setVisible(false);
 					m_timeLayer->stopTimer();
 					m_iState = CompareState;
