@@ -54,6 +54,11 @@ m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID)
     m_creatHogBtn=false;
     m_creatMulBtn=false;
     m_playNum=1;
+	m_OneBtn = nullptr;
+	m_TwoBtn = nullptr;
+	m_ThreeBtn = nullptr;
+	m_FourBtn = nullptr;
+	m_FiveBtn = nullptr;
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 //    m_recordObject=new CDMRecordObject();
 //#endif
@@ -175,18 +180,16 @@ void GamePlayScene::update(float delta)
 					log("ya zhu success!");
 					S_TanPaiReq t;
 					NetworkManger::getInstance()->SendRequest_TanPai(t);
-					if(m_OneBtn!=nullptr)
-					m_OneBtn->setVisible(false);
-					if (m_TwoBtn != nullptr)
-					m_TwoBtn->setVisible(false);
-					if (m_ThreeBtn != nullptr)
-					m_ThreeBtn->setVisible(false);
-					if (m_FourBtn != nullptr)
-					m_FourBtn->setVisible(false);
-					if (m_FiveBtn != nullptr)
-					m_FiveBtn->setVisible(false);
-					m_timeLayer->stopTimer();
-					m_iState = CompareState;
+					if (m_creatMulBtn)
+					{
+						m_OneBtn->setVisible(false);
+						m_TwoBtn->setVisible(false);
+						m_ThreeBtn->setVisible(false);
+						m_FourBtn->setVisible(false);
+						m_FiveBtn->setVisible(false);
+						m_timeLayer->stopTimer();
+						m_iState = CompareState;
+					}
 				}
 				else
 					log("ya zhu failed!");
