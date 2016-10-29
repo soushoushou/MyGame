@@ -130,7 +130,14 @@ void GamePlayScene::update(float delta)
 			{
 				S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
+				if (ack.m_statusCode == 0)
+				{
+					m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
+					log("qiang zhuang success!");
+				}
+				else
+					log("qiang zhuang failed!");
+				
 			}
 			break;
 			case PP_DOUNIU_QUIT_ROOM_ACK:

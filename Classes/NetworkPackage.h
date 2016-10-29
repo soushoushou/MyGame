@@ -664,14 +664,20 @@ struct S_QiangZhuangACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_ZhuangJiaID, pData, 4);
-		s.m_ZhuangJiaID = my_ntohll(s.m_ZhuangJiaID);
-
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		if (s.m_statusCode == 0)
+		{
+			memcpy(&s.m_ZhuangJiaID, pData, 8);
+			s.m_ZhuangJiaID = my_ntohll(s.m_ZhuangJiaID);
+		}
 		return s;
 	}
 
 	short m_packageLen;
 	unsigned short m_cmd;
+	int m_statusCode;						//0³É¹¦1Ê§°Ü
 	unsigned long long m_ZhuangJiaID;
 };
 
