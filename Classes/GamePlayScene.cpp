@@ -749,7 +749,7 @@ void GamePlayScene::showLoseDialog() {
 void GamePlayScene::showChooseMultipleButton()
 {
     m_timeLayer->setTimeAndType(12, Tip_chooseMul);
-    schedule(schedule_selector(GamePlayScene::update));
+    //schedule(schedule_selector(GamePlayScene::update));
     if (!m_creatMulBtn) {
         auto Size = Director::getInstance()->getVisibleSize();
         /** 一倍 */
