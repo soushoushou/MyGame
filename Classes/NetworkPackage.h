@@ -641,12 +641,14 @@ struct S_BuyDiamondACK
 //Êä¢Â∫íËØ∑Ê±Ç
 struct S_QiangZhuangReq
 {
-	S_QiangZhuangReq() :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ),m_packageLen(4){
+	S_QiangZhuangReq(int isQiang) :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ),m_packageLen(4){
 		m_packageLen = htons(m_packageLen);
 		m_cmd = htons(m_cmd);
+		isQiang = htonl(isQiang);
 	}
 	short m_packageLen;
 	unsigned short m_cmd;
+	int m_isQiang;					// «∑Ò«¿é·,0«¿1≤ª«¿
 };
 
 //Êä¢Â∫íÂìçÂ∫î

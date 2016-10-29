@@ -542,7 +542,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				m_HogBtn->setVisible(false);
 				m_timeLayer->stopTimer();
 				m_iState = CompareState;
-				S_QiangZhuangReq s;
+				S_QiangZhuangReq s(0);
 				NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
 				int beishu = rand() % 5 + 1;
 				S_YaZhuReq t(beishu);
@@ -551,6 +551,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
             }
             case TAG_NOT_HOG_BTN:		//不抢庒
             {
+				S_QiangZhuangReq s(1);
+				NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
                 m_notHogBtn->setVisible(false);
                 m_HogBtn->setVisible(false);
                 m_timeLayer->stopTimer();
@@ -728,13 +730,11 @@ void GamePlayScene::notHogBtnAction(){
     m_HogBtn->setVisible(false);
     m_timeLayer->stopTimer();
 	int beishu = rand() % 5 + 1;
+	S_QiangZhuangReq t(1);
+	NetworkManger::getInstance()->SendRequest_QiangZhuang(t);
 	S_YaZhuReq s(beishu);
 	NetworkManger::getInstance()->SendRequest_YaZhu(s);
 	m_iState = CompareState;
-    //m_iState=CompareState;
-	//S_TanPaiReq s;
-	//NetworkManger::getInstance()->SendRequest_TanPai(s);
-	//showCompare();
 }
 void GamePlayScene::showWinDialog() {
 	PopupLayer* pl = PopupLayer::wlDialog("popuplayer/win.png", Size(600, 600));
