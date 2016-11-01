@@ -139,6 +139,10 @@ void GamePlayScene::update(float delta)
 				{
 					m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
 					log("qiang zhuang success!");
+					if (ack.m_ZhuangJiaID != m_playerID)
+					{
+						showChooseMultipleButton();
+					}
 				}
 				else
 					log("qiang zhuang failed!");
@@ -223,7 +227,6 @@ void GamePlayScene::update(float delta)
 				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_bGameStart = true;
-	
 			}
 			break;
 			case PP_DOUNIU_FAPAI_ACK:
@@ -544,9 +547,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				m_iState = CompareState;
 				S_QiangZhuangReq s(0);
 				NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
-				int beishu = rand() % 5 + 1;
-				S_YaZhuReq t(beishu);
-				NetworkManger::getInstance()->SendRequest_YaZhu(t);
                 break;
             }
             case TAG_NOT_HOG_BTN:		//不抢庒
@@ -557,7 +557,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 m_HogBtn->setVisible(false);
                 m_timeLayer->stopTimer();
                 m_iState=ChooseMultipleState;
-                showChooseMultipleButton();
                 break;
             }
 			case TAG_MUL_ONE:
@@ -732,8 +731,6 @@ void GamePlayScene::notHogBtnAction(){
 	int beishu = rand() % 5 + 1;
 	S_QiangZhuangReq t(1);
 	NetworkManger::getInstance()->SendRequest_QiangZhuang(t);
-	S_YaZhuReq s(beishu);
-	NetworkManger::getInstance()->SendRequest_YaZhu(s);
 	m_iState = CompareState;
 }
 void GamePlayScene::showWinDialog() {
@@ -826,13 +823,10 @@ void GamePlayScene::notChooseMulAction(float dt){
     m_FourBtn->setVisible(false);
     m_FiveBtn->setVisible(false);
     m_timeLayer->stopTimer();
-	int beishu = rand() % 5 + 1;
-	S_YaZhuReq s(beishu);
+	S_YaZhuReq s(1);
 	NetworkManger::getInstance()->SendRequest_YaZhu(s);
 	m_iState = CompareState;
-	//S_TanPaiReq s;
-	//NetworkManger::getInstance()->SendRequest_TanPai(s);
-	//showCompare();
+
 }
 
 #pragma mark-显示结果
