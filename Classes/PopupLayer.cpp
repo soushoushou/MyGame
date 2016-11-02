@@ -251,7 +251,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
 	auto size = Director::getInstance()->getWinSize();
-	LabelTTF* label = LabelTTF::create("hhhhhhhh", "", 40);
+	LabelTTF* label = LabelTTF::create(g_strCreateRoom, "", 40);
 	label->setPosition(size.width/2,(size.height/2+dialogSize.height/2-35));
 	label->setColor(Color3B(0, 0, 0));
 	layer->addChild(label,10);
@@ -277,7 +277,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	createBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(createBtn, 20);
 
-	LabelTTF* label2 = LabelTTF::create("hhhhhhhh", "", 32);
+	LabelTTF* label2 = LabelTTF::create(g_juShuXuanZe, "", 32);
 	label2->setPosition(ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 - label2->getContentSize().width / 2 - 35, (size.height - dialogSize.height) / 2 + dialogSize.height / 3 * 2));
 	label2->setColor(Color3B(255, 255, 255));
 	layer->addChild(label2, 10);
@@ -296,7 +296,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	if (checkBox != nullptr)
 		layer->addChild(checkBox, 10);
 	checkBox->setTag(TAG_CHECKBOX_10);
-	LabelTTF* label3 = LabelTTF::create("10 hhh", "", 32);
+	LabelTTF* label3 = LabelTTF::create(g_tenJu, "", 32);
 	label3->setPosition(checkBox->getContentSize().width/2+checkBoxPosition.x+20+label3->getContentSize().width/2,checkBoxPosition.y);
 	label3->setColor(Color3B(255, 255, 255));
 	layer->addChild(label3, 10);
@@ -311,7 +311,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	checkBox2->setPosition(checkBoxPosition2);
 	checkBox2->setSelectedState(true);
 	checkBox2->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
-	LabelTTF* label4 = LabelTTF::create("10 hhh", "", 32);
+	LabelTTF* label4 = LabelTTF::create(g_twentyJu, "", 32);
 	label4->setPosition(checkBox2->getContentSize().width / 2 + checkBoxPosition2.x + 20 + label4->getContentSize().width / 2, checkBoxPosition.y);
 	label4->setColor(Color3B(255, 255, 255));
 	layer->addChild(label4, 10);
@@ -320,7 +320,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 		layer->addChild(checkBox2, 10);
 	checkBox2->setTag(TAG_CHECKBOX_20);
 
-	LabelTTF* label5 = LabelTTF::create("hhhhhhhh", "", 32);
+	LabelTTF* label5 = LabelTTF::create(g_modeSelect, "", 32);
 	label5->setPosition(ccp((size.width - dialogSize.width) / 2 + dialogSize.width / 3 - label5->getContentSize().width / 2 - 35, checkBoxPosition2.y-90));
 	label5->setColor(Color3B(255, 255, 255));
 	layer->addChild(label5, 10);
@@ -340,7 +340,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	if (checkBox3 != nullptr)
 		layer->addChild(checkBox3, 10);
 	checkBox3->setTag(TAG_CHECKBOX_QZ);
-	LabelTTF* label6 = LabelTTF::create("10 hhh", "", 32);
+	LabelTTF* label6 = LabelTTF::create(g_qiangZhuangMoShi, "", 32);
 	label6->setPosition(checkBox3->getContentSize().width / 2 + checkBoxPosition.x + 20 + label6->getContentSize().width / 2, checkBoxPosition3.y);
 	label6->setColor(Color3B(255, 255, 255));
 	layer->addChild(label6, 10);
@@ -355,7 +355,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 	checkBox4->setPosition(checkBoxPosition4);
 	checkBox4->setSelectedState(true);
 	checkBox4->addEventListenerCheckBox(layer, checkboxselectedeventselector(PopupLayer::selectedEvent));
-	LabelTTF* label7 = LabelTTF::create("10 hhh", "", 32);
+	LabelTTF* label7 = LabelTTF::create(g_lunZhuangMoShi, "", 32);
 	label7->setPosition(checkBox4->getContentSize().width / 2 + checkBoxPosition4.x + 20 + label7->getContentSize().width / 2, checkBoxPosition4.y);
 	label7->setColor(Color3B(255, 255, 255));
 	layer->addChild(label7, 10);
@@ -364,7 +364,7 @@ PopupLayer* PopupLayer::createRoomDialog(const char* backgroundImage, Size dialo
 		layer->addChild(checkBox4, 10);
 	checkBox4->setTag(TAG_CHECKBOX_LL);
 
-	LabelTTF* label8 = LabelTTF::create("10 hhh", "", 20);
+	LabelTTF* label8 = LabelTTF::create(g_strRoomTip, "", 20);
 	label8->setPosition(createBtn->getContentSize().width / 2 + startPosition.x + 20 + label8->getContentSize().width / 2, startPosition.y);
 	label8->setColor(Color3B(255, 255, 255));
 	layer->addChild(label8, 10);
