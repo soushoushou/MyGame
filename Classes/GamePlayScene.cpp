@@ -44,12 +44,15 @@ enum ButtonTag{
 	/** 聊天 */
 	TAG_CHAT_BTN,
     /** 录音 */
-    TAG_RECORD_BTN
+    TAG_RECORD_BTN,
+	//邀请
+	TAG_INVITE_BTN
 };
 
 
 GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
 m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr), m_bGameStart(false)
+, m_inviteBtn(nullptr)
 {
     m_creatHogBtn=false;
     m_creatMulBtn=false;
@@ -459,6 +462,15 @@ bool GamePlayScene::initButtons()
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_startGameBtn,51);
 
+	//邀请好友
+	m_inviteBtn = Button::create("game/inviteFriendBtn_normal.png", "game/inviteFriendBtn_pressed.png");
+	if (!m_inviteBtn) return false;
+	m_inviteBtn->setTag(TAG_INVITE_BTN);
+	m_inviteBtn->setScale9Enabled(true);
+	m_inviteBtn->setPosition(cocos2d::Vec2(Size.width / 2, Size.height / 2));
+	m_inviteBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+	this->addChild(m_inviteBtn, 51);
+
 	//设置按钮
 	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)),m_playerID);
     m_btnSetting->retain();
@@ -542,6 +554,11 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
                 break;
             }
+			case TAG_INVITE_BTN:
+			{
+				log("invite friend");
+				break;
+			}
             case TAG_HOG_BTN:			//抢庒
             {
 				m_notHogBtn->setVisible(false);

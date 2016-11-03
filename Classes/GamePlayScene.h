@@ -89,6 +89,8 @@ private:
 	SettingMenuInPlaying *m_btnSetting;
 	/** 聊天 */
 	Button* m_chatBtn;
+	/** 邀请 */
+	Button* m_inviteBtn;
     /** 准备按钮 */
     Button* m_startGameBtn;
     /** 不抢按钮 */
