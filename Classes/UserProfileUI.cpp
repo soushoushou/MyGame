@@ -141,7 +141,7 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 		{
 			return false;
 		}
-		m_spReady->setPosition(Vec2(55, 45));
+		m_spReady->setPosition(Vec2(135, -45));
 		m_spFrame->addChild(m_spReady);
 	}
 
@@ -351,10 +351,10 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 		m_spReady->setAnchorPoint(Vec2(0, 1));
 		if (m_spFrame->getPosition().x <= 100)
 		{
-			m_spReady->setPosition(Vec2(145, 190));
+			m_spReady->setPosition(Vec2(145, 110));
 		}
 		else
-			m_spReady->setPosition(Vec2(-45, 190));
+			m_spReady->setPosition(Vec2(-130, 110));
 		
 		m_spFrame->addChild(m_spReady);
 	}

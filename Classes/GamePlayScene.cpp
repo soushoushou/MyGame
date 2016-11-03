@@ -214,7 +214,11 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ready successed!");
-					m_pSiteManager->showReady(ack.m_playerID);
+					if (m_playerID != ack.m_playerID)
+					{
+						m_pSiteManager->showReady(ack.m_playerID);
+					}
+					
 				}
 				else
 					log("ready failed!");
@@ -275,6 +279,7 @@ void GamePlayScene::update(float delta)
 			//if (rand()%100<50 && flag && m_testID.size()<5)
 			//{
 			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+			//	m_pSiteManager->showReady(ccc);
 			//	m_testID.push_back(ccc);
 			//	if (rand() % 3 == 1)
 			//	{
