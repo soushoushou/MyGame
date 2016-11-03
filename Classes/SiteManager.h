@@ -25,9 +25,11 @@ public:
 	//设置倍数
 	bool setMultiple(unsigned long long playerID, int multiple);
 	//显示倍数
-	bool showMultiple(unsigned long long playerID);
+	bool showMultiple(unsigned long long playerID,bool isShow = true);
 	//设置庄家
 	bool showZhuangJia(unsigned long long playerID);
+	//显示准备
+	bool showReady(unsigned long long playerID, bool isShow = true);
 
 
 private:

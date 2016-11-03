@@ -27,6 +27,14 @@ HerizelUserProfileUI::HerizelUserProfileUI(Node* pParent) :IUserProfileUIInGame(
 
 }
 
+void HerizelUserProfileUI::showReady(bool isShow /* = true */)
+{
+	if (m_spReady)
+	{
+		m_spReady->setVisible(isShow);
+	}
+}
+
 
 void HerizelUserProfileUI::showMultiple(bool isShow /* = true */)
 {
@@ -126,6 +134,17 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 	}
 	m_lblCoin->setString(buf);
 
+	if (!m_spReady)
+	{
+		m_spReady = Sprite::create("game/ready.png");
+		if (!m_spReady)
+		{
+			return false;
+		}
+		m_spReady->setPosition(Vec2(55, 45));
+		m_spFrame->addChild(m_spReady);
+	}
+
 	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
 	if (!m_lblMultiple)
 	{
@@ -148,6 +167,7 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 	m_lblMultiple->setString(txts[multiple]);
 	showMultiple(false);
 	showBanker(false);
+	showReady(false);
 	return true;
 }
 
@@ -188,6 +208,14 @@ void VerticalUserProfileUI::showMultiple(bool isShow /* = true */)
 	if (m_lblMultiple);
 	{
 		m_lblMultiple->setVisible(isShow);
+	}
+}
+
+void VerticalUserProfileUI::showReady(bool isShow /* = true */)
+{
+	if (m_spReady)
+	{
+		m_spReady->setVisible(isShow);
 	}
 }
 
@@ -312,6 +340,25 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 		m_spFrame->addChild(m_lblCoin);
 	}
 	m_lblCoin->setString(buf);
+
+	if (!m_spReady)
+	{
+		m_spReady = Sprite::create("game/ready.png");
+		if (!m_spReady)
+		{
+			return false;
+		}
+		m_spReady->setAnchorPoint(Vec2(0, 1));
+		if (m_spFrame->getPosition().x <= 100)
+		{
+			m_spReady->setPosition(Vec2(145, 190));
+		}
+		else
+			m_spReady->setPosition(Vec2(-45, 190));
+		
+		m_spFrame->addChild(m_spReady);
+	}
+
 	vector<string> txts = { "", "x1", "x2", "x3", "x4", "x5" };
 	if (!m_lblMultiple)
 	{
@@ -334,6 +381,7 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 	m_lblMultiple->setString(txts[multiple]);
 	showMultiple(false);
 	showBanker(false);
+	showReady(false);
 	return true;
 }
 

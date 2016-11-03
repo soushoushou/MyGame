@@ -75,18 +75,16 @@ NiuPoker* PorkerManager::selectPoker(int huaSe, int num)
 
 void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 {
-	//第几张牌
-	for (int kk = 0; kk < 5; ++kk)
+	//顺时针发牌
+	for (int i = 0; i < 5; ++i)
 	{
-		//第几个人
-		for (int i = 0; i < porkers.size(); ++i)
+		for (int j = 0; j < m_pSitManager->m_inRoomPlayerID.size(); ++j)
 		{
-			//发牌
-			for (int j = 0; j < m_pSitManager->m_inRoomPlayerID.size(); ++j)
+			for (int k = 0; k < porkers.size(); ++k)
 			{
-				if (porkers[i].playerID == m_pSitManager->m_inRoomPlayerID[j])
+				if (porkers[k].playerID == m_pSitManager->m_inRoomPlayerID[j])
 				{
-					MovePk(m_pSitManager->m_inRoomPlayer[j], ((NiuPoker*)m_arrPokers->getObjectAtIndex(porkers[i].vecPorkerIndex[kk])));
+					MovePk(m_pSitManager->m_inRoomPlayer[j], ((NiuPoker*)m_arrPokers->getObjectAtIndex(porkers[k].vecPorkerIndex[i])));
 					break;
 				}
 			}

@@ -170,14 +170,28 @@ bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
 	return false;
 }
 
-bool SiteManager::showMultiple(unsigned long long playerID)
+bool SiteManager::showReady(unsigned long long playerID, bool isShow /* = true */)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
 			m_lock.lock();
-			m_pUserProfileVecs[i]->showMultiple();
+			m_pUserProfileVecs[i]->showReady(isShow);
+			m_lock.unlock();
+			return true;
+		}
+	}
+}
+
+bool SiteManager::showMultiple(unsigned long long playerID,bool isShow /*= true*/)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			m_lock.lock();
+			m_pUserProfileVecs[i]->showMultiple(isShow);
 			m_lock.unlock();
 			return true;
 		}

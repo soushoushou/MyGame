@@ -214,9 +214,7 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ready successed!");
-					/*char buf[100] = { 0 };
-					sprintf(buf, "ready player id = %d", ack.m_playerID);
-					log(buf);*/
+					m_pSiteManager->showReady(ack.m_playerID);
 				}
 				else
 					log("ready failed!");
