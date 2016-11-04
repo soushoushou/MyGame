@@ -50,6 +50,7 @@ using namespace std;
 #define PP_DOUNIU_VOICE_CHAT_ACK	(50023)
 #define PP_DOUNIU_MEMBER_INFO_ACK	(50024)	
 #define PP_DOUNIU_GAME_START_ACK	(50025)
+#define PP_DOUNIU_GAME_OVER_ACK		(50026)
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
@@ -379,7 +380,7 @@ struct S_SearchZhanjiReq
 //鏌ヨ鎴樼哗鍝嶅簲
 struct S_SearchZhanjiACK
 {
-	S_SearchZhanjiACK() :m_cmd(0),m_zhanji(""){}
+	S_SearchZhanjiACK() :m_cmd(0){}
 
 	static S_SearchZhanjiACK convertDataFromBinaryData(void* binaryData)
 	{
@@ -391,19 +392,26 @@ struct S_SearchZhanjiACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_zhanjiLen, pData, 2);
-		s.m_zhanjiLen = ntohl(s.m_zhanjiLen);
-		pData += 2;
-		char buf[2048] = {0};
-		memcpy(buf, pData, s.m_zhanjiLen);
-		s.m_zhanji = buf;
+		int nums = (s.m_packageLen - 4) / 8;
+		for (int i = 0; i < nums; ++i)
+		{
+			int room, score;
+			memcpy(&room, pData, 4);
+			room = ntohl(room);
+			pData += 4;
+			memcpy(&score, pData, 4);
+			score = ntohl(score);
+			pData += 4;
+			s.m_roomIDs.push_back(room);
+			s.m_scores.push_back(score);
+		}
 		return s;
 	}
 
 	unsigned short m_packageLen;
 	unsigned short m_cmd;
-	short m_zhanjiLen;
-	string m_zhanji;
+	vector<int> m_roomIDs;				//房间id
+	vector<int> m_scores;				//房间对应的积分
 };
 
 
@@ -578,14 +586,34 @@ struct S_TanPaiACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_isSmaller, pData, 4);
-		s.m_isSmaller = ntohl(s.m_isSmaller);
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		if (s.m_statusCode == 0)
+		{
+			memcpy(&s.m_playerID, pData, 8);
+			s.m_playerID = my_ntohll(s.m_playerID);
+			pData += 8;
+			memcpy(&s.m_isWin, pData, 4);
+			s.m_isWin = ntohl(s.m_isWin);
+			pData += 4;
+			memcpy(&s.m_score, pData, 4);
+			s.m_score = ntohl(s.m_score);
+			pData += 4;
+			memcpy(&s.m_niuIndex, pData, 4);
+			s.m_niuIndex = ntohl(s.m_niuIndex);
+		}
+
 		return s;
 	}
 	
 	short m_packageLen;
 	unsigned short m_cmd;
-	int m_isSmaller;//0:澶?1:灏?
+	int m_statusCode;				//0成功1失败
+	unsigned long long m_playerID;
+	int m_isWin;					//0胜1负
+	int m_score;					//该盘积分
+	int m_niuIndex;					//牛的索引
 };
 
 //鍐查捇鐭宠姹?
@@ -865,5 +893,40 @@ struct S_GameStartACK
 	}
 	short m_packageLen;
 	unsigned short m_cmd;
+};
+
+struct S_GameOverACK
+{
+	S_GameOverACK() :m_cmd(0){}
+	static S_GameOverACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_GameOverACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_playerID, pData, 8);
+		s.m_playerID = my_ntohll(s.m_playerID);
+		pData += 8;
+		memcpy(&s.m_winCount, pData, 4);
+		s.m_winCount = ntohl(s.m_winCount);
+		pData += 4;
+		memcpy(&s.m_loseCount, pData, 4);
+		s.m_loseCount = ntohl(s.m_loseCount);
+		pData += 4;
+		memcpy(&s.m_totalScore, pData, 4);
+		s.m_totalScore = ntohl(s.m_totalScore);
+		return s;
+	}
+	short m_packageLen;
+	unsigned short m_cmd;
+	unsigned long long m_playerID;
+	int m_winCount;					//胜利次数
+	int m_loseCount;				//失败次数
+	int m_totalScore;				//该局总积分
+
 };
 #pragma pack(4)
