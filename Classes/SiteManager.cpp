@@ -53,6 +53,21 @@ SiteManager::~SiteManager()
 	m_lock.unlock();
 }
 
+//返回当前入座人数
+int SiteManager::currentPlayerCount() const
+{
+	int result = 0;
+	for (int i = 0; i < m_playerInRoom.size(); ++i)
+	{
+		if (m_playerInRoom[i] == 1)
+		{
+			++result;
+		}
+	}
+	return result;
+}
+
+
 //坐下座位
 bool SiteManager::joinSite(unsigned long long playerID, string playerName, int diamond, int money)
 {
