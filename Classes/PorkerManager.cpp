@@ -52,7 +52,7 @@ bool PorkerManager::createPokers()
 				m_arrPokers->addObject(pk);
 				pk->showLast();
 				pk->setPosition(Vec2(sz.width / 2, sz.height / 2));
-				pk->setVisible(true);
+				pk->setVisible(false);
 			}
 		}
 		isRet = true;
@@ -75,6 +75,10 @@ NiuPoker* PorkerManager::selectPoker(int huaSe, int num)
 
 void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 {
+	for (int i = 0; i < m_arrPokers->count(); ++i)
+	{
+		dynamic_cast<NiuPoker*>(m_arrPokers->getObjectAtIndex(i))->setVisible(true);
+	}
 	//À≥ ±’Î∑¢≈∆
 	for (int i = 0; i < 5; ++i)
 	{
@@ -149,7 +153,7 @@ void PorkerManager::EmptyAllPorkers()
 		NiuPoker* pk = (NiuPoker*)m_arrPokers->getObjectAtIndex(i);
 		pk->setPosition(Vec2(Size.width / 2, Size.height / 2));
 		pk->showLast();
-		pk->setVisible(true);
+		pk->setVisible(false);
 	}
 	m_currentPokerActionIndex = 0;
 	for (int i = 0; i < m_poker2Actions.size(); ++i)
