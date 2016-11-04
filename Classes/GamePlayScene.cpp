@@ -900,6 +900,8 @@ void GamePlayScene::startNewPlay(){
     m_pNoticeLabel->setString(path);
 	m_pPorkerManager->EmptyAllPorkers();
 	m_startGameBtn->setVisible(true);
+	m_startGameBtn->setTouchEnabled(true);
+	m_startGameBtn->loadTextures("game/startgame.png", "");
 	if (m_pSiteManager->currentPlayerCount() == 5)
 	{
 		m_inviteBtn->setVisible(false);
