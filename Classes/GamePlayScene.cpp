@@ -237,6 +237,7 @@ void GamePlayScene::update(float delta)
 				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_bGameStart = true;
+				m_inviteBtn->setVisible(false);
 			}
 			break;
 			case PP_DOUNIU_FAPAI_ACK:
@@ -367,7 +368,6 @@ void GamePlayScene::update(float delta)
 				{
 					m_timeLayer->setVisible(false);
 					m_startGameBtn->setVisible(false);
-					m_inviteBtn->setVisible(false);
 					S_FaPaiReq s;
 					NetworkManger::getInstance()->SendRequest_FaPai(s);
 					m_bGameStart = false;
@@ -865,11 +865,14 @@ void GamePlayScene::showChooseMultipleButton()
 
 #pragma mark-选择倍数超时
 void GamePlayScene::notChooseMulAction(float dt){
-    m_OneBtn->setVisible(false);
-    m_TwoBtn->setVisible(false);
-    m_ThreeBtn->setVisible(false);
-    m_FourBtn->setVisible(false);
-    m_FiveBtn->setVisible(false);
+	if (m_creatMulBtn)
+	{
+		m_OneBtn->setVisible(false);
+		m_TwoBtn->setVisible(false);
+		m_ThreeBtn->setVisible(false);
+		m_FourBtn->setVisible(false);
+		m_FiveBtn->setVisible(false);
+	}
     m_timeLayer->stopTimer();
 	S_YaZhuReq s(1);
 	NetworkManger::getInstance()->SendRequest_YaZhu(s);
