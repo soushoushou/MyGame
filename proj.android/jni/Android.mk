@@ -1,5 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
+LAME_LIBMP3_DIR := libmp3lame
+
 include $(CLEAR_VARS)
 
 $(call import-add-path,$(LOCAL_PATH)/../../cocos2d)
@@ -35,7 +37,31 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/Global.cpp \
 				   ../../Classes/NetworkPackage.cpp \
 				   ../../Classes/TCPClient.cpp \
-				   ../../Classes/TCPRequest.cpp
+				   ../../Classes/TCPRequest.cpp \
+				   ../../Classes/AudioManager.cpp \
+				   ../../Classes/SiteManager.cpp \
+				   ../../Classes/PorkerManager.cpp \
+				   $(LAME_LIBMP3_DIR)/bitstream.c \
+				   $(LAME_LIBMP3_DIR)/fft.c \
+				   $(LAME_LIBMP3_DIR)/id3tag.c \
+				   $(LAME_LIBMP3_DIR)/mpglib_interface.c \
+				   $(LAME_LIBMP3_DIR)/presets.c \
+				   $(LAME_LIBMP3_DIR)/quantize.c \
+				   $(LAME_LIBMP3_DIR)/reservoir.c \
+				   $(LAME_LIBMP3_DIR)/tables.c \
+				   $(LAME_LIBMP3_DIR)/util.c \
+				   $(LAME_LIBMP3_DIR)/VbrTag.c \
+				   $(LAME_LIBMP3_DIR)/encoder.c \
+				   $(LAME_LIBMP3_DIR)/gain_analysis.c \
+				   $(LAME_LIBMP3_DIR)/lame.c \
+				   $(LAME_LIBMP3_DIR)/newmdct.c \
+				   $(LAME_LIBMP3_DIR)/psymodel.c \
+				   $(LAME_LIBMP3_DIR)/quantize_pvt.c \
+				   $(LAME_LIBMP3_DIR)/set_get.c \
+				   $(LAME_LIBMP3_DIR)/takehiro.c \
+				   $(LAME_LIBMP3_DIR)/vbrquantize.c \
+				   $(LAME_LIBMP3_DIR)/version.c \
+				   com_android_audio_SimpleLame.c
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 

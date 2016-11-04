@@ -14,9 +14,9 @@ public class Audio {
 	//语音操作对象  
     private static MediaPlayer mPlayer = null;  
 	private static MediaRecorder mRecorder = null;  
-	private static String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ione.pcm";
+	private static String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ione.raw";
 	
-	public static void recordAudio(){
+	public static String recordAudio(){
 		
 		mRecorder = new MediaRecorder();  
 		//设置音源为Micphone 
@@ -33,21 +33,23 @@ public class Audio {
         }  
         mRecorder.start();
         Log.e(LOG_TAG, "start record！");
-         
+        return path;
 	}
 	
-	public static void startPlay(){
+	public static String startPlay(){
 		mRecorder.stop();  
         mRecorder.release();  
         mRecorder = null;
         mPlayer = new MediaPlayer();  
         try{  
+        	mPlayer.reset();
             mPlayer.setDataSource(path);  
             mPlayer.prepare();  
             mPlayer.start();  
         }catch(IOException e){  
             Log.e(LOG_TAG,"播放失败");  
         } 
-        Log.e(LOG_TAG,"播放成功");  
+        Log.e(LOG_TAG,"播放成功");
+        return path;
 	}
 }
