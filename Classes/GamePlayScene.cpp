@@ -170,6 +170,7 @@ void GamePlayScene::update(float delta)
 					else
 					{
 						m_pSiteManager->leaveSite(ack.m_playerID);
+						m_inviteBtn->setVisible(true);
 					}
 				}
 				else
@@ -208,6 +209,10 @@ void GamePlayScene::update(float delta)
 				S_GetMemberInfoACK ack = S_GetMemberInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_pSiteManager->joinSite(ack.m_playerID, ack.m_strPlayerName, ack.m_currentDiamond, ack.m_currentMoney);
+				if (m_pSiteManager->currentPlayerCount() == 5)
+				{
+					m_inviteBtn->setVisible(false);
+				}
 			}
 			break;
 			case PP_DOUNIU_READY_ACK:
@@ -245,6 +250,7 @@ void GamePlayScene::update(float delta)
 				{
 					S_PlayerPorker s;
 					s.playerID = ack.m_playerID[i];
+					m_pSiteManager->showReady(s.playerID, false);
 					for (int j = 0; j < 5; ++j)
 					{
 						s.vecPorkerIndex[j] = ack.m_pokers[(i)* 5 + j]-1;
@@ -272,7 +278,7 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
-			/////暂时测试用
+			/////单机测试用
 			//static bool flag = true;
 			//static int ccc = 2;
 			//static int bbb = 22;
@@ -282,12 +288,17 @@ void GamePlayScene::update(float delta)
 			//if (rand()%100<50 && flag && m_testID.size()<5)
 			//{
 			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+			//	if (m_pSiteManager->currentPlayerCount() == 5)
+			//	{
+			//		m_inviteBtn->setVisible(false);
+			//	}
 			//	m_pSiteManager->showReady(ccc);
 			//	m_testID.push_back(ccc);
 			//	if (rand() % 3 == 1)
 			//	{
 			//		static int iii = 2;
 			//		m_pSiteManager->leaveSite(iii);
+			//		m_inviteBtn->setVisible(true);
 			//		for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
 			//		{
 			//			if (*iter == iii)
@@ -312,6 +323,7 @@ void GamePlayScene::update(float delta)
 			//	{
 			//		m_timeLayer->setVisible(false);
 			//		m_startGameBtn->setVisible(false);
+			//		m_inviteBtn->setVisible(false);
 			//		m_iState = SendPokerState;
 
 			//		//发牌
@@ -332,6 +344,7 @@ void GamePlayScene::update(float delta)
 			//		{
 			//			S_PlayerPorker s;
 			//			s.playerID = m_testID[i];
+			//			m_pSiteManager->showReady(s.playerID, false);
 			//			for (int j = 0; j < 5; ++j)
 			//			{
 			//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j]-1;
@@ -354,6 +367,7 @@ void GamePlayScene::update(float delta)
 				{
 					m_timeLayer->setVisible(false);
 					m_startGameBtn->setVisible(false);
+					m_inviteBtn->setVisible(false);
 					S_FaPaiReq s;
 					NetworkManger::getInstance()->SendRequest_FaPai(s);
 					m_bGameStart = false;
@@ -882,7 +896,15 @@ void GamePlayScene::startNewPlay(){
     sprintf(path, "第%d局", m_playNum);
     m_pNoticeLabel->setString(path);
 	m_pPorkerManager->EmptyAllPorkers();
-	S_FaPaiReq s;
-	NetworkManger::getInstance()->SendRequest_FaPai(s);
+	m_startGameBtn->setVisible(true);
+	if (m_pSiteManager->currentPlayerCount() == 5)
+	{
+		m_inviteBtn->setVisible(false);
+	}
+	else
+		m_inviteBtn->setVisible(true);
+	m_iState = StartState;
+	//S_FaPaiReq s;
+	//NetworkManger::getInstance()->SendRequest_FaPai(s);
 }
 

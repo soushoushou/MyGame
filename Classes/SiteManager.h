@@ -30,6 +30,8 @@ public:
 	bool showZhuangJia(unsigned long long playerID);
 	//显示准备
 	bool showReady(unsigned long long playerID, bool isShow = true);
+	//当前入座玩家数量
+	int currentPlayerCount() const;
 
 
 private:
