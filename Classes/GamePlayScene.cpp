@@ -512,6 +512,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
         switch (tag)
         {
             case TAG_RECORD_BTN:{
+				char buf[10000] = {0};
+				S_VoiceChatReq s(buf,10000);
+				NetworkManger::getInstance()->SendRequest_VoiceChat(s);
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)	//判断当前平台为ios平台
 					log("录音");
 					m_recordObject->StartRecord();

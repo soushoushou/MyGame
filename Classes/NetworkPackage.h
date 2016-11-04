@@ -61,12 +61,12 @@ unsigned long long my_ntohll(unsigned long long val);
 struct S_ACKResponse
 {
 	S_ACKResponse(){
-		memset(m_buf, 0, 3 * 1024);
+		memset(m_buf, 0, 6400 * 1024);
 		m_len = 0;
 	}
 	S_ACKResponse(void* data, int size)
 	{
-		memset(m_buf, 0, 3 * 1024);
+		memset(m_buf, 0, 6400 * 1024);
 		memcpy(m_buf, data, size);
 		m_len = size;
 	}
@@ -93,7 +93,7 @@ struct S_ACKResponse
 	{
 		int i = 0;
 	}
-	char m_buf[3 * 1024];
+	char m_buf[6400 * 1024];
 	int m_len;
 };
 
@@ -793,10 +793,10 @@ struct S_VoiceChatACK
 		memcpy(&s.m_voiceSize, pData, 2);
 		s.m_voiceSize = ntohs(s.m_voiceSize);
 		pData += 2;
-		memcpy(s.m_voiceBuf, (char*)binaryData, s.m_voiceSize);
+		memcpy(s.m_voiceBuf, (char*)pData, s.m_voiceSize);
 		return s;
 	}
-	short m_packageLen;
+	unsigned short m_packageLen;
 	unsigned short m_cmd;
 	unsigned short m_voiceSize;			//语音二进制数据大小
 	char m_voiceBuf[65535];				//语音缓冲
