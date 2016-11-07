@@ -285,20 +285,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 
 		case TAG_RANK_BTN: {
-
-			PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
-			vector<pair<int, int>> quickMessage;
-			quickMessage.push_back(pair<int, int>(1, +1200));
-			quickMessage.push_back(pair<int, int>(2, -1200));
-			quickMessage.push_back(pair<int, int>(3, 0));
-			quickMessage.push_back(pair<int, int>(4, 2400));
-			quickMessage.push_back(pair<int, int>(5, -1200));
-			quickMessage.push_back(pair<int, int>(6, -1200));
-			quickMessage.push_back(pair<int, int>(7, -1200));
-			quickMessage.push_back(pair<int, int>(8, -1111111));
-			pl->createListView(quickMessage);
-			butten->getParent()->addChild(pl);
-
+			S_SearchZhanjiReq q;
+			NetworkManger::getInstance()->SendRequest_SearchZhanji(q);
 			break; }
 
 		case TAG_NOTICE_BTN:
@@ -384,6 +372,21 @@ void MainScene::update(float delta)
 			case PP_DOUNIU_QUIT_ROOM_ACK:
 			{
 				NetworkManger::getInstance()->popACKQueue();
+			}
+			break;
+
+			case PP_DOUNIU_QUERY_ZHANJI_ACK:
+			{
+				S_SearchZhanjiACK s = S_SearchZhanjiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				NetworkManger::getInstance()->popACKQueue();
+				PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
+				vector<pair<int, int>> quickMessage;
+				for (int i = 0; i < s.m_roomIDs.size(); ++i)
+				{
+					quickMessage.push_back(pair<int, int>(s.m_roomIDs[i], s.m_scores[i]));
+				}
+				pl->createListView(quickMessage);
+				this->addChild(pl);
 			}
 			break;
 		}

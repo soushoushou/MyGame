@@ -377,7 +377,7 @@ PopupLayer* PopupLayer::recordDialog(const char* backgroundImage, Size dialogSiz
 	//	layer->setSpriteBackGround(Sprite::create(backgroundImage));
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
 	auto size = Director::getInstance()->getWinSize();
-	LabelTTF* label = LabelTTF::create("hhhhhhhh", "", 40);
+	LabelTTF* label = LabelTTF::create(g_strZhanJi, "", 40);
 	label->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
 	label->setColor(Color3B(0, 0, 0));
 	layer->addChild(label, 10);
@@ -447,8 +447,8 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 	auto button2 = Button::create("game/chat-line.png");
 	button2->setPosition(Point(size.width / 2 - 220, size.height / 2 - 270));
 	button2->setScale9Enabled(true);
-	LabelTTF* roomNumLable = LabelTTF::create("roomNum", "fonts/arial.ttf", 30);
-	LabelTTF* rankLable = LabelTTF::create("rank", "fonts/arial.ttf", 30);
+	LabelTTF* roomNumLable = LabelTTF::create(g_strRoomID, "fonts/arial.ttf", 30);
+	LabelTTF* rankLable = LabelTTF::create(g_strJiFen, "fonts/arial.ttf", 30);
 	//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));
 	roomNumLable->setPosition(Point(size.width / 2 - 450, size.height / 2 - 285));
 	rankLable->setPosition(Point(size.width / 2 - 230, size.height / 2 - 285));
@@ -474,9 +474,23 @@ bool PopupLayer::createListView(const vector<pair<int, int>> quickMessage)
 		stringstream ss;
 		ss << quickMessage[i].first;
 		string s1 = ss.str();
-		stringstream ss2;
-		ss2 << quickMessage[i].second;
-		string s2 = ss2.str();
+		string s2;
+		if (quickMessage[i].second > 0)
+		{
+			string s = "+";
+			stringstream ss2;
+			ss2 << quickMessage[i].second;
+			s2 = ss2.str();
+			s2 = s + s2;
+		}
+		else
+		{
+			stringstream ss2;
+			ss2 << quickMessage[i].second;
+			s2 = ss2.str();
+		}
+	
+
 		LabelTTF* roomNumLable = LabelTTF::create(s1, "fonts/arial.ttf", 30);
 		LabelTTF* rankLable = LabelTTF::create(s2, "fonts/arial.ttf", 30);
 		//quickLable->setPosition(Director::getInstance()->convertToUI(Vec2(quickLable->getContentSize().width / 2 + 70, quickLable->getContentSize().height / 2 + 590)));

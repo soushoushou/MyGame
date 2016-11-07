@@ -17,3 +17,6 @@ const string g_modeSelect = "模式选择";
 const string g_qiangZhuangMoShi = "抢庒模式";
 const string g_lunZhuangMoShi = "轮庒模式";
 const string g_strRoomTip = "创建房间扣除1金币";
+const string g_strZhanJi = "战绩";
+const string g_strRoomID = "房间号";
+const string g_strJiFen = "积分";
