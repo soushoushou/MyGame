@@ -54,8 +54,17 @@ void AudioManager::fileConvertedToBinary_Send(const char *filePath){
 void AudioManager::binaryConvertedToFile_Rev(const char *filePath,const char* binaryData,long length){
     log("目标路径%s", filePath);
     ofstream out(filePath,ios::binary);
-    out.write(binaryData,length);
-    out.close();
+	if (!out)
+	{
+		log("创建文件失败!");
+		return;
+	}
+	else
+	{
+		out.write(binaryData, length);
+		out.close();
+	}
+
 }
 
 
