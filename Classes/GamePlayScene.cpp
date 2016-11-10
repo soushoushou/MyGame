@@ -726,6 +726,23 @@ void GamePlayScene::menuCloseCallback(Ref* pSender)
 
 }
 
+int GamePlayScene::countNiu(vector<int> vecPorkerIndex) {
+	int sum = 0;
+	for(int i = 0; i < vecPorkerIndex.size(); i++){
+		sum += vecPorkerIndex[i];
+	}
+	int count = sum%10;
+	for (int i = 0; i < vecPorkerIndex.size(); i++) {
+		for (int j = i + 1; j << vecPorkerIndex.size(); j++) {
+			int tem = vecPorkerIndex[i] + vecPorkerIndex[j];
+			if (tem % 10 == count)
+				return 1;
+		}
+	}
+
+	return 0;
+}
+
 #pragma mark-显示抢庄按钮
 void GamePlayScene::showHogButton()
 {

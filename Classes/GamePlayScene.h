@@ -71,6 +71,8 @@ private:
     void notChooseMulAction(float dt);
 	/** 显示胜利对话框 */
 	void showWinDialog();
+	/**算牛 */
+	int countNiu(vector<int> vecPorkerIndex);
 	/** 显示失败对话框 */
 	void showLoseDialog();
 private:
