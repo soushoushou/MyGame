@@ -95,11 +95,11 @@ bool CTCPClient::sendTCPRequset(CTCPRequest* request)
 		log("send msg error in sendTCPRequest()!");
 		return false;
 	}
-	if (!Flush())
-	{
-		log("send error");
-		return false;
-	}
+	//if (!Flush())
+	//{
+	//	log("send error");
+	//	return false;
+	//}
 	m_pRequest = request;
 	return true;
 }
@@ -229,22 +229,14 @@ bool CTCPClient::SendMsg(void* pBuf, int nSize)
 		return false;
 	}
 
-	// 检查通讯消息包长度
-	int packsize = 0;
-	packsize = nSize;
-
-	// 检测BUF溢出
-	if (m_nOutbufLen + nSize > OUTBUFSIZE) {
-		// 立即发送OUTBUF中的数据，以清空OUTBUF。
-		Flush();
-		if (m_nOutbufLen + nSize > OUTBUFSIZE) {
-			// 出错了
-			return false;
-		}
+	if (m_nOutbufLen+nSize > OUTBUFSIZE)
+	{
+		return false;
 	}
-	// 数据添加到BUF尾
-	memcpy(m_bufOutput + m_nOutbufLen, pBuf, nSize);
 	m_nOutbufLen += nSize;
+	memcpy(m_bufOutput, pBuf, m_nOutbufLen);
+	Flush();
+	m_nOutbufLen = 0;
 	return true;
 }
 
@@ -264,25 +256,26 @@ bool CTCPClient::ReceiveMsg(void* pBuf, int& nSize)
 	{
 		return false;
 	}
-	// 复制出一个消息
-	if (m_nInbufStart + rcvLen > INBUFSIZE) {
-		// 如果一个消息有回卷（被拆成两份在环形缓冲区的头尾）
-		// 先拷贝环形缓冲区末尾的数据
-		int copylen = INBUFSIZE - m_nInbufStart;
-		memcpy(pBuf, m_bufInput + m_nInbufStart, copylen);
+	memcpy(pBuf, m_bufInput, rcvLen);
+	//// 复制出一个消息
+	//if (m_nInbufStart + rcvLen > INBUFSIZE) {
+	//	// 如果一个消息有回卷（被拆成两份在环形缓冲区的头尾）
+	//	// 先拷贝环形缓冲区末尾的数据
+	//	int copylen = INBUFSIZE - m_nInbufStart;
+	//	memcpy(pBuf, m_bufInput + m_nInbufStart, copylen);
 
-		// 再拷贝环形缓冲区头部的剩余部分
-		memcpy((unsigned char *)pBuf + copylen, m_bufInput, rcvLen - copylen);
-		nSize = rcvLen;
-	}
-	else {
-		// 消息没有回卷，可以一次拷贝出去
-		memcpy(pBuf, m_bufInput + m_nInbufStart, rcvLen);
-		nSize = rcvLen;
-	}
-	// 重新计算环形缓冲区头部位置
-	m_nInbufStart = (m_nInbufStart + rcvLen) % INBUFSIZE;
-	m_nInbufLen -= rcvLen;
+	//	// 再拷贝环形缓冲区头部的剩余部分
+	//	memcpy((unsigned char *)pBuf + copylen, m_bufInput, rcvLen - copylen);
+	//	nSize = rcvLen;
+	//}
+	//else {
+	//	// 消息没有回卷，可以一次拷贝出去
+	//	memcpy(pBuf, m_bufInput + m_nInbufStart, rcvLen);
+	//	nSize = rcvLen;
+	//}
+	//// 重新计算环形缓冲区头部位置
+	//m_nInbufStart = (m_nInbufStart + rcvLen) % INBUFSIZE;
+	//m_nInbufLen -= rcvLen;
 	return true;
 }
 
@@ -316,56 +309,9 @@ int CTCPClient::recvFromSock(void)
 	if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
 		return 0 ;
 	}
-
-	// 接收第一段数据
-	int	savelen, savepos;			// 数据要保存的长度和位置
-	if (m_nInbufStart + m_nInbufLen < INBUFSIZE)	{	// INBUF中的剩余空间有回绕
-		savelen = INBUFSIZE - (m_nInbufStart + m_nInbufLen);		// 后部空间长度，最大接收数据的长度
-	}
-	else {
-		savelen = INBUFSIZE - m_nInbufLen;
-	}
-
-	// 缓冲区数据的末尾
-	savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
-	CHECKF(savepos + savelen <= INBUFSIZE);
-	int inlen = recv(m_sockClient, (char*)m_bufInput + savepos, savelen, 0);
-	if (inlen > 0) {
-		// 有接收到数据
-		m_nInbufLen += inlen;
-
-		if (m_nInbufLen > INBUFSIZE) {
-			return 0;
-		}
-
-		// 接收第二段数据(一次接收没有完成，接收第二段数据)
-		if (inlen == savelen && m_nInbufLen < INBUFSIZE) {
-			int savelen = INBUFSIZE - m_nInbufLen;
-			int savepos = (m_nInbufStart + m_nInbufLen) % INBUFSIZE;
-			CHECKF(savepos + savelen <= INBUFSIZE);
-			inlen = recv(m_sockClient, (char*)m_bufInput + savepos, savelen, 0);
-			if (inlen > 0) {
-				m_nInbufLen += inlen;
-				if (m_nInbufLen > INBUFSIZE) {
-					return 0;
-				}
-			}
-			else if (inlen == 0) {
-				return 0;
-			}
-			else {
-				// 连接已断开或者错误（包括阻塞）
-				if (hasError()) {
-					return 0;
-				}
-			}
-		}
-	}
-	else if (inlen == 0) {
-		return 0;
-	}
-	else {
-		// 连接已断开或者错误（包括阻塞）
+	int inlen = recv(m_sockClient, (char*)m_bufInput, INBUFSIZE, 0);
+	if (inlen <= 0)
+	{
 		if (hasError()) {
 			return 0;
 		}
@@ -381,25 +327,14 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 	}
 
 	if (m_nOutbufLen <= 0) {
-		return true;
+		return false;
 	}
 
 	// 发送一段数据
 	int	outsize;
 	outsize = send(m_sockClient, (char*)m_bufOutput, m_nOutbufLen, 0);
-	if (outsize > 0) {
-		// 删除已发送的部分
-		if (m_nOutbufLen - outsize > 0) {
-			memcpy(m_bufOutput, m_bufOutput + outsize, m_nOutbufLen - outsize);
-		}
-
-		m_nOutbufLen -= outsize;
-
-		if (m_nOutbufLen < 0) {
-			return false;
-		}
-	}
-	else {
+	if (outsize <= 0) 
+	{
 		int err = hasError();
 #ifdef WIN32
 		if (err == 10053)

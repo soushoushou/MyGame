@@ -1,7 +1,6 @@
 #include "LoginScene.h"
 #include "SimpleAudioEngine.h"
 #include "MainScene.h"
-#include "GameSocket.h"
 #include <utility>
 #include <fstream>
 USING_NS_CC;
@@ -122,13 +121,6 @@ bool LoginScene::init()
 	//启动update函数，可用于主线程监听ack消息
 	schedule(schedule_selector(LoginScene::update));
 
-	//测试账号
-	m_testPort.push_back(make_pair("haaBhb", "hBbab"));
-	m_testPort.push_back(make_pair("hbaBhb", "iBbab"));
-	m_testPort.push_back(make_pair("hcaBhb", "jBbab"));
-	m_testPort.push_back(make_pair("hdaBhb", "kBbab"));
-	m_testPort.push_back(make_pair("heaBhb", "lBbab"));
-	m_testPort.push_back(make_pair("hfaBhb", "mBbab"));
 
 	return true;
 }
@@ -179,10 +171,9 @@ void LoginScene::loading() {
 
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
-	S_CreatePlayerReq cr("g","g",1);
+	//S_CreatePlayerReq cr("g","g",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
-	S_LoginReq lg("g", 1, 1);
-	NetworkManger::getInstance()->SendRequest_Login(lg);
+	S_LoginReq lg("c", 1, 1);	NetworkManger::getInstance()->SendRequest_Login(lg);
 
 
 

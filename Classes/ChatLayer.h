@@ -4,7 +4,6 @@
 #include "ui/UIEditBox/UIEditBox.h"
 #include "ui/CocosGUI.h"
 #include "SimpleAudioEngine.h"
-#include "GameSocket.h"
 
 using namespace CocosDenshion;
 
@@ -50,6 +49,5 @@ protected:
 private:
 	ListView* lv;
 	vector<pair<string, string>> my_quickMessage;
-	CGameSocket* m_pSocket;
 };
 

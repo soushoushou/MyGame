@@ -125,6 +125,7 @@ void GamePlayScene::update(float delta)
 				log("voice ack uc");
 				S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
+				AudioManager::getInstance()->binaryConvertedToFile_Rev("C:\\Users\\Administrator\\Desktop\\record.mp3",s.m_voiceBuf,s.m_voiceSize);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 AudioManager::getInstance()->binaryConvertedToFile_Rev(m_recordObject->destPath, s.m_voiceBuf, s.m_voiceSize);
                 m_recordObject->StartPlay();
@@ -526,6 +527,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
         switch (tag)
         {
             case TAG_RECORD_BTN:{
+				AudioManager::getInstance()->fileConvertedToBinary_Send("C:\\Users\\Administrator\\Desktop\\target.mp3");
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)	//判断当前平台为ios平台
 					log("录音");
 					m_recordObject->StartRecord();
