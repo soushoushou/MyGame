@@ -95,11 +95,6 @@ bool CTCPClient::sendTCPRequset(CTCPRequest* request)
 		log("send msg error in sendTCPRequest()!");
 		return false;
 	}
-	//if (!Flush())
-	//{
-	//	log("send error");
-	//	return false;
-	//}
 	m_pRequest = request;
 	return true;
 }
