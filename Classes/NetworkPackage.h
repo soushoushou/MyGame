@@ -140,11 +140,11 @@ struct S_CreatePlayerACK
 	{
 		char* pData = (char*)binaryData;
 		S_CreatePlayerACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -184,13 +184,13 @@ struct S_LoginACK
 	{
 		char* pData = (char*)binaryData;
 		S_LoginACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
@@ -246,11 +246,12 @@ struct S_GetPlayerInfoACK
 	{
 		char* pData = (char*)binaryData;
 		S_GetPlayerInfoACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
 		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
@@ -303,11 +304,12 @@ struct S_CreateRoomACK
 	{
 		char* pData = (char*)binaryData;
 		S_CreateRoomACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -346,11 +348,12 @@ struct S_JoinRoomACK
 	{
 		char* pData = (char*)binaryData;
 		S_JoinRoomACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
@@ -387,11 +390,12 @@ struct S_SearchZhanjiACK
 	{
 		char* pData = (char*)binaryData;
 		S_SearchZhanjiACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		int nums = (s.m_packageLen - 4) / 8;
 		for (int i = 0; i < nums; ++i)
@@ -438,11 +442,12 @@ struct S_QuitRoomACK
 	{
 		char* pData = (char*)binaryData;
 		S_QuitRoomACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
@@ -483,11 +488,12 @@ struct S_ReadyPlayACK
 	{
 		char* pData = (char*)binaryData;
 		S_ReadyPlayACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
@@ -524,11 +530,12 @@ struct S_FaPaiACK
 	{
 		char* pData = (char*)binaryData;
 		S_FaPaiACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -581,11 +588,12 @@ struct S_TanPaiACK
 	{
 		char* pData = (char*)binaryData;
 		S_TanPaiACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -647,11 +655,12 @@ struct S_BuyDiamondACK
 	{
 		char* pData = (char*)binaryData;
 		S_BuyDiamondACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
@@ -693,11 +702,12 @@ struct S_QiangZhuangACK
 	{
 		char* pData = (char*)binaryData;
 		S_QiangZhuangACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -738,11 +748,12 @@ struct S_YaZhuACK
 	{
 		char* pData = (char*)binaryData;
 		S_YaZhuACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = my_ntohll(s.m_isOK);
@@ -778,11 +789,12 @@ struct S_QuickChatACK
 	{
 		char* pData = (char*)binaryData;
 		S_QuickChatACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_quickChatSeq, pData, 4);
 		s.m_quickChatSeq = ntohl(s.m_quickChatSeq);
@@ -817,11 +829,12 @@ struct S_VoiceChatACK
 	{
 		char* pData = (char*)binaryData;
 		S_VoiceChatACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_voiceSize, pData, 2);
 		s.m_voiceSize = ntohs(s.m_voiceSize);
@@ -844,11 +857,12 @@ struct S_GetMemberInfoACK
 	{
 		char* pData = (char*)binaryData;
 		S_GetMemberInfoACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
 		s.m_playerID = my_ntohll((unsigned long long)(s.m_playerID));
@@ -899,11 +913,12 @@ struct S_SuanNiuACK
 	{
 		char* pData = (char*)binaryData;
 		S_SuanNiuACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
@@ -932,11 +947,12 @@ struct S_GameStartACK
 	{
 		char* pData = (char*)binaryData;
 		S_GameStartACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		return s;
 	}
@@ -951,11 +967,12 @@ struct S_GameOverACK
 	{
 		char* pData = (char*)binaryData;
 		S_GameOverACK s;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
+
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 8);
 		s.m_playerID = my_ntohll(s.m_playerID);
