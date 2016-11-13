@@ -36,8 +36,8 @@ using namespace std;
 #define PP_DOUNIU_READY_ACK			(50009)
 #define PP_DOUNIU_FAPAI_REQ			(50010)
 #define PP_DOUNIU_FAPAI_ACK			(50011)
-#define PP_DOUNIU_TANPAI_REQ		(50012)
-#define PP_DOUNIU_TANPAI_ACK		(50013)
+#define PP_DOUNIU_SUANNIU_REQ		(50012)
+#define PP_DOUNIU_SUANNIU_ACK		(50013)
 #define PP_DOUNIU_CHONGZHI_REQ		(50014)
 #define PP_DOUNIU_CHONGZHI_ACK		(50015)
 #define PP_DOUNIU_QIANGZHUANG_REQ	(50016)
@@ -51,7 +51,8 @@ using namespace std;
 #define PP_DOUNIU_MEMBER_INFO_ACK	(50024)	
 #define PP_DOUNIU_GAME_START_ACK	(50025)
 #define PP_DOUNIU_GAME_OVER_ACK		(50026)
-
+#define PP_DOUNIU_TANPAI_ACK		(50027)
+#define PP_DOUNIU_TANPAI_REQ		(50028) //这个暂时别管，等调完我删掉
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
 
@@ -874,7 +875,51 @@ struct S_GetMemberInfoACK
 	int m_currentDiamond;
 	int m_currentMoney;
 };
+//算牛
+struct S_SuanNiuReq
+{
+	S_SuanNiuReq() :m_cmd(PP_DOUNIU_SUANNIU_REQ), m_packageLen(4)
+	{
+		m_packageLen = htons(m_packageLen);
+		m_cmd = htons(m_cmd);
+	}
+	short m_packageLen;
+	unsigned short m_cmd;
+};
 
+struct S_SuanNiuACK
+{
+	S_SuanNiuACK() :m_cmd(0), m_playerID(0),m_niu(0) {}
+
+	static S_SuanNiuACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_SuanNiuACK s;
+		memcpy(&s.m_packageLen, pData, 2);
+		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		if (s.m_statusCode == 0)
+		{
+			memcpy(&s.m_playerID, pData, 8);
+			s.m_playerID = my_ntohll(s.m_playerID);
+			memcpy(&s.m_niu, pData, 4);
+			s.m_niu = my_ntohll(s.m_niu);
+		}
+		return s;
+	}
+
+	short m_packageLen;
+	unsigned short m_cmd;
+	int m_statusCode;						//0成功1失败
+	unsigned long long m_playerID;
+	int m_niu;
+};
 //游戏开始
 struct S_GameStartACK 
 {

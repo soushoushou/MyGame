@@ -251,6 +251,22 @@ bool NetworkManger::SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestDat
 	delete[] dataBuf;
 	return ret;
 }
+bool NetworkManger::SendRequest_SuanNiu(const S_SuanNiuReq& requestData)
+{
+	//¥¶¿Ì ˝æ›
+	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* pIndex = dataBuf;
+	memcpy(pIndex, &requestData, 2);
+	pIndex += 2;
+	memcpy(pIndex, ((char*)&requestData.m_cmd), 2);
+	pIndex += 2;
+
+	bool ret = false;
+	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
+
+	delete[] dataBuf;
+	return ret;
+}
 
 bool NetworkManger::SendRequest_TanPai(const S_TanPaiReq& requestData)
 {

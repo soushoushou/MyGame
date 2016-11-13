@@ -29,6 +29,7 @@ public:
 	bool SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData);
 	bool SendRequest_FaPai(const S_FaPaiReq& requestData);
 	bool SendRequest_TanPai(const S_TanPaiReq& requestData);
+	bool SendRequest_SuanNiu(const S_SuanNiuReq& requestData);
 	bool SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData);
 	bool SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData);
 	bool SendRequest_YaZhu(const S_YaZhuReq& requestData);

@@ -8,7 +8,8 @@ enum TipType{
     Tip_gameBegin,
     Tip_hog,
     Tip_chooseMul,
-    Tip_waitOther
+    Tip_waitOther,
+	Tip_countNiu
 };
 
 

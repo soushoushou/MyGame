@@ -147,6 +147,8 @@ void GamePlayScene::update(float delta)
 					{
 						showChooseMultipleButton();
 					}
+					S_SuanNiuReq t;
+					NetworkManger::getInstance()->SendRequest_SuanNiu(t);
 				}
 				else
 					log("qiang zhuang failed!");
@@ -263,6 +265,16 @@ void GamePlayScene::update(float delta)
 				m_iState = SendPokerState;
 				break;
 			}
+			case PP_DOUNIU_SUANNIU_ACK: 
+			{
+				S_SuanNiuACK ack = S_SuanNiuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				if (ack.m_statusCode == 0) {
+					log(ack.m_niu);
+					log(ack.m_playerID);
+				}
+			}
+			break;
 			case PP_DOUNIU_TANPAI_ACK:
 			{
 				S_TanPaiACK ack = S_TanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
@@ -402,6 +414,15 @@ void GamePlayScene::update(float delta)
             break;
             
         }
+		case CompareState: {
+			if (m_timeLayer && m_timeLayer->canRemove())
+			{
+				notChooseMulAction(0);
+				//unschedule(schedule_selector(GamePlayScene::update));
+			}
+			break;
+
+		}
 	default:
 		break;
 	}
@@ -787,6 +808,47 @@ void GamePlayScene::showHogButton()
     
 }
 
+//#pragma mark-显示比大小按钮
+//void GamePlayScene::showHogButton()
+//{
+//	m_timeLayer->setTimeAndType(15, Tip_countNiu);
+//	if (!m_creatHogBtn) {
+//		auto Size = Director::getInstance()->getVisibleSize();
+//		/** 不抢 */
+//		m_notHogBtn = Button::create("game/not_hog_button.png", "game/not_hog_button_pressed.png");
+//
+//		m_notHogBtn->setTag(TAG_NOT_HOG_BTN);
+//
+//		m_notHogBtn->setScale9Enabled(true);
+//
+//		m_notHogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+//
+//		this->addChild(m_notHogBtn, 51);
+//		/** 抢庄 */
+//		m_HogBtn = Button::create("game/hog_button.png", "game/hog_button_pressed.png");
+//
+//		m_HogBtn->setTag(TAG_HOG_BTN);
+//
+//		m_HogBtn->setScale9Enabled(true);
+//
+//		m_HogBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+//
+//		this->addChild(m_HogBtn, 51);
+//
+//		float btnwidth = m_notHogBtn->getContentSize().width;
+//		float height = Size.height *0.5 - 150;
+//		m_notHogBtn->setPosition(Vec2(Size.width / 2 - (btnwidth*0.5 + 10), height));
+//		m_HogBtn->setPosition(Vec2(Size.width / 2 + (btnwidth*0.5 + 10), height));
+//
+//		m_creatHogBtn = true;
+//	}
+//	else
+//	{
+//		m_notHogBtn->setVisible(true);
+//		m_HogBtn->setVisible(true);
+//	}
+//
+//}
 #pragma mark-不抢事件
 void GamePlayScene::notHogBtnAction(){
     m_notHogBtn->setVisible(false);
