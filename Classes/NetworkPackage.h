@@ -168,8 +168,8 @@ struct S_LoginReq
 		m_checkNum = htonl(checkNum);
 		m_strRoleNameLen=htons(m_strRoleNameLen);
 	}
-	short m_packageLen;
 	unsigned short m_cmd;
+	unsigned short m_packageLen;
 	int m_checkTime;
 	int m_checkNum;
 	short m_strRoleNameLen;
@@ -184,12 +184,10 @@ struct S_LoginACK
 	{
 		char* pData = (char*)binaryData;
 		S_LoginACK s;
-
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
-		pData += 2;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
+		pData += 2;		memcpy(&s.m_packageLen, pData, 2);
+
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
