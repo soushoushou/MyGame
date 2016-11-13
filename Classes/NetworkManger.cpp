@@ -397,7 +397,7 @@ unsigned short NetworkManger::getQueueFrontACKCmd()
 {
 	unsigned short cmd = 0;
 	S_ACKResponse *s = m_ackQueue.getFrontFromQueue();
-	memcpy(&cmd, s->m_buf + 2, 2);
+	memcpy(&cmd, s->m_buf, 2);
 	unsigned short tt = ntohs(cmd);
 	return tt;
 }

@@ -186,7 +186,8 @@ struct S_LoginACK
 		S_LoginACK s;
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
-		pData += 2;		memcpy(&s.m_packageLen, pData, 2);
+		pData += 2;		
+		memcpy(&s.m_packageLen, pData, 2);
 
 		pData += 2;
 		memcpy(&s.m_statusCode, pData, 4);
@@ -809,15 +810,15 @@ struct S_VoiceChatReq
 {
 	S_VoiceChatReq(char* voiceBinaryData,int size) :m_cmd(PP_DOUNIU_VOICE_CHAT_REQ), m_voiceSize(size)
 	{
-		m_packageLen = htons(6 + m_voiceSize);
+		m_packageLen = htonl(10 + m_voiceSize);
 		m_cmd = htons(m_cmd);
-		m_voiceSize = htons(m_voiceSize);
+		m_voiceSize = htonl(m_voiceSize);
 		memcpy(m_voiceBuf, voiceBinaryData, size);
 	}
-	unsigned short m_packageLen;
 	unsigned short m_cmd;
-	unsigned short m_voiceSize;			//语音二进制数据大小
-	char m_voiceBuf[65535];				//语音缓冲
+	unsigned int m_packageLen;
+	unsigned int m_voiceSize;			//语音二进制数据大小
+	char m_voiceBuf[6400*1024-10];				//语音缓冲
 };
 
 struct S_VoiceChatACK
@@ -831,19 +832,19 @@ struct S_VoiceChatACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_packageLen, pData, 2);
-		s.m_packageLen = ntohs(s.m_packageLen);
-		pData += 2;
-		memcpy(&s.m_voiceSize, pData, 2);
-		s.m_voiceSize = ntohs(s.m_voiceSize);
-		pData += 2;
+		memcpy(&s.m_packageLen, pData, 4);
+		s.m_packageLen = ntohl(s.m_packageLen);
+		pData += 4;
+		memcpy(&s.m_voiceSize, pData, 4);
+		s.m_voiceSize = ntohl(s.m_voiceSize);
+		pData += 4;
 		memcpy(s.m_voiceBuf, (char*)pData, s.m_voiceSize);
 		return s;
 	}
-	unsigned short m_packageLen;
+	unsigned int m_packageLen;
 	unsigned short m_cmd;
-	unsigned short m_voiceSize;			//语音二进制数据大小
-	char m_voiceBuf[65535];				//语音缓冲
+	unsigned int m_voiceSize;			//语音二进制数据大小
+	char m_voiceBuf[6400*1024-10];				//语音缓冲
 };
 
 //in game
