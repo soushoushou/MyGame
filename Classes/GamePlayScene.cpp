@@ -150,8 +150,11 @@ void GamePlayScene::update(float delta)
 					S_SuanNiuReq t;
 					NetworkManger::getInstance()->SendRequest_SuanNiu(t);
 				}
-				else
+				else {
 					log("qiang zhuang failed!");
+					S_SuanNiuReq t;
+					NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+				}
 				
 			}
 			break;
@@ -270,8 +273,8 @@ void GamePlayScene::update(float delta)
 				S_SuanNiuACK ack = S_SuanNiuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				if (ack.m_statusCode == 0) {
-					log(ack.m_niu);
-					log(ack.m_playerID);
+					log("suanniu");
+					
 				}
 			}
 			break;

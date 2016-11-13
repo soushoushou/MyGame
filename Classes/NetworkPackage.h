@@ -590,19 +590,24 @@ struct S_TanPaiACK
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
-		if (s.m_statusCode == 0)
+		int nPlayers = (s.m_packageLen - 8) / 16;
+		for (int i = 0; i < nPlayers; ++i)
 		{
-			memcpy(&s.m_playerID, pData, 8);
-			s.m_playerID = my_ntohll(s.m_playerID);
+			unsigned long long playerID = 0;
+			memcpy(&playerID, pData, 8);
+			playerID = my_ntohll(playerID);
+			s.m_playerID.push_back(playerID);
 			pData += 8;
-			memcpy(&s.m_isWin, pData, 4);
-			s.m_isWin = ntohl(s.m_isWin);
+			int winOrLose = 0;
+			memcpy(&winOrLose, pData, 4);
 			pData += 4;
-			memcpy(&s.m_score, pData, 4);
-			s.m_score = ntohl(s.m_score);
+			winOrLose = ntohl(winOrLose);
+			s.m_winOrLose.push_back(winOrLose);
+			int score = 0;
+			memcpy(&score, pData, 4);
 			pData += 4;
-			memcpy(&s.m_niuIndex, pData, 4);
-			s.m_niuIndex = ntohl(s.m_niuIndex);
+			score = ntohl(score);
+			s.m_score.push_back(score);
 		}
 
 		return s;
@@ -611,10 +616,9 @@ struct S_TanPaiACK
 	short m_packageLen;
 	unsigned short m_cmd;
 	int m_statusCode;				//0成功1失败
-	unsigned long long m_playerID;
-	int m_isWin;					//0胜1负
-	int m_score;					//该盘积分
-	int m_niuIndex;					//牛的索引
+	vector<unsigned long long> m_playerID;
+	vector<int> m_winOrLose;
+	vector<int> m_score;
 };
 
 //鍐查捇鐭宠姹?
