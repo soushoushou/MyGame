@@ -189,8 +189,8 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ya zhu success!");
-					S_TanPaiReq t;
-					NetworkManger::getInstance()->SendRequest_TanPai(t);
+					//S_TanPaiReq t;
+					//NetworkManger::getInstance()->SendRequest_TanPai(t);
 					if (m_creatMulBtn)
 					{
 						m_OneBtn->setVisible(false);
@@ -954,7 +954,7 @@ void GamePlayScene::notChooseMulAction(float dt){
     m_timeLayer->stopTimer();
 	S_YaZhuReq s(1);
 	NetworkManger::getInstance()->SendRequest_YaZhu(s);
-	m_iState = CompareState;
+	m_iState = StartState;
 
 }
 
