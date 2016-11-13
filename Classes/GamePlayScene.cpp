@@ -414,15 +414,15 @@ void GamePlayScene::update(float delta)
             break;
             
         }
-		case CompareState: {
-			if (m_timeLayer && m_timeLayer->canRemove())
-			{
-				notChooseMulAction(0);
-				//unschedule(schedule_selector(GamePlayScene::update));
-			}
-			break;
+		//case CompareState: {
+		//	if (m_timeLayer && m_timeLayer->canRemove())
+		//	{
+		//		notChooseMulAction(0);
+		//		//unschedule(schedule_selector(GamePlayScene::update));
+		//	}
+		//	break;
 
-		}
+		//}
 	default:
 		break;
 	}
@@ -857,7 +857,7 @@ void GamePlayScene::notHogBtnAction(){
 	int beishu = rand() % 5 + 1;
 	S_QiangZhuangReq t(1);
 	NetworkManger::getInstance()->SendRequest_QiangZhuang(t);
-	m_iState = CompareState;
+	m_iState = ChooseMultipleState;
 }
 void GamePlayScene::showWinDialog() {
 	PopupLayer* pl = PopupLayer::wlDialog("popuplayer/win.png", Size(600, 600));
