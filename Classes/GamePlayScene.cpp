@@ -620,35 +620,35 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			{
 				S_YaZhuReq s(1);
 				NetworkManger::getInstance()->SendRequest_YaZhu(s);
-				m_iState = CompareState;
+				//m_iState = CompareState;
 			}
 				break;
 			case TAG_MUL_TWO:
 			{
 				S_YaZhuReq s(2);
 				NetworkManger::getInstance()->SendRequest_YaZhu(s);
-				m_iState = CompareState;
+				//m_iState = CompareState;
 			}
 				break;
 			case TAG_MUL_THERE:
 			{
 				S_YaZhuReq s(3);
 				NetworkManger::getInstance()->SendRequest_YaZhu(s);
-				m_iState = CompareState;
+				//m_iState = CompareState;
 			}
 				break;
 			case TAG_MUL_FOUR:
 			{
 				S_YaZhuReq s(4);
 				NetworkManger::getInstance()->SendRequest_YaZhu(s);
-				m_iState = CompareState;
+				//m_iState = CompareState;
 			}
 				break;
 			case TAG_MUL_FIVE:
 			{
 				S_YaZhuReq s(5);
 				NetworkManger::getInstance()->SendRequest_YaZhu(s);
-				m_iState = CompareState;
+				//m_iState = CompareState;
 			}
                 //notChooseMulAction(0);
 //                m_player->showMulti(tag-TAG_MUL_ONE+1,this);
