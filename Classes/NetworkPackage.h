@@ -808,22 +808,40 @@ struct S_QuickChatACK
 //语音聊天
 struct S_VoiceChatReq
 {
-	S_VoiceChatReq(char* voiceBinaryData,int size) :m_cmd(PP_DOUNIU_VOICE_CHAT_REQ), m_voiceSize(size)
+	S_VoiceChatReq(char* voiceBinaryData, int size) :m_cmd(PP_DOUNIU_VOICE_CHAT_REQ), m_voiceSize(size), m_voiceBuf(0)
 	{
 		m_packageLen = htonl(10 + m_voiceSize);
 		m_cmd = htons(m_cmd);
 		m_voiceSize = htonl(m_voiceSize);
+		m_voiceBuf = new char[size];
 		memcpy(m_voiceBuf, voiceBinaryData, size);
+	}
+	~S_VoiceChatReq()
+	{
+		if (m_voiceBuf)
+		{
+			delete[] m_voiceBuf;
+			m_voiceBuf = 0;
+		}
+		
 	}
 	unsigned short m_cmd;
 	unsigned int m_packageLen;
 	unsigned int m_voiceSize;			//语音二进制数据大小
-	char m_voiceBuf[6400*1024-10];				//语音缓冲
+	char* m_voiceBuf;				//语音缓冲
 };
 
 struct S_VoiceChatACK
 {
-	S_VoiceChatACK() :m_cmd(0){}
+	S_VoiceChatACK() :m_cmd(0),m_voiceBuf(0){}
+	S_VoiceChatACK(const S_VoiceChatACK& a)
+	{
+		this->m_packageLen = a.m_packageLen;
+		this->m_cmd = a.m_cmd;
+		this->m_voiceSize = a.m_voiceSize;
+		this->m_voiceBuf = new char[this->m_voiceSize];
+		memcpy(this->m_voiceBuf, a.m_voiceBuf, this->m_voiceSize);
+	}
 	static S_VoiceChatACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
@@ -838,13 +856,23 @@ struct S_VoiceChatACK
 		memcpy(&s.m_voiceSize, pData, 4);
 		s.m_voiceSize = ntohl(s.m_voiceSize);
 		pData += 4;
+		s.m_voiceBuf = new char[s.m_voiceSize];
 		memcpy(s.m_voiceBuf, (char*)pData, s.m_voiceSize);
 		return s;
+	}
+	~S_VoiceChatACK()
+	{
+		if (m_voiceBuf)
+		{
+			delete[] m_voiceBuf;
+			m_voiceBuf = 0;
+		}
+		
 	}
 	unsigned int m_packageLen;
 	unsigned short m_cmd;
 	unsigned int m_voiceSize;			//语音二进制数据大小
-	char m_voiceBuf[6400*1024-10];				//语音缓冲
+	char* m_voiceBuf;				//语音缓冲
 };
 
 //in game

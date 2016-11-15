@@ -305,18 +305,19 @@ bool NetworkManger::SendRequest_YaZhu(const S_YaZhuReq& requestData)
 bool NetworkManger::SendRequest_VoiceChat(const S_VoiceChatReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	unsigned int len = ntohl(requestData.m_packageLen);
+	char* dataBuf = new char[len];
 	char* pIndex = dataBuf;
 	memcpy(pIndex, &requestData.m_cmd, 2);
 	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_voiceSize), 2);
-	pIndex += 2;
-	int size = ntohs(requestData.m_voiceSize);
-	memcpy(pIndex, ((char*)&requestData.m_voiceBuf), size);
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
+	memcpy(pIndex, ((char*)&requestData.m_voiceSize), 4);
+	pIndex += 4;
+	int size = ntohl(requestData.m_voiceSize);
+	memcpy(pIndex, ((char*)requestData.m_voiceBuf), size);
 	bool ret = false;
-	ret = SendRequest((void*)(dataBuf), ntohs(requestData.m_packageLen));
+	ret = SendRequest((void*)(dataBuf), ntohl(requestData.m_packageLen));
 
 	delete[] dataBuf;
 	return ret;
