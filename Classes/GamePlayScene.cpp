@@ -548,7 +548,7 @@ bool GamePlayScene::initButtons()
 	m_chatBtn = Button::create("game/chat_btn.png", "game/chat_pressed.png");
 	m_chatBtn->setTag(TAG_CHAT_BTN);
 	m_chatBtn->setScale9Enabled(true);
-	m_chatBtn->setPosition(Vec2(Size.width - 100, 180));
+	m_chatBtn->setPosition(Vec2(Size.width - 80, 180));
 	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_chatBtn,100);
 
@@ -556,7 +556,7 @@ bool GamePlayScene::initButtons()
     m_recordBtn = Button::create("game/voice_btn.png","game/voice_pressed.png");
     m_recordBtn->setTag(TAG_RECORD_BTN);
     m_recordBtn->setScale9Enabled(true);
-    m_recordBtn->setPosition(Vec2(Size.width - 100, 80));
+    m_recordBtn->setPosition(Vec2(Size.width - 80, 80));
     m_recordBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
     this->addChild(m_recordBtn,100);
     
