@@ -46,7 +46,13 @@ enum ButtonTag{
     /** 录音 */
     TAG_RECORD_BTN,
 	//邀请
-	TAG_INVITE_BTN
+	TAG_INVITE_BTN,
+	//有牛
+	TAG_YOUNIU_BTN,
+	//无牛
+	TAG_WUNIU_BTN,
+	//自动算牛
+	TAG_COUNTNIU_BTN
 };
 
 
@@ -514,16 +520,40 @@ bool GamePlayScene::initButtons()
 	m_btnSetting = new SettingMenuInPlaying(this,Director::getInstance()->convertToUI(Vec2(980 + 68.5, 22)),m_playerID);
     m_btnSetting->retain();
 
+	//有牛按钮
+	m_youniuBtn = Button::create("game/youniu_btn.png", "game/youniu_pressed.png");
+	m_youniuBtn->setTag(TAG_YOUNIU_BTN);
+	m_youniuBtn->setScale9Enabled(true);
+	m_youniuBtn->setPosition(Vec2(Size.width - 200, 180));
+	m_youniuBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+	this->addChild(m_youniuBtn, 100);
+
+	//没牛按钮
+	m_wuniuBtn = Button::create("game/wuniu_btn.png", "game/wuniu_pressed.png");
+	m_wuniuBtn->setTag(TAG_WUNIU_BTN);
+	m_wuniuBtn->setScale9Enabled(true);
+	m_wuniuBtn->setPosition(Vec2(Size.width - 200, 120));
+	m_wuniuBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+	this->addChild(m_wuniuBtn, 100);
+
+	//自动算牛按钮
+	m_countniuBtn = Button::create("game/countniu_btn.png", "game/countniu_pressed.png");
+	m_countniuBtn->setTag(TAG_COUNTNIU_BTN);
+	m_countniuBtn->setScale9Enabled(true);
+	m_countniuBtn->setPosition(Vec2(Size.width - 200, 60));
+	m_countniuBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
+	this->addChild(m_countniuBtn, 100);
+
 	//聊天按钮
-	m_chatBtn = Button::create("game/chat.png");
+	m_chatBtn = Button::create("game/chat_btn.png", "game/chat_pressed.png");
 	m_chatBtn->setTag(TAG_CHAT_BTN);
 	m_chatBtn->setScale9Enabled(true);
-	m_chatBtn->setPosition(Vec2(Size.width - 200, 80));
+	m_chatBtn->setPosition(Vec2(Size.width - 100, 180));
 	m_chatBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_chatBtn,100);
 
 	//语音按钮
-    m_recordBtn = Button::create("game/record.png","game/record-pressed.png");
+    m_recordBtn = Button::create("game/voice_btn.png","game/voice_pressed.png");
     m_recordBtn->setTag(TAG_RECORD_BTN);
     m_recordBtn->setScale9Enabled(true);
     m_recordBtn->setPosition(Vec2(Size.width - 100, 80));

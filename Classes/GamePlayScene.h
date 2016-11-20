@@ -91,6 +91,12 @@ private:
 	SettingMenuInPlaying *m_btnSetting;
 	/** 聊天 */
 	Button* m_chatBtn;
+	/** 有牛 */
+	Button* m_youniuBtn;
+	/** 没牛 */
+	Button* m_wuniuBtn;
+	/** 自动算牛 */
+	Button* m_countniuBtn;
 	/** 邀请 */
 	Button* m_inviteBtn;
     /** 准备按钮 */
