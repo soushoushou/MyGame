@@ -35,10 +35,10 @@ USING_NS_CC;
 
 const string g_strServerIP = "120.24.180.25"/*"127.0.0.1"*/;
 const int g_nServerPort = 333/*9999*/;
-#define _MAX_MSGSIZE (6400 * 1024)		// 暂定一个消息最大为16k
+#define _MAX_MSGSIZE (1000 * 1024)		// 暂定一个消息最大为16k
 #define BLOCKSECONDS	30			// 读取函数阻塞时间
-#define INBUFSIZE	(6400*1024)		//	具体尺寸根据剖面报告调整  接收数据的缓存
-#define OUTBUFSIZE	(6400*1024)		// 具体尺寸根据剖面报告调整。 发送数据的缓存，当不超过8K时，FLUSH只需要SEND一次
+#define INBUFSIZE	(1000*1024)		//	具体尺寸根据剖面报告调整  接收数据的缓存
+#define OUTBUFSIZE	(1000*1024)		// 具体尺寸根据剖面报告调整。 发送数据的缓存，当不超过8K时，FLUSH只需要SEND一次
 
 class CTCPClient {
 public:
@@ -55,9 +55,10 @@ private:
 	void	ReconnectFunc();						//重连线程函数
 	bool	Flush(void);
 	bool	Check(void);
-	
+	bool	isWantedCMD(unsigned short& cmd);
+	bool	isRecvCompelete();
 	SOCKET	GetSocket(void) const { return m_sockClient; }
-	bool	ReceiveMsg(void* pBuf, int& nSize);
+	bool	ReceiveMsg();
 	bool	SendMsg(void* pBuf, int nSize);
 	int	recvFromSock(void);		// 从网络中读取尽可能多的数据
 	bool    hasError();			// 是否发生错误，注意，异步模式未完成非错误
@@ -66,11 +67,11 @@ private:
 	SOCKET	m_sockClient;
 
 	// 发送数据缓冲
-	unsigned char	m_bufOutput[OUTBUFSIZE];	// 可优化为指针数组
+	unsigned char	*m_bufOutput;	// 可优化为指针数组
 	int		m_nOutbufLen;
 
 	// 环形缓冲区
-	unsigned char	m_bufInput[INBUFSIZE];
+	unsigned char	*m_bufInput;
 	int		m_nInbufLen;
 	int		m_nInbufStart;				// INBUF使用循环式队列，该变量为队列起点，0 - (SIZE-1)
 

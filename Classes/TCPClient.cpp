@@ -3,9 +3,14 @@
 
 CTCPClient::CTCPClient()
 {
+	m_nInbufLen = 0;
+	m_nOutbufLen = 0;
+	m_nInbufStart = 0;
 	m_flag = false;
 	m_pRequest = nullptr;
 	// 初始化
+	m_bufInput = new unsigned char[INBUFSIZE];
+	m_bufOutput = new unsigned char[OUTBUFSIZE];
 	memset(m_bufOutput, 0, sizeof(m_bufOutput));
 	memset(m_bufInput, 0, sizeof(m_bufInput));
 	m_sockClient = INVALID_SOCKET;
@@ -22,7 +27,111 @@ CTCPClient::~CTCPClient()
 	while (m_flag)
 	{
 	}
+	if (!m_bufInput)
+	{
+		delete[] m_bufInput;
+		m_bufInput = 0;
+	}
+	if (!m_bufOutput)
+	{
+		delete[] m_bufOutput;
+		m_bufOutput = 0;
+	}
 }
+
+bool CTCPClient::isWantedCMD(unsigned short& cmd)
+{
+	if (cmd == PP_DOUNIU_CHONGZHI_ACK || cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK ||
+		cmd == PP_DOUNIU_CREATE_ROOM_ACK || cmd == PP_DOUNIU_GET_ROLEINFO_ACK ||
+		cmd == PP_DOUNIU_LOGIN_ACCOUNT_ACK || cmd == PP_DOUNIU_JOIN_ROOM_ACK ||
+		cmd == PP_DOUNIU_SUANNIU_ACK || cmd == PP_DOUNIU_QUIT_ROOM_ACK ||
+		cmd == PP_DOUNIU_READY_ACK || cmd == PP_DOUNIU_FAPAI_ACK ||
+		cmd == PP_DOUNIU_SUANNIU_ACK || cmd == PP_DOUNIU_YAZHU_ACK ||
+		cmd == PP_DOUNIU_QUIT_ROOM_ACK || cmd == PP_DOUNIU_VOICE_CHAT_ACK ||
+		cmd == PP_DOUNIU_MEMBER_INFO_ACK || cmd == PP_DOUNIU_GAME_START_ACK ||
+		cmd == PP_DOUNIU_GAME_OVER_ACK || cmd == PP_DOUNIU_TANPAI_ACK)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CTCPClient::isRecvCompelete()
+{
+	static bool b = false;
+	static unsigned int Len = 0;
+	if (!b)
+	{
+		if (m_nInbufLen >= 6)
+		{
+			unsigned short cmd = 0;
+			memcpy(&cmd, m_bufInput, 2);
+			cmd = ntohs(cmd);
+			if (isWantedCMD(cmd))
+			{
+				if (cmd == PP_DOUNIU_VOICE_CHAT_ACK)
+				{
+					unsigned int packageLen = 0;
+					memcpy(&packageLen, m_bufInput + 2, 4);
+					packageLen = ntohl(packageLen);
+					if (packageLen == m_nInbufLen)
+					{
+						b = false;
+						Len = 0;
+						return true;
+					}
+					Len = packageLen;
+				}
+				else
+				{
+					unsigned int packageLen = 0;
+					memcpy(&packageLen, m_bufInput + 2, 2);
+					packageLen = ntohs(packageLen);
+					if (packageLen == m_nInbufLen)
+					{
+						b = false;
+						Len = 0;
+						return true;
+					}
+					Len = packageLen;
+				}
+				b = true;
+			}
+		}
+		else if (m_nInbufLen >= 4)
+		{
+			unsigned short cmd = 0;
+			memcpy(&cmd, m_bufInput, 2);
+			cmd = ntohs(cmd);
+			if (isWantedCMD(cmd))
+			{
+				unsigned int packageLen = 0;
+				memcpy(&packageLen, m_bufInput + 2, 2);
+				packageLen = ntohs(packageLen);
+				if (packageLen == m_nInbufLen)
+				{
+					b = false;
+					Len = 0;
+					return true;
+				}
+				Len = packageLen;
+				b = true;
+			}
+		}
+	}
+	else
+	{
+		if (Len == m_nInbufLen)
+		{
+			b = false;
+			Len = 0;
+			return true;
+		}
+	}
+	b = true;
+	return false;
+}
+
 
 void CTCPClient::NetworkThreadFunc()
 {
@@ -39,14 +148,15 @@ void CTCPClient::NetworkThreadFunc()
 		m_requestMutex.lock();
 		if (/*m_pRequest && */m_sockClient != INVALID_SOCKET)
 		{
-			char buf[g_nMaxRequsetDataSize];
-			memset(buf, 0, g_nMaxRequsetDataSize);
-			int rcvSize = g_nMaxRequsetDataSize;
-			if (ReceiveMsg(buf, rcvSize))
+			if (ReceiveMsg())
 			{
-				//往消息队列添加ack
-				NetworkManger::getInstance()->pushACKQueue(buf, rcvSize);
-				m_pRequest = nullptr;
+				if (isRecvCompelete())
+				{
+					//往消息队列添加ack
+					NetworkManger::getInstance()->pushACKQueue(m_bufInput, m_nInbufLen);
+					m_pRequest = nullptr;
+					m_nInbufLen = 0;
+				}
 			}
 			else
 			{
@@ -235,13 +345,8 @@ bool CTCPClient::SendMsg(void* pBuf, int nSize)
 	return true;
 }
 
-bool CTCPClient::ReceiveMsg(void* pBuf, int& nSize)
+bool CTCPClient::ReceiveMsg()
 {
-	//检查参数
-	if (pBuf == NULL || nSize <= 0) {
-		return false;
-	}
-
 	if (m_sockClient == INVALID_SOCKET) {
 		return false;
 	}
@@ -251,26 +356,7 @@ bool CTCPClient::ReceiveMsg(void* pBuf, int& nSize)
 	{
 		return false;
 	}
-	memcpy(pBuf, m_bufInput, rcvLen);
-	//// 复制出一个消息
-	//if (m_nInbufStart + rcvLen > INBUFSIZE) {
-	//	// 如果一个消息有回卷（被拆成两份在环形缓冲区的头尾）
-	//	// 先拷贝环形缓冲区末尾的数据
-	//	int copylen = INBUFSIZE - m_nInbufStart;
-	//	memcpy(pBuf, m_bufInput + m_nInbufStart, copylen);
-
-	//	// 再拷贝环形缓冲区头部的剩余部分
-	//	memcpy((unsigned char *)pBuf + copylen, m_bufInput, rcvLen - copylen);
-	//	nSize = rcvLen;
-	//}
-	//else {
-	//	// 消息没有回卷，可以一次拷贝出去
-	//	memcpy(pBuf, m_bufInput + m_nInbufStart, rcvLen);
-	//	nSize = rcvLen;
-	//}
-	//// 重新计算环形缓冲区头部位置
-	//m_nInbufStart = (m_nInbufStart + rcvLen) % INBUFSIZE;
-	//m_nInbufLen -= rcvLen;
+	m_nInbufLen += rcvLen;
 	return true;
 }
 
@@ -304,7 +390,7 @@ int CTCPClient::recvFromSock(void)
 	if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
 		return 0 ;
 	}
-	int inlen = recv(m_sockClient, (char*)m_bufInput, INBUFSIZE, 0);
+	int inlen = recv(m_sockClient, (char*)m_bufInput+m_nInbufLen, INBUFSIZE, 0);
 	if (inlen <= 0)
 	{
 		if (hasError()) {

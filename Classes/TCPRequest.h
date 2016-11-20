@@ -5,7 +5,7 @@
 using namespace std;
 USING_NS_CC;
 
-const int g_nMaxRequsetDataSize = 65535;
+const int g_nMaxRequsetDataSize = 1000*1024;
 
 //typedef std::function<void(void* pResponseData)> TCPResponseCallback;			//响应回调原型
 //
