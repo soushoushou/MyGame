@@ -136,7 +136,47 @@ void GamePlayScene::update(float delta)
 //                AudioManager::getInstance()->binaryConvertedToFile_Rev(m_recordObject->destPath, s.m_voiceBuf, s.m_voiceSize);
                 m_recordObject->startPlay(s.m_voiceBuf, s.m_voiceSize);
 #endif
-                
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
+				JniMethodInfo getVoicePathMinfo;//定义Jni函数信息结构体
+				//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
+				bool isGetPath = JniHelper::getStaticMethodInfo(getVoicePathMinfo, "com/android/audio/MP3Recorder", "getAudioPath", "()Ljava/lang/String;");
+
+				jstring js_path;
+				std::string str_path;
+
+				if (!isGetPath) {
+					CCLog("jni:此函数getAudioPath不存在");
+				}else{
+					CCLog("jni:此函数getAudioPath存在");
+
+					js_path = (jstring)getVoicePathMinfo.env->CallStaticObjectMethod(getVoicePathMinfo.classID, getVoicePathMinfo.methodID);
+
+					str_path = JniHelper::jstring2string(js_path); 
+				}
+				CCLog("jni-java函数getAudioPath执行完毕");
+
+				JniMethodInfo palyAudioMinfo;//定义Jni函数信息结构体
+				//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
+				bool isHavePalyAudio = JniHelper::getStaticMethodInfo(palyAudioMinfo, "com/android/audio/MP3Recorder", "playAudio", "(Ljava/lang/String;)V");
+
+				if (!isHavePalyAudio) {
+					CCLog("jni:此函数playAudio不存在");
+				}else{
+					CCLog("jni:此函数playAudio存在");
+
+					//jstring js_path = "";
+					//std::string str_path = JniHelper::jstring2string(js_path);  
+
+					AudioManager::getInstance()->binaryConvertedToFile_Rev(str_path.c_str(), s.m_voiceBuf, s.m_voiceSize);
+
+					//调用此函数
+					palyAudioMinfo.env->CallStaticVoidMethod(palyAudioMinfo.classID, palyAudioMinfo.methodID, js_path);
+					
+				}
+				CCLog("jni-java函数playAudio执行完毕");
+#endif          
+
                 log(s.m_packageLen);
 				
 			}
@@ -598,7 +638,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 					}else{
 						CCLog("jni:此函数recordAudio存在");
 						//调用此函数
-						jobj = recordAudioMinfo.env->CallStaticObjectMethod(recordAudioMinfo.classID, recordAudioMinfo.methodID,823);
+						jobj = recordAudioMinfo.env->CallStaticObjectMethod(recordAudioMinfo.classID, recordAudioMinfo.methodID);
 					}
 					CCLog("jni-java函数recordAudio执行完毕");
 				#endif
@@ -725,42 +765,45 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
 					JniMethodInfo stopAudioMinfo;//定义Jni函数信息结构体
 					bool isHaveStopAudio = JniHelper::getStaticMethodInfo(stopAudioMinfo, "com/android/audio/MP3Recorder", "stopAudio", "()Ljava/lang/String;");
-					
+					jstring js_pkn;
+
 					if (!isHaveStopAudio) {
 						CCLog("jni:此函数stopAudio不存在");
 					}else{
 						CCLog("jni:此函数stopAudio存在");
 						//调用此函数
-						jstring js_pkn = (jstring)stopAudioMinfo.env->CallStaticObjectMethod(stopAudioMinfo.classID, stopAudioMinfo.methodID,823);
-					}
-					CCLog("jni-java函数stopAudio执行完毕");
-					
-					
-					JniMethodInfo palyAudioMinfo;//定义Jni函数信息结构体
-					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
-					bool isHavePalyAudio = JniHelper::getStaticMethodInfo(palyAudioMinfo, "com/android/audio/MP3Recorder", "playAudio", "()Ljava/lang/String;");
+						js_pkn = (jstring)stopAudioMinfo.env->CallStaticObjectMethod(stopAudioMinfo.classID, stopAudioMinfo.methodID);
 
-					if (!isHavePalyAudio) {
-						CCLog("jni:此函数playAudio不存在");
-					}else{
-						CCLog("jni:此函数playAudio存在");
-						//调用此函数
-						jstring js_pkn = (jstring)palyAudioMinfo.env->CallStaticObjectMethod(palyAudioMinfo.classID, palyAudioMinfo.methodID,823);
 						std::string str_pkn = JniHelper::jstring2string(js_pkn);  
 						fstream _file;
 						_file.open(str_pkn, ios::in);
 						if (!_file)
 						{
-							log("video file notin");
+							log("video file not in");
 						}
 						else
 						{
 							//Load_File_SEND(str_pkn.data());
-							AudioManager::getInstance()->fileConvertedToBinary_Send(str_pkn.data());
+							AudioManager::getInstance()->fileConvertedToBinary_Send(str_pkn.c_str());
 							log("video file in");
 						}
 					}
-					CCLog("jni-java函数playAudio执行完毕");
+					CCLog("jni-java函数stopAudio执行完毕");
+					
+					
+					//JniMethodInfo palyAudioMinfo;//定义Jni函数信息结构体
+					//getStaticMethodInfo 次函数返回一个bool值表示是否找到此函数
+					//bool isHavePalyAudio = JniHelper::getStaticMethodInfo(palyAudioMinfo, "com/android/audio/MP3Recorder", "playAudio", "(Ljava/lang/String;)V");
+
+					//if (!isHavePalyAudio) {
+					//	CCLog("jni:此函数playAudio不存在");
+					//}else{
+					//	CCLog("jni:此函数playAudio存在");
+					//	std::string str_pkn = JniHelper::jstring2string(js_pkn);  
+					//	//调用此函数
+					//	palyAudioMinfo.env->CallStaticVoidMethod(palyAudioMinfo.classID, palyAudioMinfo.methodID, js_pkn);
+					//}
+					//CCLog("jni-java函数playAudio执行完毕");
 				#endif
 
                 break;

@@ -70,7 +70,7 @@ public class MP3RecorderUtil {
 	 */
 	public String startRecording() throws IOException {
 		String path = "";
-		
+	
 		if (isRecording) return path;
 		Log.d(TAG, "Start recording");
 		Log.d(TAG, "BufferSize = " + bufferSize);

@@ -14,8 +14,8 @@ public class MP3Recorder {
 	//语音操作对象  
     private static MediaPlayer mPlayer = null;  
     private static String path = "";
-    private static String path2 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/voice.mp3";
-	
+	private static String playPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/AudioRecorder/voice.mp3";
+    
 	public static String recordAudio(){
 		try {
 			path = recorder.startRecording();
@@ -41,17 +41,20 @@ public class MP3Recorder {
 		return path;
 	}
 	
-	public static String playAudio(){
+	public static void playAudio(String voicePath){
 		mPlayer = new MediaPlayer();  
         try{
         	mPlayer.reset();
-            mPlayer.setDataSource(path);  
+            mPlayer.setDataSource(voicePath);
             mPlayer.prepare();  
             mPlayer.start();  
         }catch(IOException e){  
             Log.e(LOG_TAG,"播放失败");  
         } 
         Log.e(LOG_TAG,"播放成功");
-        return path;
+	}
+	
+	public static String getAudioPath(){
+		return playPath;
 	}
 }
