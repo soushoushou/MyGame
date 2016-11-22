@@ -24,6 +24,7 @@ public:
 	void ShowAllPorkers();
 	void EmptyAllPorkers();
 	bool RunActions();												//运行发牌动画，返回true则代表所有动画结束
+	vector<NiuPoker*> GetMePlayerPoker();							//返回游戏中ME玩家的5张牌
 	
 private:
 	bool createPokers();
@@ -42,6 +43,6 @@ private:
 	Node* m_pParent;
 	SiteManager* m_pSitManager;
 	vector<pair<NiuPoker*, Sequence*> > m_poker2Actions;			//扑克和动画的映射
-	int m_currentPokerActionIndex;									//当前扑克动画序号
+	int m_currentPokerActionIndex;
 };
 

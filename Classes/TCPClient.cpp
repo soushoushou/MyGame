@@ -128,7 +128,7 @@ bool CTCPClient::isRecvCompelete()
 			return true;
 		}
 	}
-	b = true;
+	b = false;
 	return false;
 }
 

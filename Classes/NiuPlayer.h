@@ -41,9 +41,6 @@ public:
 	void updatePkWeiZhi();
     void showAllPokers();
     void emptyAllPokers();
-//    /** 显示倍数 */
-//    void showMulti(int multi,GamePlayScene *scene);
-//    void multiDisAppear();
 
 private:
 	CC_SYNTHESIZE(__Array*, m_arrPk, ArrPk);

@@ -96,6 +96,17 @@ void PorkerManager::SendPorker(const vector<S_PlayerPorker>& porkers)
 	}
 }
 
+vector<NiuPoker*> PorkerManager::GetMePlayerPoker()
+{
+	vector<NiuPoker*> result;
+	__Array *a = m_pSitManager->m_inRoomPlayer[0]->getArrPk();
+	for (int i = 0; i < a->count(); ++i)
+	{
+		result.push_back(dynamic_cast<NiuPoker*>(a->getObjectAtIndex(i)));
+	}
+	return result;
+}
+
 bool PorkerManager::RunActions()
 {
 	if (m_currentPokerActionIndex < m_poker2Actions.size())

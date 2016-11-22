@@ -621,7 +621,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
         switch (tag)
         {
             case TAG_RECORD_BTN:{
-				AudioManager::getInstance()->fileConvertedToBinary_Send("C:\\Users\\Administrator\\Desktop\\target.mp3");
+				//AudioManager::getInstance()->fileConvertedToBinary_Send("C:\\Users\\Administrator\\Desktop\\target.mp3");
 				#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)	//判断当前平台为ios平台
 					log("录音");
 					m_recordObject->StartRecord();
