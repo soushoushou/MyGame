@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "toolFunctions.h"
 #include "ui/CocosGUI.h" 
+#include "Global.h"
 using namespace std;
 USING_NS_CC;
 using namespace ui;
@@ -32,7 +33,9 @@ protected:
 class IUserProfileUIInGame : public UserProfileUI
 {
 public:
-	IUserProfileUIInGame(Node* pParent) :UserProfileUI(pParent),m_spBankerFrame(0), m_lblMultiple(0),m_spReady(0){}
+	IUserProfileUIInGame(Node* pParent) :UserProfileUI(pParent), m_spBankerFrame(0), m_lblMultiple(0), m_spReady(0)
+	{
+	}
 	bool setProfile(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin){ return true; }
 	virtual bool setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond, const int coin, const int multiple) = 0;
 	virtual void showMultiple(bool isShow = true) = 0;												//ÏÔÊ¾±¶Êý

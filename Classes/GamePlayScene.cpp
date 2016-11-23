@@ -58,7 +58,7 @@ enum ButtonTag{
 
 GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
 m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr), m_bGameStart(false)
-, m_inviteBtn(nullptr)
+, m_inviteBtn(nullptr), m_notHogBtn(nullptr), m_HogBtn(nullptr)
 {
     m_creatHogBtn=false;
     m_creatMulBtn=false;
@@ -342,84 +342,84 @@ void GamePlayScene::update(float delta)
 	{
         case StartState:
         {
-			/////单机测试用
-			//static bool flag = true;
-			//static int ccc = 2;
-			//static int bbb = 22;
-			//char buf[10] = { 0 };
-			//sprintf(buf, "%d", bbb);
-			//string name = buf;
-			//if (rand()%100<50 && flag && m_testID.size()<5)
-			//{
-			//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-			//	if (m_pSiteManager->currentPlayerCount() == 5)
-			//	{
-			//		m_inviteBtn->setVisible(false);
-			//	}
-			//	m_pSiteManager->showReady(ccc);
-			//	m_testID.push_back(ccc);
-			//	if (rand() % 3 == 1)
-			//	{
-			//		static int iii = 2;
-			//		m_pSiteManager->leaveSite(iii);
-			//		m_inviteBtn->setVisible(true);
-			//		for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
-			//		{
-			//			if (*iter == iii)
-			//			{
-			//				m_testID.erase(iter);
-			//				break;
-			//			}
-			//		}
-			//		++iii;
-			//	}
-			//	++ccc;
-			//	++bbb;
-			//}
-			//if (m_testID.size()==5)
-			//{
-			//	if (!m_timeLayer && m_bReady)
-			//	{
-			//		m_timeLayer = TimeLayer::create();
-			//		addChild(m_timeLayer, 50);
-			//	}
-			//	if (m_timeLayer && m_timeLayer->canRemove())
-			//	{
-			//		m_timeLayer->setVisible(false);
-			//		m_startGameBtn->setVisible(false);
-			//		m_inviteBtn->setVisible(false);
-			//		m_iState = SendPokerState;
+			///单机测试用
+			static bool flag = true;
+			static int ccc = 2;
+			static int bbb = 22;
+			char buf[10] = { 0 };
+			sprintf(buf, "%d", bbb);
+			string name = buf;
+			if (rand()%100<50 && flag && m_testID.size()<5)
+			{
+				m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+				if (m_pSiteManager->currentPlayerCount() == 5)
+				{
+					m_inviteBtn->setVisible(false);
+				}
+				m_pSiteManager->showReady(ccc);
+				m_testID.push_back(ccc);
+				/*if (rand() % 3 == 1)
+				{
+				static int iii = 2;
+				m_pSiteManager->leaveSite(iii);
+				m_inviteBtn->setVisible(true);
+				for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+				{
+				if (*iter == iii)
+				{
+				m_testID.erase(iter);
+				break;
+				}
+				}
+				++iii;
+				}*/
+				++ccc;
+				++bbb;
+			}
+			if (m_testID.size()==5)
+			{
+				if (!m_timeLayer && m_bReady)
+				{
+					m_timeLayer = TimeLayer::create();
+					addChild(m_timeLayer, 50);
+				}
+				if (m_timeLayer && m_timeLayer->canRemove())
+				{
+					m_timeLayer->setVisible(false);
+					m_startGameBtn->setVisible(false);
+					m_inviteBtn->setVisible(false);
+					m_iState = SendPokerState;
 
-			//		//发牌
-			//		vector<S_PlayerPorker> porkers;
-			//		vector<int> ttt(52, 0);
-			//		for (int i = 0; i < 52; ++i)
-			//		{
-			//			ttt[i] = i+1;
-			//		}
-			//		for (int i = 0; i < 25; ++i)
-			//		{
-			//			int t = rand() % 52;
-			//			int c = ttt[t];
-			//			ttt[t] = ttt[i];
-			//			ttt[i] = c;
-			//		}
-			//		for (int i = 0; i < m_testID.size(); ++i)
-			//		{
-			//			S_PlayerPorker s;
-			//			s.playerID = m_testID[i];
-			//			m_pSiteManager->showReady(s.playerID, false);
-			//			for (int j = 0; j < 5; ++j)
-			//			{
-			//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j]-1;
-			//			}
-			//			porkers.push_back(s);
-			//		}
-			//		m_pPorkerManager->SendPorker(porkers);
-			//	}
-			//	flag = false;
-			//}
-			////////////////////////////////////////////////////////////////////////////
+					//发牌
+					vector<S_PlayerPorker> porkers;
+					vector<int> ttt(52, 0);
+					for (int i = 0; i < 52; ++i)
+					{
+						ttt[i] = i+1;
+					}
+					for (int i = 0; i < 25; ++i)
+					{
+						int t = rand() % 52;
+						int c = ttt[t];
+						ttt[t] = ttt[i];
+						ttt[i] = c;
+					}
+					for (int i = 0; i < m_testID.size(); ++i)
+					{
+						S_PlayerPorker s;
+						s.playerID = m_testID[i];
+						m_pSiteManager->showReady(s.playerID, false);
+						for (int j = 0; j < 5; ++j)
+						{
+							s.vecPorkerIndex[j] = ttt[(i)* 5 + j]-1;
+						}
+						porkers.push_back(s);
+					}
+					m_pPorkerManager->SendPorker(porkers);
+				}
+				flag = false;
+			}
+			//////////////////////////////////////////////////////////////////////////
 			if (m_bGameStart)
 			{
 				if (!m_timeLayer && m_bReady)
@@ -443,7 +443,11 @@ void GamePlayScene::update(float delta)
 				if (m_pPorkerManager->RunActions())
 				{
 					m_iState = HogState;
-					showHogButton();
+					//showHogButton();
+					for (int i = 0; i < m_testID.size(); ++i)
+					{
+						m_pSiteManager->showNiu(m_testID[i], rand() % 9 + 1);
+					}
 				}
 			}
             break;
@@ -980,8 +984,14 @@ void GamePlayScene::showHogButton()
 //}
 #pragma mark-不抢事件
 void GamePlayScene::notHogBtnAction(){
-    m_notHogBtn->setVisible(false);
-    m_HogBtn->setVisible(false);
+	if (m_notHogBtn)
+	{
+		m_notHogBtn->setVisible(false);
+	}
+	if (m_HogBtn)
+	{
+		m_HogBtn->setVisible(false);
+	}
     m_timeLayer->stopTimer();
 	int beishu = rand() % 5 + 1;
 	S_QiangZhuangReq t(1);

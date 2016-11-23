@@ -12,23 +12,41 @@ SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID)
 		m_inRoomPlayer[i] = nullptr;
 		m_inRoomPlayerID[i] = 0;
 		m_pUserProfileVecs[i] = nullptr;
+		m_playerNiu[i] = nullptr;
 	}
 	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	m_playerProfileInfo[0].profilePos = Point(160, 550);
 	m_playerProfileInfo[0].profileType = 0;
 	m_playerProfileInfo[0].playerPos = Point(Size.width / 2, Size.height / 6 - 20);
+	m_playerProfileInfo[0].niuPos = Point(Size.width / 2, Size.height / 6 + 60);
 	m_playerProfileInfo[1].profilePos = Point(80, 330);
 	m_playerProfileInfo[1].profileType = 1;
 	m_playerProfileInfo[1].playerPos = Point(165, Size.height / 2 - 30);
+	m_playerProfileInfo[1].niuPos = Point(240, Size.height / 2 - 90);
 	m_playerProfileInfo[2].profilePos = Point(400, 130);
 	m_playerProfileInfo[2].profileType = 0;
 	m_playerProfileInfo[2].playerPos = Point(Size.width*0.5 - pkWidth_small * 4 - 20, Size.height / 6 * 5 - 130);
+	m_playerProfileInfo[2].niuPos = Point(Size.width*0.5 - 150, Size.height / 6 * 5 - 200);
 	m_playerProfileInfo[3].profilePos = Point(760, 130);
 	m_playerProfileInfo[3].profileType = 0;
 	m_playerProfileInfo[3].playerPos = Point(Size.width*0.5 + pkWidth_small * 3 - 100, Size.height / 6 * 5 - 130);
+	m_playerProfileInfo[3].niuPos = Point(Size.width*0.5 + 150, Size.height / 6 * 5 - 200);
 	m_playerProfileInfo[4].profilePos = Point(1050, 330);
 	m_playerProfileInfo[4].profileType = 1;
 	m_playerProfileInfo[4].playerPos = Point(Size.width - pkWidth_small * 3 - 180, Size.height / 2 - 30);
+	m_playerProfileInfo[4].niuPos = Point(Size.width - pkWidth_small * 3 - 85, Size.height / 2 - 90);
+
+	m_niuIndex2JPGPath[1] = "game/niu1.png";
+	m_niuIndex2JPGPath[2] = "game/niu2.png";
+	m_niuIndex2JPGPath[3] = "game/niu3.png";
+	m_niuIndex2JPGPath[4] = "game/niu4.png";
+	m_niuIndex2JPGPath[5] = "game/niu5.png";
+	m_niuIndex2JPGPath[6] = "game/niu6.png";
+	m_niuIndex2JPGPath[7] = "game/niu7.png";
+	m_niuIndex2JPGPath[8] = "game/niu8.png";
+	m_niuIndex2JPGPath[9] = "game/niu9.png";
+	m_niuIndex2JPGPath[10] = "game/niuniu.png";
+
 	m_lock.unlock();
 }
 
@@ -156,7 +174,18 @@ bool SiteManager::showNiu(unsigned long long playerID, int niuIndex)
 	{
 		if (m_inRoomPlayerID[i] == playerID)
 		{
-			//ÏÔÊ¾Å£ to do
+			if (m_playerNiu[i])
+			{
+				m_playerNiu[i]->removeFromParent();
+				m_playerNiu[i] = nullptr;
+			}
+			m_playerNiu[i] = Sprite::create(m_niuIndex2JPGPath[niuIndex]);
+			if (!m_playerNiu[i])
+			{
+				return false;
+			}
+			m_pParent->addChild(m_playerNiu[i]);
+			m_playerNiu[i]->setPosition(m_playerProfileInfo[i].niuPos);
 			return true;
 		}
 	}
@@ -170,7 +199,12 @@ void SiteManager::hideAllNiu()
 	{
 		if (m_playerInRoom[i] == 1)
 		{
-
+			if (m_playerNiu[i])
+			{
+				m_playerNiu[i]->removeFromParent();
+				m_playerNiu[i] = nullptr;
+			}
+			
 		}
 	}
 }

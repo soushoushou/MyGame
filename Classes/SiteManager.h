@@ -44,6 +44,7 @@ private:
 	{
 		Point playerPos;
 		Point profilePos;
+		Point niuPos;
 		int profileType;		//0为水平，1为垂直
 	};
 
@@ -51,8 +52,10 @@ private:
 	array<NiuPlayer*,5> m_inRoomPlayer;
 	array<PlayerAndProfilePos,5> m_playerProfileInfo;			//位置信息
 	array<IUserProfileUIInGame*,5> m_pUserProfileVecs;			//头像UI，第0个是当前玩家头像
-	array<int,5> m_playerInRoom;									//房间里的坑位，0表示没人坐，1表示有人坐
+	array<int,5> m_playerInRoom;								//房间里的坑位，0表示没人坐，1表示有人坐
 	array<unsigned long long,5> m_inRoomPlayerID;				//0为不存在
+	array<Sprite*,5> m_playerNiu;
+	map<int, string> m_niuIndex2JPGPath;
 
 	unsigned long long m_currentPlayerID;						//自己的ID
 

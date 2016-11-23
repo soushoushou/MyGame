@@ -165,6 +165,7 @@ bool HerizelUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNam
 		m_spFrame->addChild(m_lblMultiple);
 	}
 	m_lblMultiple->setString(txts[multiple]);
+
 	showMultiple(false);
 	showBanker(false);
 	showReady(false);
@@ -197,6 +198,7 @@ bool IUserProfileUIInGame::setMultiple(int multiple)
 	showBanker(false);
 	return true;
 }
+
 
 VerticalUserProfileUI::VerticalUserProfileUI(Node* pParent) :IUserProfileUIInGame(pParent)
 {
@@ -267,6 +269,7 @@ UserProfileUI* UserProfileUIInMainScene::create(Node* pParent)
 bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileName, const string name, const int diamond
 	, const int coin, const int multiple)
 {
+	cocos2d::Size Size = Director::getInstance()->getVisibleSize();
 	if (!m_pParent)
 	{
 		return false;
@@ -368,7 +371,7 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 			return false;
 		}
 		m_lblMultiple->setColor(Color3B::GREEN);
-		m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
+		//m_lblMultiple->enableShadow(Size(3, -3), 1, 90);
 		m_lblMultiple->setAnchorPoint(Vec2(0, 1));
 		if (m_spFrame->getPosition().x <= 100)
 		{
@@ -379,9 +382,12 @@ bool VerticalUserProfileUI::setProfileProperty(Vec2 pos, const string headFileNa
 		m_spFrame->addChild(m_lblMultiple);
 	}
 	m_lblMultiple->setString(txts[multiple]);
+
+
 	showMultiple(false);
 	showBanker(false);
 	showReady(false);
+
 	return true;
 }
 

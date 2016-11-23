@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include <vector>
+#include <map>
+#include <string>
+#include <utility>
+using namespace std;
 const int pkWidth_small = 60;//71;//牌的宽
 const int pkHeight_small = 79;//96;//牌的高
 const int pkWidth_Big=88;
