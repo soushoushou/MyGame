@@ -149,6 +149,32 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 	return false;
 }
 
+//œ‘ æ≈£
+bool SiteManager::showNiu(unsigned long long playerID, int niuIndex)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			//œ‘ æ≈£ to do
+			return true;
+		}
+	}
+	return false;
+}
+
+//“˛≤ÿÀ˘”–≈£
+void SiteManager::hideAllNiu()
+{
+	for (int i = 0; i < m_playerInRoom.size(); ++i)
+	{
+		if (m_playerInRoom[i] == 1)
+		{
+
+		}
+	}
+}
+
 bool SiteManager::showZhuangJia(unsigned long long playerID)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
