@@ -75,6 +75,8 @@ private:
 	int countNiu(vector<int> vecPorkerIndex);
 	/** 显示失败对话框 */
 	void showLoseDialog();
+	/** 显示算牛UI */
+	void showSuanNiuUi();
 private:
 	//其余4个玩家的玩家位置和头像位置
 	struct PlayerAndProfilePos 
@@ -122,6 +124,18 @@ private:
     bool m_creatHogBtn;
     /** 是否创建倍数按钮 */
     bool m_creatMulBtn;
+	Scale9Sprite * suanNiuBg_sprite;
+	Scale9Sprite * suanNiuOne_sprite;
+	Scale9Sprite * suanNiuTwo_sprite;
+	Scale9Sprite * suanNiuThree_sprite;
+	Scale9Sprite * suanNiuSum_sprite;
+	Scale9Sprite * suanNiuAdd_sprite;
+	Scale9Sprite * suanNiuAdd2_sprite;
+	Scale9Sprite * suanNiuEqual_sprite;
+	LabelTTF* m_countNiuOneLable;
+	LabelTTF* m_countNiuTwoLable;
+	LabelTTF* m_countNiuThreeLable;
+	LabelTTF* m_countNiuSumLable;
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
 	Label *m_pRoomNumberLabel;

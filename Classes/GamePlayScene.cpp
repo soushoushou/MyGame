@@ -249,6 +249,7 @@ void GamePlayScene::update(float delta)
 						m_FiveBtn->setVisible(false);
 						m_timeLayer->stopTimer();
 						m_iState = CompareState;
+						showSuanNiuUi();
 					}
 				}
 				else
@@ -533,7 +534,58 @@ bool GamePlayScene::initBackground()
     this->addChild(m_pModelLabel);
 	return true;
 }
-
+void GamePlayScene::showSuanNiuUi() {
+	auto Size = Director::getInstance()->getVisibleSize();
+	//算牛底框
+	suanNiuBg_sprite = Scale9Sprite::create("game/countniu_Bg.png");
+	suanNiuBg_sprite->setScale(0.55f);
+	auto suanniuBgPs = ccp((Size.width) / 2, 200);
+	suanNiuBg_sprite->setPosition(suanniuBgPs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuBg_sprite, 10);
+	//算牛数字框1
+	suanNiuOne_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+	auto suanniuOnePs = ccp((Size.width) / 2 - suanNiuBg_sprite->getContentSize().width*0.275 + 10 + suanNiuOne_sprite->getContentSize().width / 2, 198);
+	suanNiuOne_sprite->setPosition(suanniuOnePs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuOne_sprite, 10);
+	//+号
+	suanNiuAdd_sprite = Scale9Sprite::create("game/add.png");
+	auto suanniuAddPs = ccp(suanniuOnePs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 200);
+	suanNiuAdd_sprite->setPosition(suanniuAddPs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuAdd_sprite, 10);
+	//算牛数字框2
+	suanNiuTwo_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+	auto suanniuTwoPs = ccp(suanniuAddPs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 198);
+	suanNiuTwo_sprite->setPosition(suanniuTwoPs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuTwo_sprite, 10);
+	//+号
+	suanNiuAdd2_sprite = Scale9Sprite::create("game/add.png");
+	auto suanniuAdd2Ps = ccp(suanniuTwoPs.x + 15 + suanNiuTwo_sprite->getContentSize().width / 2, 200);
+	suanNiuAdd2_sprite->setPosition(suanniuAdd2Ps);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuAdd2_sprite, 10);
+	//算牛数字框3
+	suanNiuThree_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+	auto suanniuThreePs = ccp(suanniuAdd2Ps.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 198);
+	suanNiuThree_sprite->setPosition(suanniuThreePs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuThree_sprite, 10);
+	//=号
+	suanNiuEqual_sprite = Scale9Sprite::create("game/equal.png");
+	auto suanniuEqualPs = ccp(suanniuThreePs.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 200);
+	suanNiuEqual_sprite->setPosition(suanniuEqualPs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuEqual_sprite, 10);
+	//算牛数字框Sum
+	suanNiuSum_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+	auto suanniuSumPs = ccp(suanniuEqualPs.x + 15 + suanNiuSum_sprite->getContentSize().width / 2, 198);
+	suanNiuSum_sprite->setPosition(suanniuSumPs);
+	//suanNiuBg_sprite->setVisible(false);
+	this->addChild(suanNiuSum_sprite, 10);
+}
 bool GamePlayScene::initButtons()
 {
 	auto Size = Director::getInstance()->getVisibleSize();
@@ -583,7 +635,7 @@ bool GamePlayScene::initButtons()
 	m_countniuBtn->setPosition(Vec2(Size.width - 200, 60));
 	m_countniuBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_countniuBtn, 100);
-
+	
 	//聊天按钮
 	m_chatBtn = Button::create("game/chat_btn.png", "game/chat_pressed.png");
 	m_chatBtn->setTag(TAG_CHAT_BTN);
@@ -662,6 +714,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				m_bReady =!m_bReady;
 				S_ReadyPlayReq req;
 				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
+				//suanNiuBg_sprite->setVisible(true);
                 break;
             }
 			case TAG_INVITE_BTN:
