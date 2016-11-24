@@ -49,7 +49,8 @@ bool CTCPClient::isWantedCMD(unsigned short& cmd)
 		cmd == PP_DOUNIU_SUANNIU_ACK || cmd == PP_DOUNIU_YAZHU_ACK ||
 		cmd == PP_DOUNIU_QUIT_ROOM_ACK || cmd == PP_DOUNIU_VOICE_CHAT_ACK ||
 		cmd == PP_DOUNIU_MEMBER_INFO_ACK || cmd == PP_DOUNIU_GAME_START_ACK ||
-		cmd == PP_DOUNIU_GAME_OVER_ACK || cmd == PP_DOUNIU_TANPAI_ACK)
+		cmd == PP_DOUNIU_GAME_OVER_ACK || cmd == PP_DOUNIU_TANPAI_ACK
+		cmd == PP_DOUNIU_QIANGZHUANG_ACK)
 	{
 		return true;
 	}
