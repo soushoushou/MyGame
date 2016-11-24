@@ -352,7 +352,7 @@ bool CTCPClient::ReceiveMsg()
 	}
 
 	int rcvLen = recvFromSock();
-	if (rcvLen <= 0)
+ 	if (rcvLen <= 0)
 	{
 		return false;
 	}

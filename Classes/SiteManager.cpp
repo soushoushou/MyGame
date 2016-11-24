@@ -161,6 +161,7 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 			m_playerInRoom[i] = 0;
 			m_inRoomPlayerID[i] = 0;
 			m_lock.unlock();
+			m_inRoomPlayer[i]->emptyAllPokers();
 			return true;
 		}
 	}
