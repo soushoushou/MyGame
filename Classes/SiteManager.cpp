@@ -156,12 +156,12 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 			m_lock.lock();
 			delete m_pUserProfileVecs[i];
 			m_pUserProfileVecs[i] = nullptr;
+			m_inRoomPlayer[i]->emptyAllPokers();
 			delete m_inRoomPlayer[i];
 			m_inRoomPlayer[i] = nullptr;
 			m_playerInRoom[i] = 0;
 			m_inRoomPlayerID[i] = 0;
 			m_lock.unlock();
-			m_inRoomPlayer[i]->emptyAllPokers();
 			return true;
 		}
 	}
