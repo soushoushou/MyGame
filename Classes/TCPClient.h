@@ -56,7 +56,7 @@ private:
 	bool	Flush(void);
 	bool	Check(void);
 	bool	isWantedCMD(unsigned short& cmd);
-	bool	isRecvCompelete();
+	bool	isRecvCompelete(unsigned int& nPackageLen);
 	SOCKET	GetSocket(void) const { return m_sockClient; }
 	bool	ReceiveMsg();
 	bool	SendMsg(void* pBuf, int nSize);
@@ -70,10 +70,9 @@ private:
 	unsigned char	*m_bufOutput;	// 可优化为指针数组
 	int		m_nOutbufLen;
 
-	// 环形缓冲区
 	unsigned char	*m_bufInput;
 	int		m_nInbufLen;
-	int		m_nInbufStart;				// INBUF使用循环式队列，该变量为队列起点，0 - (SIZE-1)
+	unsigned int		m_nInbufStart;				//包头
 
 	CTCPRequest* m_pRequest;
 	mutex m_requestMutex;

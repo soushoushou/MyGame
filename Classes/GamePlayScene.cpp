@@ -418,7 +418,7 @@ void GamePlayScene::update(float delta)
 			//		m_pPorkerManager->SendPorker(porkers);
 			//	}
 			//	flag = false;
-			//}
+		
 			////////////////////////////////////////////////////////////////////////////
 			if (m_bGameStart)
 			{

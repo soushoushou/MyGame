@@ -56,7 +56,7 @@ bool CTCPClient::isWantedCMD(unsigned short& cmd)
 	return false;
 }
 
-bool CTCPClient::isRecvCompelete()
+bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 {
 	static bool b = false;
 	static unsigned int Len = 0;
@@ -65,19 +65,20 @@ bool CTCPClient::isRecvCompelete()
 		if (m_nInbufLen >= 6)
 		{
 			unsigned short cmd = 0;
-			memcpy(&cmd, m_bufInput, 2);
+			memcpy(&cmd, m_bufInput+m_nInbufStart, 2);
 			cmd = ntohs(cmd);
 			if (isWantedCMD(cmd))
 			{
 				if (cmd == PP_DOUNIU_VOICE_CHAT_ACK)
 				{
 					unsigned int packageLen = 0;
-					memcpy(&packageLen, m_bufInput + 2, 4);
+					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 4);
 					packageLen = ntohl(packageLen);
-					if (packageLen == m_nInbufLen)
+					if (packageLen <= m_nInbufLen)
 					{
 						b = false;
 						Len = 0;
+						nPackageLen = packageLen;
 						return true;
 					}
 					Len = packageLen;
@@ -85,12 +86,13 @@ bool CTCPClient::isRecvCompelete()
 				else
 				{
 					unsigned int packageLen = 0;
-					memcpy(&packageLen, m_bufInput + 2, 2);
+					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 2);
 					packageLen = ntohs(packageLen);
-					if (packageLen == m_nInbufLen)
+					if (packageLen <= m_nInbufLen)
 					{
 						b = false;
 						Len = 0;
+						nPackageLen = packageLen;
 						return true;
 					}
 					Len = packageLen;
@@ -101,17 +103,18 @@ bool CTCPClient::isRecvCompelete()
 		else if (m_nInbufLen >= 4)
 		{
 			unsigned short cmd = 0;
-			memcpy(&cmd, m_bufInput, 2);
+			memcpy(&cmd, m_bufInput+m_nInbufStart, 2);
 			cmd = ntohs(cmd);
 			if (isWantedCMD(cmd))
 			{
 				unsigned int packageLen = 0;
 				memcpy(&packageLen, m_bufInput + 2, 2);
 				packageLen = ntohs(packageLen);
-				if (packageLen == m_nInbufLen)
+				if (packageLen <= m_nInbufLen)
 				{
 					b = false;
 					Len = 0;
+					nPackageLen = packageLen;
 					return true;
 				}
 				Len = packageLen;
@@ -121,14 +124,14 @@ bool CTCPClient::isRecvCompelete()
 	}
 	else
 	{
-		if (Len == m_nInbufLen)
+		if (Len <= m_nInbufLen)
 		{
 			b = false;
 			Len = 0;
+			nPackageLen = m_nInbufLen;
 			return true;
 		}
 	}
-	b = false;
 	return false;
 }
 
@@ -146,16 +149,22 @@ void CTCPClient::NetworkThreadFunc()
 	while (1)
 	{
 		m_requestMutex.lock();
-		if (/*m_pRequest && */m_sockClient != INVALID_SOCKET)
+		if (m_sockClient != INVALID_SOCKET)
 		{
 			if (ReceiveMsg())
 			{
-				if (isRecvCompelete())
+				unsigned int packageLen = 0;
+				if (isRecvCompelete(packageLen))
 				{
 					//往消息队列添加ack
-					NetworkManger::getInstance()->pushACKQueue(m_bufInput, m_nInbufLen);
+					NetworkManger::getInstance()->pushACKQueue(m_bufInput+m_nInbufStart, packageLen);
 					m_pRequest = nullptr;
-					m_nInbufLen = 0;
+					if (packageLen == m_nInbufLen)
+					{
+						m_nInbufLen = 0;
+					}
+					else
+						m_nInbufStart += packageLen;
 				}
 			}
 			else
@@ -390,6 +399,7 @@ int CTCPClient::recvFromSock(void)
 	if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
 		return 0 ;
 	}
+
 	int inlen = recv(m_sockClient, (char*)m_bufInput+m_nInbufLen, INBUFSIZE, 0);
 	if (inlen <= 0)
 	{
@@ -482,12 +492,6 @@ bool CTCPClient::Check(void)
 
 void CTCPClient::Destroy(void)
 {
-	// 关闭
-	//struct linger so_linger;
-	//so_linger.l_onoff = 1;
-	//so_linger.l_linger = 500;
-	//int ret = setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
-
 	closeSocket();
 
 	m_sockClient = INVALID_SOCKET;
