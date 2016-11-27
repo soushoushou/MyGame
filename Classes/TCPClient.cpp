@@ -399,8 +399,8 @@ int CTCPClient::recvFromSock(void)
 	if (m_nInbufLen >= INBUFSIZE || m_sockClient == INVALID_SOCKET) {
 		return 0 ;
 	}
-
-	int inlen = recv(m_sockClient, (char*)m_bufInput+m_nInbufLen, INBUFSIZE, 0);
+	const int size = INBUFSIZE - m_nInbufLen;
+	int inlen = recv(m_sockClient, (char*)m_bufInput + m_nInbufLen, size, 0);
 	if (inlen <= 0)
 	{
 		if (hasError()) {
@@ -439,7 +439,7 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 			log("will reconnecting server!");
 		}
 #endif
-		ReconnectServer();
+		//ReconnectServer();
 		return false;
 	}
 
