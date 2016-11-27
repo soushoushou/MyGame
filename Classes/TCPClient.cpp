@@ -74,7 +74,7 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 					unsigned int packageLen = 0;
 					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 4);
 					packageLen = ntohl(packageLen);
-					if (packageLen <= m_nInbufLen)
+					if (packageLen <= m_nInbufLen-m_nInbufStart)
 					{
 						b = false;
 						Len = 0;
@@ -88,7 +88,7 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 					unsigned int packageLen = 0;
 					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 2);
 					packageLen = ntohs(packageLen);
-					if (packageLen <= m_nInbufLen)
+					if (packageLen <= m_nInbufLen - m_nInbufStart)
 					{
 						b = false;
 						Len = 0;
@@ -110,7 +110,7 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 				unsigned int packageLen = 0;
 				memcpy(&packageLen, m_bufInput + 2, 2);
 				packageLen = ntohs(packageLen);
-				if (packageLen <= m_nInbufLen)
+				if (packageLen <= m_nInbufLen - m_nInbufStart)
 				{
 					b = false;
 					Len = 0;
@@ -124,11 +124,11 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 	}
 	else
 	{
-		if (Len <= m_nInbufLen)
+		if (Len <= m_nInbufLen - m_nInbufStart)
 		{
 			b = false;
 			Len = 0;
-			nPackageLen = m_nInbufLen;
+			nPackageLen = m_nInbufLen - m_nInbufStart;
 			return true;
 		}
 	}
