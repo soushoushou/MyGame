@@ -19,10 +19,10 @@ public:
 	virtual ~CTCPRequest();
 	void setRequestData(char* requestData, int size);
 	void* getRequestData(){ return m_dataBuf; }
-	int getRequestDataLen(){ return m_nDataLen; }
+	int getRequestDataLen(){ return *m_nDataLen; }
 private:
 	unsigned char *m_dataBuf ;		//数据缓冲
-	int m_nDataLen;								//实际数据长度
+	int* m_nDataLen;								//实际数据长度
 	mutex m_dataMutex;
 	
 };

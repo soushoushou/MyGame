@@ -7,6 +7,7 @@ CTCPRequest::CTCPRequest() :m_nDataLen(0)
 {
 	//m_dataMutex.lock();
 	m_dataBuf = new unsigned char[g_nMaxRequsetDataSize];
+	m_nDataLen = new int(0);
 	memset(m_dataBuf, 0, g_nMaxRequsetDataSize);
 	//m_dataMutex.unlock();
 }
@@ -16,6 +17,7 @@ CTCPRequest::~CTCPRequest()
 {
 	delete[] m_dataBuf;
 	m_dataBuf = 0;
+	delete m_nDataLen;
 }
 
 void CTCPRequest::setRequestData(char* requestData, int size)
@@ -24,11 +26,11 @@ void CTCPRequest::setRequestData(char* requestData, int size)
 	memset(m_dataBuf, 0, g_nMaxRequsetDataSize);
 	if (size > g_nMaxRequsetDataSize)
 	{
-		m_nDataLen = 0;
-		m_dataMutex.unlock();
+		*m_nDataLen = 0;
+		//m_dataMutex.unlock();
 		return;
 	}
 	memcpy(m_dataBuf, requestData, size);
-	m_nDataLen = size;
+	*m_nDataLen = size;
 	//m_dataMutex.unlock();
 }
