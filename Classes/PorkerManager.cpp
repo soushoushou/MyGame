@@ -64,9 +64,9 @@ bool PorkerManager::createPokers()
 NiuPoker* PorkerManager::selectPoker(int huaSe, int num)
 {
 	NiuPoker* pk;
-	char path[256] = { 0 };
-	sprintf(path, "pokerBig/%d_%d@2x.png", huaSe, num);
-	pk = NiuPoker::create("poker.png", cocos2d::Rect(0, 0, pkWidth_small, pkHeight_small));
+//	char path[256] = { 0 };
+//	sprintf(path, "pokerBig/%d_%d@2x.png", huaSe, num);
+	pk = NiuPoker::create();
 	pk->setHuaSe(huaSe);
 	pk->setNum(num);
 	pk->setGameMain(dynamic_cast<GamePlayScene*>(m_pParent));

@@ -16,9 +16,9 @@ NiuPoker::~NiuPoker(){
 
 }
 
-NiuPoker* NiuPoker::create(const char *pszFileName, const Rect& rect){
+NiuPoker* NiuPoker::create(){
 	NiuPoker* pk = new NiuPoker();
-	if (pk && pk->initWithFile(pszFileName, rect))
+	if (pk)
 	{
 		pk->autorelease();
 		return pk;

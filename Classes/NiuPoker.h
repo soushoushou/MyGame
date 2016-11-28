@@ -18,7 +18,7 @@ class  NiuPoker : public Sprite
 public:
 	NiuPoker();
 	~NiuPoker();
-	static NiuPoker* create(const char *pszFileName, const cocos2d::Rect& rect);
+	static NiuPoker* create();
 	void showFront();//显示前面
 	void showLast();//显示背面
     void showFront_small();
