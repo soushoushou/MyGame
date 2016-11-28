@@ -14,6 +14,8 @@ CTCPRequest::CTCPRequest() :m_nDataLen(0)
 
 CTCPRequest::~CTCPRequest()
 {
+	delete[] m_dataBuf;
+	m_dataBuf = 0;
 }
 
 void CTCPRequest::setRequestData(char* requestData, int size)
