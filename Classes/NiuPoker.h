@@ -26,7 +26,7 @@ public:
 	NiuPoker* copy();
 	/** ´òÓ¡ÆË¿ËÅÆ */
 	void printPoker();
-	void setTouchPriority(int num);
+	void setTouchPriority();
 private:
 	CC_SYNTHESIZE(bool, m_isSelect, Select);
 	CC_SYNTHESIZE(GamePlayScene*, m_gameMain, GameMain);
