@@ -171,9 +171,9 @@ void LoginScene::loading() {
 
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
-	//S_CreatePlayerReq cr("g","g",1);
+	S_CreatePlayerReq cr("y","y",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
-
+	S_LoginReq lg("y",1,1);
 	NetworkManger::getInstance()->SendRequest_Login(lg);
 
 

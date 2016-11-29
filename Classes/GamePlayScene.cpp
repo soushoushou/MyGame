@@ -193,13 +193,11 @@ void GamePlayScene::update(float delta)
 					{
 						showChooseMultipleButton();
 					}
-					S_SuanNiuReq t;
-					NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+
 				}
 				else {
 					log("qiang zhuang failed!");
-					S_SuanNiuReq t;
-					NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+
 				}
 				
 			}
@@ -321,7 +319,7 @@ void GamePlayScene::update(float delta)
 				pNet->popACKQueue();
 				if (ack.m_statusCode == 0) {
 					log("suanniu");
-					
+					m_pSiteManager->showNiu(ack.m_playerID,ack.m_niu);
 				}
 			}
 			break;
@@ -780,6 +778,12 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 //                m_player->showMulti(tag-TAG_MUL_ONE+1,this);
 //                scheduleOnce(schedule_selector(GamePlayScene::notChooseMulAction), 10.0f);
                 break;
+			case TAG_COUNTNIU_BTN:
+			{
+				S_SuanNiuReq t;
+				NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+			}
+			break;
 			case TAG_CHAT_BTN:
 			{
 
