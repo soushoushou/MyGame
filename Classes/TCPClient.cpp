@@ -322,14 +322,6 @@ bool CTCPClient::Create(const char* pszServerIP, int nServerPort, int nBlockSec,
 			}
 		}
 	}
-
-
-
-	//struct linger so_linger;
-	//so_linger.l_onoff = 1;
-	//so_linger.l_linger = 500;
-	//setsockopt(m_sockClient, SOL_SOCKET, SO_LINGER, (const char*)&so_linger, sizeof(so_linger));
-
 	return true;
 }
 
@@ -422,26 +414,30 @@ bool CTCPClient::Flush(void)		// 如果 OUTBUF > SENDBUF 则需要多次SEND（）
 	}
 
 	// 发送一段数据
-	int	outsize;
-	outsize = send(m_sockClient, (char*)m_bufOutput, m_nOutbufLen, 0);
-	if (outsize <= 0) 
+	int	outsize = 0;
+	while (outsize < m_nOutbufLen)
 	{
-		int err = hasError();
+		outsize += send(m_sockClient, (char*)m_bufOutput+outsize, m_nOutbufLen-outsize, 0);
+		if (outsize <= 0)
+		{
+			int err = hasError();
 #ifdef WIN32
-		if (err == 10053)
-		{
-			log("will reconnecting server!");
-			
-		}
+			if (err == 10053)
+			{
+				log("will reconnecting server!");
+
+			}
 #else
-		if (err == 60)
-		{
-			log("will reconnecting server!");
-		}
+			if (err == 60)
+			{
+				log("will reconnecting server!");
+			}
 #endif
-		//ReconnectServer();
-		return false;
+			//ReconnectServer();
+			return false;
+		}
 	}
+
 
 	return true;
 }

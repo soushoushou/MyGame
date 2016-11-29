@@ -325,11 +325,9 @@ bool NetworkManger::SendRequest_VoiceChat(const S_VoiceChatReq& requestData)
 bool NetworkManger::SendRequest(void* requestData, int size)
 {
 	CTCPRequest *request = new CTCPRequest;
-	//request->retain();
 	request->setRequestData((char*)requestData, size);
 	bool ret = false;
 	ret= m_tcpClient->sendTCPRequset(request);
-	//request->release();
 	delete request;
 	return ret;
 }
