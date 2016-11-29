@@ -44,8 +44,8 @@ private:
 	vector<pair<NiuPoker*, Sequence*> > m_poker2Actions;			//扑克和动画的映射
 	int m_currentPokerActionIndex;
 public:
-    static vector<NiuPoker*> m_touchPokers;
+//    static vector<NiuPoker*> m_touchPokers;
 };
 
-vector<NiuPoker*> PorkerManager::m_touchPokers;
+//vector<NiuPoker*> PorkerManager::m_touchPokers;
 

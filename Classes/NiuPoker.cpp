@@ -11,29 +11,29 @@
 #include "PorkerManager.h"
 
 NiuPoker::NiuPoker() :m_isSelect(false), m_isDianJi(false){
-    touchListener=EventListenerTouchOneByOne::create();
-    touchListener->onTouchEnded=[=](Touch *touch,Event *event){
+//    touchListener=EventListenerTouchOneByOne::create();
+//    touchListener->onTouchEnded=[=](Touch *touch,Event *event){
 //        auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        m_isDianJi=!m_isDianJi;
-        if (m_isDianJi) {
-            if (PorkerManager::m_touchPokers.size()==2) {
-                PorkerManager::m_touchPokers.pop_back();
-                PorkerManager::m_touchPokers[0]->m_isDianJi=false;
-            }
-            PorkerManager::m_touchPokers.push_back(this);
-        }
-        else{
-            for(int i=0;i<PorkerManager::m_touchPokers.size();i++)
-            {
-                NiuPoker *pk=PorkerManager::m_touchPokers[i];
-                if (pk->m_num==m_num && pk->m_huaSe==m_huaSe) {
-                    vector<NiuPoker*>::iterator it = PorkerManager::m_touchPokers.begin()+i;
-                    PorkerManager::m_touchPokers.erase(it);
-                }
-            }
-        }
-    };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+//        m_isDianJi=!m_isDianJi;
+//        if (m_isDianJi) {
+//            if (PorkerManager::m_touchPokers.size()==2) {
+//                PorkerManager::m_touchPokers.pop_back();
+//                PorkerManager::m_touchPokers[0]->m_isDianJi=false;
+//            }
+//            PorkerManager::m_touchPokers.push_back(this);
+//        }
+//        else{
+//            for(int i=0;i<PorkerManager::m_touchPokers.size();i++)
+//            {
+//                NiuPoker *pk=PorkerManager::m_touchPokers[i];
+//                if (pk->m_num==m_num && pk->m_huaSe==m_huaSe) {
+//                    vector<NiuPoker*>::iterator it = PorkerManager::m_touchPokers.begin()+i;
+//                    PorkerManager::m_touchPokers.erase(it);
+//                }
+//            }
+//        }
+//    };
+//    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
 NiuPoker::~NiuPoker(){
 
@@ -84,9 +84,6 @@ NiuPoker* NiuPoker::copy(){
 	return pk;
 }
 
-void NiuPoker::setTouchPriority(){
-    m_isDianJi=!m_isDianJi;
-}
 
 void NiuPoker::printPoker(){
 	switch (this->m_huaSe) {
