@@ -5,10 +5,8 @@ using namespace std;
 
 CTCPRequest::CTCPRequest():m_nDataLen(0)
 {
-	//m_dataMutex.lock();
 	m_dataBuf = new unsigned char[g_nMaxRequsetDataSize];
 	memset(m_dataBuf, 0, g_nMaxRequsetDataSize);
-	//m_dataMutex.unlock();
 }
 
 
