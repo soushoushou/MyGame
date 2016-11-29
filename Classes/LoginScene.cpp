@@ -3,6 +3,10 @@
 #include "MainScene.h"
 #include <utility>
 #include <fstream>
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "WeChatTransit.h"
+#endif
+
 USING_NS_CC;
 
 Scene* LoginScene::createScene()
@@ -137,7 +141,7 @@ void LoginScene::loading() {
 
 		// 331x212是图片的大小，貌似这样直接设定是不好的；但是还必须提供这个参数
 		// 应该给这个Rect参数提供一个默认参数，默认加载整个图片
-		SpriteFrame *pSpriteFrame = SpriteFrame::create(path, Rect(0, 0, 113, 27));
+        SpriteFrame *pSpriteFrame = SpriteFrame::create(path, cocos2d::Rect(0, 0, 113, 27));
 
 		// 加入SpriteFrameCache中
 		spriteFrameCache->addSpriteFrame(pSpriteFrame, path);
@@ -171,12 +175,15 @@ void LoginScene::loading() {
 
 void LoginScene::menuCloseCallback(Ref* pSender)
 {
-	S_CreatePlayerReq cr("y","y",1);
+//	S_CreatePlayerReq cr("y","y",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
-	S_LoginReq lg("y",1,1);
-	NetworkManger::getInstance()->SendRequest_Login(lg);
-
-
+//	S_LoginReq lg("e",1,1);
+//	NetworkManger::getInstance()->SendRequest_Login(lg);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    WeChatTransit *manager=new WeChatTransit;
+    manager->sendWeChatLoginReq();
+#endif
+    
 
 
 }
