@@ -47,6 +47,9 @@ public:
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void update(float delta);
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 private:
 	bool initBackground();
 	bool initButtons();
@@ -132,10 +135,7 @@ private:
 	Scale9Sprite * suanNiuAdd_sprite;
 	Scale9Sprite * suanNiuAdd2_sprite;
 	Scale9Sprite * suanNiuEqual_sprite;
-	LabelTTF* m_countNiuOneLable;
-	LabelTTF* m_countNiuTwoLable;
-	LabelTTF* m_countNiuThreeLable;
-	LabelTTF* m_countNiuSumLable;
+	LabelTTF* m_countNiuLabels[4];			//0第一个数,1第二个数,2第三个数,3和
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
 	Label *m_pRoomNumberLabel;

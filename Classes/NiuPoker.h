@@ -27,13 +27,14 @@ public:
 	/** ´òÓ¡ÆË¿ËÅÆ */
 	void printPoker();
 	void setTouchPriority();
+	bool upOrDownPoker(int& up);
+	void setTouchable(bool isTouchable = true);
 private:
 	CC_SYNTHESIZE(bool, m_isSelect, Select);
 	CC_SYNTHESIZE(GamePlayScene*, m_gameMain, GameMain);
-	CC_SYNTHESIZE(bool, m_isDianJi, DianJi);
 	CC_SYNTHESIZE(int, m_huaSe, HuaSe);
 	CC_SYNTHESIZE(int, m_num, Num);
-	EventListenerTouchOneByOne* touchListener;
+	bool m_isTouchable;
 };
 
 

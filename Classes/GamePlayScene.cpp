@@ -68,6 +68,10 @@ m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID)
 	m_ThreeBtn = nullptr;
 	m_FourBtn = nullptr;
 	m_FiveBtn = nullptr;
+	for (int i = 0; i < 4; ++i)
+	{
+		m_countNiuLabels[i] = nullptr;
+	}
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 //    m_recordObject=new CDMRecordObject();
 //#endif
@@ -246,8 +250,14 @@ void GamePlayScene::update(float delta)
 						m_FourBtn->setVisible(false);
 						m_FiveBtn->setVisible(false);
 						m_timeLayer->stopTimer();
+						m_timeLayer->removeFromParent();
+						m_timeLayer = nullptr;
 						m_iState = CompareState;
 						showSuanNiuUi();
+						for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+						{
+							m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+						}
 					}
 				}
 				else
@@ -340,41 +350,87 @@ void GamePlayScene::update(float delta)
 	{
 	case StartState:
 	{
-		///单机测试用
-		static bool flag = true;
-		static int ccc = 2;
-		static int bbb = 22;
-		char buf[10] = { 0 };
-		sprintf(buf, "%d", bbb);
-		string name = buf;
-		if (rand()%100<50 && flag && m_testID.size()<5)
-		{
-			m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-			if (m_pSiteManager->currentPlayerCount() == 5)
-			{
-				m_inviteBtn->setVisible(false);
-			}
-			m_pSiteManager->showReady(ccc);
-			m_testID.push_back(ccc);
-			if (rand() % 3 == 1)
-			{
-				static int iii = 2;
-				m_pSiteManager->leaveSite(iii);
-				m_inviteBtn->setVisible(true);
-				for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
-				{
-					if (*iter == iii)
-					{
-						m_testID.erase(iter);
-						break;
-					}
-				}
-				++iii;
-			}
-			++ccc;
-			++bbb;
-		}
-		if (m_testID.size()==5)
+		/////单机测试用
+		//static bool flag = true;
+		//static int ccc = 2;
+		//static int bbb = 22;
+		//char buf[10] = { 0 };
+		//sprintf(buf, "%d", bbb);
+		//string name = buf;
+		//if (rand() % 100 < 50 && flag && m_testID.size() < 5)
+		//{
+		//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+		//	if (m_pSiteManager->currentPlayerCount() == 5)
+		//	{
+		//		m_inviteBtn->setVisible(false);
+		//	}
+		//	m_pSiteManager->showReady(ccc);
+		//	m_testID.push_back(ccc);
+		//	if (rand() % 3 == 1)
+		//	{
+		//		static int iii = 2;
+		//		m_pSiteManager->leaveSite(iii);
+		//		m_inviteBtn->setVisible(true);
+		//		for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+		//		{
+		//			if (*iter == iii)
+		//			{
+		//				m_testID.erase(iter);
+		//				break;
+		//			}
+		//		}
+		//		++iii;
+		//	}
+		//	++ccc;
+		//	++bbb;
+		//}
+		//if (m_testID.size() == 5)
+		//{
+		//	if (!m_timeLayer && m_bReady)
+		//	{
+		//		m_timeLayer = TimeLayer::create();
+		//		addChild(m_timeLayer, 50);
+		//	}
+		//	if (m_timeLayer && m_timeLayer->canRemove())
+		//	{
+		//		m_timeLayer->setVisible(false);
+		//		m_timeLayer->removeFromParent();
+		//		m_timeLayer = nullptr;
+		//		m_startGameBtn->setVisible(false);
+		//		m_inviteBtn->setVisible(false);
+		//		m_iState = SendPokerState;
+
+		//		//发牌
+		//		vector<S_PlayerPorker> porkers;
+		//		vector<int> ttt(52, 0);
+		//		for (int i = 0; i < 52; ++i)
+		//		{
+		//			ttt[i] = i + 1;
+		//		}
+		//		for (int i = 0; i < 25; ++i)
+		//		{
+		//			int t = rand() % 52;
+		//			int c = ttt[t];
+		//			ttt[t] = ttt[i];
+		//			ttt[i] = c;
+		//		}
+		//		for (int i = 0; i < m_testID.size(); ++i)
+		//		{
+		//			S_PlayerPorker s;
+		//			s.playerID = m_testID[i];
+		//			m_pSiteManager->showReady(s.playerID, false);
+		//			for (int j = 0; j < 5; ++j)
+		//			{
+		//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j] - 1;
+		//			}
+		//			porkers.push_back(s);
+		//		}
+		//		m_pPorkerManager->SendPorker(porkers);
+		//	}
+		//	flag = false;
+		//}
+		////////////////////////////////////////////////////////////////////////////
+		if (m_bGameStart)
 		{
 			if (!m_timeLayer && m_bReady)
 			{
@@ -384,93 +440,47 @@ void GamePlayScene::update(float delta)
 			if (m_timeLayer && m_timeLayer->canRemove())
 			{
 				m_timeLayer->setVisible(false);
+				m_timeLayer->removeFromParent();
+				m_timeLayer = nullptr;
 				m_startGameBtn->setVisible(false);
-				m_inviteBtn->setVisible(false);
-				m_iState = SendPokerState;
-
-				//发牌
-				vector<S_PlayerPorker> porkers;
-				vector<int> ttt(52, 0);
-				for (int i = 0; i < 52; ++i)
-				{
-					ttt[i] = i+1;
-				}
-				for (int i = 0; i < 25; ++i)
-				{
-					int t = rand() % 52;
-					int c = ttt[t];
-					ttt[t] = ttt[i];
-					ttt[i] = c;
-				}
-				for (int i = 0; i < m_testID.size(); ++i)
-				{
-					S_PlayerPorker s;
-					s.playerID = m_testID[i];
-					m_pSiteManager->showReady(s.playerID, false);
-					for (int j = 0; j < 5; ++j)
-					{
-						s.vecPorkerIndex[j] = ttt[(i)* 5 + j]-1;
-					}
-					porkers.push_back(s);
-				}
-				m_pPorkerManager->SendPorker(porkers);
+				S_FaPaiReq s;
+				NetworkManger::getInstance()->SendRequest_FaPai(s);
+				m_bGameStart = false;
 			}
-			flag = false;
 		}
-		//////////////////////////////////////////////////////////////////////////
-			if (m_bGameStart)
-			{
-				if (!m_timeLayer && m_bReady)
-				{
-					m_timeLayer = TimeLayer::create();
-					addChild(m_timeLayer, 50);
-				}
-				if (m_timeLayer && m_timeLayer->canRemove())
-				{
-					m_timeLayer->setVisible(false);
-					m_startGameBtn->setVisible(false);
-					S_FaPaiReq s;
-					NetworkManger::getInstance()->SendRequest_FaPai(s);
-					m_bGameStart = false;
-				}
-			}
-            break;
-        }
-		case SendPokerState:
-			{
-				if (m_pPorkerManager->RunActions())
-				{
-					m_iState = HogState;
-					showHogButton();
-				}
-			}
-            break;
-        case HogState:{
-            if (m_timeLayer && m_timeLayer->canRemove())
-            {
-                notHogBtnAction();
-                //unschedule(schedule_selector(GamePlayScene::update));
-            }
-            break;
-        }
-        case ChooseMultipleState:{
-            if (m_timeLayer && m_timeLayer->canRemove())
-            {
-                notChooseMulAction(0);
-                //unschedule(schedule_selector(GamePlayScene::update));
-            }
-            break;
-            
-        }
-		//case CompareState: {
-		//	if (m_timeLayer && m_timeLayer->canRemove())
-		//	{
-		//		notChooseMulAction(0);
-		//		//unschedule(schedule_selector(GamePlayScene::update));
-		//	}
-		//	break;
+		break;
+	}
+	case SendPokerState:
+	{
+		if (m_pPorkerManager->RunActions())
+		{
+			m_iState = HogState;
+			showHogButton();
+			//showSuanNiuUi();
+			//for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+			//{
+			//	m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+			//}
+		}
+	}
+	break;
+	case HogState:{
+		if (m_timeLayer && m_timeLayer->canRemove())
+		{
+			notHogBtnAction();
+			//unschedule(schedule_selector(GamePlayScene::update));
+		}
+		break;
+	}
+	case ChooseMultipleState:{
+		if (m_timeLayer && m_timeLayer->canRemove())
+		{
+			notChooseMulAction(0);
+			//unschedule(schedule_selector(GamePlayScene::update));
+		}
+		break;
 
-		//}
+	}
 	default:
 		break;
 	}
@@ -496,6 +506,14 @@ bool GamePlayScene::init()
 #endif
 	m_pSiteManager = new SiteManager(this,m_playerID);
 	m_pPorkerManager = new PorkerManager(this, m_pSiteManager);
+
+	auto listener = EventListenerTouchOneByOne::create();
+
+	listener->onTouchBegan = CC_CALLBACK_2(GamePlayScene::onTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(GamePlayScene::onTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(GamePlayScene::onTouchEnded, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	return true;
 }
@@ -653,6 +671,40 @@ bool GamePlayScene::initButtons()
 	return true;
 }
 
+bool GamePlayScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+	return true;
+}
+
+void GamePlayScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+}
+
+void GamePlayScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+	Vec2 pt = touch->getLocation();
+	vector<NiuPoker*> pks = m_pPorkerManager->GetMePlayerPoker();
+	for (int i = 0; i < pks.size(); ++i)
+	{
+		if (pks[i]->getBoundingBox().containsPoint(pt))
+		{
+			int up = 0;
+			bool touchable = pks[i]->upOrDownPoker(up);
+			for (int i = 0; i < 3; ++i)
+			{
+				if (m_countNiuLabels[i] == nullptr)
+				{
+					char buf[10] = { 0 };
+					sprintf(buf, "%d", pks[i]->getNum());
+					m_countNiuLabels[i] = LabelTTF::create(buf, "Arial", 15);
+					
+				}
+			}
+			break;
+		}
+	}
+}
+
 bool GamePlayScene::initPlayerProfile()
 {
 	S_GetPlayerInfoReq fp(m_playerID);
@@ -725,6 +777,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				m_notHogBtn->setVisible(false);
 				m_HogBtn->setVisible(false);
 				m_timeLayer->stopTimer();
+				m_timeLayer->removeFromParent();
+				m_timeLayer = nullptr;
 				m_iState = CompareState;
 				S_QiangZhuangReq s(0);
 				NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
@@ -737,6 +791,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 m_notHogBtn->setVisible(false);
                 m_HogBtn->setVisible(false);
                 m_timeLayer->stopTimer();
+				m_timeLayer->removeFromParent();
+				m_timeLayer = nullptr;
                 m_iState=ChooseMultipleState;
                 break;
             }
@@ -902,6 +958,11 @@ int GamePlayScene::countNiu(vector<int> vecPorkerIndex) {
 #pragma mark-显示抢庄按钮
 void GamePlayScene::showHogButton()
 {
+	if (!m_timeLayer)
+	{
+		m_timeLayer = TimeLayer::create();
+		addChild(m_timeLayer, 50);
+	}
     m_timeLayer->setTimeAndType(12, Tip_hog);
     if (!m_creatHogBtn) {
         auto Size = Director::getInstance()->getVisibleSize();
@@ -993,6 +1054,8 @@ void GamePlayScene::notHogBtnAction(){
 		m_HogBtn->setVisible(false);
 	}
     m_timeLayer->stopTimer();
+	m_timeLayer->removeFromParent();
+	m_timeLayer = nullptr;
 	int beishu = rand() % 5 + 1;
 	S_QiangZhuangReq t(1);
 	NetworkManger::getInstance()->SendRequest_QiangZhuang(t);
@@ -1023,6 +1086,11 @@ void GamePlayScene::showLoseDialog() {
 #pragma mark-显示倍数按钮
 void GamePlayScene::showChooseMultipleButton()
 {
+	if (!m_timeLayer)
+	{
+		m_timeLayer = TimeLayer::create();
+		addChild(m_timeLayer, 50);
+	}
     m_timeLayer->setTimeAndType(12, Tip_chooseMul);
     //schedule(schedule_selector(GamePlayScene::update));
     if (!m_creatMulBtn) {
@@ -1091,6 +1159,8 @@ void GamePlayScene::notChooseMulAction(float dt){
 		m_FiveBtn->setVisible(false);
 	}
     m_timeLayer->stopTimer();
+	m_timeLayer->removeFromParent();
+	m_timeLayer = nullptr;
 	S_YaZhuReq s(1);
 	NetworkManger::getInstance()->SendRequest_YaZhu(s);
 	m_iState = StartState;

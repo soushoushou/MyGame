@@ -10,38 +10,21 @@
 #include "GamePlayScene.h"
 #include "PorkerManager.h"
 
-NiuPoker::NiuPoker() :m_isSelect(false), m_isDianJi(false){
-//    touchListener=EventListenerTouchOneByOne::create();
-//    touchListener->onTouchEnded=[=](Touch *touch,Event *event){
-//        auto target = static_cast<Sprite*>(event->getCurrentTarget());
-//        m_isDianJi=!m_isDianJi;
-//        if (m_isDianJi) {
-//            if (PorkerManager::m_touchPokers.size()==2) {
-//                PorkerManager::m_touchPokers.pop_back();
-//                PorkerManager::m_touchPokers[0]->m_isDianJi=false;
-//            }
-//            PorkerManager::m_touchPokers.push_back(this);
-//        }
-//        else{
-//            for(int i=0;i<PorkerManager::m_touchPokers.size();i++)
-//            {
-//                NiuPoker *pk=PorkerManager::m_touchPokers[i];
-//                if (pk->m_num==m_num && pk->m_huaSe==m_huaSe) {
-//                    vector<NiuPoker*>::iterator it = PorkerManager::m_touchPokers.begin()+i;
-//                    PorkerManager::m_touchPokers.erase(it);
-//                }
-//            }
-//        }
-//    };
-//    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+NiuPoker::NiuPoker() :m_isSelect(false), m_isTouchable(false)
+{
 }
 NiuPoker::~NiuPoker(){
 
 }
 
+void NiuPoker::setTouchable(bool isTouchable /* = true */)
+{
+	m_isTouchable = isTouchable;
+}
+
 NiuPoker* NiuPoker::create(){
 	NiuPoker* pk = new NiuPoker();
-	if (pk)
+	if (pk && pk->init())
 	{
 		pk->autorelease();
 		return pk;
@@ -76,12 +59,28 @@ void NiuPoker::showLast_small(){
 
 NiuPoker* NiuPoker::copy(){
 	NiuPoker* pk;
-	pk->m_isDianJi = this->m_isDianJi;
 	pk->m_isSelect = this->m_isSelect;
+	pk->m_isTouchable = this->m_isTouchable;
 	pk->setHuaSe(this->getHuaSe());
 	pk->setNum(this->getNum());
 	pk->m_gameMain = this->m_gameMain;
 	return pk;
+}
+
+bool NiuPoker::upOrDownPoker(int& up)
+{
+	if (!m_isTouchable)
+	{
+		return false;
+	}
+	m_isSelect = !m_isSelect;
+	if (m_isSelect)
+	{
+		this->setPositionY(this->getPositionY() + 30);
+	}
+	else
+		this->setPositionY(this->getPositionY() - 30);
+	return m_isTouchable;
 }
 
 
