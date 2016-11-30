@@ -80,6 +80,8 @@ private:
 	void showLoseDialog();
 	/** 显示算牛UI */
 	void showSuanNiuUi();
+	/** 隐藏算牛UI */
+	void hideSuanNiuUi();
 private:
 	//其余4个玩家的玩家位置和头像位置
 	struct PlayerAndProfilePos 
