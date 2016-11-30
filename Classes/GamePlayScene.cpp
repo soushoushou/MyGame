@@ -231,6 +231,7 @@ void GamePlayScene::update(float delta)
 					{
 						m_pSiteManager->leaveSite(ack.m_playerID);
 						m_inviteBtn->setVisible(true);
+						hideSuanNiuUi();
 					}
 				}
 				else
