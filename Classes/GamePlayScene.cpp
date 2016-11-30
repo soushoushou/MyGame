@@ -259,12 +259,12 @@ void GamePlayScene::update(float delta)
 						m_timeLayer->removeFromParent();
 						m_timeLayer = nullptr;
 						m_iState = CompareState;
-						showSuanNiuUi();
-						for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-						{
-							m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
-							m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
-						}
+					}
+					showSuanNiuUi();
+					for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+					{
+						m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+						m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
 					}
 				}
 				else

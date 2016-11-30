@@ -204,7 +204,7 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 	manager->sendWeChatLoginReq();
 #endif
 
-	S_LoginReq lg("e", 1, 1);
+	S_LoginReq lg("c", 1, 1);
 	NetworkManger::getInstance()->SendRequest_Login(lg);
 
     
