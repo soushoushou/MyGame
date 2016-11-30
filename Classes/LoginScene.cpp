@@ -9,6 +9,12 @@
 
 USING_NS_CC;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#include <android/log.h>
+#endif
+
 Scene* LoginScene::createScene()
 {
 	// 'scene' is an autorelease object
@@ -177,12 +183,30 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 {
 //	S_CreatePlayerReq cr("y","y",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
+
+	JniMethodInfo loginWxMinfo;
+	bool isHaveLogin = JniHelper::getStaticMethodInfo(loginWxMinfo, "cn/baihui/laiyijuya/CocosWechat", "loginWeixin", "()V");
+
+	if (!isHaveLogin) {
+		CCLog("jni:此函数loginWeixin不存在");
+	}
+	else{
+		CCLog("jni:此函数loginWeixin存在");
+
+		loginWxMinfo.env->CallStaticVoidMethod(loginWxMinfo.classID, loginWxMinfo.methodID);
+	}
+
+#endif
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	WeChatTransit *manager = new WeChatTransit;
+	manager->sendWeChatLoginReq();
+#endif
+
 	S_LoginReq lg("e", 1, 1);
 	NetworkManger::getInstance()->SendRequest_Login(lg);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    WeChatTransit *manager=new WeChatTransit;
-    manager->sendWeChatLoginReq();
-#endif
+
     
 
 
