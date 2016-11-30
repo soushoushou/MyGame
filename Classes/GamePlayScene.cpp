@@ -198,6 +198,11 @@ void GamePlayScene::update(float delta)
 					{
 						showChooseMultipleButton();
 					}
+					else
+					{
+						S_YaZhuReq req(1);
+						NetworkManger::getInstance()->SendRequest_YaZhu(req);
+					}
 
 				}
 				else {
@@ -258,6 +263,7 @@ void GamePlayScene::update(float delta)
 						for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
 						{
 							m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+							m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
 						}
 					}
 				}
