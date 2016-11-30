@@ -859,6 +859,23 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			case TAG_INVITE_BTN:
 			{
 				log("invite friend");
+				
+				#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
+
+					JniMethodInfo inviteFriendMinfo;
+					bool isHaveInvite = JniHelper::getStaticMethodInfo(inviteFriendMinfo, "cn/baihui/laiyijuya/CocosWechat", "sendMsgToFriend", "()V");
+
+					if (!isHaveInvite) {
+						CCLog("jni:此函数sendMsgToFriend不存在");
+					}
+					else{
+						CCLog("jni:此函数sendMsgToFriend存在");
+
+						inviteFriendMinfo.env->CallStaticVoidMethod(inviteFriendMinfo.classID, inviteFriendMinfo.methodID);
+					}
+
+				#endif
+				
 				break;
 			}
             case TAG_HOG_BTN:			//抢庒
