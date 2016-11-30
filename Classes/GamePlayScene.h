@@ -138,6 +138,7 @@ private:
 	Scale9Sprite * suanNiuAdd2_sprite;
 	Scale9Sprite * suanNiuEqual_sprite;
 	LabelTTF* m_countNiuLabels[4];			//0第一个数,1第二个数,2第三个数,3和
+	bool m_creatSuanniuUI;
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
 	Label *m_pRoomNumberLabel;
