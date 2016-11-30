@@ -27,7 +27,7 @@ public:
 	/** ´òÓ¡ÆË¿ËÅÆ */
 	void printPoker();
 	void setTouchPriority();
-	bool upOrDownPoker(int& up);
+	bool upOrDownPoker(int& up,int c);
 	void setTouchable(bool isTouchable = true);
 private:
 	CC_SYNTHESIZE(bool, m_isSelect, Select);

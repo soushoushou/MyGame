@@ -456,11 +456,6 @@ void GamePlayScene::update(float delta)
 		{
 			m_iState = HogState;
 			showHogButton();
-			//showSuanNiuUi();
-			//for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-			//{
-			//	m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
-			//}
 		}
 	}
 	break;
@@ -682,6 +677,7 @@ void GamePlayScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 
 void GamePlayScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
+	
 	Vec2 pt = touch->getLocation();
 	vector<NiuPoker*> pks = m_pPorkerManager->GetMePlayerPoker();
 	for (int i = 0; i < pks.size(); ++i)
@@ -689,18 +685,80 @@ void GamePlayScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 		if (pks[i]->getBoundingBox().containsPoint(pt))
 		{
 			int up = 0;
-			bool touchable = pks[i]->upOrDownPoker(up);
-			for (int i = 0; i < 3; ++i)
+			int count = 0;
+			for (int j = 0; j < 3; ++j)
 			{
-				if (m_countNiuLabels[i] == nullptr)
+				if (m_countNiuLabels[j] != nullptr)
 				{
-					char buf[10] = { 0 };
-					sprintf(buf, "%d", pks[i]->getNum());
-					m_countNiuLabels[i] = LabelTTF::create(buf, "Arial", 15);
-					
+					++count;
 				}
 			}
-			break;
+			bool touchable = pks[i]->upOrDownPoker(up,count);
+			if (touchable)
+			{
+				vector<Vec2> frameps = { suanNiuOne_sprite->getPosition(), suanNiuTwo_sprite->getPosition(), suanNiuThree_sprite->getPosition(), suanNiuSum_sprite->getPosition() };
+				if (up == 1)
+				{
+					for (int j = 0; j < 3; ++j)
+					{
+						if (m_countNiuLabels[j] == nullptr)
+						{
+							char buf[10] = { 0 };
+							sprintf(buf, "%d", pks[i]->getNum());
+							m_countNiuLabels[j] = LabelTTF::create(buf, "Arial", 25);
+							m_countNiuLabels[j]->setPosition(frameps[j]);
+							this->addChild(m_countNiuLabels[j], 10);
+							break;
+						}
+					}
+				}
+				else
+				{
+					for (int j = 0; j < 3; ++j)
+					{
+						if (m_countNiuLabels[j] != nullptr)
+						{
+							int num = atoi(m_countNiuLabels[j]->getString().c_str());
+							if (num == pks[i]->getNum())
+							{
+								m_countNiuLabels[j]->removeFromParent();
+								m_countNiuLabels[j] = nullptr;
+								break;
+							}
+						}
+					}
+				}
+
+				for (int i = 0; i < 3; ++i)
+				{
+					if (m_countNiuLabels[i] == nullptr)
+					{
+						if (m_countNiuLabels[3] != nullptr)
+						{
+							m_countNiuLabels[3]->removeFromParent();
+							m_countNiuLabels[3] = nullptr;
+						}
+						return;
+					}
+				}
+				if (m_countNiuLabels[3] == nullptr)
+				{
+					int sum = 0;
+					for (int i = 0; i < 3; ++i)
+					{
+						int t = 0;
+						t = atoi(m_countNiuLabels[i]->getString().c_str());
+						sum += t;
+					}
+					char buf[10] = { 0 };
+					sprintf(buf, "%d", sum);
+					m_countNiuLabels[3] = LabelTTF::create(buf, "Arial", 25);
+					m_countNiuLabels[3]->setPosition(frameps[3]);
+					this->addChild(m_countNiuLabels[3], 10);
+				}
+
+				break;
+			}
 		}
 	}
 }
@@ -1196,6 +1254,10 @@ void GamePlayScene::startNewPlay(){
 	else
 		m_inviteBtn->setVisible(true);
 	m_iState = StartState;
+	for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+	{
+		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
+	}
 	//S_FaPaiReq s;
 	//NetworkManger::getInstance()->SendRequest_FaPai(s);
 }

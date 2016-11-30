@@ -67,7 +67,7 @@ NiuPoker* NiuPoker::copy(){
 	return pk;
 }
 
-bool NiuPoker::upOrDownPoker(int& up)
+bool NiuPoker::upOrDownPoker(int& up,int c)
 {
 	if (!m_isTouchable)
 	{
@@ -76,10 +76,20 @@ bool NiuPoker::upOrDownPoker(int& up)
 	m_isSelect = !m_isSelect;
 	if (m_isSelect)
 	{
+		if (c == 3)
+		{
+			return false;
+		}
 		this->setPositionY(this->getPositionY() + 30);
+		up = 1;
 	}
 	else
+	{
 		this->setPositionY(this->getPositionY() - 30);
+		up = 0;
+	}
+		
+
 	return m_isTouchable;
 }
 
