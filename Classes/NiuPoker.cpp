@@ -73,6 +73,10 @@ bool NiuPoker::upOrDownPoker(int& up,int c)
 	{
 		return false;
 	}
+	if (c == 3 && m_isSelect == false)
+	{
+		return false;
+	}
 	m_isSelect = !m_isSelect;
 	if (m_isSelect)
 	{

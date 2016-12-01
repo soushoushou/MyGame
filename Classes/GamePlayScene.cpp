@@ -62,6 +62,7 @@ m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID)
 {
     m_creatHogBtn=false;
     m_creatMulBtn=false;
+	m_creatSuanniuUI = true;
     m_playNum=1;
 	m_OneBtn = nullptr;
 	m_TwoBtn = nullptr;
@@ -197,6 +198,11 @@ void GamePlayScene::update(float delta)
 					{
 						showChooseMultipleButton();
 					}
+					else
+					{
+						S_YaZhuReq req(1);
+						NetworkManger::getInstance()->SendRequest_YaZhu(req);
+					}
 
 				}
 				else {
@@ -225,6 +231,7 @@ void GamePlayScene::update(float delta)
 					{
 						m_pSiteManager->leaveSite(ack.m_playerID);
 						m_inviteBtn->setVisible(true);
+						hideSuanNiuUi();
 					}
 				}
 				else
@@ -253,11 +260,12 @@ void GamePlayScene::update(float delta)
 						m_timeLayer->removeFromParent();
 						m_timeLayer = nullptr;
 						m_iState = CompareState;
-						showSuanNiuUi();
-						for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-						{
-							m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
-						}
+					}
+					showSuanNiuUi();
+					for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+					{
+						m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+						m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
 					}
 				}
 				else
@@ -546,57 +554,81 @@ bool GamePlayScene::initBackground()
 	return true;
 }
 void GamePlayScene::showSuanNiuUi() {
-	auto Size = Director::getInstance()->getVisibleSize();
-	//算牛底框
-	suanNiuBg_sprite = Scale9Sprite::create("game/countniu_Bg.png");
-	suanNiuBg_sprite->setScale(0.55f);
-	auto suanniuBgPs = ccp((Size.width) / 2, 200);
-	suanNiuBg_sprite->setPosition(suanniuBgPs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuBg_sprite, 10);
-	//算牛数字框1
-	suanNiuOne_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
-	auto suanniuOnePs = ccp((Size.width) / 2 - suanNiuBg_sprite->getContentSize().width*0.275 + 10 + suanNiuOne_sprite->getContentSize().width / 2, 198);
-	suanNiuOne_sprite->setPosition(suanniuOnePs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuOne_sprite, 10);
-	//+号
-	suanNiuAdd_sprite = Scale9Sprite::create("game/add.png");
-	auto suanniuAddPs = ccp(suanniuOnePs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 200);
-	suanNiuAdd_sprite->setPosition(suanniuAddPs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuAdd_sprite, 10);
-	//算牛数字框2
-	suanNiuTwo_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
-	auto suanniuTwoPs = ccp(suanniuAddPs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 198);
-	suanNiuTwo_sprite->setPosition(suanniuTwoPs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuTwo_sprite, 10);
-	//+号
-	suanNiuAdd2_sprite = Scale9Sprite::create("game/add.png");
-	auto suanniuAdd2Ps = ccp(suanniuTwoPs.x + 15 + suanNiuTwo_sprite->getContentSize().width / 2, 200);
-	suanNiuAdd2_sprite->setPosition(suanniuAdd2Ps);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuAdd2_sprite, 10);
-	//算牛数字框3
-	suanNiuThree_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
-	auto suanniuThreePs = ccp(suanniuAdd2Ps.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 198);
-	suanNiuThree_sprite->setPosition(suanniuThreePs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuThree_sprite, 10);
-	//=号
-	suanNiuEqual_sprite = Scale9Sprite::create("game/equal.png");
-	auto suanniuEqualPs = ccp(suanniuThreePs.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 200);
-	suanNiuEqual_sprite->setPosition(suanniuEqualPs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuEqual_sprite, 10);
-	//算牛数字框Sum
-	suanNiuSum_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
-	auto suanniuSumPs = ccp(suanniuEqualPs.x + 15 + suanNiuSum_sprite->getContentSize().width / 2, 198);
-	suanNiuSum_sprite->setPosition(suanniuSumPs);
-	//suanNiuBg_sprite->setVisible(false);
-	this->addChild(suanNiuSum_sprite, 10);
+	if (m_creatSuanniuUI)
+	{
+		auto Size = Director::getInstance()->getVisibleSize();
+		//算牛底框
+		suanNiuBg_sprite = Scale9Sprite::create("game/countniu_Bg.png");
+		suanNiuBg_sprite->setScale(0.55f);
+		auto suanniuBgPs = ccp((Size.width) / 2, 200);
+		suanNiuBg_sprite->setPosition(suanniuBgPs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuBg_sprite, 10);
+		//算牛数字框1
+		suanNiuOne_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+		auto suanniuOnePs = ccp((Size.width) / 2 - suanNiuBg_sprite->getContentSize().width*0.275 + 10 + suanNiuOne_sprite->getContentSize().width / 2, 198);
+		suanNiuOne_sprite->setPosition(suanniuOnePs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuOne_sprite, 10);
+		//+号
+		suanNiuAdd_sprite = Scale9Sprite::create("game/add.png");
+		auto suanniuAddPs = ccp(suanniuOnePs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 200);
+		suanNiuAdd_sprite->setPosition(suanniuAddPs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuAdd_sprite, 10);
+		//算牛数字框2
+		suanNiuTwo_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+		auto suanniuTwoPs = ccp(suanniuAddPs.x + 15 + suanNiuOne_sprite->getContentSize().width / 2, 198);
+		suanNiuTwo_sprite->setPosition(suanniuTwoPs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuTwo_sprite, 10);
+		//+号
+		suanNiuAdd2_sprite = Scale9Sprite::create("game/add.png");
+		auto suanniuAdd2Ps = ccp(suanniuTwoPs.x + 15 + suanNiuTwo_sprite->getContentSize().width / 2, 200);
+		suanNiuAdd2_sprite->setPosition(suanniuAdd2Ps);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuAdd2_sprite, 10);
+		//算牛数字框3
+		suanNiuThree_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+		auto suanniuThreePs = ccp(suanniuAdd2Ps.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 198);
+		suanNiuThree_sprite->setPosition(suanniuThreePs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuThree_sprite, 10);
+		//=号
+		suanNiuEqual_sprite = Scale9Sprite::create("game/equal.png");
+		auto suanniuEqualPs = ccp(suanniuThreePs.x + 15 + suanNiuThree_sprite->getContentSize().width / 2, 200);
+		suanNiuEqual_sprite->setPosition(suanniuEqualPs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuEqual_sprite, 10);
+		//算牛数字框Sum
+		suanNiuSum_sprite = Scale9Sprite::create("game/suanniuNum_bg.png");
+		auto suanniuSumPs = ccp(suanniuEqualPs.x + 15 + suanNiuSum_sprite->getContentSize().width / 2, 198);
+		suanNiuSum_sprite->setPosition(suanniuSumPs);
+		//suanNiuBg_sprite->setVisible(false);
+		this->addChild(suanNiuSum_sprite, 10);
+	}
+	else {
+		suanNiuBg_sprite->setVisible(true);
+		suanNiuOne_sprite->setVisible(true);
+		suanNiuAdd_sprite->setVisible(true);
+		suanNiuTwo_sprite->setVisible(true);
+		suanNiuAdd2_sprite->setVisible(true);
+		suanNiuThree_sprite->setVisible(true);
+		suanNiuEqual_sprite->setVisible(true);
+		suanNiuSum_sprite->setVisible(true);
+	}
 }
+void GamePlayScene::hideSuanNiuUi() {
+	suanNiuBg_sprite->setVisible(false);
+	suanNiuOne_sprite->setVisible(false);
+	suanNiuAdd_sprite->setVisible(false);
+	suanNiuTwo_sprite->setVisible(false);
+	suanNiuAdd2_sprite->setVisible(false);
+	suanNiuThree_sprite->setVisible(false);
+	suanNiuEqual_sprite->setVisible(false);
+	suanNiuSum_sprite->setVisible(false);
+}
+
 bool GamePlayScene::initButtons()
 {
 	auto Size = Director::getInstance()->getVisibleSize();
@@ -828,6 +860,23 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			case TAG_INVITE_BTN:
 			{
 				log("invite friend");
+				
+				#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
+
+					JniMethodInfo inviteFriendMinfo;
+					bool isHaveInvite = JniHelper::getStaticMethodInfo(inviteFriendMinfo, "cn/baihui/laiyijuya/CocosWechat", "sendMsgToFriend", "()V");
+
+					if (!isHaveInvite) {
+						CCLog("jni:此函数sendMsgToFriend不存在");
+					}
+					else{
+						CCLog("jni:此函数sendMsgToFriend存在");
+
+						inviteFriendMinfo.env->CallStaticVoidMethod(inviteFriendMinfo.classID, inviteFriendMinfo.methodID);
+					}
+
+				#endif
+				
 				break;
 			}
             case TAG_HOG_BTN:			//抢庒
