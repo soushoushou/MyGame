@@ -133,17 +133,84 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	layer->m_dialogContentSize = dialogSize;
 	auto size = Director::getInstance()->getWinSize();
 	auto * sprite = Scale9Sprite::create("popuplayer/EditBoxBg.png");
+	auto * sprite01 = Scale9Sprite::create("popuplayer/EditBox01.png");
+	auto * sprite02 = Scale9Sprite::create("popuplayer/EditBox02.png");
+	auto * sprite03 = Scale9Sprite::create("popuplayer/EditBox03.png");
+	auto * sprite04 = Scale9Sprite::create("popuplayer/EditBox04.png");
+	auto * sprite05 = Scale9Sprite::create("popuplayer/EditBox05.png");
+	auto * sprite06 = Scale9Sprite::create("popuplayer/EditBox06.png");
 	//上面那句话也可以根据需要这样来写：  
 	//CCString* fileName = CCString::createWithFormat("Icon_%d.jpg", flag);  
 	//CCSprite* sprite = CCSprite::create(fileName->getCString());  
 	auto editBgPs =ccp((size.width) / 2, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
-	sprite->setPosition(editBgPs);
-	layer->addChild(sprite,10);
-	LabelTTF* numLabel = LabelTTF::create("", "", 40);
+	//sprite01->setPosition(editBgPs);
+	//layer->addChild(sprite01,10);
+
+	auto editBgPs01 = ccp((size.width) / 2 - 200, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite01->setPosition(editBgPs01);
+	layer->addChild(sprite01, 10);
+
+	auto editBgPs02 = ccp((size.width) / 2 - 122, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite02->setPosition(editBgPs02);
+	layer->addChild(sprite02, 10);
+
+	auto editBgPs03 = ccp((size.width) / 2 - 44, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite03->setPosition(editBgPs03);
+	layer->addChild(sprite03, 10);
+
+	auto editBgPs04 = ccp((size.width) / 2 + 34, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite04->setPosition(editBgPs04);
+	layer->addChild(sprite04, 10);
+
+	auto editBgPs05 = ccp((size.width) / 2 + 112, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite05->setPosition(editBgPs05);
+	layer->addChild(sprite05, 10);
+
+	auto editBgPs06 = ccp((size.width) / 2 + 190, (size.height + layer->m_dialogContentSize.height) / 2 - 120);
+	sprite06->setPosition(editBgPs06);
+	layer->addChild(sprite06, 10);
+
+	LabelTTF* numLabel01 = LabelTTF::create("", "", 40);
+	numLabel01->setPosition(editBgPs01);
+	numLabel01->setName("numLabel01");
+	numLabel01->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel01, 10);
+
+	LabelTTF* numLabel02 = LabelTTF::create("", "", 40);
+	numLabel02->setPosition(editBgPs02);
+	numLabel02->setName("numLabel02");
+	numLabel02->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel02, 10);
+
+	LabelTTF* numLabel03 = LabelTTF::create("", "", 40);
+	numLabel03->setPosition(editBgPs03);
+	numLabel03->setName("numLabel03");
+	numLabel03->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel03, 10);
+
+	LabelTTF* numLabel04 = LabelTTF::create("", "", 40);
+	numLabel04->setPosition(editBgPs04);
+	numLabel04->setName("numLabel04");
+	numLabel04->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel04, 10);
+
+	LabelTTF* numLabel05 = LabelTTF::create("", "", 40);
+	numLabel05->setPosition(editBgPs05);
+	numLabel05->setName("numLabel05");
+	numLabel05->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel05, 10);
+
+	LabelTTF* numLabel06 = LabelTTF::create("", "", 40);
+	numLabel06->setPosition(editBgPs06);
+	numLabel06->setName("numLabel06");
+	numLabel06->setColor(Color3B(0, 0, 0));
+	layer->addChild(numLabel06, 10);
+
+	/*LabelTTF* numLabel = LabelTTF::create("", "", 40);
 	numLabel->setPosition(editBgPs);
 	numLabel->setName("numLabel");
 	numLabel->setColor(Color3B(0, 0, 0));
-	layer->addChild(numLabel, 10);
+	layer->addChild(numLabel, 10);*/
 	LabelTTF* titleLable = LabelTTF::create("please enter No", "", 40);
 	titleLable->setPosition(size.width / 2, (size.height / 2 + dialogSize.height / 2 - 35));
 	titleLable->setColor(Color3B(0, 0, 0));
@@ -182,7 +249,8 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	Button* sendBtn = Button::create("popuplayer/sendBtnJoin.png", "popuplayer/sendBtnJoin_pressed.png");
 	if (!sendBtn) return NULL;
 
-	auto btn1Position = ccp(editBgPs.x- sprite->getContentSize().width/2+m1Btn->getContentSize().width/2-12,editBgPs.y-70);
+	//auto btn1Position = ccp(editBgPs.x- sprite->getContentSize().width/2+m1Btn->getContentSize().width/2-12,editBgPs.y-70);
+	auto btn1Position = ccp(editBgPs.x - sprite->getContentSize().width / 2 + m1Btn->getContentSize().width / 2 - 12, editBgPs.y - 70);
 	m1Btn->setPosition(btn1Position);
 	m1Btn->setTag(TAG_1_BTN);
 	m1Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
@@ -192,6 +260,7 @@ PopupLayer* PopupLayer::joinRoomWith9Dialog(const char* backgroundImage, Size di
 	m2Btn->setTag(TAG_2_BTN);
 	m2Btn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(m2Btn, 10);
+	//auto btn3Position = ccp(editBgPs.x + sprite->getContentSize().width / 2 - m1Btn->getContentSize().width / 2 + 12, btn1Position.y);
 	auto btn3Position = ccp(editBgPs.x + sprite->getContentSize().width / 2 - m1Btn->getContentSize().width / 2 + 12, btn1Position.y);
 	m3Btn->setPosition(btn3Position);
 	m3Btn->setTag(TAG_3_BTN);
@@ -897,26 +966,119 @@ void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 {
 	Size size = Director::sharedDirector()->getWinSize();
+	Button* butten = (Button*)pSender;
+	string num, num01, num02, num03, num04, num05, num06;
+	unsigned int tag = butten->getTag();
+
 	if (type == Widget::TouchEventType::ENDED)
 	{
-		Button* butten = (Button*)pSender;
-		string num;
-		unsigned int tag = butten->getTag();
+		//Button* butten = (Button*)pSender;
+		//string num;
+		//string num,num01, num02, num03, num04, num05, num06;
+		//unsigned int tag = butten->getTag();
 		if (tag >= TAG_0_BTN&&tag <= TAG_JOINROOM_BTN) {
-			LabelTTF* label = (LabelTTF *)butten->getParent()->getChildByName("numLabel");
+			/*LabelTTF* label = (LabelTTF *)butten->getParent()->getChildByName("numLabel");
 			if (label == NULL)
-				return;
+			return;
 			num = (string)label->getString();
 			int count = num.length();
 			if (tag <= TAG_9_BTN)
 			{
-				if (count < 6) {
+			if (count < 6) {
+			int tem = tag - TAG_0_BTN;
+			stringstream ss;
+			ss << tem;
+			string s1 = ss.str();
+			num += s1;
+			label->setString(num);
+			}
+			else {
+			return;
+			}
+			return;
+			}
+			if (tag == TAG_DEL_BTN) {
+			if (count == 0) {
+			return;
+			}
+			else {
+			num=num.erase(num.length()-1);
+			label->setString(num);
+			return;
+			}
+			}*/
+
+			LabelTTF* label01 = (LabelTTF *)butten->getParent()->getChildByName("numLabel01");
+			LabelTTF* label02 = (LabelTTF *)butten->getParent()->getChildByName("numLabel02");
+			LabelTTF* label03 = (LabelTTF *)butten->getParent()->getChildByName("numLabel03");
+			LabelTTF* label04 = (LabelTTF *)butten->getParent()->getChildByName("numLabel04");
+			LabelTTF* label05 = (LabelTTF *)butten->getParent()->getChildByName("numLabel05");
+			LabelTTF* label06 = (LabelTTF *)butten->getParent()->getChildByName("numLabel06");
+			if (label01 == NULL || label02 == NULL || label03 == NULL || label04 == NULL || label05 == NULL || label06 == NULL)
+				return;
+			num01 = (string)label01->getString();
+			num02 = (string)label02->getString();
+			num03 = (string)label03->getString();
+			num04 = (string)label04->getString();
+			num05 = (string)label05->getString();
+			num06 = (string)label06->getString();
+
+			int count01 = num01.length();
+			int count02 = num02.length();
+			int count03 = num03.length();
+			int count04 = num04.length();
+			int count05 = num05.length();
+			int count06 = num06.length();
+
+			if (tag <= TAG_9_BTN)
+			{
+				if (count01 < 1) {
 					int tem = tag - TAG_0_BTN;
 					stringstream ss;
 					ss << tem;
-					string s1 = ss.str();				
-					num += s1;
-					label->setString(num);
+					string s1 = ss.str();
+					num01 += s1;
+					label01->setString(num01);
+				}
+				else if (count02 < 1) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s2 = ss.str();
+					num02 += s2;
+					label02->setString(num02);
+				}
+				else if (count03 < 1) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s3 = ss.str();
+					num03 += s3;
+					label03->setString(num03);
+				}
+				else if (count04 < 1) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s4 = ss.str();
+					num04 += s4;
+					label04->setString(num04);
+				}
+				else if (count05 < 1) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s5 = ss.str();
+					num05 += s5;
+					label05->setString(num05);
+				}
+				else if (count06 < 1) {
+					int tem = tag - TAG_0_BTN;
+					stringstream ss;
+					ss << tem;
+					string s6 = ss.str();
+					num06 += s6;
+					label06->setString(num06);
 				}
 				else {
 					return;
@@ -924,16 +1086,43 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				return;
 			}
 			if (tag == TAG_DEL_BTN) {
-				if (count == 0) {
+				if (count06 > 0){
+					num06 = num06.erase(num06.length() - 1);
+					label06->setString(num06);
 					return;
 				}
-				else {
-					num=num.erase(num.length()-1);
-					label->setString(num);
+				else if (count05 > 0){
+					num05 = num05.erase(num05.length() - 1);
+					label05->setString(num05);
+					return;
+				}
+				else if (count04 > 0){
+					num04 = num04.erase(num04.length() - 1);
+					label04->setString(num04);
+					return;
+				}
+				else if (count03 > 0){
+					num03 = num03.erase(num03.length() - 1);
+					label03->setString(num03);
+					return;
+				}
+				else if (count02 > 0){
+					num02 = num02.erase(num02.length() - 1);
+					label02->setString(num02);
+					return;
+				}
+				else if (count01 > 0){
+					num01 = num01.erase(num01.length() - 1);
+					label01->setString(num01);
+					return;
+				}
+				else{
 					return;
 				}
 			}
+
 			if (tag == TAG_JOINROOM_BTN) {
+				num = num01 + num02 + num03 + num04 + num05 + num06;
 				int roomid = atoi(num.c_str());
 				S_JoinRoomReq jr(roomid);
 				NetworkManger::getInstance()->SendRequest_JoinRoom(jr);

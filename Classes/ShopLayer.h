@@ -66,6 +66,13 @@ private:
 	Button* s_buyDiamond05Btn;
 	Button* s_buyDiamond06Btn;
 
+	LabelTTF* s_buyDiamond01Lab;
+	LabelTTF* s_buyDiamond02Lab;
+	LabelTTF* s_buyDiamond03Lab;
+	LabelTTF* s_buyDiamond04Lab;
+	LabelTTF* s_buyDiamond05Lab;
+	LabelTTF* s_buyDiamond06Lab;
+
 	Button* s_buyCoin01Btn;
 	Button* s_buyCoin02Btn;
 	Button* s_buyCoin03Btn;

@@ -6,6 +6,12 @@
 
 USING_NS_CC;
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#include <android/log.h>
+#endif
+
 using namespace ui;
 
 #define TAG_BACK_BIN			0		//返回
@@ -305,12 +311,12 @@ bool ShopLayer::initDiamondLayer(){
 	if (!s_buyDiamond06Btn) return false;
 
 	//初始化按钮钻石标题
-	LabelTTF* s_buyDiamond01Lab = LabelTTF::create("$  6", "tuffy_bold_italic-charmap.png", 24);
-	LabelTTF* s_buyDiamond02Lab = LabelTTF::create("$  30", "Arial", 24);
-	LabelTTF* s_buyDiamond03Lab = LabelTTF::create("$  60", "Arial", 24);
-	LabelTTF* s_buyDiamond04Lab = LabelTTF::create("$  108", "Arial", 24);
-	LabelTTF* s_buyDiamond05Lab = LabelTTF::create("$  208", "Arial", 24);
-	LabelTTF* s_buyDiamond06Lab = LabelTTF::create("$  618", "Arial", 24);
+	s_buyDiamond01Lab = LabelTTF::create("$  6", "tuffy_bold_italic-charmap.png", 24);
+	s_buyDiamond02Lab = LabelTTF::create("$  30", "Arial", 24);
+	s_buyDiamond03Lab = LabelTTF::create("$  60", "Arial", 24);
+	s_buyDiamond04Lab = LabelTTF::create("$  108", "Arial", 24);
+	s_buyDiamond05Lab = LabelTTF::create("$  208", "Arial", 24);
+	s_buyDiamond06Lab = LabelTTF::create("$  618", "Arial", 24);
 
 	//打开scale9可以拉伸图片  
 	s_buyDiamond01Btn->setScale9Enabled(true);
@@ -593,9 +599,22 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 		case TAG_DIAMOND01_BIN:
 		{
+
+			//AudioManager::getInstance()->fileConvertedToBinary_Send("C:\\Users\\Administrator\\Desktop\\target.mp3");
+			#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)	//判断当前平台为ios平台
+						log("录音");
+						m_recordObject->StartRecord();
+			#endif
+
+			#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) //判断当前是否为Android平台
+				CCLog("jni-java函数recordAudio执行完毕");
+			#endif
+
 			log("DIAMOND1");
 			auto diamond01Value = m_lblDiamond01->getString().c_str();
-			CCLOG("offset=%s", diamond01Value);	
+			auto s_buyDiamond01LabValue = s_buyDiamond01Lab->getString().c_str();		
+			CCLOG("diamond01Value=%s", diamond01Value);	
+			CCLOG("s_buyDiamond01LabValue=%s", s_buyDiamond01LabValue);
 			S_BuyDiamondReq s(0,60);
 			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
 			break;
