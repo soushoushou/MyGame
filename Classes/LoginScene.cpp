@@ -183,10 +183,7 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 {
 //	S_CreatePlayerReq cr("y","y",1);
 	//NetworkManger::getInstance()->SendRequest_CreateUser(cr);
-<<<<<<< HEAD
-	S_LoginReq lg("b", 1, 1);
-	NetworkManger::getInstance()->SendRequest_Login(lg);
-=======
+
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)  
 
 	JniMethodInfo loginWxMinfo;
@@ -203,7 +200,6 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 
 #endif
 
->>>>>>> 4e30e7bb92b223b69ee7c3669046675fb70d5d89
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	WeChatTransit *manager = new WeChatTransit;
 	manager->sendWeChatLoginReq();
