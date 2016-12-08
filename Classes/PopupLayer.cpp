@@ -930,7 +930,7 @@ void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 			checkBox3->setSelectedState(false);
 			break;
 		case TAG_CHECKBOX_MUSIC:
-			SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3");
+			SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
 			break;
 		case TAG_CHECKBOX_MUSICE:
 			break;
@@ -951,7 +951,7 @@ void PopupLayer::selectedEvent(Object* pSender, CheckBoxEventType type)
 			checkBox3->setSelectedState(true);
 			break;
 		case TAG_CHECKBOX_MUSIC:
-			SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("background.mp3");
 			break;
 		case TAG_CHECKBOX_MUSICE:
 			break;
