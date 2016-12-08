@@ -855,6 +855,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				S_ReadyPlayReq req;
 				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
 				//suanNiuBg_sprite->setVisible(true);
+
+				m_pSiteManager->showChatMessage(m_playerID,"!!!!!!!!");
                 break;
             }
 			case TAG_INVITE_BTN:

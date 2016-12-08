@@ -36,7 +36,8 @@ public:
 	bool showReady(unsigned long long playerID, bool isShow = true);
 	//当前入座玩家数量
 	int currentPlayerCount() const;
-
+	//显示聊天信息
+	void showChatMessage(unsigned long long playerID, string strMessage, float timeThreshold = 3.0f);
 
 private:
 	//玩家和头像位置信息

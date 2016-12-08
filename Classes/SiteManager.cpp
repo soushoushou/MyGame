@@ -1,4 +1,5 @@
 #include "SiteManager.h"
+#include "ChatBuble.h"
 
 
 SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) 
@@ -69,6 +70,20 @@ SiteManager::~SiteManager()
 		}
 	}
 	m_lock.unlock();
+}
+
+void SiteManager::showChatMessage(unsigned long long playerID, string strMessage, float timeThreshold /*= 3.0f*/)
+{
+	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
+	{
+		if (m_inRoomPlayerID[i] == playerID)
+		{
+			ChatBuble* t = ChatBuble::create(strMessage);
+			m_pParent->addChild(t);
+			t->setPosition(m_playerProfileInfo[i].playerPos.x, m_playerProfileInfo[i].playerPos.y);
+			break;
+		}
+	}
 }
 
 //返回当前入座人数
