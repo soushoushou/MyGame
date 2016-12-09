@@ -50,6 +50,8 @@ public:
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
+	SiteManager* getSiteManager() const;
+	unsigned long long getPlayerID() const;
 private:
 	bool initBackground();
 	bool initButtons();

@@ -1,4 +1,5 @@
 #include "ChatLayer.h"
+#include "GamePlayScene.h"
 
 using namespace ui;
 
@@ -198,7 +199,10 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		case TAG_SEND_BTN:
 		{
 			log("send chat");
-			
+			EditBox* e = dynamic_cast<EditBox*>(getChildByTag(101));
+			SiteManager* p = dynamic_cast<GamePlayScene*>(getParent())->getSiteManager();
+			p->showChatMessage(dynamic_cast<GamePlayScene*>(getParent())->getPlayerID(), e->getText());
+			this->removeFromParent();
 			break;
 		}
 		case TAG_CLOSE_BTN:

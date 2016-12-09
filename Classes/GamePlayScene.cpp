@@ -81,9 +81,7 @@ m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID)
 }
 
 GamePlayScene::~GamePlayScene(){
-	DebugSimpleServer::getInstance()->quitRoom("alw");
 	CC_SAFE_RELEASE(m_btnSetting);
-	
 }
 
 GamePlayScene* GamePlayScene::create(unsigned long long playerID,int roomID)
@@ -368,6 +366,7 @@ void GamePlayScene::update(float delta)
 		//if (rand() % 100 < 50 && flag && m_testID.size() < 5)
 		//{
 		//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+		//	m_pSiteManager->showChatMessage(ccc, "asdasdfasdffaawwsw");
 		//	if (m_pSiteManager->currentPlayerCount() == 5)
 		//	{
 		//		m_inviteBtn->setVisible(false);
@@ -855,8 +854,6 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				S_ReadyPlayReq req;
 				NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
 				//suanNiuBg_sprite->setVisible(true);
-
-				m_pSiteManager->showChatMessage(m_playerID,"!!!!!!!!");
                 break;
             }
 			case TAG_INVITE_BTN:
@@ -1045,6 +1042,16 @@ void GamePlayScene::menuCloseCallback(Ref* pSender)
 	exit(0);
 #endif
 
+}
+
+unsigned long long GamePlayScene::getPlayerID() const
+{
+	return m_playerID;
+}
+
+SiteManager* GamePlayScene::getSiteManager() const
+{
+	return m_pSiteManager;
 }
 
 int GamePlayScene::countNiu(vector<int> vecPorkerIndex) {

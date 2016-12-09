@@ -4,6 +4,7 @@
 #include "ui/UIEditBox/UIEditBox.h"
 #include "ui/CocosGUI.h"
 #include "SimpleAudioEngine.h"
+#include "SiteManager.h"
 
 using namespace CocosDenshion;
 

@@ -46,6 +46,7 @@ private:
 		Point playerPos;
 		Point profilePos;
 		Point niuPos;
+		Point bubblePos;
 		int profileType;		//0为水平，1为垂直
 	};
 
