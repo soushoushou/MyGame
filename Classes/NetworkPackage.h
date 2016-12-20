@@ -62,43 +62,48 @@ using namespace std;
 #define PP_ZZ_DOUNIU_GET_FOLEINFO_ACK	(10003)
 #define PP_ZZ_DOUNIU_ROLE_LOGIN_REQ	(10004)
 #define PP_ZZ_DOUNIU_ROLE_LOGIN_ACK	(10005)
-#define PP_ZZ_DOUNIU_CREATE_ROOM_REQ	(50000)
-#define PP_ZZ_DOUNIU_CREATE_ROOM_ACK	(50001)
-#define PP_ZZ_DOUNIU_JOIN_ROOM_REQ		(50002)
-#define PP_ZZ_DOUNIU_JOIN_ROOM_ACK		(50003)
-#define PP_ZZ_DOUNIU_QUERY_ZHANJI_REQ	(50004)
-#define PP_ZZ_DOUNIU_QUERY_ZHANJI_ACK	(50005)
-#define PP_ZZ_DOUNIU_QUIT_ROOM_REQ		(50006)
-#define PP_ZZ_DOUNIU_QUIT_ROOM_ACK		(50007)
-#define PP_ZZ_DOUNIU_READY_REQ			(50008)
-#define PP_ZZ_DOUNIU_READY_ACK			(50009)
-#define PP_ZZ_DOUNIU_FAPAI_REQ			(50010)
-#define PP_ZZ_DOUNIU_FAPAI_ACK			(50011)
-#define PP_ZZ_DOUNIU_TANPAI_REQ		(50012)
-#define PP_ZZ_DOUNIU_TANPAI_ACK		(50013)
-#define PP_ZZ_DOUNIU_WECHAT_ORDER_REQ		(50014)
-#define PP_ZZ_DOUNIU_WECHAT_ORDER_ACK		(50015)
-#define PP_ZZ_DOUNIU_QIANGZHUANG_REQ	(50016)
-#define PP_ZZ_DOUNIU_QIANGZHUANG_ACK	(50017)
-#define PP_ZZ_DOUNIU_YAZHU_REQ			(50018)
-#define PP_ZZ_DOUNIU_YAZHU_ACK			(50019)
-#define PP_ZZ_DOUNIU_QUICK_CHAT_REQ	(50020)
-#define PP_ZZ_DOUNIU_QUICK_CHAT_ACK	(50021)
-#define PP_ZZ_DOUNIU_VOICE_CHAT_REQ	(50022)
-#define PP_ZZ_DOUNIU_VOICE_CHAT_ACK	(50023)
-#define PP_ZZ_DOUNIU_MEMBER_INFO_NOTIFY	(50024)	
-#define PP_ZZ_DOUNIU_GAME_START_ACK	(50025)
-#define PP_ZZ_DOUNIU_GAME_OVER_ACK		(50026)
-#define PP_ZZ_DOUNIU_INVITE_CODE_REQ		(50027)
-#define PP_ZZ_DOUNIU_INVITE_CODE_ACK		(50028)
-#define PP_ZZ_DOUNIU_NOTICE_INFO_NOTIFY		(50029)
-#define PP_ZZ_DOUNIU_SHARE_INFO_NOTIFY		(50030)
-#define PP_ZZ_DOUNIU_ORDER_RESULT_REQ		(50031)
-#define PP_ZZ_DOUNIU_ORDER_RESULT_ACK		(50032)
-#define PP_ZZ_DOUNIU_TEXT_CHAT_REQ		(50033)
-#define PP_ZZ_DOUNIU_TEXT_CHAT_ACK		(50034)
-#define PP_ZZ_DOUNIU_KEEP_ALIVE_REQ		(50035)
-#define PP_ZZ_DOUNIU_KEEP_ALIVE_ACK		(50036)
+#define PP_ZZ_DOUNIU_RECONNECT_REQ	(10005)
+#define PP_ZZ_DOUNIU_CREATE_ROOM_REQ	(20000)
+#define PP_ZZ_DOUNIU_CREATE_ROOM_ACK	(20001)
+#define PP_ZZ_DOUNIU_JOIN_ROOM_REQ		(20002)
+#define PP_ZZ_DOUNIU_JOIN_ROOM_ACK		(20003)
+#define PP_ZZ_DOUNIU_QUERY_ZHANJI_REQ	(20004)
+#define PP_ZZ_DOUNIU_QUERY_ZHANJI_ACK	(20005)
+#define PP_ZZ_DOUNIU_QUIT_ROOM_REQ		(20006)
+#define PP_ZZ_DOUNIU_QUIT_ROOM_ACK		(20007)
+#define PP_ZZ_DOUNIU_READY_REQ			(20008)
+#define PP_ZZ_DOUNIU_READY_ACK			(20009)
+#define PP_ZZ_DOUNIU_FAPAI_REQ			(20010)
+#define PP_ZZ_DOUNIU_FAPAI_ACK			(20011)
+#define PP_ZZ_DOUNIU_TANPAI_REQ		(20012)
+#define PP_ZZ_DOUNIU_TANPAI_ACK		(20013)
+#define PP_ZZ_DOUNIU_WECHAT_ORDER_REQ		(20014)
+#define PP_ZZ_DOUNIU_WECHAT_ORDER_ACK		(20015)
+#define PP_ZZ_DOUNIU_QIANGZHUANG_REQ	(20016)
+#define PP_ZZ_DOUNIU_QIANGZHUANG_ACK	(20017)
+#define PP_ZZ_DOUNIU_YAZHU_REQ			(20018)
+#define PP_ZZ_DOUNIU_YAZHU_ACK			(20019)
+#define PP_ZZ_DOUNIU_QUICK_CHAT_REQ	(20020)
+#define PP_ZZ_DOUNIU_QUICK_CHAT_ACK	(20021)
+#define PP_ZZ_DOUNIU_VOICE_CHAT_REQ	(20022)
+#define PP_ZZ_DOUNIU_VOICE_CHAT_ACK	(20023)
+#define PP_ZZ_DOUNIU_MEMBER_INFO_NOTIFY	(20024)	
+#define PP_ZZ_DOUNIU_GAME_START_ACK	(20025)
+#define PP_ZZ_DOUNIU_GAME_OVER_ACK		(20026)
+#define PP_ZZ_DOUNIU_INVITE_CODE_REQ		(20027)
+#define PP_ZZ_DOUNIU_INVITE_CODE_ACK		(20028)
+#define PP_ZZ_DOUNIU_NOTICE_INFO_NOTIFY		(20029)
+#define PP_ZZ_DOUNIU_SHARE_INFO_NOTIFY		(20030)
+#define PP_ZZ_DOUNIU_BUYDIAMOND_QUERY_REQ	(20031)
+#define PP_ZZ_DOUNIU_BUYDIAMOND_QUERY_ACK	(20032)
+#define PP_ZZ_DOUNIU_ORDER_RESULT_REQ		(20031)
+#define PP_ZZ_DOUNIU_ORDER_RESULT_ACK		(20032)
+#define PP_ZZ_DOUNIU_TEXT_CHAT_REQ		(20033)
+#define PP_ZZ_DOUNIU_TEXT_CHAT_ACK		(20034)
+#define PP_ZZ_DOUNIU_KEEP_ALIVE_REQ		(20035)
+#define PP_ZZ_DOUNIU_KEEP_ALIVE_ACK		(20036)
+#define PP_ZZ_DOUNIU_CHECK_UPDATE_REQ	(20037)
+#define PP_ZZ_DOUNIU_CHECK_UPDATE_ACK	(20038)
 
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
@@ -1133,24 +1138,23 @@ struct S_GameOverACK
 //微信登录请求
 struct S_ZZ_WechatLoginReq
 {
-	S_ZZ_WechatLoginReq(string wechatCode, int checkTime, int checkNum) :m_cmd(PP_ZZ_DOUNIU_WECHAT_LOGIN_REQ),
-		m_wechatCode(wechatCode), m_checkTime(checkTime), m_checkNum(checkNum)
+	S_ZZ_WechatLoginReq(string wechatCode, int statusCode) :m_cmd(PP_ZZ_DOUNIU_WECHAT_LOGIN_REQ),
+		m_wechatCode(wechatCode), m_statusCode(statusCode)
 	{
 		m_strCodeLen = m_wechatCode.length() + 1;
-		m_packageLen = 16 + m_strCodeLen;
+		m_packageLen = 12 + m_strCodeLen;
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_checkTime = htonl(checkTime);
-		m_checkNum = htonl(checkNum);
+		m_statusCode = htonl(m_statusCode);
 		m_strCodeLen = htons(m_strCodeLen);
 	}
 	int m_packageLen;
 	short m_cmd;
 	short m_strCodeLen;
 	string m_wechatCode;
-	int m_checkTime;
-	int m_checkNum;
+	int m_statusCode;		//0:未登录，1:已登录，2:已进入房间
 };
+
 //鑾峰彇鐧诲綍鍝嶅簲
 struct S_ZZ_WechatLoginACK
 {
@@ -1188,9 +1192,6 @@ struct S_ZZ_WechatLoginACK
 		memcpy(buf2, pData, s.m_playerNameLen);
 		s.m_strProfile = buf2;
 		pData += s.m_profileLen;
-		memcpy(&s.m_sex, pData, 4);
-		s.m_sex = ntohl(s.m_sex);
-		pData += 4;
 		return s;
 	}
 	unsigned int m_packageLen;
@@ -1201,7 +1202,6 @@ struct S_ZZ_WechatLoginACK
 	string m_strPlayerName;
 	short m_profileLen;
 	string m_strProfile;
-	int m_sex;
 };
 //鑾峰彇瑙掕壊淇℃伅璇锋眰
 struct S_ZZ_GetPlayerInfoReq
@@ -1244,14 +1244,8 @@ struct S_ZZ_GetPlayerInfoACK
 		memcpy(buf, pData, s.m_playerNameLen);
 		s.m_strPlayerName = buf;
 		pData += s.m_playerNameLen;
-		memcpy(&s.m_sex, pData, 4);
-		s.m_sex = ntohl(s.m_sex);
-		pData += 4;
 		memcpy(&s.m_currentDiamond, pData, 4);
 		s.m_currentDiamond = ntohl(s.m_currentDiamond);
-		pData += 4;
-		memcpy(&s.m_currentMoney, pData, 4);
-		s.m_currentMoney = ntohl(s.m_currentMoney);
 		return s;
 	}
 	int m_packageLen;
@@ -1259,29 +1253,27 @@ struct S_ZZ_GetPlayerInfoACK
 	int m_playerID;
 	int m_playerNameLen;
 	string m_strPlayerName;
-	int m_sex;
 	int m_currentDiamond;
-	int m_currentMoney;
 };
 
 //角色登录请求
 struct S_ZZ_RoleLoginReq
 {
-	S_ZZ_RoleLoginReq(int playerID, int checkTime, int checkNum) :m_cmd(PP_ZZ_DOUNIU_ROLE_LOGIN_REQ),
-		m_playerID(playerID), m_checkTime(checkTime), m_checkNum(checkNum)
+	S_ZZ_RoleLoginReq(int playerID, int statusCode,int platformTpye) :m_cmd(PP_ZZ_DOUNIU_ROLE_LOGIN_REQ),
+		m_playerID(playerID), m_platformTpye(platformTpye)
 	{
 		m_packageLen = 18;
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_checkTime = htonl(checkTime);
-		m_checkNum = htonl(checkNum);
+		m_statusCode = htonl(statusCode);
+		m_platformTpye = htonl(m_platformTpye);
 		m_playerID = htonl(m_playerID);
 	}
 	int m_packageLen;
 	short m_cmd;
 	int m_playerID;
-	int m_checkTime;
-	int m_checkNum;
+	int m_statusCode;		//0:未登录，1:已登录，2:已进入房间
+	int m_platformTpye;		//0:wine2,1:andorid,2:ios
 };
 
 //角色登录ack
@@ -1309,23 +1301,48 @@ struct S_ZZ_RoleLoginACK
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_statusCode;
+	int m_statusCode;				//0:成功，1：无账号，2：验证超时
 	int m_playerID;
+};
+
+
+//角色登录请求
+struct S_ZZ_ReconnectReq
+{
+	S_ZZ_ReconnectReq(int playerID, int statusCode, int roomID) :m_cmd(PP_ZZ_DOUNIU_RECONNECT_REQ),
+		m_playerID(playerID), m_roomID(roomID)
+	{
+		m_packageLen = 18;
+		m_packageLen = htonl(m_packageLen);
+		m_cmd = htons(m_cmd);
+		m_statusCode = htonl(statusCode);
+		m_roomID = htonl(roomID);
+		m_playerID = htonl(m_playerID);
+	}
+	int m_packageLen;
+	short m_cmd;
+	int m_playerID;
+	int m_statusCode;		//0:未登录，1:已登录，2:已进入房间
+	int m_roomID;		
 };
 
 //鍒涘缓鎴块棿璇锋眰
 struct S_ZZ_CreateRoomReq
 {
-	S_ZZ_CreateRoomReq(int playerID) :m_cmd(PP_ZZ_DOUNIU_CREATE_ROOM_REQ), m_packageLen(10)
+	S_ZZ_CreateRoomReq(int playerID,int mode,int round) :m_cmd(PP_ZZ_DOUNIU_CREATE_ROOM_REQ), m_packageLen(18)
 		, m_playerID(playerID)
 	{
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_playerID = my_htonll(m_playerID);
+		m_playerID = htonl(m_playerID);
+		m_mode = htonl(mode);
+		m_round = htonl(round);
 	}
 	int m_packageLen;
 	short m_cmd;
 	int m_playerID;
+	int m_mode;				//抢庒，轮庒
+	int m_round;			//局数
 };
 
 //鍒涘缓鎴块棿鍝嶅簲
@@ -1371,8 +1388,8 @@ struct S_ZZ_JoinRoomReq
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_roomID;
 	int m_playerID;
+	int m_roomID;
 };
 
 //鍔犲叆鎴块棿鍝嶅簲
@@ -1619,10 +1636,10 @@ struct S_ZZ_FaPaiACK
 	vector<int> m_pokers;
 };
 
-//鎽婄墝璇锋眰
-struct S_ZZ_TanPaiReq
+//算牛摊牌请求，在抢庒和押注之后，只算改玩家的牛和摊该玩家的牌
+struct S_ZZ_SuanNiuTanPaiReq
 {
-	S_ZZ_TanPaiReq(unsigned long long playerID) :m_cmd(PP_ZZ_DOUNIU_TANPAI_REQ), m_packageLen(10),
+	S_ZZ_SuanNiuTanPaiReq(unsigned long long playerID) :m_cmd(PP_ZZ_DOUNIU_TANPAI_REQ), m_packageLen(10),
 		m_playerID(playerID)
 	{
 		m_packageLen = htonl(m_packageLen);
@@ -1634,15 +1651,16 @@ struct S_ZZ_TanPaiReq
 	int  m_playerID;
 };
 
-//鎽婄墝鍝嶅簲
-struct S_ZZ_TanPaiACK
+//服务端把响应发送给所有玩家，客户端收到后摊开该玩家的牌，并提示牛型。
+//全部算牛完毕时，该局结束，给出单局积分统计结果
+struct S_ZZ_SuanNiuTanPaiACK
 {
-	S_ZZ_TanPaiACK() :m_cmd(0){}
+	S_ZZ_SuanNiuTanPaiACK() :m_cmd(0){}
 
-	static S_ZZ_TanPaiACK convertDataFromBinaryData(void* binaryData)
+	static S_ZZ_SuanNiuTanPaiACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
-		S_ZZ_TanPaiACK s;
+		S_ZZ_SuanNiuTanPaiACK s;
 
 		memcpy(&s.m_packageLen, pData, 4);
 		s.m_packageLen = ntohl(s.m_packageLen);
@@ -1654,29 +1672,25 @@ struct S_ZZ_TanPaiACK
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
-		int nPlayers = (s.m_packageLen - 10) / 16;
-		for (int i = 0; i < nPlayers; ++i)
-		{
-			unsigned long long playerID = 0;
-			memcpy(&playerID, pData, 4);
-			playerID = ntohl(playerID);
-			s.m_playerID.push_back(playerID);
-			pData += 4;
-			int winOrLose = 0;
-			memcpy(&winOrLose, pData, 4);
-			pData += 4;
-			winOrLose = ntohl(winOrLose);
-			s.m_winOrLose.push_back(winOrLose);
-			int score = 0;
-			memcpy(&score, pData, 4);
-			pData += 4;
-			score = ntohl(score);
-			s.m_score.push_back(score);
-			int niu = 0;
-			memcpy(&niu, pData, 4);
-			niu = ntohl(niu);
-			s.m_niuIndex.push_back(niu);
-		}
+		int playerID = 0;
+		memcpy(&playerID, pData, 4);
+		playerID = ntohl(playerID);
+		s.m_playerID = playerID;
+		pData += 4;
+		int winOrLose = 0;
+		memcpy(&winOrLose, pData, 4);
+		pData += 4;
+		winOrLose = ntohl(winOrLose);
+		s.m_winOrLose=winOrLose;
+		int score = 0;
+		memcpy(&score, pData, 4);
+		pData += 4;
+		score = ntohl(score);
+		s.m_score = score;
+		int niu = 0;
+		memcpy(&niu, pData, 4);
+		niu = ntohl(niu);
+		s.m_niuIndex = niu;
 
 		return s;
 	}
@@ -1684,33 +1698,31 @@ struct S_ZZ_TanPaiACK
 	int m_packageLen;
 	short m_cmd;
 	int m_statusCode;				//0成功1失败
-	vector<int> m_playerID;
-	vector<int> m_winOrLose;
-	vector<int> m_score;
-	vector<int> m_niuIndex;
+	int m_playerID;
+	int m_winOrLose;				//0胜1负
+	int m_score;
+	int m_niuIndex;
 };
 
 //鍐查捇鐭宠姹?
 struct S_ZZ_WechatOrderReq
 {
-	S_ZZ_WechatOrderReq(int diamondNum, int coinNum) :m_cmd(PP_ZZ_DOUNIU_WECHAT_ORDER_REQ), m_packageLen(14), m_diamondNum(diamondNum), m_coinNum(coinNum)
+	S_ZZ_WechatOrderReq(int playerID, int diamondNum) :m_cmd(PP_ZZ_DOUNIU_WECHAT_ORDER_REQ), m_packageLen(14), m_diamondNum(diamondNum)
 	{
 		m_diamondNum = htonl(m_diamondNum);
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_coinNum = htonl(m_coinNum);
-
 	}
 	int m_packageLen;
 	short m_cmd;
+	int m_playerID;
 	int m_diamondNum;
-	int m_coinNum;
 };
 
 //鍐查捇鐭冲搷搴?
 struct S_ZZ_WechatOrderACK
 {
-	S_ZZ_WechatOrderACK() :m_cmd(0),m_shanhuLen(0),m_yuZhiFuIDLen(0),m_signLen(0){}
+	S_ZZ_WechatOrderACK() :m_cmd(0),m_shanhuLen(0),m_yuZhiFuIDLen(0){}
 
 	static S_ZZ_WechatOrderACK convertDataFromBinaryData(void* binaryData)
 	{
@@ -1723,9 +1735,6 @@ struct S_ZZ_WechatOrderACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl(s.m_playerID);
-		pData += 4;
 		memcpy(&s.m_shanhuLen, pData, 2);
 		s.m_shanhuLen = ntohs(s.m_shanhuLen);
 		pData += 2;
@@ -1733,13 +1742,6 @@ struct S_ZZ_WechatOrderACK
 		memcpy(buf, pData, s.m_shanhuLen);
 		s.m_strShanhu = buf;
 		pData += s.m_shanhuLen;
-		memcpy(&s.m_signLen, pData, 2);
-		s.m_signLen = ntohs(s.m_signLen);
-		pData += 2;
-		char buf1[65535] = { 0 };
-		memcpy(buf1, pData, s.m_signLen);
-		s.m_strSign = buf1;
-		pData += s.m_signLen;
 		memcpy(&s.m_yuZhiFuIDLen, pData, 2);
 		s.m_yuZhiFuIDLen = ntohs(s.m_yuZhiFuIDLen);
 		pData += 2;
@@ -1752,28 +1754,27 @@ struct S_ZZ_WechatOrderACK
 
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
 	short m_shanhuLen;					
 	string m_strShanhu;			//商户名
-	short m_signLen;
-	string m_strSign;			//签名
 	short m_yuZhiFuIDLen;
 	string m_strYuZhiFuID;		//预支付会话ID
 };
 
-//鎶㈠簰璇锋眰
+//抢庒请求，抢庒模式：1.不点抢庒，超时自动抢庒；2.只有一个抢庒则成为庄家；3.都不抢庒或者超过两个玩家抢庒则随机分配庄家
 struct S_ZZ_QiangZhuangReq
 {
-	S_ZZ_QiangZhuangReq(int playerID) :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ), m_packageLen(10),
+	S_ZZ_QiangZhuangReq(int playerID,int isQiang) :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ), m_packageLen(14),
 		m_playerID(playerID)
 	{
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_playerID = htonl(m_playerID);
+		m_isQiang = htonl(isQiang);
 	}
 	int m_packageLen;
 	short m_cmd;
 	int m_playerID;
+	int m_isQiang;   //0抢1不抢
 };
 
 //鎶㈠簰鍝嶅簲
@@ -1810,7 +1811,7 @@ struct S_ZZ_QiangZhuangACK
 	int m_ZhuangJiaID;
 };
 
-//鎶兼敞璇锋眰
+//押注请求，庄家确定后，不是庄家的给出押注界面
 struct S_ZZ_YaZhuReq
 {
 	S_ZZ_YaZhuReq(int playerID,int beishu) :m_cmd(PP_ZZ_DOUNIU_YAZHU_REQ), m_packageLen(14){
@@ -1825,7 +1826,7 @@ struct S_ZZ_YaZhuReq
 	int m_beishu;
 };
 
-//鎶兼敞鍝嶅簲
+//押注成功后，显示玩家的最后一张牌
 struct S_ZZ_YaZhuACK
 {
 	S_ZZ_YaZhuACK() :m_cmd(0){}
@@ -1922,7 +1923,7 @@ struct S_ZZ_VoiceChatReq
 	short m_cmd;
 	int m_packageLen;
 	int m_playerID;
-	int m_voiceSize;			//语音二进制数据大小
+	int m_voiceSize;				//语音二进制数据大小
 	char* m_voiceBuf;				//语音缓冲
 };
 
@@ -2002,24 +2003,28 @@ struct S_ZZ_GetMemberInfoACK
 		memcpy(buf, pData, s.m_playerNameLen);
 		s.m_strPlayerName = buf;
 		pData += s.m_playerNameLen;
-		memcpy(&s.m_sex, pData, 4);
-		s.m_sex = ntohl(s.m_sex);
-		pData += 4;
+
+		memcpy(&s.m_headURLLen, pData, 2);
+		s.m_headURLLen = ntohs(s.m_headURLLen);
+		pData += 2;
+		char buf1[1024];
+		memcpy(buf1, pData, s.m_headURLLen);
+		s.m_strHeadURL = buf;
+		pData += s.m_headURLLen;
+
 		memcpy(&s.m_currentDiamond, pData, 4);
 		s.m_currentDiamond = ntohl(s.m_currentDiamond);
-		pData += 4;
-		memcpy(&s.m_currentMoney, pData, 4);
-		s.m_currentMoney = ntohl(s.m_currentMoney);
 		return s;
 	}
 	int m_packageLen;
 	short m_cmd;
 	int m_playerID;
+	int m_roleSiteIndex;			//没卵用
 	short m_playerNameLen;
 	string m_strPlayerName;
-	int m_sex;
+	short m_headURLLen;		
+	string m_strHeadURL;			//头像URL
 	int m_currentDiamond;
-	int m_currentMoney;
 };
 ////算牛
 //struct S_ZZ_SuanNiuReq
@@ -2083,13 +2088,20 @@ struct S_ZZ_GameStartACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl(s.m_playerID);
+		int numPlayer = (s.m_packageLen - 6) / 4;
+		for (int i = 0; i < numPlayer; ++i)
+		{
+			int playerID = 0;
+			memcpy(&playerID, pData, 4);
+			playerID = ntohl(playerID);
+			s.m_playerID.push_back(playerID);
+		}
+
 		return s;
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
+	vector<int> m_playerID;
 };
 
 struct S_ZZ_GameOverACK
@@ -2105,26 +2117,38 @@ struct S_ZZ_GameOverACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
+		int num = (s.m_packageLen - 6) / 16;
+		for (int i = 0; i < num; ++i)
+		{
+			int playerID = 0;
+			int winCount = 0;
+			int loseCount = 0;
+			int totalScore = 0;
+			memcpy(&playerID, pData, 4);
+			playerID = my_ntohll(playerID);
+			s.m_playerID.push_back(playerID);
+			pData += 4;
+			memcpy(&winCount, pData, 4);
+			winCount = ntohl(winCount);
+			s.m_winCount.push_back(winCount);
+			pData += 4;
+			memcpy(&loseCount, pData, 4);
+			loseCount = ntohl(loseCount);
+			s.m_loseCount.push_back(loseCount);
+			pData += 4;
+			memcpy(&totalScore, pData, 4);
+			totalScore = ntohl(totalScore);
+			s.m_totalScore.push_back(totalScore);
+		}
 
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = my_ntohll(s.m_playerID);
-		pData += 4;
-		memcpy(&s.m_winCount, pData, 4);
-		s.m_winCount = ntohl(s.m_winCount);
-		pData += 4;
-		memcpy(&s.m_loseCount, pData, 4);
-		s.m_loseCount = ntohl(s.m_loseCount);
-		pData += 4;
-		memcpy(&s.m_totalScore, pData, 4);
-		s.m_totalScore = ntohl(s.m_totalScore);
 		return s;
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
-	int m_winCount;					//胜利次数
-	int m_loseCount;				//失败次数
-	int m_totalScore;				//该局总积分
+	vector<int> m_playerID;
+	vector<int> m_winCount;					//胜利次数
+	vector<int> m_loseCount;				//失败次数
+	vector<int> m_totalScore;				//该局总积分
 
 };
 
@@ -2161,16 +2185,12 @@ struct S_ZZ_INVITE_ACK
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl(s.m_playerID);
-		pData += 4;
-
 		return s;
 	}
 	unsigned int m_packageLen;
 	unsigned short m_cmd;
 	int m_statusCode;
-	int m_playerID;
+
 
 
 };
@@ -2189,9 +2209,6 @@ struct S_ZZ_NoticeInfoACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = my_ntohll(s.m_playerID);
-		pData += 4;
 		memcpy(&s.m_noticeLen, pData, 2);
 		s.m_noticeLen = ntohs(s.m_noticeLen);
 		pData += 2;
@@ -2202,7 +2219,6 @@ struct S_ZZ_NoticeInfoACK
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
 	short m_noticeLen;
 	string m_strNotice;
 };
@@ -2221,9 +2237,6 @@ struct S_ZZ_ShareInfoACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl(s.m_playerID);
-		pData += 4;
 		memcpy(&s.m_shareURLLen, pData, 2);
 		s.m_shareURLLen = ntohs(s.m_shareURLLen);
 		pData += 2;
@@ -2247,7 +2260,6 @@ struct S_ZZ_ShareInfoACK
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
 	short m_shareURLLen;
 	string m_strURL;
 	short m_shareTitleLen;
@@ -2335,15 +2347,57 @@ struct S_ZZ_KeepaliveACK
 		memcpy(&s.m_cmd, pData, 2);
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
-		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = my_ntohll(s.m_playerID);
-		pData += 4;
 		return s;
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_playerID;
+};
 
+//检测更新请求
+struct S_ZZ_CheckUpdateREQ
+{
+	S_ZZ_CheckUpdateREQ(string version) :m_cmd(PP_ZZ_DOUNIU_CHECK_UPDATE_REQ),
+		m_strVersion(version)
+	{
+		m_packageLen = htonl(14);
+		m_cmd = htons(m_cmd);
+		m_versionLen = htons(version.length()+1);
+	}
+	int m_packageLen;
+	short m_cmd;
+	short m_versionLen;
+	string m_strVersion;
+};
+
+struct S_ZZ_CheckUpdateACK
+{
+	S_ZZ_CheckUpdateACK() :m_cmd(0){}
+	static S_ZZ_CheckUpdateACK convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_ZZ_CheckUpdateACK s;
+		memcpy(&s.m_packageLen, pData, 4);
+		s.m_packageLen = ntohl(s.m_packageLen);
+		pData += 4;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		memcpy(&s.m_statusCode, pData, 4);
+		s.m_statusCode = ntohl(s.m_statusCode);
+		pData += 4;
+		memcpy(&s.m_urlLen, pData, 2);
+		s.m_urlLen = ntohs(s.m_urlLen);
+		pData += 2;
+		char buf[65535] = { 0 };
+		memcpy(buf, pData, s.m_urlLen);
+		s.m_strURL = buf;
+		return s;
+	}
+	int m_packageLen;
+	short m_cmd;
+	int m_statusCode;			//0需要更新，1不需要更新
+	short m_urlLen;
+	string m_strURL;
 };
 
 #pragma pack(4)
