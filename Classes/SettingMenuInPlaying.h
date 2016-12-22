@@ -31,6 +31,6 @@ private:
 	Button* m_btnDestoryRoom;			//解散房间
 	Button* m_btnOptions;				//选项
 	Node* m_pParent;
-	unsigned long long m_playerID;
+	int m_playerID;
 };
 

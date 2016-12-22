@@ -1124,8 +1124,8 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			if (tag == TAG_JOINROOM_BTN) {
 				num = num01 + num02 + num03 + num04 + num05 + num06;
 				int roomid = atoi(num.c_str());
-				S_JoinRoomReq jr(roomid);
-				NetworkManger::getInstance()->SendRequest_JoinRoom(jr);
+				//S_ZZ_JoinRoomReq jr(roomid);
+				//NetworkManger::getInstance()->SendRequest(jr);
 			}
 			return;
 		}
@@ -1134,8 +1134,8 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			case TAG_CREATEROOM_BTN:
 			{
-				S_CreateRoomReq ss;
-				NetworkManger::getInstance()->SendRequest_CreateRoom(ss);
+				//S_CreateRoomReq ss;
+				//NetworkManger::getInstance()->SendRequest_CreateRoom(ss);
 
 				break;
 			}
@@ -1167,8 +1167,8 @@ void PopupLayer::buttonCallBack(Ref* pSender) {
 	{
 	case TAG_CREATEROOM_BTN:
 	{
-		S_CreateRoomReq cr;
-		NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
+		//S_CreateRoomReq cr;
+		//NetworkManger::getInstance()->SendRequest_CreateRoom(cr);
 		//Director::getInstance()->replaceScene(GamePlayScene::createScene(((MainScene*)this->getParent())->getPlayerID()));
 		break;
 	}

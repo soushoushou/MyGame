@@ -1686,7 +1686,7 @@ struct S_ZZ_SuanNiuTanPaiACK
 		memcpy(&score, pData, 4);
 		pData += 4;
 		score = ntohl(score);
-		s.m_score = score;
+		s.m_score = score; 
 		int niu = 0;
 		memcpy(&niu, pData, 4);
 		niu = ntohl(niu);
@@ -2153,9 +2153,9 @@ struct S_ZZ_GameOverACK
 };
 
 //邀请
-struct S_ZZ_INVITE_REQ
+struct S_ZZ_InviteReq
 {
-	S_ZZ_INVITE_REQ(int playerID, int inviteCode) :m_cmd(PP_ZZ_DOUNIU_INVITE_CODE_REQ),
+	S_ZZ_InviteReq(int playerID, int inviteCode) :m_cmd(PP_ZZ_DOUNIU_INVITE_CODE_REQ),
 		m_playerID(playerID), m_inviteCode(inviteCode)
 	{
 		m_packageLen = htonl(14);
@@ -2169,13 +2169,13 @@ struct S_ZZ_INVITE_REQ
 	int m_inviteCode;
 };
 
-struct S_ZZ_INVITE_ACK
+struct S_ZZ_InviteACK
 {
-	S_ZZ_INVITE_ACK() :m_cmd(0){}
-	static S_ZZ_INVITE_ACK convertDataFromBinaryData(void* binaryData)
+	S_ZZ_InviteACK() :m_cmd(0){}
+	static S_ZZ_InviteACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
-		S_ZZ_INVITE_ACK s;
+		S_ZZ_InviteACK s;
 		memcpy(&s.m_packageLen, pData, 4);
 		s.m_packageLen = ntohl(s.m_packageLen);
 		pData += 4;
@@ -2269,9 +2269,9 @@ struct S_ZZ_ShareInfoACK
 };
 
 //输入文本聊天请求
-struct S_ZZ_TEXT_CHAT_REQ
+struct S_ZZ_TextChatReq
 {
-	S_ZZ_TEXT_CHAT_REQ(int playerID, string text) :m_cmd(PP_ZZ_DOUNIU_TEXT_CHAT_REQ),
+	S_ZZ_TextChatReq(int playerID, string text) :m_cmd(PP_ZZ_DOUNIU_TEXT_CHAT_REQ),
 		m_playerID(playerID), m_strText(text)
 	{
 		m_textLen = htons(m_strText.length() + 1);
@@ -2286,13 +2286,13 @@ struct S_ZZ_TEXT_CHAT_REQ
 	string m_strText;
 };
 
-struct S_ZZ_TEXT_CHAT_ACK
+struct S_ZZ_TextChatACK
 {
-	S_ZZ_TEXT_CHAT_ACK() :m_cmd(0){}
-	static S_ZZ_TEXT_CHAT_ACK convertDataFromBinaryData(void* binaryData)
+	S_ZZ_TextChatACK() :m_cmd(0){}
+	static S_ZZ_TextChatACK convertDataFromBinaryData(void* binaryData)
 	{
 		char* pData = (char*)binaryData;
-		S_ZZ_TEXT_CHAT_ACK s;
+		S_ZZ_TextChatACK s;
 		memcpy(&s.m_packageLen, pData, 4);
 		s.m_packageLen = ntohl(s.m_packageLen);
 		pData += 4;
@@ -2320,9 +2320,9 @@ struct S_ZZ_TEXT_CHAT_ACK
 
 
 //心跳请求
-struct S_ZZ_KeepaliveREQ
+struct S_ZZ_KeepaliveReq
 {
-	S_ZZ_KeepaliveREQ(int playerID) :m_cmd(PP_ZZ_DOUNIU_KEEP_ALIVE_REQ),
+	S_ZZ_KeepaliveReq(int playerID) :m_cmd(PP_ZZ_DOUNIU_KEEP_ALIVE_REQ),
 		m_playerID(playerID)
 	{
 		m_packageLen = htonl(14);
@@ -2354,9 +2354,9 @@ struct S_ZZ_KeepaliveACK
 };
 
 //检测更新请求
-struct S_ZZ_CheckUpdateREQ
+struct S_ZZ_CheckUpdateReq
 {
-	S_ZZ_CheckUpdateREQ(string version) :m_cmd(PP_ZZ_DOUNIU_CHECK_UPDATE_REQ),
+	S_ZZ_CheckUpdateReq(string version) :m_cmd(PP_ZZ_DOUNIU_CHECK_UPDATE_REQ),
 		m_strVersion(version)
 	{
 		m_packageLen = htonl(14);

@@ -39,6 +39,7 @@ const int g_nServerPort = 333/*9999*/;
 const string g_mdzzStrServerName = "huanan01.csbhnt.cn";
 const int g_mdzzServerPort = 9998;
 
+
 #define _MAX_MSGSIZE (1000 * 1024)		// 暂定一个消息最大为1000k
 #define BLOCKSECONDS	30			// 读取函数阻塞时间
 #define INBUFSIZE	(1000*1024)		//	具体尺寸根据剖面报告调整  接收数据的缓存
@@ -67,7 +68,6 @@ private:
 	int	recvFromSock(void);		// 从网络中读取尽可能多的数据
 	bool    hasError();			// 是否发生错误，注意，异步模式未完成非错误
 	void    closeSocket();
-
 	SOCKET	m_sockClient;
 
 	// 发送数据缓冲
@@ -81,4 +81,5 @@ private:
 	CTCPRequest* m_pRequest;
 	mutex m_requestMutex;
 	bool m_flag;
+	float m_fTimeEscaped;							//计时
 };

@@ -7,6 +7,8 @@
 USING_NS_CC;
 using namespace std;
 
+const int g_popRadio = 45;				//心跳频率
+
 //网络通信类
 class NetworkManger
 {
@@ -19,21 +21,29 @@ public:
 	void startNetwork();
 
 	//发送各种请求，取消回调，因为子线程无法绘制UI
-	bool SendRequest_Login(const S_LoginReq& requestData);
-	bool SendRequest_CreateUser(const S_CreatePlayerReq& requestData);
-	bool SendRequest_GetPlayerInfo(const S_GetPlayerInfoReq& requestData);
-	bool SendRequest_CreateRoom(const S_CreateRoomReq& requestData);
-	bool SendRequest_JoinRoom(const S_JoinRoomReq& requestData);
-	bool SendRequest_SearchZhanji(const S_SearchZhanjiReq& requestData);
-	bool SendRequest_QuitRoom(const S_QuitRoomReq& requestData);
-	bool SendRequest_ReadyPlay(const S_ReadyPlayReq& requestData);
-	bool SendRequest_FaPai(const S_FaPaiReq& requestData);
-	bool SendRequest_TanPai(const S_TanPaiReq& requestData);
-	bool SendRequest_SuanNiu(const S_SuanNiuReq& requestData);
-	bool SendRequest_BuyDiamond(const S_BuyDiamondReq& requestData);
-	bool SendRequest_QiangZhuang(const S_QiangZhuangReq& requestData);
-	bool SendRequest_YaZhu(const S_YaZhuReq& requestData);
-	bool SendRequest_VoiceChat(const S_VoiceChatReq& requestData);
+	bool SendRequest(const S_ZZ_WechatLoginReq& requestData);
+	bool SendRequest(const S_ZZ_RoleLoginReq& requestData);
+	bool SendRequest(const S_ZZ_ReconnectReq& requestData);
+	//bool SendRequest(const S_ZZ_CreatePlayerReq& requestData);
+	bool SendRequest(const S_ZZ_GetPlayerInfoReq& requestData);
+	bool SendRequest(const S_ZZ_CreateRoomReq& requestData);
+	bool SendRequest(const S_ZZ_JoinRoomReq& requestData);
+	bool SendRequest(const S_ZZ_SearchZhanjiReq& requestData);
+	bool SendRequest(const S_ZZ_QuitRoomReq& requestData);
+	bool SendRequest(const S_ZZ_ReadyPlayReq& requestData);
+	bool SendRequest(const S_ZZ_FaPaiReq& requestData);
+	bool SendRequest(const S_ZZ_SuanNiuTanPaiReq& requestData);
+	bool SendRequest(const S_ZZ_QuickChatReq& requestData);
+	//bool SendRequest(const S_ZZ_SuanNiuReq& requestData);
+	bool SendRequest(const S_ZZ_WechatOrderReq& requestData);
+	bool SendRequest(const S_ZZ_QiangZhuangReq& requestData);
+	bool SendRequest(const S_ZZ_YaZhuReq& requestData);
+	bool SendRequest(const S_ZZ_VoiceChatReq& requestData);
+	bool SendRequest(const S_ZZ_InviteReq& requestData);
+	bool SendRequest(const S_ZZ_TextChatReq& requestData);
+	bool SendRequest(const S_ZZ_KeepaliveReq& requestData);
+	bool SendRequest(const S_ZZ_CheckUpdateReq& requestData);
+
 	//消息队列相关
 	bool ackQueueIsEmpty();						//消息队列是否为空
 	void pushACKQueue(void* data, int size);	//入队
@@ -42,7 +52,7 @@ public:
 	void* getQueueFrontACKBinaryData();			//获得对头结点的二进制数据
 private:
 	NetworkManger();
-	bool SendRequest(void* requestData, int size/*, const TCPResponseCallback& responseCallback*/);
+	bool _SendRequest(void* requestData, int size);
 private:
 	//ACK响应的消息队列
 	class CACKResponseQueue
@@ -60,7 +70,6 @@ private:
 	CACKResponseQueue m_ackQueue;			//ack消息队列，用于主线程获得ack响应消息后进行渲染
 	static NetworkManger* m_pInstance;
 	CTCPClient* m_tcpClient;
-	
 
 };
 

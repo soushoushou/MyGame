@@ -615,8 +615,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			auto s_buyDiamond01LabValue = s_buyDiamond01Lab->getString().c_str();		
 			CCLOG("diamond01Value=%s", diamond01Value);	
 			CCLOG("s_buyDiamond01LabValue=%s", s_buyDiamond01LabValue);
-			S_BuyDiamondReq s(0,60);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 60);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_DIAMOND02_BIN:
@@ -624,8 +624,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND2");
 			auto diamond02Value = m_lblDiamond02->getString().c_str();
 			CCLOG("offset=%s", diamond02Value);
-			S_BuyDiamondReq s(0,390);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 390);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_DIAMOND03_BIN:
@@ -633,8 +633,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND3");
 			auto diamond03Value = m_lblDiamond03->getString().c_str();
 			CCLOG("offset=%s", diamond03Value);
-			S_BuyDiamondReq s(0,800);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 800);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_DIAMOND04_BIN:
@@ -642,8 +642,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND4");
 			auto diamond04Value = m_lblDiamond04->getString().c_str();
 			CCLOG("offset=%s", diamond04Value);
-			S_BuyDiamondReq s(0,1500);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 1500);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_DIAMOND05_BIN:
@@ -651,8 +651,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND5");
 			auto diamond05Value = m_lblDiamond05->getString().c_str();
 			CCLOG("offset=%s", diamond05Value);
-			S_BuyDiamondReq s(0,3000);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 3000);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
 		}
@@ -661,8 +661,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND6");
 			auto diamond06Value = m_lblDiamond06->getString().c_str();
 			CCLOG("offset=%s", diamond06Value);
-			S_BuyDiamondReq s(0,9680);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(0, 9680);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
 		}
@@ -671,8 +671,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN1");
 			auto coin01Value = m_lblCoin01->getString().c_str();
 			CCLOG("offset=%s", coin01Value);
-			S_BuyDiamondReq s(1, 50);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 50);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_COIN02_BIN:
@@ -680,8 +680,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN2");
 			auto coin02Value = m_lblCoin02->getString().c_str();
 			CCLOG("offset=%s", coin02Value);
-			S_BuyDiamondReq s(1, 100);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 100);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_COIN03_BIN:
@@ -689,8 +689,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN3");
 			auto coin03Value = m_lblCoin03->getString().c_str();
 			CCLOG("offset=%s", coin03Value);
-			S_BuyDiamondReq s(1, 500);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 500);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_COIN04_BIN:
@@ -698,8 +698,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN4");
 			auto coin04Value = m_lblCoin04->getString().c_str();
 			CCLOG("offset=%s", coin04Value);
-			S_BuyDiamondReq s(1, 1000);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 1000);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
 		case TAG_COIN05_BIN:
@@ -707,8 +707,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN5");
 			auto coin05Value = m_lblCoin05->getString().c_str();
 			CCLOG("offset=%s", coin05Value);
-			S_BuyDiamondReq s(1, 2000);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 2000);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
 		}
@@ -717,8 +717,8 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("COIN6");
 			auto coin06Value = m_lblCoin06->getString().c_str();
 			CCLOG("offset=%s", coin06Value);
-			S_BuyDiamondReq s(1, 5000);
-			NetworkManger::getInstance()->SendRequest_BuyDiamond(s);
+			S_ZZ_WechatOrderReq s(1, 5000);
+			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
 		}

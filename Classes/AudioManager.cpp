@@ -43,8 +43,8 @@ void AudioManager::fileConvertedToBinary_Send(const char *filePath){
     fread(str, flength, 1, fp);
     printf("%s\n", str);
     fclose(fp);
-    S_VoiceChatReq vcr(str, flength * sizeof(char));
-    NetworkManger::getInstance()->SendRequest_VoiceChat(vcr);
+    //S_ZZ_VoiceChatReq vcr(str, flength * sizeof(char));
+    //NetworkManger::getInstance()->SendRequest(vcr);
     data=str;
     length=flength;
     log("send audio file");

@@ -92,8 +92,8 @@ void SettingMenuInPlaying::onBtnsTouch(Ref* pSender, Widget::TouchEventType evne
 void SettingMenuInPlaying::quitRoomCallback(Node* node)
 {
 
-		S_QuitRoomReq req;
-		NetworkManger::getInstance()->SendRequest_QuitRoom(req);
+		S_ZZ_QuitRoomReq req(m_playerID);
+		NetworkManger::getInstance()->SendRequest(req);
 	
 }
 

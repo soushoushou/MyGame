@@ -3,6 +3,7 @@
 
 CTCPClient::CTCPClient()
 {
+	m_fTimeEscaped = 0.0f;
 	m_nInbufLen = 0;
 	m_nOutbufLen = 0;
 	m_nInbufStart = 0;
@@ -139,7 +140,7 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 void CTCPClient::NetworkThreadFunc()
 {
 	m_requestMutex.lock();
-	if (!Create(g_strServerIP.c_str(), g_nServerPort, BLOCKSECONDS, true))
+	if (!Create(g_mdzzStrServerName.c_str(), g_mdzzServerPort, BLOCKSECONDS, true))
 	{
 		log("connect server error!");
 		m_requestMutex.unlock();
@@ -235,7 +236,14 @@ bool CTCPClient::Create(const char* pszServerIP, int nServerPort, int nBlockSec,
 	m_nOutbufLen = 0;
 	// 检查参数
 	if (pszServerIP == 0 || strlen(pszServerIP) > 15) {
-		return false;
+		//如果不是IP，则解析域名
+		hostent *h = gethostbyname(pszServerIP);
+		if (h == nullptr)
+		{
+			return false;
+		}
+		pszServerIP = inet_ntoa(*(struct in_addr*)h->h_addr_list[0]);
+		
 	}
 
 #ifdef WIN32

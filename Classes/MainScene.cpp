@@ -75,8 +75,8 @@ bool MainScene::init()
 	if (!initNotice()) return false;
 	if (!initPlayerProfile()) return false;
 
-	S_GetPlayerInfoReq gpi(m_playerID);
-	NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
+	//S_GetPlayerInfoReq gpi(m_playerID);
+	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
 
 	return true;
 }
@@ -285,8 +285,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 
 		case TAG_RANK_BTN: {
-			S_SearchZhanjiReq q;
-			NetworkManger::getInstance()->SendRequest_SearchZhanji(q);
+			//S_SearchZhanjiReq q;
+			//NetworkManger::getInstance()->SendRequest_SearchZhanji(q);
 			break; }
 
 		case TAG_NOTICE_BTN:
