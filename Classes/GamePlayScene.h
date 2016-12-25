@@ -36,13 +36,13 @@ enum UpdateType{
 class GamePlayScene : public cocos2d::Layer
 {
 public:
-    GamePlayScene(unsigned long long playerID,int roomID);
+    GamePlayScene(int playerID,int roomID);
     ~GamePlayScene();
-	static cocos2d::Scene* createScene(unsigned long long playerID,int roomID);
+	static cocos2d::Scene* createScene(int playerID,int roomID);
     virtual bool init();
     void menuCloseCallback(cocos2d::Ref* pSender);
     
-	static GamePlayScene* create(unsigned long long playerID,int roomID);
+	static GamePlayScene* create(int playerID,int roomID);
 
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
@@ -147,7 +147,7 @@ private:
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
 	int m_roomID;
-	unsigned long long m_playerID;
+	int m_playerID;
 	SiteManager* m_pSiteManager;
 	PorkerManager* m_pPorkerManager;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -23,7 +23,7 @@ using namespace ui;
 
 
 
-MainScene::MainScene(unsigned long long playerID):
+MainScene::MainScene(int playerID):
 m_playerID(playerID), m_strPlayerName(""), m_currentDiamond(0), m_currentMoney(0)
 {
 	m_pNoticeLabel = NULL;
@@ -40,7 +40,7 @@ MainScene::~MainScene()
 	}
 }
 
-Scene* MainScene::scene(unsigned long long playerID){
+Scene* MainScene::scene(int playerID){
 	Scene* scene = Scene::create();
 	MainScene * mainScene = MainScene::createMainScene(playerID);
 	if(mainScene!=nullptr)
@@ -48,7 +48,7 @@ Scene* MainScene::scene(unsigned long long playerID){
 	return scene;
 }
 
-MainScene* MainScene::createMainScene(unsigned long long playerID)
+MainScene* MainScene::createMainScene(int playerID)
 {
 	MainScene *pRet = new(std::nothrow) MainScene(playerID); 
     if (pRet && pRet->init()) 
@@ -75,8 +75,9 @@ bool MainScene::init()
 	if (!initNotice()) return false;
 	if (!initPlayerProfile()) return false;
 
-	//S_GetPlayerInfoReq gpi(m_playerID);
-	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(gpi);
+
+	S_ZZ_GetPlayerInfoReq req(m_playerID);
+	NetworkManger::getInstance()->SendRequest(req);
 
 	return true;
 }
@@ -241,7 +242,7 @@ int MainScene::getMoney() const
 	return m_currentMoney;
 }
 
-unsigned long long MainScene::getPlayerID() const
+int MainScene::getPlayerID() const
 {
 	return m_playerID;
 }
@@ -258,10 +259,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 		case TAG_CREATEROOM_BTN:
 		{
-			//NetworkManger::getInstance()->SendRequest_CreateRoom(CC_CALLBACK_2(MainScene::onCreateRoomNetworkCallBack, this));
 			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
-			//pl->setTitle("hhh");
-			//pl->setContentText("hhhh", 20, 60, 250);
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
 
 			butten->getParent()->addChild(pl);
@@ -272,7 +270,6 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			log("join room!");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
-			//PopupLayer* pl = PopupLayer::joinRoomDialog("popuplayer/joinRoomBg.png", Size(size.width / 9 * 7, size.height - 540));
 			PopupLayer* pl = PopupLayer::joinRoomWith9Dialog("popuplayer/joinRoomBg2.png", Size(621, 542));
 			butten->getParent()->addChild(pl);
 			break;
@@ -285,8 +282,8 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 
 		case TAG_RANK_BTN: {
-			//S_SearchZhanjiReq q;
-			//NetworkManger::getInstance()->SendRequest_SearchZhanji(q);
+			S_ZZ_SearchZhanjiReq req(m_playerID);
+			NetworkManger::getInstance()->SendRequest(req);
 			break; }
 
 		case TAG_NOTICE_BTN:
@@ -323,29 +320,25 @@ void MainScene::update(float delta)
 		log("MainScene::connect suc cmd=%d", cmd);
 		switch (cmd)
 		{
-			case PP_DOUNIU_GET_ROLEINFO_ACK:
+			case PP_ZZ_DOUNIU_GET_FOLEINFO_ACK:
 			{
-				S_GetPlayerInfoACK ack = S_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				S_ZZ_GetPlayerInfoACK ack = S_ZZ_GetPlayerInfoACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
 				log("LoginScene::onCreateUserResponse get data!");
 
 				m_strPlayerName = ack.m_strPlayerName;
 				m_currentDiamond = ack.m_currentDiamond;
-				m_currentMoney = ack.m_currentMoney;
 
 				m_pUser->setProfile(Vec2(30, 17), "MainScene/timo.png", m_strPlayerName, m_currentDiamond, m_currentMoney);
 			}
 			break;
 
-			case PP_DOUNIU_CREATE_ROOM_ACK:
+			case PP_ZZ_DOUNIU_CREATE_ROOM_ACK:
 			{
-				S_CreateRoomACK cr = S_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				S_ZZ_CreateRoomACK cr = S_ZZ_CreateRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
 				if (cr.m_statusCode == 0)
 				{
-					/*char buf[100] = { 0 };
-					sprintf(buf, "roomID=%d", cr.m_roomID);
-					log(buf);*/
 					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
 				}
 				else
@@ -354,9 +347,9 @@ void MainScene::update(float delta)
 			}
 			break;
 
-			case PP_DOUNIU_JOIN_ROOM_ACK:
+			case PP_ZZ_DOUNIU_JOIN_ROOM_ACK:
 			{
-				S_JoinRoomACK cr = S_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				S_ZZ_JoinRoomACK cr = S_ZZ_JoinRoomACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
 				if (cr.m_isOK == 0)
 				{
@@ -369,15 +362,15 @@ void MainScene::update(float delta)
 			}
 			break;
 
-			case PP_DOUNIU_QUIT_ROOM_ACK:
+			case PP_ZZ_DOUNIU_QUIT_ROOM_ACK:
 			{
 				NetworkManger::getInstance()->popACKQueue();
 			}
 			break;
 
-			case PP_DOUNIU_QUERY_ZHANJI_ACK:
+			case PP_ZZ_DOUNIU_QUERY_ZHANJI_ACK:
 			{
-				S_SearchZhanjiACK s = S_SearchZhanjiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+				S_ZZ_SearchZhanjiACK s = S_ZZ_SearchZhanjiACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 				NetworkManger::getInstance()->popACKQueue();
 				PopupLayer* pl = PopupLayer::recordDialog("popuplayer/noticeBg.png", Size(710, 499));
 				vector<pair<int, int>> quickMessage;

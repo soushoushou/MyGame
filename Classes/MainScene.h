@@ -10,8 +10,8 @@ using namespace ui;
 class MainScene :public Layer
 {
 public:
-	MainScene(unsigned long long playerID);
-	static Scene* scene(unsigned long long playerID);
+	MainScene(int playerID);
+	static Scene* scene(int playerID);
 	virtual bool init();
 	virtual void onEnter();
 	virtual void onExit();
@@ -21,21 +21,21 @@ public:
 	void buttonCallback(CCNode* pSender);
 	int getDiamond() const;
 	int getMoney() const;
-	unsigned long long getPlayerID() const;
+	int getPlayerID() const;
 private:
 	bool initBackground();
 	bool initButtons();
 	bool initNotice();
 	bool initPlayerProfile();					
 	void flushNoticeLabel(float delta);			//ÖØ»æ¹«¸æ
-	static MainScene* createMainScene(unsigned long long  playerID);
+	static MainScene* createMainScene(int  playerID);
 
 private:
 	LabelTTF* m_pNoticeLabel;
 	UserProfileUI* m_pUser;
 	Sprite* m_spRoundRectInNotice;		
 
-	unsigned long long m_playerID;
+	INT m_playerID;
 	string m_strPlayerName;
 	int m_currentDiamond;
 	int m_currentMoney;

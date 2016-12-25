@@ -39,9 +39,9 @@ void LoginScene::update(float dt)
 		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
 		//判断该ack的协议号是不是10005
 		log("LoginScene::connect suc cmd=%d",cmd);
-		if (cmd == PP_DOUNIU_LOGIN_ACCOUNT_ACK)
+		if (cmd == PP_ZZ_DOUNIU_ROLE_LOGIN_ACK)
 		{
-			S_LoginACK ack = S_LoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			S_ZZ_RoleLoginACK ack = S_ZZ_RoleLoginACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
 			if (ack.m_statusCode != 0)
 			{
@@ -65,12 +65,12 @@ void LoginScene::update(float dt)
 				CCDirector::sharedDirector()->replaceScene(reScene);
 			}
 		}
-		else if (cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK)
-		{
-			S_CreatePlayerACK ack = S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
-			NetworkManger::getInstance()->popACKQueue();
-			log(ack.m_statusCode);
-		}
+		//else if (cmd == PP_ZZ_DOUNIU_CREAT_ACCOUNT_ACK)
+		//{
+		//	S_CreatePlayerACK ack = S_CreatePlayerACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+		//	NetworkManger::getInstance()->popACKQueue();
+		//	log(ack.m_statusCode);
+		//}
 	}
 }
 
@@ -202,10 +202,8 @@ void LoginScene::menuCloseCallback(Ref* pSender)
 	manager->sendWeChatLoginReq();
 #endif
 
-	//S_LoginReq lg("c", 1, 1);
-	//NetworkManger::getInstance()->SendRequest_Login(lg);
-
-    
+	S_ZZ_RoleLoginReq req(0, 0, 0);			//登录要id然而不知道id是啥 zz
+	NetworkManger::getInstance()->SendRequest(req);
 
 
 }

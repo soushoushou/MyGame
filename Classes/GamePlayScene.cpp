@@ -56,7 +56,7 @@ enum ButtonTag{
 };
 
 
-GamePlayScene::GamePlayScene(unsigned long long playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
+GamePlayScene::GamePlayScene(int playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
 m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr), m_bGameStart(false)
 , m_inviteBtn(nullptr), m_notHogBtn(nullptr), m_HogBtn(nullptr)
 {
@@ -84,7 +84,7 @@ GamePlayScene::~GamePlayScene(){
 	CC_SAFE_RELEASE(m_btnSetting);
 }
 
-GamePlayScene* GamePlayScene::create(unsigned long long playerID,int roomID)
+GamePlayScene* GamePlayScene::create(int playerID,int roomID)
 {
 
 	GamePlayScene *pRet = new(std::nothrow) GamePlayScene(playerID,roomID); 
@@ -102,7 +102,7 @@ GamePlayScene* GamePlayScene::create(unsigned long long playerID,int roomID)
 }
 
 
-Scene* GamePlayScene::createScene(unsigned long long playerID,int roomID)
+Scene* GamePlayScene::createScene(int playerID,int roomID)
 {
 	auto scene = Scene::create();
 	auto gamePlayScene = GamePlayScene::create(playerID,roomID);
@@ -120,19 +120,19 @@ void GamePlayScene::update(float delta)
 		unsigned short cmd = pNet->getQueueFrontACKCmd();
 		switch (cmd)
 		{
-			case PP_DOUNIU_GET_ROLEINFO_ACK:
+			case PP_ZZ_DOUNIU_GET_FOLEINFO_ACK:
 			{
 				log("info ack uc");
-				S_GetPlayerInfoACK s = S_GetPlayerInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_GetMemberInfoACK s = S_ZZ_GetMemberInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, s.m_currentMoney);
+				m_pSiteManager->joinSite(m_playerID, s.m_strPlayerName, s.m_currentDiamond, 0);
 				m_testID.push_back(s.m_playerID);
 			}
 			break;
-			case PP_DOUNIU_VOICE_CHAT_ACK:
+			case PP_ZZ_DOUNIU_VOICE_CHAT_ACK:
 			{
 				log("voice ack uc");
-				S_VoiceChatACK s = S_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_VoiceChatACK s = S_ZZ_VoiceChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				//AudioManager::getInstance()->binaryConvertedToFile_Rev("C:\\Users\\Administrator\\Desktop\\record.mp3",s.m_voiceBuf,s.m_voiceSize);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -184,9 +184,9 @@ void GamePlayScene::update(float delta)
 				
 			}
 			break;	
-			case PP_DOUNIU_QIANGZHUANG_ACK:
+			case PP_ZZ_DOUNIU_QIANGZHUANG_ACK:
 			{
-				S_QiangZhuangACK ack = S_QiangZhuangACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_QiangZhuangACK ack = S_ZZ_QiangZhuangACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				if (ack.m_statusCode == 0)
 				{
@@ -210,10 +210,10 @@ void GamePlayScene::update(float delta)
 				
 			}
 			break;
-			case PP_DOUNIU_QUIT_ROOM_ACK:
+			case PP_ZZ_DOUNIU_QUIT_ROOM_ACK:
 			{
 				log("quit room ack");
-				S_QuitRoomACK ack = S_QuitRoomACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_QuitRoomACK ack = S_ZZ_QuitRoomACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				if (ack.m_isOK == 0)
 				{
@@ -238,9 +238,9 @@ void GamePlayScene::update(float delta)
 				}
 			}
 			break;
-			case PP_DOUNIU_YAZHU_ACK:
+			case PP_ZZ_DOUNIU_YAZHU_ACK:
 			{
-				S_YaZhuACK ack = S_YaZhuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_YaZhuACK ack = S_ZZ_YaZhuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				if (ack.m_isOK == 0)
 				{
@@ -271,18 +271,18 @@ void GamePlayScene::update(float delta)
 
 			}
 			break;
-			case PP_DOUNIU_MEMBER_INFO_ACK:
+			case PP_ZZ_DOUNIU_MEMBER_INFO_NOTIFY:
 			{
-				S_GetMemberInfoACK ack = S_GetMemberInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_GetMemberInfoACK ack = S_ZZ_GetMemberInfoACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				m_pSiteManager->joinSite(ack.m_playerID, ack.m_strPlayerName, ack.m_currentDiamond, ack.m_currentMoney);
+				m_pSiteManager->joinSite(ack.m_playerID, ack.m_strPlayerName, ack.m_currentDiamond, 0);
 				if (m_pSiteManager->currentPlayerCount() == 5)
 				{
 					m_inviteBtn->setVisible(false);
 				}
 			}
 			break;
-			case PP_DOUNIU_READY_ACK:
+			case PP_ZZ_DOUNIU_READY_ACK:
 			{
 				S_ReadyPlayACK ack = S_ReadyPlayACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
@@ -299,17 +299,17 @@ void GamePlayScene::update(float delta)
 					log("ready failed!");
 			}
 			break;
-			case PP_DOUNIU_GAME_START_ACK:
+			case PP_ZZ_DOUNIU_GAME_START_ACK:
 			{
-				S_GameStartACK ack = S_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_GameStartACK ack = S_ZZ_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				m_bGameStart = true;
 				m_inviteBtn->setVisible(false);
 			}
 			break;
-			case PP_DOUNIU_FAPAI_ACK:
+			case PP_ZZ_DOUNIU_FAPAI_ACK:
 			{
-				S_FaPaiACK ack = S_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_FaPaiACK ack = S_ZZ_FaPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				log("fapai");
 				//发牌
@@ -329,19 +329,20 @@ void GamePlayScene::update(float delta)
 				m_iState = SendPokerState;
 				break;
 			}
-			case PP_DOUNIU_SUANNIU_ACK: 
+			//取消
+			//case PP_DOUNIU_SUANNIU_ACK: 
+			//{
+			//	S_SuanNiuACK ack = S_SuanNiuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+			//	pNet->popACKQueue();
+			//	if (ack.m_statusCode == 0) {
+			//		log("suanniu");
+			//		m_pSiteManager->showNiu(ack.m_playerID,ack.m_niu);
+			//	}
+			//}
+			//break;
+			case PP_ZZ_DOUNIU_TANPAI_ACK:
 			{
-				S_SuanNiuACK ack = S_SuanNiuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
-				pNet->popACKQueue();
-				if (ack.m_statusCode == 0) {
-					log("suanniu");
-					m_pSiteManager->showNiu(ack.m_playerID,ack.m_niu);
-				}
-			}
-			break;
-			case PP_DOUNIU_TANPAI_ACK:
-			{
-				S_TanPaiACK ack = S_TanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_SuanNiuTanPaiACK ack = S_ZZ_SuanNiuTanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				showCompare();
 			}
@@ -796,8 +797,8 @@ void GamePlayScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 
 bool GamePlayScene::initPlayerProfile()
 {
-	//S_GetPlayerInfoReq fp(m_playerID);
-	//NetworkManger::getInstance()->SendRequest_GetPlayerInfo(fp);
+	S_ZZ_GetPlayerInfoReq req(m_playerID);
+	NetworkManger::getInstance()->SendRequest(req);
 	return true;
 }
 
@@ -854,6 +855,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_ReadyPlayReq req;
 				//NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
 				//suanNiuBg_sprite->setVisible(true);
+
+				S_ZZ_ReadyPlayReq req(m_playerID);
+				NetworkManger::getInstance()->SendRequest(req);
                 break;
             }
 			case TAG_INVITE_BTN:
@@ -886,14 +890,15 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				m_timeLayer->removeFromParent();
 				m_timeLayer = nullptr;
 				m_iState = CompareState;
-				//S_QiangZhuangReq s(0);
-				//NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
+
+				S_ZZ_QiangZhuangReq req(m_playerID,0);
+				NetworkManger::getInstance()->SendRequest(req);
                 break;
             }
             case TAG_NOT_HOG_BTN:		//不抢庒
             {
-				//S_QiangZhuangReq s(1);
-				//NetworkManger::getInstance()->SendRequest_QiangZhuang(s);
+				S_ZZ_QiangZhuangReq req(m_playerID, 1);
+				NetworkManger::getInstance()->SendRequest(req);
                 m_notHogBtn->setVisible(false);
                 m_HogBtn->setVisible(false);
                 m_timeLayer->stopTimer();
@@ -907,6 +912,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_YaZhuReq s(1);
 				//NetworkManger::getInstance()->SendRequest_YaZhu(s);
 				//m_iState = CompareState;
+
+				S_ZZ_YaZhuReq req(m_playerID,1);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
 				break;
 			case TAG_MUL_TWO:
@@ -914,6 +922,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_YaZhuReq s(2);
 				//NetworkManger::getInstance()->SendRequest_YaZhu(s);
 				//m_iState = CompareState;
+
+				S_ZZ_YaZhuReq req(m_playerID, 2);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
 				break;
 			case TAG_MUL_THERE:
@@ -921,6 +932,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_YaZhuReq s(3);
 				//NetworkManger::getInstance()->SendRequest_YaZhu(s);
 				//m_iState = CompareState;
+
+				S_ZZ_YaZhuReq req(m_playerID, 3);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
 				break;
 			case TAG_MUL_FOUR:
@@ -928,6 +942,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_YaZhuReq s(4);
 				//NetworkManger::getInstance()->SendRequest_YaZhu(s);
 				//m_iState = CompareState;
+
+				S_ZZ_YaZhuReq req(m_playerID, 4);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
 				break;
 			case TAG_MUL_FIVE:
@@ -935,15 +952,18 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//S_YaZhuReq s(5);
 				//NetworkManger::getInstance()->SendRequest_YaZhu(s);
 				//m_iState = CompareState;
+
+				S_ZZ_YaZhuReq req(m_playerID, 5);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
-                //notChooseMulAction(0);
-//                m_player->showMulti(tag-TAG_MUL_ONE+1,this);
-//                scheduleOnce(schedule_selector(GamePlayScene::notChooseMulAction), 10.0f);
                 break;
 			case TAG_COUNTNIU_BTN:
 			{
 				//S_SuanNiuReq t;
 				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+
+				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
+				NetworkManger::getInstance()->SendRequest(req);
 			}
 			break;
 			case TAG_CHAT_BTN:
@@ -1173,8 +1193,9 @@ void GamePlayScene::notHogBtnAction(){
 	m_timeLayer->removeFromParent();
 	m_timeLayer = nullptr;
 	int beishu = rand() % 5 + 1;
-	//S_QiangZhuangReq t(1);
-	//NetworkManger::getInstance()->SendRequest_QiangZhuang(t);
+
+	S_ZZ_QiangZhuangReq req(m_playerID, 0);
+	NetworkManger::getInstance()->SendRequest(req);
 	m_iState = ChooseMultipleState;
 }
 void GamePlayScene::showWinDialog() {
@@ -1279,6 +1300,8 @@ void GamePlayScene::notChooseMulAction(float dt){
 	m_timeLayer = nullptr;
 	//S_YaZhuReq s(1);
 	//NetworkManger::getInstance()->SendRequest_YaZhu(s);
+	S_ZZ_YaZhuReq req(m_playerID, 1);
+	NetworkManger::getInstance()->SendRequest(req);
 	m_iState = StartState;
 
 }
@@ -1318,5 +1341,7 @@ void GamePlayScene::startNewPlay(){
 	}
 	//S_FaPaiReq s;
 	//NetworkManger::getInstance()->SendRequest_FaPai(s);
+	S_ZZ_FaPaiReq req(m_playerID);
+	NetworkManger::getInstance()->SendRequest(req);
 }
 

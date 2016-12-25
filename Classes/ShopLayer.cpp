@@ -31,7 +31,7 @@ using namespace ui;
 
 
 
-ShopLayer::ShopLayer(unsigned long long playerID, int diamond, int money, int number) :m_playerID(playerID), m_number(number)
+ShopLayer::ShopLayer(int playerID, int diamond, int money, int number) :m_playerID(playerID), m_number(number)
 , m_diamond(diamond), m_money(money)
 {
 }
@@ -41,7 +41,7 @@ ShopLayer::~ShopLayer()
 {
 }
 
-ShopLayer* ShopLayer::create(unsigned long long playerID, int diamond, int money, int number)
+ShopLayer* ShopLayer::create(int playerID, int diamond, int money, int number)
 {
 	ShopLayer *pRet = new(std::nothrow)ShopLayer(playerID, diamond, money, number);
 	if (pRet && pRet->init()) 
@@ -57,7 +57,7 @@ ShopLayer* ShopLayer::create(unsigned long long playerID, int diamond, int money
 	} 
 }
 
-Scene* ShopLayer::createScene(unsigned long long playerID, int diamond, int money, int number)
+Scene* ShopLayer::createScene(int playerID, int diamond, int money, int number)
 {
 	auto scene = Scene::create();
 	auto shopLayer = ShopLayer::create(playerID, diamond, money, number);
@@ -71,25 +71,26 @@ void ShopLayer::update(float delta)
 	{
 		unsigned short cmd = NetworkManger::getInstance()->getQueueFrontACKCmd();			//获得ack的协议号
 		log("LoginScene::connect suc cmd=%d", cmd);
-		if (cmd == PP_DOUNIU_CHONGZHI_ACK)
+		if (cmd == PP_ZZ_DOUNIU_WECHAT_ORDER_ACK)
 		{
-			S_BuyDiamondACK ack = S_BuyDiamondACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
+			S_ZZ_WechatOrderACK ack = S_ZZ_WechatOrderACK::convertDataFromBinaryData(NetworkManger::getInstance()->getQueueFrontACKBinaryData());
 			NetworkManger::getInstance()->popACKQueue();
 
-			if (ack.m_isOK == 0)
-			{
-				char buf[100] = { 0 };
-				sprintf(buf, "%d", ack.m_currentNum);
-				switch (ack.m_buyType)
-				{
-				case 0:
-					m_lblDiamond->setString(buf);
-					break;
-				case 1:
-					m_lblCoin->setString(buf);
-					break;
-				}
-			}
+			///蜜汁不清楚
+			//if (ack.m_isOK == 0)
+			//{
+			//	char buf[100] = { 0 };
+			//	sprintf(buf, "%d", ack.m_currentNum);
+			//	switch (ack.m_buyType)
+			//	{
+			//	case 0:
+			//		m_lblDiamond->setString(buf);
+			//		break;
+			//	case 1:
+			//		m_lblCoin->setString(buf);
+			//		break;
+			//	}
+			//}
 
 			
 		}
@@ -615,7 +616,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			auto s_buyDiamond01LabValue = s_buyDiamond01Lab->getString().c_str();		
 			CCLOG("diamond01Value=%s", diamond01Value);	
 			CCLOG("s_buyDiamond01LabValue=%s", s_buyDiamond01LabValue);
-			S_ZZ_WechatOrderReq s(0, 60);
+			S_ZZ_WechatOrderReq s(m_playerID, 60);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
@@ -624,7 +625,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND2");
 			auto diamond02Value = m_lblDiamond02->getString().c_str();
 			CCLOG("offset=%s", diamond02Value);
-			S_ZZ_WechatOrderReq s(0, 390);
+			S_ZZ_WechatOrderReq s(m_playerID, 390);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
@@ -633,7 +634,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND3");
 			auto diamond03Value = m_lblDiamond03->getString().c_str();
 			CCLOG("offset=%s", diamond03Value);
-			S_ZZ_WechatOrderReq s(0, 800);
+			S_ZZ_WechatOrderReq s(m_playerID, 800);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
@@ -642,7 +643,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND4");
 			auto diamond04Value = m_lblDiamond04->getString().c_str();
 			CCLOG("offset=%s", diamond04Value);
-			S_ZZ_WechatOrderReq s(0, 1500);
+			S_ZZ_WechatOrderReq s(m_playerID, 1500);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 		}
@@ -651,7 +652,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND5");
 			auto diamond05Value = m_lblDiamond05->getString().c_str();
 			CCLOG("offset=%s", diamond05Value);
-			S_ZZ_WechatOrderReq s(0, 3000);
+			S_ZZ_WechatOrderReq s(m_playerID, 3000);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
@@ -661,12 +662,13 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("DIAMOND6");
 			auto diamond06Value = m_lblDiamond06->getString().c_str();
 			CCLOG("offset=%s", diamond06Value);
-			S_ZZ_WechatOrderReq s(0, 9680);
+			S_ZZ_WechatOrderReq s(m_playerID, 9680);
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
 		}
-		case TAG_COIN01_BIN:
+		//金币取消
+		/*case TAG_COIN01_BIN:
 		{
 			log("COIN1");
 			auto coin01Value = m_lblCoin01->getString().c_str();
@@ -721,7 +723,7 @@ void ShopLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			NetworkManger::getInstance()->SendRequest(s);
 			break;
 
-		}
+		}*/
 		}
 	}
 }

@@ -9,13 +9,13 @@ using namespace ui;
 class ShopLayer : public cocos2d::Layer
 {
 public:
-	ShopLayer(unsigned long long playerID, int diamond, int money, int number = 0);
+	ShopLayer(int playerID, int diamond, int money, int number = 0);
 	~ShopLayer();
-	static Scene* createScene(unsigned long long playerID,int diamond, int money, int number = 0);
+	static Scene* createScene(int playerID,int diamond, int money, int number = 0);
 	//static cocos2d::Scene* createScene(String str);
 	virtual bool init();
 	//CREATE_FUNC(ShopLayer);
-	static ShopLayer* create(unsigned long long playerID, int diamond, int money, int number = 0);
+	static ShopLayer* create(int playerID, int diamond, int money, int number = 0);
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
 	void update(float delta);
 	//virtual void onEnter(int number);
@@ -29,8 +29,6 @@ private:
 	bool initDiamondLayer();	//初始化钻石层
 	bool initCoinLayer();		//初始化金币层
 	void tapBarMenuPressed(Ref *pSender);
-	//void onEnter();
-	//bool initNotice();
 
 	LayerMultiplex* layers;		//左侧层
 	LayerMultiplex* topLayers;	//顶部层
@@ -81,7 +79,7 @@ private:
 	Button* s_buyCoin06Btn;
 
 	int m_number;
-	unsigned long long m_playerID;
+	int m_playerID;
 	int m_diamond;
 	int m_money;
 };

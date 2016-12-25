@@ -42,15 +42,17 @@ CTCPClient::~CTCPClient()
 
 bool CTCPClient::isWantedCMD(unsigned short& cmd)
 {
-	if (cmd == PP_DOUNIU_CHONGZHI_ACK || cmd == PP_DOUNIU_CREAT_ACCOUNT_ACK ||
-		cmd == PP_DOUNIU_CREATE_ROOM_ACK || cmd == PP_DOUNIU_GET_ROLEINFO_ACK ||
-		cmd == PP_DOUNIU_LOGIN_ACCOUNT_ACK || cmd == PP_DOUNIU_JOIN_ROOM_ACK ||
-		cmd == PP_DOUNIU_SUANNIU_ACK || cmd == PP_DOUNIU_QUIT_ROOM_ACK ||
-		cmd == PP_DOUNIU_READY_ACK || cmd == PP_DOUNIU_FAPAI_ACK ||
-		cmd == PP_DOUNIU_SUANNIU_ACK || cmd == PP_DOUNIU_YAZHU_ACK ||
-		cmd == PP_DOUNIU_QUIT_ROOM_ACK || cmd == PP_DOUNIU_VOICE_CHAT_ACK ||
-		cmd == PP_DOUNIU_MEMBER_INFO_ACK || cmd == PP_DOUNIU_GAME_START_ACK ||
-		cmd == PP_DOUNIU_GAME_OVER_ACK || cmd == PP_DOUNIU_TANPAI_ACK || cmd == PP_DOUNIU_QIANGZHUANG_ACK)
+	if (cmd == PP_ZZ_DOUNIU_WECHAT_ORDER_ACK || cmd == PP_ZZ_DOUNIU_CREATE_ROOM_ACK || cmd == PP_ZZ_DOUNIU_GET_FOLEINFO_ACK ||
+		cmd == PP_ZZ_DOUNIU_WECHAT_LOGIN_ACK || cmd == PP_ZZ_DOUNIU_ROLE_LOGIN_ACK || cmd == PP_ZZ_DOUNIU_JOIN_ROOM_ACK ||
+		cmd == PP_ZZ_DOUNIU_TANPAI_ACK || cmd == PP_ZZ_DOUNIU_QUIT_ROOM_ACK ||
+		cmd == PP_ZZ_DOUNIU_READY_ACK || cmd == PP_ZZ_DOUNIU_FAPAI_ACK ||
+		cmd == PP_ZZ_DOUNIU_YAZHU_ACK || cmd == PP_ZZ_DOUNIU_TEXT_CHAT_ACK ||
+		cmd == PP_ZZ_DOUNIU_VOICE_CHAT_ACK || cmd == PP_ZZ_DOUNIU_SHARE_INFO_NOTIFY ||
+		cmd == PP_ZZ_DOUNIU_GAME_START_ACK || cmd == PP_ZZ_DOUNIU_MEMBER_INFO_NOTIFY ||
+		cmd == PP_ZZ_DOUNIU_INVITE_CODE_ACK || cmd == PP_ZZ_DOUNIU_NOTICE_INFO_NOTIFY ||
+		cmd == PP_ZZ_DOUNIU_SHARE_INFO_NOTIFY || cmd == PP_ZZ_DOUNIU_BUYDIAMOND_QUERY_ACK ||
+		cmd == PP_ZZ_DOUNIU_ORDER_RESULT_ACK || cmd == PP_ZZ_DOUNIU_CHECK_UPDATE_ACK ||
+		cmd == PP_ZZ_DOUNIU_GAME_OVER_ACK || cmd == PP_ZZ_DOUNIU_QIANGZHUANG_ACK)
 	{
 		return true;
 	}
@@ -66,50 +68,12 @@ bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
 		if (m_nInbufLen >= 6)
 		{
 			unsigned short cmd = 0;
-			memcpy(&cmd, m_bufInput+m_nInbufStart, 2);
-			cmd = ntohs(cmd);
-			if (isWantedCMD(cmd))
-			{
-				if (cmd == PP_DOUNIU_VOICE_CHAT_ACK)
-				{
-					unsigned int packageLen = 0;
-					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 4);
-					packageLen = ntohl(packageLen);
-					if (packageLen <= m_nInbufLen-m_nInbufStart)
-					{
-						b = false;
-						Len = 0;
-						nPackageLen = packageLen;
-						return true;
-					}
-					Len = packageLen;
-				}
-				else
-				{
-					unsigned int packageLen = 0;
-					memcpy(&packageLen, m_bufInput + m_nInbufStart + 2, 2);
-					packageLen = ntohs(packageLen);
-					if (packageLen <= m_nInbufLen - m_nInbufStart)
-					{
-						b = false;
-						Len = 0;
-						nPackageLen = packageLen;
-						return true;
-					}
-					Len = packageLen;
-				}
-				b = true;
-			}
-		}
-		else if (m_nInbufLen >= 4)
-		{
-			unsigned short cmd = 0;
-			memcpy(&cmd, m_bufInput+m_nInbufStart, 2);
+			memcpy(&cmd, m_bufInput+m_nInbufStart+4, 2);
 			cmd = ntohs(cmd);
 			if (isWantedCMD(cmd))
 			{
 				unsigned int packageLen = 0;
-				memcpy(&packageLen, m_bufInput + 2, 2);
+				memcpy(&packageLen, m_bufInput + m_nInbufStart, 4);
 				packageLen = ntohs(packageLen);
 				if (packageLen <= m_nInbufLen - m_nInbufStart)
 				{
