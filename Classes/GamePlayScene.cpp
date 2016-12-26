@@ -1339,9 +1339,12 @@ void GamePlayScene::startNewPlay(){
 	{
 		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
 	}
+
+
+	//不发牌怎么触发下一局？ zz
 	//S_FaPaiReq s;
 	//NetworkManger::getInstance()->SendRequest_FaPai(s);
-	S_ZZ_FaPaiReq req(m_playerID);
-	NetworkManger::getInstance()->SendRequest(req);
+	//S_ZZ_FaPaiReq req(m_playerID);
+	//NetworkManger::getInstance()->SendRequest(req);
 }
 

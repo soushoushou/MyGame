@@ -140,24 +140,24 @@ bool NetworkManger::SendRequest(const S_ZZ_WechatOrderReq& requestData)
 	return ret;
 }
 
-bool NetworkManger::SendRequest(const S_ZZ_FaPaiReq& requestData)
-{
-	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
-	char* pIndex = dataBuf;
-	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
-	pIndex += 2;
-	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
-	pIndex += 4;
-
-	bool ret = false;
-	ret = _SendRequest((void*)(dataBuf), ntohl(requestData.m_packageLen));
-
-	delete[] dataBuf;
-	return ret;
-}
+//bool NetworkManger::SendRequest(const S_ZZ_FaPaiReq& requestData)
+//{
+//	//¥¶¿Ì ˝æ›
+//	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+//	char* pIndex = dataBuf;
+//	memcpy(pIndex, &requestData.m_cmd, 2);
+//	pIndex += 2;
+//	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
+//	pIndex += 2;
+//	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
+//	pIndex += 4;
+//
+//	bool ret = false;
+//	ret = _SendRequest((void*)(dataBuf), ntohl(requestData.m_packageLen));
+//
+//	delete[] dataBuf;
+//	return ret;
+//}
 
 bool NetworkManger::SendRequest(const S_ZZ_GetPlayerInfoReq& requestData)
 {

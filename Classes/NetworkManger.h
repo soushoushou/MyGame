@@ -31,7 +31,7 @@ public:
 	bool SendRequest(const S_ZZ_SearchZhanjiReq& requestData);
 	bool SendRequest(const S_ZZ_QuitRoomReq& requestData);
 	bool SendRequest(const S_ZZ_ReadyPlayReq& requestData);
-	bool SendRequest(const S_ZZ_FaPaiReq& requestData);
+	//bool SendRequest(const S_ZZ_FaPaiReq& requestData);
 	bool SendRequest(const S_ZZ_SuanNiuTanPaiReq& requestData);
 	bool SendRequest(const S_ZZ_QuickChatReq& requestData);
 	//bool SendRequest(const S_ZZ_SuanNiuReq& requestData);

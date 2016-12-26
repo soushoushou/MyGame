@@ -1152,6 +1152,7 @@ struct S_ZZ_WechatLoginReq
 	short m_cmd;
 	short m_strCodeLen;
 	string m_wechatCode;
+	int m_playerID;			//首次时传0
 	int m_statusCode;		//0:未登录，1:已登录，2:已进入房间
 };
 
@@ -1196,7 +1197,7 @@ struct S_ZZ_WechatLoginACK
 	}
 	unsigned int m_packageLen;
 	unsigned short m_cmd;
-	int m_statusCode;
+	int m_statusCode;			//0成功1失败2成功但没邀请码
 	int m_playerID;
 	short m_playerNameLen;
 	string m_strPlayerName;
@@ -1273,7 +1274,7 @@ struct S_ZZ_RoleLoginReq
 	short m_cmd;
 	int m_playerID;
 	int m_statusCode;		//0:未登录，1:已登录，2:已进入房间
-	int m_platformTpye;		//0:wine2,1:andorid,2:ios
+	int m_platformTpye;		//0:win32,1:andorid,2:ios
 };
 
 //角色登录ack
@@ -1301,12 +1302,12 @@ struct S_ZZ_RoleLoginACK
 	}
 	int m_packageLen;
 	short m_cmd;
-	int m_statusCode;				//0:成功，1：无账号，2：验证超时
+	int m_statusCode;				//0:成功，1：无账号，2：成功但没邀请码 3验证超时，要重新微信登录
 	int m_playerID;
 };
 
 
-//角色登录请求
+//重连
 struct S_ZZ_ReconnectReq
 {
 	S_ZZ_ReconnectReq(int playerID, int statusCode, int roomID) :m_cmd(PP_ZZ_DOUNIU_RECONNECT_REQ),
@@ -1574,20 +1575,21 @@ struct S_ZZ_ReadyPlayACK
 	int m_playerID;
 };
 
-//鍙戠墝璇锋眰
-struct S_ZZ_FaPaiReq
-{
-	S_ZZ_FaPaiReq(unsigned long long playerID) :m_cmd(PP_ZZ_DOUNIU_FAPAI_REQ), m_packageLen(10),
-		m_playerID(playerID)
-	{
-		m_packageLen = htonl(m_packageLen);
-		m_cmd = htons(m_cmd);
-		m_playerID = htonl(m_playerID);
-	}
-	int m_packageLen;
-	short m_cmd;
-	int m_playerID;
-};
+//取消
+////鍙戠墝璇锋眰
+//struct S_ZZ_FaPaiReq
+//{
+//	S_ZZ_FaPaiReq(unsigned long long playerID) :m_cmd(PP_ZZ_DOUNIU_FAPAI_REQ), m_packageLen(10),
+//		m_playerID(playerID)
+//	{
+//		m_packageLen = htonl(m_packageLen);
+//		m_cmd = htons(m_cmd);
+//		m_playerID = htonl(m_playerID);
+//	}
+//	int m_packageLen;
+//	short m_cmd;
+//	int m_playerID;
+//};
 
 //鍙戠墝鍝嶅簲
 struct S_ZZ_FaPaiACK
