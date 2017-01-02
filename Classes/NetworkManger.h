@@ -31,7 +31,7 @@ public:
 	bool SendRequest(const S_ZZ_SearchZhanjiReq& requestData);
 	bool SendRequest(const S_ZZ_QuitRoomReq& requestData);
 	bool SendRequest(const S_ZZ_ReadyPlayReq& requestData);
-	//bool SendRequest(const S_ZZ_FaPaiReq& requestData);
+	bool SendRequest(const S_ZZ_FaPaiReq& requestData);
 	bool SendRequest(const S_ZZ_SuanNiuTanPaiReq& requestData);
 	bool SendRequest(const S_ZZ_QuickChatReq& requestData);
 	//bool SendRequest(const S_ZZ_SuanNiuReq& requestData);
@@ -48,7 +48,7 @@ public:
 	bool ackQueueIsEmpty();						//消息队列是否为空
 	void pushACKQueue(void* data, int size);	//入队
 	void popACKQueue();							//出队
-	unsigned short getQueueFrontACKCmd();				//获得队头结点的协议号
+	short getQueueFrontACKCmd();				//获得队头结点的协议号
 	void* getQueueFrontACKBinaryData();			//获得对头结点的二进制数据
 private:
 	NetworkManger();
