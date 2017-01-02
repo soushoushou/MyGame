@@ -60,7 +60,7 @@ private:
 	void	ReconnectFunc();						//重连线程函数
 	bool	Flush(void);
 	bool	Check(void);
-	bool	isWantedCMD(unsigned short& cmd);
+	bool	isWantedCMD(short& cmd);
 	bool	isRecvCompelete(unsigned int& nPackageLen);
 	SOCKET	GetSocket(void) const { return m_sockClient; }
 	bool	ReceiveMsg();
