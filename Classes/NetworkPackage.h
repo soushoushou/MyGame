@@ -2403,4 +2403,92 @@ struct S_ZZ_CheckUpdateACK
 	string m_strURL;
 };
 
+
+struct S_ZZ_OneRoundSumNotify
+{
+	S_ZZ_OneRoundSumNotify() :m_cmd(0){}
+
+	static S_ZZ_OneRoundSumNotify convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_ZZ_OneRoundSumNotify s;
+
+		memcpy(&s.m_packageLen, pData, 4);
+		s.m_packageLen = ntohl(s.m_packageLen);
+		pData += 4;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+
+		//memcpy(&s.m_statusCode, pData, 4);
+		//s.m_statusCode = ntohl(s.m_statusCode);
+		//pData += 4;
+		int nPlayers = (s.m_packageLen - 6) / 8;
+		for (int i = 0; i < nPlayers; ++i)
+		{
+			int playerID = 0;
+			memcpy(&playerID, pData, 4);
+			playerID = ntohl(playerID);
+			s.m_playerID.push_back(playerID);
+			pData += 4;
+			int count = 0;
+			memcpy(&count, pData, 4);
+			pData += 4;
+			count = ntohl(count);
+			s.m_oneRoundCount.push_back(count);
+		}
+		return s;
+	}
+
+	int m_packageLen;
+	short m_cmd;
+	vector<int> m_playerID;//单局玩家容器
+	vector<int> m_oneRoundCount;//单局积分容器
+};
+
+struct S_ZZ_AllRoundSumNotify
+{
+	S_ZZ_AllRoundSumNotify() :m_cmd(0){}
+
+	static S_ZZ_AllRoundSumNotify convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_ZZ_AllRoundSumNotify s;
+
+		memcpy(&s.m_packageLen, pData, 4);
+		s.m_packageLen = ntohl(s.m_packageLen);
+		pData += 4;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+
+		//memcpy(&s.m_statusCode, pData, 4);
+		//s.m_statusCode = ntohl(s.m_statusCode);
+		//pData += 4;
+		int nPlayers = (s.m_packageLen - 6) / 24;
+		for (int i = 0; i < nPlayers; ++i)
+		{
+			int playerID = 0;
+			memcpy(&playerID, pData, 4);
+			playerID = ntohl(playerID);
+			s.m_playerID.push_back(playerID);
+			pData += 4;
+			for (int j = 0; j < 5; ++j)
+			{
+				int poker = 0;
+				memcpy(&poker, pData, 4);
+				pData += 4;
+				poker = ntohl(poker);
+				s.m_allRoundCount.push_back(poker);
+			}
+		}
+		return s;
+	}
+
+	int m_packageLen;
+	short m_cmd;
+	vector<int> m_playerID;//全局玩家容器
+	vector<int> m_allRoundCount;//全局积分和牛型统计容器
+};
+
 #pragma pack(4)

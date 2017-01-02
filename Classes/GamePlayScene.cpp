@@ -342,9 +342,30 @@ void GamePlayScene::update(float delta)
 			//break;
 			case PP_ZZ_DOUNIU_TANPAI_ACK:
 			{
+				log("suanniu tanpai ack");
 				S_ZZ_SuanNiuTanPaiACK ack = S_ZZ_SuanNiuTanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				showCompare();
+			}
+			break;
+			//单局积分统计通知
+			case PP_ZZ_DOUNIU_ONE_ROUND_SUM_NOTIFY:
+			{
+				log("one round sum notify");
+				S_ZZ_OneRoundSumNotify ack = S_ZZ_OneRoundSumNotify::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				//弹出展示
+
+			}
+			break;
+			//全局积分统计通知
+			case PP_ZZ_DOUNIU_ALL_ROUND_SUM_NOTIFY:
+			{
+				log("all round sum notify");
+				S_ZZ_AllRoundSumNotify ack = S_ZZ_AllRoundSumNotify::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				//弹出展示
+
 			}
 			break;
 			default:
@@ -1311,40 +1332,39 @@ void GamePlayScene::showCompare(){
 	m_pPorkerManager->ShowAllPorkers();
     m_playNum++;
     if (m_playNum<=10) {
-        auto delayTime = DelayTime::create(3.0);
-        auto func=CallFunc::create(CC_CALLBACK_0(GamePlayScene::startNewPlay, this));
-        auto seq=Sequence::create(delayTime,func, nullptr);
-        this->runAction(seq);
+        //auto delayTime = DelayTime::create(3.0);
+        //auto func=CallFunc::create(CC_CALLBACK_0(GamePlayScene::startNewPlay, this));
+        //auto seq=Sequence::create(delayTime,func, nullptr);
+        //this->runAction(seq);
     }
     
 }
 
 //#pragma mark-延迟执行重新开局
-void GamePlayScene::startNewPlay(){
-    char path[256] = { 0 };
-    sprintf(path, "第%d局", m_playNum);
-    m_pNoticeLabel->setString(path);
-	m_pPorkerManager->EmptyAllPorkers();
-	m_startGameBtn->setVisible(true);
-	m_startGameBtn->setTouchEnabled(true);
-	m_startGameBtn->loadTextures("game/startgame.png", "");
-	if (m_pSiteManager->currentPlayerCount() == 5)
-	{
-		m_inviteBtn->setVisible(false);
-	}
-	else
-		m_inviteBtn->setVisible(true);
-	m_iState = StartState;
-	for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-	{
-		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
-	}
+//void GamePlayScene::startNewPlay(){
+//    char path[256] = { 0 };
+//    sprintf(path, "第%d局", m_playNum);
+//    m_pNoticeLabel->setString(path);
+//	m_pPorkerManager->EmptyAllPorkers();
+//	m_startGameBtn->setVisible(true);
+//	m_startGameBtn->setTouchEnabled(true);
+//	m_startGameBtn->loadTextures("game/startgame.png", "");
+//	if (m_pSiteManager->currentPlayerCount() == 5)
+//	{
+//		m_inviteBtn->setVisible(false);
+//	}
+//	else
+//		m_inviteBtn->setVisible(true);
+//	m_iState = StartState;
+//	for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+//	{
+//		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
+//	}
 
 
 	//不发牌怎么触发下一局？ zz
 	//S_FaPaiReq s;
 	//NetworkManger::getInstance()->SendRequest_FaPai(s);
-	S_ZZ_FaPaiReq req(m_playerID);
-	NetworkManger::getInstance()->SendRequest(req);
-}
-
+	//S_ZZ_FaPaiReq req(m_playerID);
+	//NetworkManger::getInstance()->SendRequest(req);
+//}

@@ -148,6 +148,8 @@ private:
     Button *m_recordBtn;
 	int m_roomID;
 	int m_playerID;
+	int m_bankerModel;//设定的庄家模式，抢庄或轮庄，0或1
+	int m_roundNum;//设定的单轮局数，10或20
 	SiteManager* m_pSiteManager;
 	PorkerManager* m_pPorkerManager;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
