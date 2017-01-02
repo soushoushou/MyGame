@@ -88,8 +88,8 @@ using namespace std;
 #define PP_ZZ_DOUNIU_VOICE_CHAT_REQ	(20022)
 #define PP_ZZ_DOUNIU_VOICE_CHAT_ACK	(20023)
 #define PP_ZZ_DOUNIU_MEMBER_INFO_NOTIFY	(20024)	
-#define PP_ZZ_DOUNIU_GAME_START_ACK	(20025)
-#define PP_ZZ_DOUNIU_GAME_OVER_ACK		(20026)
+#define PP_ZZ_DOUNIU_ONE_ROUND_START_NOTIFY	(20025)
+#define PP_ZZ_DOUNIU_ALL_ROUND_OVER_NOTIFY	(20026)
 #define PP_ZZ_DOUNIU_INVITE_CODE_REQ		(20027)
 #define PP_ZZ_DOUNIU_INVITE_CODE_ACK		(20028)
 #define PP_ZZ_DOUNIU_NOTICE_INFO_NOTIFY		(20029)
@@ -104,7 +104,8 @@ using namespace std;
 #define PP_ZZ_DOUNIU_KEEP_ALIVE_ACK		(20036)
 #define PP_ZZ_DOUNIU_CHECK_UPDATE_REQ	(20037)
 #define PP_ZZ_DOUNIU_CHECK_UPDATE_ACK	(20038)
-
+#define PP_ZZ_DOUNIU_ONE_ROUND_SUM_NOTIFY	(20039)
+#define PP_ZZ_DOUNIU_ALL_ROUND_SUM_NOTIFY	(20040)
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
@@ -1577,19 +1578,19 @@ struct S_ZZ_ReadyPlayACK
 
 //取消
 ////鍙戠墝璇锋眰
-//struct S_ZZ_FaPaiReq
-//{
-//	S_ZZ_FaPaiReq(unsigned long long playerID) :m_cmd(PP_ZZ_DOUNIU_FAPAI_REQ), m_packageLen(10),
-//		m_playerID(playerID)
-//	{
-//		m_packageLen = htonl(m_packageLen);
-//		m_cmd = htons(m_cmd);
-//		m_playerID = htonl(m_playerID);
-//	}
-//	int m_packageLen;
-//	short m_cmd;
-//	int m_playerID;
-//};
+struct S_ZZ_FaPaiReq
+{
+	S_ZZ_FaPaiReq(int playerID) :m_cmd(PP_ZZ_DOUNIU_FAPAI_REQ), m_packageLen(10),
+		m_playerID(playerID)
+	{
+		m_packageLen = htonl(m_packageLen);
+		m_cmd = htons(m_cmd);
+		m_playerID = htonl(m_playerID);
+	}
+	int m_packageLen;
+	short m_cmd;
+	int m_playerID;
+};
 
 //鍙戠墝鍝嶅簲
 struct S_ZZ_FaPaiACK
@@ -1611,10 +1612,10 @@ struct S_ZZ_FaPaiACK
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
-		int nPlayers = (s.m_packageLen - 8) / 28;
+		int nPlayers = (s.m_packageLen - 10) / 24;
 		for (int i = 0; i < nPlayers; ++i)
 		{
-			unsigned long long playerID = 0;
+			int playerID = 0;
 			memcpy(&playerID, pData, 4);
 			playerID = ntohl(playerID);
 			s.m_playerID.push_back(playerID);
@@ -1765,7 +1766,7 @@ struct S_ZZ_WechatOrderACK
 //抢庒请求，抢庒模式：1.不点抢庒，超时自动抢庒；2.只有一个抢庒则成为庄家；3.都不抢庒或者超过两个玩家抢庒则随机分配庄家
 struct S_ZZ_QiangZhuangReq
 {
-	S_ZZ_QiangZhuangReq(int playerID,int isQiang) :m_cmd(PP_DOUNIU_QIANGZHUANG_REQ), m_packageLen(14),
+	S_ZZ_QiangZhuangReq(int playerID,int isQiang) :m_cmd(PP_ZZ_DOUNIU_QIANGZHUANG_REQ), m_packageLen(14),
 		m_playerID(playerID)
 	{
 		m_packageLen = htonl(m_packageLen);
@@ -2327,7 +2328,7 @@ struct S_ZZ_KeepaliveReq
 	S_ZZ_KeepaliveReq(int playerID) :m_cmd(PP_ZZ_DOUNIU_KEEP_ALIVE_REQ),
 		m_playerID(playerID)
 	{
-		m_packageLen = htonl(14);
+		m_packageLen = htonl(10);
 		m_cmd = htons(m_cmd);
 		m_playerID = htonl(m_playerID);
 	}
