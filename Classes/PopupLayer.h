@@ -58,6 +58,7 @@ public:
 	bool createWLListView(const vector<pair<int, int>> quickMessage);
 	Ref* m_callbackListener;
 	SEL_CallFuncN m_callback;
+	void setPlayerID(int playerID);
 
 private:
 	void buttonCallBack(Ref* pSender);
@@ -68,7 +69,7 @@ private:
 	ListView* lv;
 	Size m_dialogContentSize;
 	EditBox* pEditBox_roomNum;
-
+	int m_playerID;
 	//set and get
 	CC_SYNTHESIZE_RETAIN(Menu*, m__pMenu, MenuButton);
 	CC_SYNTHESIZE_RETAIN(Sprite*, m__sfBackGround, SpriteBackGround);

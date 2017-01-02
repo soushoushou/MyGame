@@ -1124,8 +1124,8 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			if (tag == TAG_JOINROOM_BTN) {
 				num = num01 + num02 + num03 + num04 + num05 + num06;
 				int roomid = atoi(num.c_str());
-				//S_ZZ_JoinRoomReq jr(roomid);
-				//NetworkManger::getInstance()->SendRequest(jr);
+				S_ZZ_JoinRoomReq jr(m_playerID,roomid);
+				NetworkManger::getInstance()->SendRequest(jr);
 			}
 			return;
 		}
@@ -1134,8 +1134,8 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			case TAG_CREATEROOM_BTN:
 			{
-				//S_CreateRoomReq ss;
-				//NetworkManger::getInstance()->SendRequest_CreateRoom(ss);
+				S_ZZ_CreateRoomReq req(m_playerID,0,10);
+				NetworkManger::getInstance()->SendRequest(req);
 
 				break;
 			}
@@ -1160,6 +1160,11 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		}
 	}
 }
+
+void PopupLayer::setPlayerID(int playerID){
+	m_playerID = playerID;
+}
+
 void PopupLayer::buttonCallBack(Ref* pSender) {
 	MenuItemImage* butten = (MenuItemImage*)pSender;
 	unsigned int tag = butten->getTag();

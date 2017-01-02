@@ -261,7 +261,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 		{
 			PopupLayer* pl = PopupLayer::createRoomDialog("popuplayer/startgamepopupbg.png", Size(710, 499));
 			pl->setCallbackFunc(butten->getParent(), callfuncN_selector(MainScene::buttonCallback));
-
+			pl->setPlayerID(m_playerID);
 			butten->getParent()->addChild(pl);
 	
 			break;
@@ -271,6 +271,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("join room!");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
 			PopupLayer* pl = PopupLayer::joinRoomWith9Dialog("popuplayer/joinRoomBg2.png", Size(621, 542));
+			pl->setPlayerID(m_playerID);
 			butten->getParent()->addChild(pl);
 			break;
 		}
@@ -291,6 +292,7 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("NOTIC");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
 			PopupLayer* pl = PopupLayer::noticeDialog("popuplayer/backbg.png", Size(size.width / 2, size.height / 7 * 4));
+			pl->setPlayerID(m_playerID);
 			butten->getParent()->addChild(pl);
 			break;
 		}
@@ -299,11 +301,13 @@ void MainScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("SETTING");
 			CCSize size = CCDirector::sharedDirector()->getWinSize();
 			PopupLayer* pl = PopupLayer::settingDialog("popuplayer/settingbg.png", Size(size.width / 2, size.height / 7 * 4));
+			pl->setPlayerID(m_playerID);
 			butten->getParent()->addChild(pl);
 			break; }
 		case TAG_BACK_BTN: {
 			auto pl = PopupLayer::backDialog("popuplayer/backbg.png", Size(610, 399), "quit room", "Are you sure?");
 			butten->getParent()->addChild(pl);
+			pl->setPlayerID(m_playerID);
 			pl->setCallbackFunc(this, callfuncN_selector(MainScene::buttonCallback));
 			break;
 			}
