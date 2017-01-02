@@ -284,7 +284,7 @@ void GamePlayScene::update(float delta)
 			break;
 			case PP_ZZ_DOUNIU_READY_ACK:
 			{
-				S_ReadyPlayACK ack = S_ReadyPlayACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				S_ZZ_ReadyPlayACK ack = S_ZZ_ReadyPlayACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 				if (ack.m_isOK == 0)
 				{
@@ -299,7 +299,7 @@ void GamePlayScene::update(float delta)
 					log("ready failed!");
 			}
 			break;
-			case PP_ZZ_DOUNIU_GAME_START_ACK:
+			case PP_ZZ_DOUNIU_ONE_ROUND_START_NOTIFY:
 			{
 				S_ZZ_GameStartACK ack = S_ZZ_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
@@ -451,8 +451,8 @@ void GamePlayScene::update(float delta)
 				m_timeLayer->removeFromParent();
 				m_timeLayer = nullptr;
 				m_startGameBtn->setVisible(false);
-				//S_FaPaiReq s;
-				//NetworkManger::getInstance()->SendRequest_FaPai(s);
+				S_ZZ_FaPaiReq req(m_playerID);
+				NetworkManger::getInstance()->SendRequest(req);
 				m_bGameStart = false;
 			}
 		}
@@ -1344,7 +1344,7 @@ void GamePlayScene::startNewPlay(){
 	//不发牌怎么触发下一局？ zz
 	//S_FaPaiReq s;
 	//NetworkManger::getInstance()->SendRequest_FaPai(s);
-	//S_ZZ_FaPaiReq req(m_playerID);
-	//NetworkManger::getInstance()->SendRequest(req);
+	S_ZZ_FaPaiReq req(m_playerID);
+	NetworkManger::getInstance()->SendRequest(req);
 }
 

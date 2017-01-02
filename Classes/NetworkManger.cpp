@@ -76,11 +76,11 @@ NetworkManger::~NetworkManger()
 
 bool NetworkManger::SendRequest(const S_ZZ_WechatLoginReq& requestData)
 {
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_strCodeLen), 2);
 	pIndex += 2;
@@ -99,11 +99,11 @@ bool NetworkManger::SendRequest(const S_ZZ_WechatLoginReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_CreateRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_playerID), 4);
 	pIndex += 4;
@@ -122,11 +122,11 @@ bool NetworkManger::SendRequest(const S_ZZ_CreateRoomReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_WechatOrderReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -140,33 +140,33 @@ bool NetworkManger::SendRequest(const S_ZZ_WechatOrderReq& requestData)
 	return ret;
 }
 
-//bool NetworkManger::SendRequest(const S_ZZ_FaPaiReq& requestData)
-//{
-//	//¥¶¿Ì ˝æ›
-//	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
-//	char* pIndex = dataBuf;
-//	memcpy(pIndex, &requestData.m_cmd, 2);
-//	pIndex += 2;
-//	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
-//	pIndex += 2;
-//	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
-//	pIndex += 4;
-//
-//	bool ret = false;
-//	ret = _SendRequest((void*)(dataBuf), ntohl(requestData.m_packageLen));
-//
-//	delete[] dataBuf;
-//	return ret;
-//}
+bool NetworkManger::SendRequest(const S_ZZ_FaPaiReq& requestData)
+{
+	//¥¶¿Ì ˝æ›
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
+	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
+	memcpy(pIndex, &requestData.m_cmd, 2);
+	pIndex += 2;	
+	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
+	pIndex += 4;
+
+	bool ret = false;
+	ret = _SendRequest((void*)(dataBuf), ntohl(requestData.m_packageLen));
+
+	delete[] dataBuf;
+	return ret;
+}
 
 bool NetworkManger::SendRequest(const S_ZZ_GetPlayerInfoReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_playerID), 4);
 
@@ -180,11 +180,11 @@ bool NetworkManger::SendRequest(const S_ZZ_GetPlayerInfoReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_JoinRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -199,11 +199,11 @@ bool NetworkManger::SendRequest(const S_ZZ_JoinRoomReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_QiangZhuangReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -220,11 +220,11 @@ bool NetworkManger::SendRequest(const S_ZZ_QiangZhuangReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_QuitRoomReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -239,11 +239,11 @@ bool NetworkManger::SendRequest(const S_ZZ_QuitRoomReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_ReadyPlayReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -258,11 +258,11 @@ bool NetworkManger::SendRequest(const S_ZZ_ReadyPlayReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_SearchZhanjiReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -294,11 +294,11 @@ bool NetworkManger::SendRequest(const S_ZZ_SearchZhanjiReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_SuanNiuTanPaiReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -313,11 +313,11 @@ bool NetworkManger::SendRequest(const S_ZZ_SuanNiuTanPaiReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_YaZhuReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	char* dataBuf = new char[ntohs(requestData.m_packageLen)];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
+	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
+	pIndex += 4;
 	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
-	memcpy(pIndex, ((char*)&requestData.m_packageLen), 2);
 	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
@@ -332,13 +332,12 @@ bool NetworkManger::SendRequest(const S_ZZ_YaZhuReq& requestData)
 bool NetworkManger::SendRequest(const S_ZZ_VoiceChatReq& requestData)
 {
 	//¥¶¿Ì ˝æ›
-	unsigned int len = ntohl(requestData.m_packageLen);
-	char* dataBuf = new char[len];
+	char* dataBuf = new char[ntohl(requestData.m_packageLen)];
 	char* pIndex = dataBuf;
-	memcpy(pIndex, &requestData.m_cmd, 2);
-	pIndex += 2;
 	memcpy(pIndex, ((char*)&requestData.m_packageLen), 4);
 	pIndex += 4;
+	memcpy(pIndex, &requestData.m_cmd, 2);
+	pIndex += 2;
 	memcpy(pIndex, (char*)&requestData.m_playerID, 4);
 	pIndex += 4;
 	memcpy(pIndex, ((char*)&requestData.m_voiceSize), 4);
@@ -562,12 +561,12 @@ void NetworkManger::popACKQueue()
 	m_ackQueue.popACKResponse();
 }
 
-unsigned short NetworkManger::getQueueFrontACKCmd()
+short NetworkManger::getQueueFrontACKCmd()
 {
-	unsigned short cmd = 0;
+	short cmd = 0;
 	S_ACKResponse *s = m_ackQueue.getFrontFromQueue();
-	memcpy(&cmd, s->m_buf, 4);
-	unsigned short tt = ntohs(cmd);
+	memcpy(&cmd, s->m_buf+4, 2);
+	short tt = ntohs(cmd);
 	return tt;
 }
 
