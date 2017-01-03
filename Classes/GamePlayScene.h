@@ -144,6 +144,7 @@ private:
     int m_playNum;
     LabelTTF *m_pNoticeLabel;
 	Label *m_pRoomNumberLabel;
+	LabelTTF *m_pWaitYaZhuLabel;
 	LabelTTF *m_pModelLabel;
     Button *m_recordBtn;
 	int m_roomID;

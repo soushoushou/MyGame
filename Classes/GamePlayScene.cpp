@@ -197,9 +197,9 @@ void GamePlayScene::update(float delta)
 						showChooseMultipleButton();
 					}
 					else
-					{
-						//S_YaZhuReq req(1);
-						//NetworkManger::getInstance()->SendRequest_YaZhu(req);
+					{	
+						//自己是庄家,提示等待贤家押注,但什么时候不显示 没协议
+						m_pWaitYaZhuLabel->setVisible(true);
 					}
 
 				}
@@ -245,8 +245,8 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ya zhu success!");
-					//S_TanPaiReq t;
-					//NetworkManger::getInstance()->SendRequest_TanPai(t);
+					NiuPoker *p = m_pPorkerManager->GetMePlayerPoker()[4];
+					p->showFront();
 					if (m_creatMulBtn)
 					{
 						m_OneBtn->setVisible(false);
@@ -280,6 +280,10 @@ void GamePlayScene::update(float delta)
 				{
 					m_inviteBtn->setVisible(false);
 				}
+				if (m_pSiteManager->currentPlayerCount() > 1)
+				{
+					m_startGameBtn->setVisible(true);
+				}
 			}
 			break;
 			case PP_ZZ_DOUNIU_READY_ACK:
@@ -293,7 +297,6 @@ void GamePlayScene::update(float delta)
 					{
 						m_pSiteManager->showReady(ack.m_playerID);
 					}
-					
 				}
 				else
 					log("ready failed!");
@@ -342,6 +345,7 @@ void GamePlayScene::update(float delta)
 			//break;
 			case PP_ZZ_DOUNIU_TANPAI_ACK:
 			{
+				m_pWaitYaZhuLabel->setVisible(false);
 				log("suanniu tanpai ack");
 				S_ZZ_SuanNiuTanPaiACK ack = S_ZZ_SuanNiuTanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
@@ -378,87 +382,87 @@ void GamePlayScene::update(float delta)
 	{
 	case StartState:
 	{
-		/////单机测试用
-		//static bool flag = true;
-		//static int ccc = 2;
-		//static int bbb = 22;
-		//char buf[10] = { 0 };
-		//sprintf(buf, "%d", bbb);
-		//string name = buf;
-		//if (rand() % 100 < 50 && flag && m_testID.size() < 5)
-		//{
-		//	m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-		//	m_pSiteManager->showChatMessage(ccc, "asdasdfasdffaawwsw");
-		//	if (m_pSiteManager->currentPlayerCount() == 5)
-		//	{
-		//		m_inviteBtn->setVisible(false);
-		//	}
-		//	m_pSiteManager->showReady(ccc);
-		//	m_testID.push_back(ccc);
-		//	if (rand() % 3 == 1)
-		//	{
-		//		static int iii = 2;
-		//		m_pSiteManager->leaveSite(iii);
-		//		m_inviteBtn->setVisible(true);
-		//		for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
-		//		{
-		//			if (*iter == iii)
-		//			{
-		//				m_testID.erase(iter);
-		//				break;
-		//			}
-		//		}
-		//		++iii;
-		//	}
-		//	++ccc;
-		//	++bbb;
-		//}
-		//if (m_testID.size() == 5)
-		//{
-		//	if (!m_timeLayer && m_bReady)
-		//	{
-		//		m_timeLayer = TimeLayer::create();
-		//		addChild(m_timeLayer, 50);
-		//	}
-		//	if (m_timeLayer && m_timeLayer->canRemove())
-		//	{
-		//		m_timeLayer->setVisible(false);
-		//		m_timeLayer->removeFromParent();
-		//		m_timeLayer = nullptr;
-		//		m_startGameBtn->setVisible(false);
-		//		m_inviteBtn->setVisible(false);
-		//		m_iState = SendPokerState;
+		///单机测试用
+		static bool flag = true;
+		static int ccc = 2;
+		static int bbb = 22;
+		char buf[10] = { 0 };
+		sprintf(buf, "%d", bbb);
+		string name = buf;
+		if (rand() % 100 < 50 && flag && m_testID.size() < 5)
+		{
+			m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+			m_pSiteManager->showChatMessage(ccc, "asdasdfasdffaawwsw");
+			if (m_pSiteManager->currentPlayerCount() == 5)
+			{
+				m_inviteBtn->setVisible(false);
+			}
+			m_pSiteManager->showReady(ccc);
+			m_testID.push_back(ccc);
+			if (rand() % 3 == 1)
+			{
+				static int iii = 2;
+				m_pSiteManager->leaveSite(iii);
+				m_inviteBtn->setVisible(true);
+				for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+				{
+					if (*iter == iii)
+					{
+						m_testID.erase(iter);
+						break;
+					}
+				}
+				++iii;
+			}
+			++ccc;
+			++bbb;
+		}
+		if (m_testID.size() == 5)
+		{
+			if (!m_timeLayer && m_bReady)
+			{
+				m_timeLayer = TimeLayer::create();
+				addChild(m_timeLayer, 50);
+			}
+			if (m_timeLayer && m_timeLayer->canRemove())
+			{
+				m_timeLayer->setVisible(false);
+				m_timeLayer->removeFromParent();
+				m_timeLayer = nullptr;
+				m_startGameBtn->setVisible(false);
+				m_inviteBtn->setVisible(false);
+				m_iState = SendPokerState;
 
-		//		//发牌
-		//		vector<S_PlayerPorker> porkers;
-		//		vector<int> ttt(52, 0);
-		//		for (int i = 0; i < 52; ++i)
-		//		{
-		//			ttt[i] = i + 1;
-		//		}
-		//		for (int i = 0; i < 25; ++i)
-		//		{
-		//			int t = rand() % 52;
-		//			int c = ttt[t];
-		//			ttt[t] = ttt[i];
-		//			ttt[i] = c;
-		//		}
-		//		for (int i = 0; i < m_testID.size(); ++i)
-		//		{
-		//			S_PlayerPorker s;
-		//			s.playerID = m_testID[i];
-		//			m_pSiteManager->showReady(s.playerID, false);
-		//			for (int j = 0; j < 5; ++j)
-		//			{
-		//				s.vecPorkerIndex[j] = ttt[(i)* 5 + j] - 1;
-		//			}
-		//			porkers.push_back(s);
-		//		}
-		//		m_pPorkerManager->SendPorker(porkers);
-		//	}
-		//	flag = false;
-		//}
-		////////////////////////////////////////////////////////////////////////////
+				//发牌
+				vector<S_PlayerPorker> porkers;
+				vector<int> ttt(52, 0);
+				for (int i = 0; i < 52; ++i)
+				{
+					ttt[i] = i + 1;
+				}
+				for (int i = 0; i < 25; ++i)
+				{
+					int t = rand() % 52;
+					int c = ttt[t];
+					ttt[t] = ttt[i];
+					ttt[i] = c;
+				}
+				for (int i = 0; i < m_testID.size(); ++i)
+				{
+					S_PlayerPorker s;
+					s.playerID = m_testID[i];
+					m_pSiteManager->showReady(s.playerID, false);
+					for (int j = 0; j < 5; ++j)
+					{
+						s.vecPorkerIndex[j] = ttt[(i)* 5 + j] - 1;
+					}
+					porkers.push_back(s);
+				}
+				m_pPorkerManager->SendPorker(porkers);
+			}
+			flag = false;
+		}
+		//////////////////////////////////////////////////////////////////////////
 		if (m_bGameStart)
 		{
 			if (!m_timeLayer && m_bReady)
@@ -572,6 +576,16 @@ bool GamePlayScene::initBackground()
     m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
 	m_pModelLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pModelLabel);
+
+	m_pWaitYaZhuLabel = LabelTTF::create("等待贤家押注...", "Arial", 25);
+	if (!m_pWaitYaZhuLabel)
+	{
+		return false;
+	}
+	m_pWaitYaZhuLabel->setPosition(Vec2(size.width / 2, 200));
+	m_pWaitYaZhuLabel->setColor(Color3B(255,255,255));
+	this->addChild(m_pWaitYaZhuLabel);
+	m_pWaitYaZhuLabel->setVisible(false);
 	return true;
 }
 void GamePlayScene::showSuanNiuUi() {
@@ -662,6 +676,7 @@ bool GamePlayScene::initButtons()
 	m_startGameBtn->setPosition(cocos2d::Vec2(Size.width / 2, Size.height / 2 - 150));
 	m_startGameBtn->addTouchEventListener(CC_CALLBACK_2(GamePlayScene::onBtnTouch, this));
 	this->addChild(m_startGameBtn,51);
+	m_startGameBtn->setVisible(false);
 
 	//邀请好友
 	m_inviteBtn = Button::create("game/inviteFriendBtn_normal.png", "game/inviteFriendBtn_pressed.png");
