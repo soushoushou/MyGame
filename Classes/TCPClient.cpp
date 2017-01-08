@@ -60,46 +60,46 @@ bool CTCPClient::isWantedCMD(short& cmd)
 	return false;
 }
 
-bool CTCPClient::isRecvCompelete(unsigned int& nPackageLen)
-{
-	static bool b = false;
-	static unsigned int Len = 0;
-	if (!b)
-	{
-		if (m_nInbufLen >= 6)
-		{
-			short cmd = 0;
-			memcpy(&cmd, m_bufInput+m_nInbufStart+4, 2);
-			cmd = ntohs(cmd);
-			if (isWantedCMD(cmd))
-			{
-				int packageLen = 0;
-				memcpy(&packageLen, m_bufInput + m_nInbufStart, 4);
-				packageLen = ntohl(packageLen);
-				if (packageLen <= m_nInbufLen - m_nInbufStart)
-				{
-					b = false;
-					Len = 0;
-					nPackageLen = packageLen;
-					return true;
-				}
-				Len = packageLen;
-				b = true;
-			}
-		}
-	}
-	else
-	{
-		if (Len <= m_nInbufLen - m_nInbufStart)
-		{
-			b = false;
-			Len = 0;
-			nPackageLen = m_nInbufLen - m_nInbufStart;
-			return true;
-		}
-	}
-	return false;
-}
+//bool CTCPClient::isRecvCompelete(int& nPackageLen)
+//{
+//	static bool b = false;
+//	static unsigned int Len = 0;
+//	if (!b)
+//	{
+//		if (m_nInbufLen >= 6)
+//		{
+//			short cmd = 0;
+//			memcpy(&cmd, m_bufInput+m_nInbufStart+4, 2);
+//			cmd = ntohs(cmd);
+//			if (isWantedCMD(cmd))
+//			{
+//				int packageLen = 0;
+//				memcpy(&packageLen, m_bufInput + m_nInbufStart, 4);
+//				packageLen = ntohl(packageLen);
+//				if (packageLen <= m_nInbufLen - m_nInbufStart)
+//				{
+//					b = false;
+//					Len = 0;
+//					nPackageLen = packageLen;
+//					return true;
+//				}
+//				Len = packageLen;
+//				b = true;
+//			}
+//		}
+//	}
+//	else
+//	{
+//		if (Len <= m_nInbufLen - m_nInbufStart)
+//		{
+//			b = false;
+//			Len = 0;
+//			nPackageLen = m_nInbufLen - m_nInbufStart;
+//			return true;
+//		}
+//	}
+//	return false;
+//}
 
 
 void CTCPClient::NetworkThreadFunc()
@@ -119,15 +119,35 @@ void CTCPClient::NetworkThreadFunc()
 		{
 			if (ReceiveMsg())
 			{
-				unsigned int packageLen = 0;
-				if (isRecvCompelete(packageLen))
+				
+				bool ishasnext = true;
+				while (ishasnext)
 				{
+					int packageLen = 0;
+					memcpy(&packageLen, m_bufInput + m_nInbufStart, 4);
+					packageLen = ntohl(packageLen);
+
+					short cmd = 0;
+					memcpy(&cmd, m_bufInput + m_nInbufStart + 4, 2);
+					cmd = ntohs(cmd);
+
+					if (!isWantedCMD(cmd)){
+						break;
+					}
+
+					if (m_nInbufStart + packageLen > m_nInbufLen){
+						break;
+					}
+
 					//往消息队列添加ack
 					NetworkManger::getInstance()->pushACKQueue(m_bufInput+m_nInbufStart, packageLen);
-					m_pRequest = nullptr;
-					if (packageLen == m_nInbufLen)
+					
+					if (m_nInbufStart + packageLen == m_nInbufLen)
 					{
 						m_nInbufLen = 0;
+						m_nInbufStart = 0;
+						m_pRequest = nullptr;
+						break;
 					}
 					else
 						m_nInbufStart += packageLen;
