@@ -280,10 +280,7 @@ void GamePlayScene::update(float delta)
 				{
 					m_inviteBtn->setVisible(false);
 				}
-				if (m_pSiteManager->currentPlayerCount() > 1)
-				{
-					m_startGameBtn->setVisible(true);
-				}
+				m_startGameBtn->setVisible(true);
 			}
 			break;
 			case PP_ZZ_DOUNIU_READY_ACK:
@@ -382,87 +379,87 @@ void GamePlayScene::update(float delta)
 	{
 	case StartState:
 	{
-		///单机测试用
-		static bool flag = true;
-		static int ccc = 2;
-		static int bbb = 22;
-		char buf[10] = { 0 };
-		sprintf(buf, "%d", bbb);
-		string name = buf;
-		if (rand() % 100 < 50 && flag && m_testID.size() < 5)
-		{
-			m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
-			m_pSiteManager->showChatMessage(ccc, "asdasdfasdffaawwsw");
-			if (m_pSiteManager->currentPlayerCount() == 5)
-			{
-				m_inviteBtn->setVisible(false);
-			}
-			m_pSiteManager->showReady(ccc);
-			m_testID.push_back(ccc);
-			if (rand() % 3 == 1)
-			{
-				static int iii = 2;
-				m_pSiteManager->leaveSite(iii);
-				m_inviteBtn->setVisible(true);
-				for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
-				{
-					if (*iter == iii)
-					{
-						m_testID.erase(iter);
-						break;
-					}
-				}
-				++iii;
-			}
-			++ccc;
-			++bbb;
-		}
-		if (m_testID.size() == 5)
-		{
-			if (!m_timeLayer && m_bReady)
-			{
-				m_timeLayer = TimeLayer::create();
-				addChild(m_timeLayer, 50);
-			}
-			if (m_timeLayer && m_timeLayer->canRemove())
-			{
-				m_timeLayer->setVisible(false);
-				m_timeLayer->removeFromParent();
-				m_timeLayer = nullptr;
-				m_startGameBtn->setVisible(false);
-				m_inviteBtn->setVisible(false);
-				m_iState = SendPokerState;
+	//	///单机测试用
+	//	static bool flag = true;
+	//	static int ccc = 2;
+	//	static int bbb = 22;
+	//	char buf[10] = { 0 };
+	//	sprintf(buf, "%d", bbb);
+	//	string name = buf;
+	//	if (rand() % 100 < 50 && flag && m_testID.size() < 5)
+	//	{
+	//		m_pSiteManager->joinSite(ccc, name, rand() % 1000, rand() % 10000);
+	//		m_pSiteManager->showChatMessage(ccc, "asdasdfasdffaawwsw");
+	//		if (m_pSiteManager->currentPlayerCount() == 5)
+	//		{
+	//			m_inviteBtn->setVisible(false);
+	//		}
+	//		m_pSiteManager->showReady(ccc);
+	//		m_testID.push_back(ccc);
+	//		if (rand() % 3 == 1)
+	//		{
+	//			static int iii = 2;
+	//			m_pSiteManager->leaveSite(iii);
+	//			m_inviteBtn->setVisible(true);
+	//			for (vector<unsigned long long>::iterator iter = m_testID.begin(); iter != m_testID.end(); ++iter)
+	//			{
+	//				if (*iter == iii)
+	//				{
+	//					m_testID.erase(iter);
+	//					break;
+	//				}
+	//			}
+	//			++iii;
+	//		}
+	//		++ccc;
+	//		++bbb;
+	//	}
+	//	if (m_testID.size() == 5)
+	//	{
+	//		if (!m_timeLayer && m_bReady)
+	//		{
+	//			m_timeLayer = TimeLayer::create();
+	//			addChild(m_timeLayer, 50);
+	//		}
+	//		if (m_timeLayer && m_timeLayer->canRemove())
+	//		{
+	//			m_timeLayer->setVisible(false);
+	//			m_timeLayer->removeFromParent();
+	//			m_timeLayer = nullptr;
+	//			m_startGameBtn->setVisible(false);
+	//			m_inviteBtn->setVisible(false);
+	//			m_iState = SendPokerState;
 
-				//发牌
-				vector<S_PlayerPorker> porkers;
-				vector<int> ttt(52, 0);
-				for (int i = 0; i < 52; ++i)
-				{
-					ttt[i] = i + 1;
-				}
-				for (int i = 0; i < 25; ++i)
-				{
-					int t = rand() % 52;
-					int c = ttt[t];
-					ttt[t] = ttt[i];
-					ttt[i] = c;
-				}
-				for (int i = 0; i < m_testID.size(); ++i)
-				{
-					S_PlayerPorker s;
-					s.playerID = m_testID[i];
-					m_pSiteManager->showReady(s.playerID, false);
-					for (int j = 0; j < 5; ++j)
-					{
-						s.vecPorkerIndex[j] = ttt[(i)* 5 + j] - 1;
-					}
-					porkers.push_back(s);
-				}
-				m_pPorkerManager->SendPorker(porkers);
-			}
-			flag = false;
-		}
-		//////////////////////////////////////////////////////////////////////////
+	//			//发牌
+	//			vector<S_PlayerPorker> porkers;
+	//			vector<int> ttt(52, 0);
+	//			for (int i = 0; i < 52; ++i)
+	//			{
+	//				ttt[i] = i + 1;
+	//			}
+	//			for (int i = 0; i < 25; ++i)
+	//			{
+	//				int t = rand() % 52;
+	//				int c = ttt[t];
+	//				ttt[t] = ttt[i];
+	//				ttt[i] = c;
+	//			}
+	//			for (int i = 0; i < m_testID.size(); ++i)
+	//			{
+	//				S_PlayerPorker s;
+	//				s.playerID = m_testID[i];
+	//				m_pSiteManager->showReady(s.playerID, false);
+	//				for (int j = 0; j < 5; ++j)
+	//				{
+	//					s.vecPorkerIndex[j] = ttt[(i)* 5 + j] - 1;
+	//				}
+	//				porkers.push_back(s);
+	//			}
+	//			m_pPorkerManager->SendPorker(porkers);
+	//		}
+	//		flag = false;
+	//	}
+	//	//////////////////////////////////////////////////////////////////////////
 		if (m_bGameStart)
 		{
 			if (!m_timeLayer && m_bReady)
