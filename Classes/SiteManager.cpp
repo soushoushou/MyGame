@@ -240,7 +240,7 @@ bool SiteManager::showZhuangJia(unsigned long long playerID)
 			if (m_inRoomPlayerID[i] == playerID)
 			{
 				m_lock.lock();
-				m_pUserProfileVecs[i]->showBanker();
+				m_pUserProfileVecs[i]->showBanker(true);
 				m_lock.unlock();
 			}
 			else
@@ -279,6 +279,7 @@ bool SiteManager::showReady(unsigned long long playerID, bool isShow /* = true *
 			return true;
 		}
 	}
+	return false;
 }
 
 bool SiteManager::showMultiple(unsigned long long playerID,bool isShow /*= true*/)
