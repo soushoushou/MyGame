@@ -161,9 +161,11 @@ int32   （0：成功，1：失败）
 PP_DOUNIU_YAZHU_REQ
 int32    角色ID
 int32    押注倍数
-20019   押注响应(s >> c)（押注成功后，显示玩家的最后一张牌）
+20019   押注响应(s >> c)（押注成功后，显示玩家的最后一张牌，该ACK要发往房间内的所有玩家，客户端需展示）
 PP_DOUNIU_YAZHU_ACK
 int32   （0：成功，1：失败）
+int32    角色ID
+int32   押注倍数
 20020   快速聊天请求(c >> s)
 PP_DOUNIU_QUICK_CHAT_REQ
 int32    角色ID
