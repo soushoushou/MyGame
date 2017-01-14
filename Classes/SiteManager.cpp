@@ -2,7 +2,7 @@
 #include "ChatBubble.h"
 
 
-SiteManager::SiteManager(Node* parent, unsigned long long currentPlayerID) 
+SiteManager::SiteManager(Node* parent, int currentPlayerID)
 {
 	m_lock.lock();
 	m_pParent = (Node*)parent;
@@ -77,7 +77,7 @@ SiteManager::~SiteManager()
 	m_lock.unlock();
 }
 
-void SiteManager::showChatMessage(unsigned long long playerID, string strMessage, float timeThreshold /*= 3.0f*/)
+void SiteManager::showChatMessage(int playerID, string strMessage, float timeThreshold /*= 3.0f*/)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -108,7 +108,7 @@ int SiteManager::currentPlayerCount() const
 
 
 //坐下座位
-bool SiteManager::joinSite(unsigned long long playerID, string playerName, int diamond, int money)
+bool SiteManager::joinSite(int playerID, string playerName, int diamond, int money)
 {
 	for (int i = 0; i < m_playerInRoom.size(); ++i)
 	{
@@ -168,7 +168,7 @@ bool SiteManager::joinSite(unsigned long long playerID, string playerName, int d
 }
 
 //离开座位
-bool SiteManager::leaveSite(unsigned long long playerID)
+bool SiteManager::leaveSite(int playerID)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -190,7 +190,7 @@ bool SiteManager::leaveSite(unsigned long long playerID)
 }
 
 //显示牛
-bool SiteManager::showNiu(unsigned long long playerID, int niuIndex)
+bool SiteManager::showNiu(int playerID, int niuIndex)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -231,7 +231,7 @@ void SiteManager::hideAllNiu()
 	}
 }
 
-bool SiteManager::showZhuangJia(unsigned long long playerID)
+bool SiteManager::showZhuangJia(int playerID)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -252,7 +252,7 @@ bool SiteManager::showZhuangJia(unsigned long long playerID)
 	return true;
 }
 
-bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
+bool SiteManager::setMultiple(int playerID, int multiple)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -267,7 +267,7 @@ bool SiteManager::setMultiple(unsigned long long playerID, int multiple)
 	return false;
 }
 
-bool SiteManager::showReady(unsigned long long playerID, bool isShow /* = true */)
+bool SiteManager::showReady(int playerID, bool isShow /* = true */)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{
@@ -282,7 +282,7 @@ bool SiteManager::showReady(unsigned long long playerID, bool isShow /* = true *
 	return false;
 }
 
-bool SiteManager::showMultiple(unsigned long long playerID,bool isShow /*= true*/)
+bool SiteManager::showMultiple(int playerID, bool isShow /*= true*/)
 {
 	for (int i = 0; i < m_inRoomPlayerID.size(); ++i)
 	{

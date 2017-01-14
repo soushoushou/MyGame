@@ -1801,11 +1801,10 @@ struct S_ZZ_QiangZhuangACK
 		memcpy(&s.m_statusCode, pData, 4);
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
-		if (s.m_statusCode == 0)
-		{
-			memcpy(&s.m_ZhuangJiaID, pData, 4);
-			s.m_ZhuangJiaID = ntohl(s.m_ZhuangJiaID);
-		}
+
+		memcpy(&s.m_ZhuangJiaID, pData, 4);
+		s.m_ZhuangJiaID = ntohl(s.m_ZhuangJiaID);
+
 		return s;
 	}
 
