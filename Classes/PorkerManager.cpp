@@ -135,13 +135,17 @@ bool PorkerManager::RunActions()
 	return false;
 }
 
-void PorkerManager::ShowAllPorkers()
+void PorkerManager::ShowAllPorkers(int mPlayerID)
 {
 	for (int i = 0; i < m_pSitManager->m_inRoomPlayer.size(); ++i)
 	{
 		if (m_pSitManager->m_inRoomPlayer[i] != nullptr)
 		{
-			m_pSitManager->m_inRoomPlayer[i]->showAllPokers();
+			if (m_pSitManager->m_inRoomPlayerID[i] == mPlayerID)
+			{
+				m_pSitManager->m_inRoomPlayer[i]->showAllPokers();
+				break;
+			}
 		}
 	}
 }

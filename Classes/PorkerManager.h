@@ -21,7 +21,7 @@ public:
 	PorkerManager(Node* parent,SiteManager* pSite);
 	virtual ~PorkerManager();
 	void SendPorker(const vector<S_PlayerPorker>& porkers);			//发牌
-	void ShowAllPorkers();
+	void ShowAllPorkers(int mPlayerID);
 	void EmptyAllPorkers();
 	bool RunActions();												//运行发牌动画，返回true则代表所有动画结束
 	vector<NiuPoker*> GetMePlayerPoker();							//返回游戏中ME玩家的5张牌

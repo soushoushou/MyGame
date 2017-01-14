@@ -67,7 +67,7 @@ private:
     /** 显示倍数按钮 */
     void showChooseMultipleButton();
     /** 显示结果 */
-    void showCompare();
+    void showCompare(int mPlayerID);
     /** 重新开局 */
     void startNewPlay();
     /** 不抢和抢庄超时事件 */

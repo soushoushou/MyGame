@@ -188,26 +188,20 @@ void GamePlayScene::update(float delta)
 			{
 				S_ZZ_QiangZhuangACK ack = S_ZZ_QiangZhuangACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				if (ack.m_statusCode == 0)
+
+				//显示庄家，有问题！！！
+				m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
+			
+				if (ack.m_ZhuangJiaID != m_playerID)
 				{
-					m_pSiteManager->showZhuangJia(ack.m_ZhuangJiaID);
-					log("qiang zhuang success!");
-					if (ack.m_ZhuangJiaID != m_playerID)
-					{
-						showChooseMultipleButton();
-					}
-					else
-					{	
-						//自己是庄家,提示等待贤家押注,但什么时候不显示 没协议
-						m_pWaitYaZhuLabel->setVisible(true);
-					}
-
+					//自己是闲家，展示押注按钮
+					showChooseMultipleButton();
 				}
-				else {
-					log("qiang zhuang failed!");
-
+				else
+				{
+					//自己是庄家,提示等待贤家押注
+					m_pWaitYaZhuLabel->setVisible(true);
 				}
-				
 			}
 			break;
 			case PP_ZZ_DOUNIU_QUIT_ROOM_ACK:
@@ -245,26 +239,35 @@ void GamePlayScene::update(float delta)
 				if (ack.m_isOK == 0)
 				{
 					log("ya zhu success!");
-					NiuPoker *p = m_pPorkerManager->GetMePlayerPoker()[4];
-					p->showFront();
-					if (m_creatMulBtn)
+					if (m_playerID == ack.m_playerID)
 					{
-						m_OneBtn->setVisible(false);
-						m_TwoBtn->setVisible(false);
-						m_ThreeBtn->setVisible(false);
-						m_FourBtn->setVisible(false);
-						m_FiveBtn->setVisible(false);
-						m_timeLayer->stopTimer();
-						m_timeLayer->removeFromParent();
-						m_timeLayer = nullptr;
-						m_iState = CompareState;
+						//显示最后一张牌
+						NiuPoker *p = m_pPorkerManager->GetMePlayerPoker()[4];
+						p->showFront();
+						//关闭押注按钮
+						if (m_creatMulBtn)
+						{
+							m_OneBtn->setVisible(false);
+							m_TwoBtn->setVisible(false);
+							m_ThreeBtn->setVisible(false);
+							m_FourBtn->setVisible(false);
+							m_FiveBtn->setVisible(false);
+							m_timeLayer->stopTimer();
+							m_timeLayer->removeFromParent();
+							m_timeLayer = nullptr;
+							m_iState = CompareState;
+						}
+						//显示算牛按钮
+						showSuanNiuUi();
+						for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+						{
+							m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+							m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
+						}
 					}
-					showSuanNiuUi();
-					for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-					{
-						m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
-						m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
-					}
+						
+					//显示自己的或其他玩家的押注倍数
+					m_pSiteManager->showMultiple(m_playerID, true);
 				}
 				else
 					log("ya zhu failed!");
@@ -346,7 +349,7 @@ void GamePlayScene::update(float delta)
 				log("suanniu tanpai ack");
 				S_ZZ_SuanNiuTanPaiACK ack = S_ZZ_SuanNiuTanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				showCompare();
+				showCompare(ack.m_playerID);
 			}
 			break;
 			//单局积分统计通知
@@ -369,6 +372,26 @@ void GamePlayScene::update(float delta)
 
 			}
 			break;
+			//闲家押注完毕通知
+			case PP_DOUNIU_YAZHU_ALL_OVER_NOTIFY:
+			{
+				log("all round sum notify");
+				S_ZZ_YaZhu_AllOver_Notify ack = S_ZZ_YaZhu_AllOver_Notify::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+				//关闭庄家等待押注提示
+				m_pWaitYaZhuLabel->setVisible(false);
+				//显示庄家最后一张牌
+				NiuPoker *p = m_pPorkerManager->GetMePlayerPoker()[4];
+				p->showFront();
+				//显示庄家算牛按钮
+				showSuanNiuUi();
+				for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+				{
+					m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
+					m_pPorkerManager->GetMePlayerPoker()[i]->showFront();
+				}
+			}
+				break;
 			default:
 			break;
 		}
@@ -1340,8 +1363,8 @@ void GamePlayScene::notChooseMulAction(float dt){
 }
 
 #pragma mark-显示结果
-void GamePlayScene::showCompare(){
-	m_pPorkerManager->ShowAllPorkers();
+void GamePlayScene::showCompare(int mPlayerID){
+	m_pPorkerManager->ShowAllPorkers(mPlayerID);
     m_playNum++;
     if (m_playNum<=10) {
         //auto delayTime = DelayTime::create(3.0);
