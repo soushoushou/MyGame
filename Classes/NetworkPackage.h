@@ -106,6 +106,7 @@ using namespace std;
 #define PP_ZZ_DOUNIU_CHECK_UPDATE_ACK	(20038)
 #define PP_ZZ_DOUNIU_ONE_ROUND_SUM_NOTIFY	(20039)
 #define PP_ZZ_DOUNIU_ALL_ROUND_SUM_NOTIFY	(20040)
+#define PP_DOUNIU_YAZHU_ALL_OVER_NOTIFY	(20041)
 
 //8瀛楄妭涓绘満搴忚浆缃戠粶搴?
 unsigned long long my_htonll(unsigned long long val);
@@ -1829,7 +1830,7 @@ struct S_ZZ_YaZhuReq
 	int m_beishu;
 };
 
-//押注成功后，显示玩家的最后一张牌
+//押注成功后，显示玩家的最后一张牌；展示押注倍数
 struct S_ZZ_YaZhuACK
 {
 	S_ZZ_YaZhuACK() :m_cmd(0){}
@@ -1847,6 +1848,14 @@ struct S_ZZ_YaZhuACK
 
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
+		pData += 4;
+
+		memcpy(&s.m_playerID, pData, 4);
+		s.m_playerID = ntohl(s.m_playerID);
+		pData += 4;
+
+		memcpy(&s.betMultipleNum, pData, 4);
+		s.betMultipleNum = ntohl(s.betMultipleNum);
 
 		return s;
 	}
@@ -1854,6 +1863,8 @@ struct S_ZZ_YaZhuACK
 	int m_packageLen;
 	short m_cmd;
 	int m_isOK;
+	int m_playerID;
+	int betMultipleNum;//押注倍数
 };
 
 //快捷聊天
@@ -2489,6 +2500,28 @@ struct S_ZZ_AllRoundSumNotify
 	short m_cmd;
 	vector<int> m_playerID;//全局玩家容器
 	vector<int> m_allRoundCount;//全局积分和牛型统计容器
+};
+
+struct S_ZZ_YaZhu_AllOver_Notify
+{
+	S_ZZ_YaZhu_AllOver_Notify() :m_cmd(0){}
+
+	static S_ZZ_YaZhu_AllOver_Notify convertDataFromBinaryData(void* binaryData)
+	{
+		char* pData = (char*)binaryData;
+		S_ZZ_YaZhu_AllOver_Notify s;
+
+		memcpy(&s.m_packageLen, pData, 4);
+		s.m_packageLen = ntohl(s.m_packageLen);
+		pData += 4;
+		memcpy(&s.m_cmd, pData, 2);
+		s.m_cmd = ntohs(s.m_cmd);
+		pData += 2;
+		return s;
+	}
+
+	int m_packageLen;
+	short m_cmd;
 };
 
 #pragma pack(4)
