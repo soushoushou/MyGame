@@ -267,7 +267,8 @@ void GamePlayScene::update(float delta)
 					}
 						
 					//显示自己的或其他玩家的押注倍数
-					m_pSiteManager->showMultiple(m_playerID, true);
+					m_pSiteManager->setMultiple(ack.m_playerID, ack.betMultipleNum);
+					m_pSiteManager->showMultiple(ack.m_playerID, true);
 				}
 				else
 					log("ya zhu failed!");
