@@ -1014,6 +1014,24 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				NetworkManger::getInstance()->SendRequest(req);
 			}
                 break;
+			case TAG_YOUNIU_BTN:
+			{
+				//S_SuanNiuReq t;
+				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+
+				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
+				NetworkManger::getInstance()->SendRequest(req);
+			}
+			break;
+			case TAG_WUNIU_BTN:
+			{
+				//S_SuanNiuReq t;
+				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+
+				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
+				NetworkManger::getInstance()->SendRequest(req);
+			}
+			break;
 			case TAG_COUNTNIU_BTN:
 			{
 				//S_SuanNiuReq t;
