@@ -1021,6 +1021,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
+
+				//牛型提示
 			}
 			break;
 			case TAG_WUNIU_BTN:
@@ -1030,6 +1032,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
+
+				//牛型提示
 			}
 			break;
 			case TAG_COUNTNIU_BTN:
@@ -1039,6 +1043,8 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
+
+				//牛型提示
 			}
 			break;
 			case TAG_CHAT_BTN:
