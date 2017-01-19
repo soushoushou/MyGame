@@ -44,11 +44,13 @@ public:
 	//模拟从服务器取得数据
 	bool readMessage(const vector<pair<string, string>> quickMessage);
 
+	void setPlayerID(int playerID);
 protected:
 	Sprite* m_pFrameSprtie;							//œ˚œ¢øÚæ´¡È
 
 private:
 	ListView* lv;
 	vector<pair<string, string>> my_quickMessage;
+	int m_playerID;
 };
 

@@ -136,6 +136,10 @@ bool ChatLayer::initEditBox()
 	return true;
 }
 
+void ChatLayer::setPlayerID(int playerID){
+	m_playerID = playerID;
+}
+
 //模拟已读取聊天
 bool ChatLayer::readMessage(const vector<pair<string, string>> quickMessage){
 	my_quickMessage = quickMessage;
@@ -217,6 +221,9 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("quick chat");
 
 			int i = tag - 100;//获取第几个快捷聊天
+
+			S_ZZ_QuickChatReq req(m_playerID,i);
+			NetworkManger::getInstance()->SendRequest(req);
 
 			SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[i].second.c_str());
 			this->removeFromParent();

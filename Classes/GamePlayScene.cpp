@@ -76,8 +76,15 @@ m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID)
 //#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 //    m_recordObject=new CDMRecordObject();
 //#endif
-    
 
+	my_quickMessage.push_back(pair<string, string>("1a", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("2aa", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("3aa", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("4aaa", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("5aaaa", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("6aaaaa", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("7bb", "game/message1.mp3"));
+	my_quickMessage.push_back(pair<string, string>("8bbb", "game/message1.mp3"));
 }
 
 GamePlayScene::~GamePlayScene(){
@@ -334,16 +341,17 @@ void GamePlayScene::update(float delta)
 				break;
 			}
 			//取消
-			//case PP_DOUNIU_SUANNIU_ACK: 
-			//{
-			//	S_SuanNiuACK ack = S_SuanNiuACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
-			//	pNet->popACKQueue();
-			//	if (ack.m_statusCode == 0) {
-			//		log("suanniu");
-			//		m_pSiteManager->showNiu(ack.m_playerID,ack.m_niu);
-			//	}
-			//}
-			//break;
+			case PP_ZZ_DOUNIU_QUICK_CHAT_ACK:
+			{
+				S_ZZ_QuickChatACK ack = S_ZZ_QuickChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+
+				//播放语音的动态显示，以区别是哪个玩家的语音
+
+				//播放语音
+				SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[ack.m_quickChatSeq].second.c_str());
+			}
+			break;
 			case PP_ZZ_DOUNIU_TANPAI_ACK:
 			{
 				m_pWaitYaZhuLabel->setVisible(false);
@@ -1054,22 +1062,9 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				log("chat");
 				auto Size = Director::getInstance()->getWinSize();
 				m_chatLayer = ChatLayer::create();
+				m_chatLayer->setPlayerID(m_playerID);
 
-				//快捷聊天内容以及音乐地址
-				vector<pair<string, string>> quickMessage;
-				quickMessage.push_back(pair<string, string>("1a", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("2aa", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("3aa", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("4aaa", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("5aaaa", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("6aaaaa", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("7bb", "game/message1.mp3"));
-				quickMessage.push_back(pair<string, string>("8bbb", "game/message1.mp3"));
-
-
-
-				//m_chatLayer->createListView(quickMessage);
-				m_chatLayer->readMessage(quickMessage);
+				m_chatLayer->readMessage(my_quickMessage);
 				m_chatLayer->createListView();
 
 				addChild(m_chatLayer,500);

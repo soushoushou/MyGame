@@ -158,6 +158,7 @@ private:
 #endif
 	bool m_bGameStart;
 	vector<int> m_testID;
+	vector<pair<string, string>> my_quickMessage;
 };
 
 

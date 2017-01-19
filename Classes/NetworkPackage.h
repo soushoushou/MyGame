@@ -1871,10 +1871,10 @@ struct S_ZZ_QuickChatReq
 {
 	S_ZZ_QuickChatReq(int playerID,int quickChatSeq) :m_cmd(PP_ZZ_DOUNIU_QUICK_CHAT_REQ), m_packageLen(14)
 	{
-		m_quickChatSeq = htonl(m_quickChatSeq);
+		m_quickChatSeq = htonl(quickChatSeq);
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
-		m_playerID = htonl(m_playerID);
+		m_playerID = htonl(playerID);
 	}
 
 	int m_packageLen;
