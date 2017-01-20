@@ -346,9 +346,8 @@ void GamePlayScene::update(float delta)
 				S_ZZ_QuickChatACK ack = S_ZZ_QuickChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 
-				//播放语音的动态显示，以区别是哪个玩家的语音
-				
-
+				//显示文本
+				m_pSiteManager->showChatMessage(ack.m_playerID, my_quickMessage[ack.m_quickChatSeq].first.c_str());
 				//播放语音
 				SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[ack.m_quickChatSeq].second.c_str());
 			}

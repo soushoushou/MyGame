@@ -225,6 +225,10 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("quick chat");
 
 			int i = tag - 100;//获取第几个快捷聊天
+			//显示文本
+			SiteManager* p = dynamic_cast<GamePlayScene*>(getParent())->getSiteManager();
+			p->showChatMessage(m_playerID, my_quickMessage[i].first.c_str());
+			//播放语音
 			SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[i].second.c_str());
 
 			S_ZZ_QuickChatReq req(m_playerID, i);

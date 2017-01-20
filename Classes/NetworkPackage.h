@@ -2288,7 +2288,7 @@ struct S_ZZ_TextChatReq
 		m_playerID(playerID), m_strText(text)
 	{
 		m_textLen = htons(m_strText.length() + 1);
-		m_packageLen = htonl(12 + m_textLen);
+		m_packageLen = htonl(12 + m_strText.length() + 1);
 		m_cmd = htons(m_cmd);
 		m_playerID = htonl(m_playerID);
 	}
