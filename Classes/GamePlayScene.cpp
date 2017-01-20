@@ -340,18 +340,29 @@ void GamePlayScene::update(float delta)
 				m_iState = SendPokerState;
 				break;
 			}
-			//取消
+			//快捷聊天响应
 			case PP_ZZ_DOUNIU_QUICK_CHAT_ACK:
 			{
 				S_ZZ_QuickChatACK ack = S_ZZ_QuickChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
 
 				//播放语音的动态显示，以区别是哪个玩家的语音
+				
 
 				//播放语音
 				SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[ack.m_quickChatSeq].second.c_str());
 			}
 			break;
+			//文本聊天响应
+			case PP_ZZ_DOUNIU_TEXT_CHAT_ACK:
+			{
+				S_ZZ_TextChatACK ack = S_ZZ_TextChatACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
+				pNet->popACKQueue();
+
+				//展示文本
+				m_pSiteManager->showChatMessage(ack.m_playerID, ack.m_strText);
+			}
+				break;
 			case PP_ZZ_DOUNIU_TANPAI_ACK:
 			{
 				m_pWaitYaZhuLabel->setVisible(false);

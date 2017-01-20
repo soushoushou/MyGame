@@ -206,6 +206,10 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			EditBox* e = dynamic_cast<EditBox*>(getChildByTag(101));
 			SiteManager* p = dynamic_cast<GamePlayScene*>(getParent())->getSiteManager();
 			p->showChatMessage(dynamic_cast<GamePlayScene*>(getParent())->getPlayerID(), e->getText());
+
+			S_ZZ_TextChatReq req(m_playerID, e->getText());
+			NetworkManger::getInstance()->SendRequest(req);
+
 			this->removeFromParent();
 			break;
 		}
@@ -221,11 +225,11 @@ void ChatLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 			log("quick chat");
 
 			int i = tag - 100;//获取第几个快捷聊天
+			SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[i].second.c_str());
 
-			S_ZZ_QuickChatReq req(m_playerID,i);
+			S_ZZ_QuickChatReq req(m_playerID, i);
 			NetworkManger::getInstance()->SendRequest(req);
 
-			SimpleAudioEngine::getInstance()->playEffect(my_quickMessage[i].second.c_str());
 			this->removeFromParent();
 			break;
 		}
