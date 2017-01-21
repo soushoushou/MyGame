@@ -1,4 +1,4 @@
-﻿<dict>  
+<dict>  
     <key>dizhu</key>  
     <string>地主</string>
 
@@ -20,13 +20,13 @@
     <key>chupai</key>  
     <string>出牌</string>  
 
-    <key>youwin</key>  
-    <string>你赢了!!点击重新开始!!</string>  
+    <key>notice_main</key>  
+    <string>抵制不良游戏，拒绝盗版游戏。 注意自我保护，谨防受骗上当。 适度游戏益脑，沉迷游戏伤身。 合理安排时间，享受健康生活。</string>  
 
-    <key>youlost</key>  
-    <string>你输了!!点击重新开始!!</string> 
+    <key>current_round</key>  
+    <string>第1局</string> 
 
-    <key>youwin</key>  
-    <string>你赢了!!点击重新开始!!</string>   
+    <key>qiangzhuang_moshi</key>  
+    <string>模式：抢庄模式</string>   
 </dict>  
 </plist>  
