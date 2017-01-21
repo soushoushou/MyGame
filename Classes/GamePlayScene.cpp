@@ -1,3 +1,4 @@
+#include "AppDelegate.h"
 #include "GamePlayScene.h"
 #include "SimpleAudioEngine.h"
 #include "constString.h"
@@ -56,8 +57,8 @@ enum ButtonTag{
 };
 
 
-GamePlayScene::GamePlayScene(int playerID, int roomID) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
-m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_pSiteManager(nullptr), m_bGameStart(false)
+GamePlayScene::GamePlayScene(int playerID, int roomID, CCDictionary* stringsInConfig) :m_timeLayer(NULL), m_startGameBtn(NULL), m_bReady(false),
+m_iState(StartState), m_btnSetting(NULL), m_playerID(playerID), m_roomID(roomID), m_StringsInConfig(stringsInConfig), m_pSiteManager(nullptr), m_bGameStart(false)
 , m_inviteBtn(nullptr), m_notHogBtn(nullptr), m_HogBtn(nullptr)
 {
     m_creatHogBtn=false;
@@ -91,10 +92,10 @@ GamePlayScene::~GamePlayScene(){
 	CC_SAFE_RELEASE(m_btnSetting);
 }
 
-GamePlayScene* GamePlayScene::create(int playerID,int roomID)
+GamePlayScene* GamePlayScene::create(int playerID, int roomID, CCDictionary* stringsInConfig)
 {
 
-	GamePlayScene *pRet = new(std::nothrow) GamePlayScene(playerID,roomID); 
+	GamePlayScene *pRet = new(std::nothrow) GamePlayScene(playerID, roomID, stringsInConfig);
     if (pRet && pRet->init())
 	{ 
         pRet->autorelease(); 
@@ -109,10 +110,10 @@ GamePlayScene* GamePlayScene::create(int playerID,int roomID)
 }
 
 
-Scene* GamePlayScene::createScene(int playerID,int roomID)
+Scene* GamePlayScene::createScene(int playerID, int roomID, CCDictionary* stringsInConfig)
 {
 	auto scene = Scene::create();
-	auto gamePlayScene = GamePlayScene::create(playerID,roomID);
+	auto gamePlayScene = GamePlayScene::create(playerID, roomID, stringsInConfig);
 	scene->addChild(gamePlayScene);
 	return scene;
 }
@@ -314,8 +315,7 @@ void GamePlayScene::update(float delta)
 			{
 				S_ZZ_GameStartACK ack = S_ZZ_GameStartACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				m_bGameStart = true;
-				m_inviteBtn->setVisible(false);
+				startNewPlay();
 			}
 			break;
 			case PP_ZZ_DOUNIU_FAPAI_ACK:
@@ -368,7 +368,14 @@ void GamePlayScene::update(float delta)
 				log("suanniu tanpai ack");
 				S_ZZ_SuanNiuTanPaiACK ack = S_ZZ_SuanNiuTanPaiACK::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				showCompare(ack.m_playerID);
+
+				//显示该玩家的所有牌
+				m_pPorkerManager->ShowAllPorkers(ack.m_playerID);
+
+				//显示该玩家的牛型
+				m_pSiteManager->showNiu(ack.m_playerID, ack.m_niuIndex);
+
+				//如果是自己算牛，则牌还原位置，并设置不可点击
 			}
 			break;
 			//单局积分统计通知
@@ -377,8 +384,16 @@ void GamePlayScene::update(float delta)
 				log("one round sum notify");
 				S_ZZ_OneRoundSumNotify ack = S_ZZ_OneRoundSumNotify::convertDataFromBinaryData(pNet->getQueueFrontACKBinaryData());
 				pNet->popACKQueue();
-				//弹出展示
 
+				//保存该局胜利失败及积分信息
+				m_winStatus = ack.m_winStatus;
+				m_playerAndCount = ack.m_playerAndCount;
+
+				//延迟弹出展示
+				auto delayTime = DelayTime::create(1.0);
+				auto func = CallFunc::create(CC_CALLBACK_0(GamePlayScene::delayShowCount, this));
+				auto seq = Sequence::create(delayTime, func, nullptr);
+				this->runAction(seq);
 			}
 			break;
 			//全局积分统计通知
@@ -404,6 +419,7 @@ void GamePlayScene::update(float delta)
 				p->showFront();
 				//显示庄家算牛按钮
 				showSuanNiuUi();
+				//每一张牌都能点击
 				for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
 				{
 					m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable();
@@ -597,26 +613,27 @@ bool GamePlayScene::initBackground()
 	this->addChild(spriteBK);
     
 	char buf[100] = { 0 };
-	sprintf(buf, "房间号:%d", m_roomID);
+	sprintf(buf, "房间号：%d", m_roomID);
     m_pRoomNumberLabel = Label::create(buf, "Arial", 25);
     if (!m_pRoomNumberLabel) return false;
     m_pRoomNumberLabel->setPosition(Vec2(size.width / 2 - 270, size.height / 2 + 290));
 	m_pRoomNumberLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pRoomNumberLabel);
-    
-    m_pNoticeLabel = LabelTTF::create("第1局", "Arial", 25);
+	
+	String* current_round = (String*)m_StringsInConfig->objectForKey("current_round");
+	m_pNoticeLabel = LabelTTF::create(current_round->getCString(), "Arial", 25);
     if (!m_pNoticeLabel) return false;
     m_pNoticeLabel->setPosition(Vec2(size.width / 2,size.height / 2 + 290));
 	m_pNoticeLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pNoticeLabel);
     
-    m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
+	m_pModelLabel = LabelTTF::create("模式:抢庄模式", "Arial", 25);
     if (!m_pModelLabel) return false;
     m_pModelLabel->setPosition(Vec2(size.width / 2 + 270, size.height / 2 + 290));
 	m_pModelLabel->setColor(Color3B(220, 190, 59));
     this->addChild(m_pModelLabel);
 
-	m_pWaitYaZhuLabel = LabelTTF::create("等待贤家押注...", "Arial", 25);
+	m_pWaitYaZhuLabel = LabelTTF::create("等待闲家押注...", "Arial", 25);
 	if (!m_pWaitYaZhuLabel)
 	{
 		return false;
@@ -784,7 +801,7 @@ void GamePlayScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 
 void GamePlayScene::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event)
 {
-	
+	//手动算牛相关
 	Vec2 pt = touch->getLocation();
 	vector<NiuPoker*> pks = m_pPorkerManager->GetMePlayerPoker();
 	for (int i = 0; i < pks.size(); ++i)
@@ -931,7 +948,7 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				//NetworkManger::getInstance()->SendRequest_ReadyPlay(req);
 				//suanNiuBg_sprite->setVisible(true);
 
-				S_ZZ_ReadyPlayReq req(m_playerID);
+				S_ZZ_ReadyPlayReq req(m_playerID, 0);
 				NetworkManger::getInstance()->SendRequest(req);
                 break;
             }
@@ -1034,35 +1051,36 @@ void GamePlayScene::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
                 break;
 			case TAG_YOUNIU_BTN:
 			{
-				//S_SuanNiuReq t;
-				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+				log("点击有牛");
+				
+				//检验加法是否正确
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
-
-				//牛型提示
+				
+				//隐藏算牛界面
+				hideSuanNiuUi();
 			}
 			break;
 			case TAG_WUNIU_BTN:
 			{
-				//S_SuanNiuReq t;
-				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
+				log("点击无牛");
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
 
-				//牛型提示
+				//隐藏算牛界面
+				hideSuanNiuUi();
 			}
 			break;
 			case TAG_COUNTNIU_BTN:
 			{
-				//S_SuanNiuReq t;
-				//NetworkManger::getInstance()->SendRequest_SuanNiu(t);
 
 				S_ZZ_SuanNiuTanPaiReq req(m_playerID);
 				NetworkManger::getInstance()->SendRequest(req);
 
-				//牛型提示
+				//隐藏算牛界面
+				hideSuanNiuUi();
 			}
 			break;
 			case TAG_CHAT_BTN:
@@ -1284,25 +1302,23 @@ void GamePlayScene::notHogBtnAction(){
 	NetworkManger::getInstance()->SendRequest(req);
 	m_iState = ChooseMultipleState;
 }
-void GamePlayScene::showWinDialog() {
-	PopupLayer* pl = PopupLayer::wlDialog("popuplayer/win.png", Size(600, 600));
-	vector<pair<int, int>> quickMessage;
-	quickMessage.push_back(pair<int, int>(1, +1200));
-	quickMessage.push_back(pair<int, int>(2, -1200));
-	quickMessage.push_back(pair<int, int>(3, 0));
-	quickMessage.push_back(pair<int, int>(4, 2400));
-	quickMessage.push_back(pair<int, int>(5, -1200));
+void GamePlayScene::showOneRoundResultDialog(int playerID,int winStatus, vector<pair<int, int>> quickMessage) {
+	PopupLayer* pl;
+	if (winStatus == 0)
+	{
+		pl = PopupLayer::wlDialog("popuplayer/win.png", Size(600, 600));
+	}
+	else
+	{
+		pl = PopupLayer::wlDialog("popuplayer/lose.png", Size(600, 600));
+	}
+	pl->setPlayerID(playerID);
 	pl->createWLListView(quickMessage);
 	this->addChild(pl,100);
 }
-void GamePlayScene::showLoseDialog() {
-	PopupLayer* pl = PopupLayer::recordDialog("popuplayer/lose.png", Size(600, 600));
-	vector<pair<int, int>> quickMessage;
-	quickMessage.push_back(pair<int, int>(1, +1200));
-	quickMessage.push_back(pair<int, int>(2, -1200));
-	quickMessage.push_back(pair<int, int>(3, 0));
-	quickMessage.push_back(pair<int, int>(4, 2400));
-	quickMessage.push_back(pair<int, int>(5, -1200));
+void GamePlayScene::showAllRoundResultDialog(int playerID, vector<pair<int, int>> quickMessage) {
+	PopupLayer* pl;
+	pl->setPlayerID(playerID);
 	pl->createWLListView(quickMessage);
 	this->addChild(pl);
 }
@@ -1392,44 +1408,32 @@ void GamePlayScene::notChooseMulAction(float dt){
 
 }
 
-#pragma mark-显示结果
-void GamePlayScene::showCompare(int mPlayerID){
-	m_pPorkerManager->ShowAllPorkers(mPlayerID);
-    m_playNum++;
-    if (m_playNum<=10) {
-        //auto delayTime = DelayTime::create(3.0);
-        //auto func=CallFunc::create(CC_CALLBACK_0(GamePlayScene::startNewPlay, this));
-        //auto seq=Sequence::create(delayTime,func, nullptr);
-        //this->runAction(seq);
-    }
-    
+#pragma mark-延迟展示积分结果
+void GamePlayScene::delayShowCount(){
+	showOneRoundResultDialog(m_playerID, m_winStatus, m_playerAndCount);
 }
 
-//#pragma mark-延迟执行重新开局
-//void GamePlayScene::startNewPlay(){
-//    char path[256] = { 0 };
-//    sprintf(path, "第%d局", m_playNum);
-//    m_pNoticeLabel->setString(path);
-//	m_pPorkerManager->EmptyAllPorkers();
-//	m_startGameBtn->setVisible(true);
-//	m_startGameBtn->setTouchEnabled(true);
-//	m_startGameBtn->loadTextures("game/startgame.png", "");
-//	if (m_pSiteManager->currentPlayerCount() == 5)
-//	{
-//		m_inviteBtn->setVisible(false);
-//	}
-//	else
-//		m_inviteBtn->setVisible(true);
-//	m_iState = StartState;
-//	for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
-//	{
-//		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
-//	}
+#pragma mark-延迟执行重新开局
+void GamePlayScene::startNewPlay(){
 
+	//去除庄家显示
+	//去除牛型显示
+	//去除押注显示
 
-	//不发牌怎么触发下一局？ zz
-	//S_FaPaiReq s;
-	//NetworkManger::getInstance()->SendRequest_FaPai(s);
-	//S_ZZ_FaPaiReq req(m_playerID);
-	//NetworkManger::getInstance()->SendRequest(req);
-//}
+    char path[256] = { 0 };
+    sprintf(path, "第%d局", m_playNum);
+    m_pNoticeLabel->setString(path);
+	m_pPorkerManager->EmptyAllPorkers();
+	m_startGameBtn->setVisible(true);
+	m_startGameBtn->setTouchEnabled(true);
+	m_startGameBtn->loadTextures("game/startgamePressed.png", "");
+	m_inviteBtn->setVisible(false);
+
+	for (int i = 0; i < m_pPorkerManager->GetMePlayerPoker().size(); ++i)
+	{
+		m_pPorkerManager->GetMePlayerPoker()[i]->setTouchable(false);
+	}
+
+	m_bGameStart = true;
+	m_iState = StartState;
+}

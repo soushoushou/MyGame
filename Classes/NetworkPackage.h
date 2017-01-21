@@ -1238,15 +1238,18 @@ struct S_ZZ_GetPlayerInfoACK
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl((unsigned long long)(s.m_playerID));
+		s.m_playerID = ntohl(s.m_playerID);
 		pData += 4;
 		memcpy(&s.m_playerNameLen, pData, 2);
 		s.m_playerNameLen = ntohs(s.m_playerNameLen);
 		pData += 2;
+
 		char buf[1024];
 		memcpy(buf, pData, s.m_playerNameLen);
 		s.m_strPlayerName = buf;
+		s.m_strPlayerName = s.m_strPlayerName.substr(0, s.m_playerNameLen);
 		pData += s.m_playerNameLen;
+
 		memcpy(&s.m_currentDiamond, pData, 4);
 		s.m_currentDiamond = ntohl(s.m_currentDiamond);
 		return s;
@@ -1298,7 +1301,7 @@ struct S_ZZ_RoleLoginACK
 		s.m_statusCode = ntohl(s.m_statusCode);
 		pData += 4;
 		memcpy(&s.m_playerID, pData, 4);
-		s.m_playerID = ntohl((unsigned long long)(s.m_playerID));
+		s.m_playerID = ntohl(s.m_playerID);
 		pData += 4;
 		return s;
 	}
@@ -1534,16 +1537,18 @@ struct S_ZZ_QuitRoomACK
 //鍑嗗娓告垙璇锋眰
 struct S_ZZ_ReadyPlayReq
 {
-	S_ZZ_ReadyPlayReq(int playerID) :m_cmd(PP_ZZ_DOUNIU_READY_REQ), m_packageLen(10),
-		m_playerID(playerID)
+	S_ZZ_ReadyPlayReq(int playerID, int nextRoundOrGame) :m_cmd(PP_ZZ_DOUNIU_READY_REQ), m_packageLen(14),
+		m_playerID(playerID), m_nextRoundOrGame(nextRoundOrGame)
 	{
 		m_packageLen = htonl(m_packageLen);
 		m_cmd = htons(m_cmd);
 		m_playerID = htonl(m_playerID);
+		m_nextRoundOrGame = htonl(m_nextRoundOrGame);
 	}
 	int m_packageLen;
 	short m_cmd;
 	int m_playerID;
+	int m_nextRoundOrGame;//0：刚开始准备游戏；1：下一局游戏；2：下一轮游戏
 };
 
 //鍑嗗娓告垙鍝嶅簲
@@ -1566,8 +1571,14 @@ struct S_ZZ_ReadyPlayACK
 		memcpy(&s.m_isOK, pData, 4);
 		s.m_isOK = ntohl(s.m_isOK);
 		pData += 4;
+
 		memcpy(&s.m_playerID, pData, 4);
 		s.m_playerID = ntohl(s.m_playerID);
+		pData += 4;
+
+		memcpy(&s.m_nextRoundOrGame, pData, 4);
+		s.m_nextRoundOrGame = ntohl(s.m_nextRoundOrGame);
+		
 		return s;
 	}
 
@@ -1575,6 +1586,7 @@ struct S_ZZ_ReadyPlayACK
 	short m_cmd;
 	int m_isOK;						//0澶辫触锛?鎴愬姛
 	int m_playerID;
+	int m_nextRoundOrGame;//0：刚开始准备游戏；1：下一局游戏；2：下一轮游戏
 };
 
 //取消
@@ -2430,10 +2442,11 @@ struct S_ZZ_OneRoundSumNotify
 		s.m_cmd = ntohs(s.m_cmd);
 		pData += 2;
 
-		//memcpy(&s.m_statusCode, pData, 4);
-		//s.m_statusCode = ntohl(s.m_statusCode);
-		//pData += 4;
-		int nPlayers = (s.m_packageLen - 6) / 8;
+		memcpy(&s.m_winStatus, pData, 4);
+		s.m_winStatus = ntohl(s.m_winStatus);
+		pData += 4;
+
+		int nPlayers = (s.m_packageLen - 10) / 8;
 		for (int i = 0; i < nPlayers; ++i)
 		{
 			int playerID = 0;
@@ -2446,14 +2459,18 @@ struct S_ZZ_OneRoundSumNotify
 			pData += 4;
 			count = ntohl(count);
 			s.m_oneRoundCount.push_back(count);
+
+			s.m_playerAndCount.push_back(pair<int, int>(playerID, count));
 		}
 		return s;
 	}
 
 	int m_packageLen;
 	short m_cmd;
+	int m_winStatus;
 	vector<int> m_playerID;//单局玩家容器
 	vector<int> m_oneRoundCount;//单局积分容器
+	vector<pair<int, int>> m_playerAndCount;
 };
 
 struct S_ZZ_AllRoundSumNotify

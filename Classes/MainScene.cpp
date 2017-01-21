@@ -68,13 +68,14 @@ MainScene* MainScene::createMainScene(int playerID)
 //初始化各种
 bool MainScene::init()
 {
+	m_StringsInConfig = CCDictionary::createWithContentsOfFile("config/strings.xml");
+
 	CCLayer::init();
 	scheduleUpdate();
 	if (!initBackground()) return false;
 	if (!initButtons()) return false;
 	if (!initNotice()) return false;
 	if (!initPlayerProfile()) return false;
-
 
 	S_ZZ_GetPlayerInfoReq req(m_playerID);
 	NetworkManger::getInstance()->SendRequest(req);
@@ -134,7 +135,9 @@ bool MainScene::initNotice()
 	clipNode->setAnchorPoint(Vec2(0.5,0.5));
 	clipNode->setPosition(Vec2(size.width / 2+60, 3 * size.height / 4-10));
 	this->addChild(clipNode);
-	m_pNoticeLabel = LabelTTF::create(g_strMainSceneNotice.c_str(), "Arial", 25);
+
+	String* notice_main = (String*)m_StringsInConfig->objectForKey("notice_main");
+	m_pNoticeLabel = LabelTTF::create(notice_main->getCString(), "Arial", 25);
 	if (!m_pNoticeLabel) return false;
 	m_pNoticeLabel->setPosition(Vec2(-(clipNode->getContentSize().width / 2+m_pNoticeLabel->getContentSize().width/2), 3 * clipNode->getContentSize().height / 4));
 	m_pNoticeLabel->setColor(Color3B(255, 255, 255));
@@ -343,7 +346,7 @@ void MainScene::update(float delta)
 				NetworkManger::getInstance()->popACKQueue();
 				if (cr.m_statusCode == 0)
 				{
-					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID, m_StringsInConfig));
 				}
 				else
 					log("in update but create room failed");
@@ -357,7 +360,7 @@ void MainScene::update(float delta)
 				NetworkManger::getInstance()->popACKQueue();
 				if (cr.m_isOK == 0)
 				{
-					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID));
+					Director::getInstance()->replaceScene(GamePlayScene::createScene(m_playerID, cr.m_roomID, m_StringsInConfig));
 				}
 				else
 				{

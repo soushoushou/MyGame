@@ -42,6 +42,7 @@ SiteManager::SiteManager(Node* parent, int currentPlayerID)
 	m_playerProfileInfo[4].niuPos = Point(Size.width - pkWidth_small * 3 - 85, Size.height / 2 - 90);
 	m_playerProfileInfo[4].bubblePos = Point(950, 400);
 
+	m_niuIndex2JPGPath[0] = "game/niu0.png";
 	m_niuIndex2JPGPath[1] = "game/niu1.png";
 	m_niuIndex2JPGPath[2] = "game/niu2.png";
 	m_niuIndex2JPGPath[3] = "game/niu3.png";
@@ -52,6 +53,9 @@ SiteManager::SiteManager(Node* parent, int currentPlayerID)
 	m_niuIndex2JPGPath[8] = "game/niu8.png";
 	m_niuIndex2JPGPath[9] = "game/niu9.png";
 	m_niuIndex2JPGPath[10] = "game/niuniu.png";
+	m_niuIndex2JPGPath[11] = "game/zhadan.png";
+	m_niuIndex2JPGPath[12] = "game/wuhuaniu.png";
+	m_niuIndex2JPGPath[13] = "game/wuxiaoniu.png";
 
 	m_lock.unlock();
 }

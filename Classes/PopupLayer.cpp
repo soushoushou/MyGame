@@ -46,6 +46,7 @@ PopupLayer::PopupLayer() :
 #define TAG_9_BTN 21
 #define TAG_DEL_BTN 22
 #define TAG_JOINROOM_BTN 23
+#define TAG_READY_FOR_NEXT_ROUND_BTN 24
 PopupLayer::~PopupLayer() {
 	CC_SAFE_RELEASE(m__pMenu);
 	CC_SAFE_RELEASE(m__sfBackGround);
@@ -475,11 +476,11 @@ PopupLayer* PopupLayer::wlDialog(const char* backgroundImage, Size dialogSize) {
 	layer->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
 	auto size = Director::getInstance()->getWinSize();
 	Size v_size = Director::getInstance()->getVisibleSize();
-	LabelTTF* label = LabelTTF::create("player", "fonts/arial.ttf", 40);
+	LabelTTF* label = LabelTTF::create("玩家", "Arial", 20);
 	label->setPosition(size.width / 2 - 80, (size.height / 2 + dialogSize.height / 2 - 235));
 	
 	layer->addChild(label, 10);
-	LabelTTF* label2 = LabelTTF::create("score", "fonts/arial.ttf", 40);
+	LabelTTF* label2 = LabelTTF::create("积分", "Arial", 20);
 	label2->setPosition(size.width / 2 +80, (size.height / 2 + dialogSize.height / 2 - 235));
 	
 	layer->addChild(label2, 10);
@@ -488,12 +489,12 @@ PopupLayer* PopupLayer::wlDialog(const char* backgroundImage, Size dialogSize) {
 	//	"popuplayer/close.png",
 	//	"popuplayer/close_pressed.png",
 	//	CC_CALLBACK_1(PopupLayer::buttonCallBack, layer));
-	Button* closeBtn = Button::create("popuplayer/close.png", "popuplayer/close_pressed.png");
+	Button* closeBtn = Button::create("popuplayer/commitBtn.png", "popuplayer/commitBtn_pressed.png");
 	if (!closeBtn) return NULL;
 	//auto contentSize = item->getContentSize;
-	auto closePosition = Point((size.width - dialogSize.width) / 2 + dialogSize.width, (size.height - dialogSize.height) / 2 + dialogSize.height - 35);
+	auto closePosition = Point((size.width - dialogSize.width)  , (size.height - dialogSize.height) / 2 + 50 );
 	closeBtn->setPosition(closePosition);
-	closeBtn->setTag(TAG_CLOSEDIALOG_BTN);
+	closeBtn->setTag(TAG_READY_FOR_NEXT_ROUND_BTN);
 	closeBtn->addTouchEventListener(CC_CALLBACK_2(PopupLayer::onBtnTouch, layer));
 	layer->addChild(closeBtn, 20);
 	return layer;
@@ -1156,6 +1157,13 @@ void PopupLayer::onBtnTouch(Ref *pSender, Widget::TouchEventType type)
 				else {
 					butten->getParent()->removeFromParent();
 				}
+				break;
+			case TAG_READY_FOR_NEXT_ROUND_BTN:
+				//发送准备消息
+				S_ZZ_ReadyPlayReq req(m_playerID, 1);
+				NetworkManger::getInstance()->SendRequest(req);
+				//关闭积分统计显示
+				butten->getParent()->removeFromParent();
 				break;
 		}
 	}

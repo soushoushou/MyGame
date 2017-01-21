@@ -39,6 +39,8 @@ private:
 	string m_strPlayerName;
 	int m_currentDiamond;
 	int m_currentMoney;
+
+	CCDictionary* m_StringsInConfig;
 };
 
 

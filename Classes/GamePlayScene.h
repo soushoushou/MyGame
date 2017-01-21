@@ -36,13 +36,13 @@ enum UpdateType{
 class GamePlayScene : public cocos2d::Layer
 {
 public:
-    GamePlayScene(int playerID,int roomID);
+	GamePlayScene(int playerID, int roomID, CCDictionary* stringsInConfig);
     ~GamePlayScene();
-	static cocos2d::Scene* createScene(int playerID,int roomID);
+	static cocos2d::Scene* createScene(int playerID, int roomID, CCDictionary* stringsInConfig);
     virtual bool init();
     void menuCloseCallback(cocos2d::Ref* pSender);
     
-	static GamePlayScene* create(int playerID,int roomID);
+	static GamePlayScene* create(int playerID, int roomID, CCDictionary* stringsInConfig);
 
 	//virtual void onExit();
 	void onBtnTouch(Ref *pSender, Widget::TouchEventType type);
@@ -74,12 +74,14 @@ private:
     void notHogBtnAction();
     /** 选择倍数超时事件 */
     void notChooseMulAction(float dt);
-	/** 显示胜利对话框 */
-	void showWinDialog();
 	/**算牛 */
 	int countNiu(vector<int> vecPorkerIndex);
-	/** 显示失败对话框 */
-	void showLoseDialog();
+	/**延迟展示积分界面 */
+	void delayShowCount();
+	/** 显示单局积分结果 */
+	void showOneRoundResultDialog(int playerID, int winStatus, vector<pair<int, int>> quickMessage);
+	/** 显示全局积分结果 */
+	void showAllRoundResultDialog(int playerID, vector<pair<int, int>> quickMessage);
 	/** 显示算牛UI */
 	void showSuanNiuUi();
 	/** 隐藏算牛UI */
@@ -149,6 +151,8 @@ private:
     Button *m_recordBtn;
 	int m_roomID;
 	int m_playerID;
+	int m_winStatus;
+	vector<pair<int, int>> m_playerAndCount;
 	int m_bankerModel;//设定的庄家模式，抢庄或轮庄，0或1
 	int m_roundNum;//设定的单轮局数，10或20
 	SiteManager* m_pSiteManager;
@@ -159,6 +163,7 @@ private:
 	bool m_bGameStart;
 	vector<int> m_testID;
 	vector<pair<string, string>> my_quickMessage;
+	CCDictionary* m_StringsInConfig;
 };
 
 
